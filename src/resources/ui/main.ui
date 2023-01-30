@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="application_window" parent="AdwApplicationWindow">
+    <property name="content">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="AdwHeaderBar">
+            <property name="centering-policy">strict</property>
+            <property name="title-widget">
+              <object class="AdwViewSwitcherTitle" id="title">
+                <property name="stack">stack</property>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="main_box">
+            <property name="width-request">400</property>
+            <property name="height-request">600</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="AdwViewStack" id="stack">
+                <child>
+                  <object class="AdwViewStackPage">
+                    <property name="name">upcoming</property>
+                    <property name="title">Upcoming</property>
+                    <property name="icon-name">view-list-symbolic</property>
+                    <property name="child">
+                      <object class="GtkScrolledWindow">
+                        <property name="vexpand">true</property>
+                        <property name="hexpand">true</property>
+                        <child>
+                          <object class="AdwClamp">
+                            <property name="maximum-size">1000</property>
+                            <property name="tightening-threshold">800</property>
+                            <property name="orientation">horizontal</property>
+                            <property name="halign">center</property>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="valign">start</property>
+                                    <property name="halign">start</property>
+                                    <property name="label">Upcoming Reminders</property>
+                                    <style>
+                                      <class name="title-1"/>
+                                      <class name="page-heading"/>
+                                    </style>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkListBox" id="upcoming_reminders_list">
+                                    <property name="selection-mode">none</property>
+                                    <style>
+                                      <class name="boxed-list"/>
+                                      <class name="reminders-list"/>
+                                    </style>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="reminders-window"/>
+                        </style>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwViewStackPage">
+                    <property name="name">completed</property>
+                    <property name="title">Completed</property>
+                    <property name="icon-name">object-select-symbolic</property>
+                    <property name="child">
+                      <object class="GtkScrolledWindow">
+                        <property name="vexpand">true</property>
+                        <child>
+                          <object class="AdwClamp">
+                            <property name="maximum-size">1000</property>
+                            <property name="tightening-threshold">800</property>
+                            <property name="orientation">horizontal</property>
+                            <property name="halign">center</property>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="valign">start</property>
+                                    <property name="halign">start</property>
+                                    <property name="label">Completed Reminders</property>
+                                    <style>
+                                      <class name="title-1"/>
+                                      <class name="page-heading"/>
+                                    </style>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkListBox" id="completed_reminders_list">
+                                    <property name="selection-mode">none</property>
+                                    <style>
+                                      <class name="boxed-list"/>
+                                      <class name="reminders-list"/>
+                                    </style>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="completed-reminders-window"/>
+                        </style>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="valign">end</property>
+                <style>
+                  <class name="bottom"/>
+                </style>
+                <child>
+                  <object class="GtkBox">
+                    <property name="hexpand">true</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="add_reminder">
+                    <property name="icon-name">list-add-symbolic</property>
+                    <property name="halign">end</property>
+                    <style>
+                      <class name="suggested-action"/>
+                      <class name="circular"/>
+                      <class name="add-reminder"/>
+                    </style>
+                    <signal name="clicked" handler="new_reminder" swapped="no" />
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwViewSwitcherBar">
+                <property name="stack">stack</property>
+                <binding name="reveal">
+                  <lookup name="title-visible">title</lookup>
+                </binding>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+</interface>

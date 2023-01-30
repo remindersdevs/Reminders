@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="reminder" parent="AdwExpanderRow">
+    <child>
+      <object class="AdwEntryRow" id="title_entry">
+        <property name="title">What should the reminder be called?</property>
+        <signal name="changed" handler="check_unsaved_edits" swapped="no" />
+      </object>
+    </child>
+    <child>
+      <object class="AdwEntryRow" id="description_entry">
+        <property name="title">Enter a short description of the reminder (Optional).</property>
+        <signal name="changed" handler="check_unsaved_edits" swapped="no" />
+      </object>
+    </child>
+    <child>
+      <object class="GtkListBoxRow" id="time_row">
+        <property name="hexpand">true</property>
+        <property name="activatable">false</property>
+        <style>
+          <class name="time"/>
+        </style>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="hexpand">true</property>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">horizontal</property>
+                <property name="halign">start</property>
+                <property name="spacing">5</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label">Set a time</property>
+                    <style>
+                      <class name="caption"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSwitch" id="time_switch">
+                    <property name="valign">center</property>
+                    <signal name="state-set" handler="on_time_switch" swapped="no" />
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="time_box">
+                <property name="orientation">horizontal</property>
+                <property name="halign">end</property>
+                <property name="hexpand">true</property>
+                <property name="spacing">10</property>
+                <child>
+                  <object class="GtkMenuButton" id="date_button">
+                    <property name="valign">center</property>
+                    <property name="popover">
+                      <object class="GtkPopover" id="calendar_popover">
+                        <child>
+                          <object class="GtkCalendar" id="calendar">
+                            <signal name="day-selected" handler="day_changed" swapped="no" />
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                    <style>
+                      <class name="date"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <child>
+                      <object class="GtkSpinButton" id="hour_button">
+                        <property name="width-request">40</property>
+                        <property name="orientation">vertical</property>
+                        <property name="wrap">true</property>
+                        <property name="numeric">true</property>
+                        <property name="adjustment">
+                          <object class="GtkAdjustment" id="hour_adjustment">
+                            <property name="step-increment">1</property>
+                            <property name="lower">0</property>
+                            <property name="upper">23</property>
+                            <signal name="value-changed" handler="hour_changed" swapped="no" />
+                          </object>
+                        </property>
+                        <style>
+                          <class name="time"/>
+                        </style>
+                        <signal name="wrapped" handler="wrap_hour" swapped="no" />
+                        <signal name="output" handler="show_leading_zeros" swapped="no" />
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label">:</property>
+                        <style>
+                          <class name="time"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="minute_button">
+                        <property name="width-request">40</property>
+                        <property name="orientation">vertical</property>
+                        <property name="wrap">true</property>
+                        <property name="numeric">true</property>
+                        <property name="adjustment">
+                          <object class="GtkAdjustment" id="minute_adjustment">
+                            <property name="step-increment">1</property>
+                            <property name="lower">0</property>
+                            <property name="upper">59</property>
+                            <signal name="value-changed" handler="minute_changed" swapped="no" />
+                          </object>
+                        </property>
+                        <style>
+                          <class name="time"/>
+                        </style>
+                        <signal name="wrapped" handler="wrap_minute" swapped="no" />
+                        <signal name="output" handler="show_leading_zeros" swapped="no" />
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkListBoxRow">
+        <property name="activatable">false</property>
+        <style>
+          <class name="save-row"/>
+        </style>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="hexpand">true</property>
+            <property name="spacing">5</property>
+            <child>
+              <object class="GtkButton" id="remove_button">
+                <property name="valign">center</property>
+                <property name="label">Remove</property>
+                <style>
+                  <class name="destructive-action"/>
+                </style>
+                <signal name="clicked" handler="on_remove" swapped="no" />
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="done_button">
+                <property name="sensitive" bind-source="save_message" bind-property="reveal-child" bind-flags="invert-boolean"/>
+                <property name="valign">center</property>
+                <signal name="clicked" handler="update_completed_property" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="hexpand">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkRevealer" id="save_message">
+                <property name="reveal-child">false</property>
+                <property name="transition-type">GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label">There are unsaved changes</property>
+                    <property name="halign">end</property>
+                    <style>
+                      <class name="caption"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="save_button">
+                <property name="valign">center</property>
+                <property name="icon-name">object-select-symbolic</property>
+                <style>
+                  <class name="suggested-action"/>
+                  <class name="circular"/>
+                  <class name="save-button"/>
+                </style>
+                <signal name="clicked" handler="on_save" swapped="no" />
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

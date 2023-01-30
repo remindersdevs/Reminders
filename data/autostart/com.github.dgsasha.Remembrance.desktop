@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=Remembrance
+Exec=remembrance --gapplication-service
+NoDisplay=true
