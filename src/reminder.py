@@ -50,10 +50,10 @@ class Reminder(Adw.ExpanderRow):
         self.id = reminder_id
 
         if self._completed:
-            self.done_button.set_label('Incomplete')
+            self.done_button.set_label(_('Incomplete'))
             self.done_button.set_css_classes(['opaque', 'incomplete'])
         else:
-            self.done_button.set_label('Complete')
+            self.done_button.set_label(_('Complete'))
             self.done_button.set_css_classes(['opaque', 'complete'])
 
         if timestamp == 0:
@@ -113,9 +113,11 @@ class Reminder(Adw.ExpanderRow):
         week = now.get_week_of_year()
 
         if reminder_day == today:
-            date = 'Today'
+            date = _('Today')
         elif reminder_day == today + 1:
-            date = 'Tomorrow'
+            date = _('Tomorrow')
+        elif reminder_day == today - 1:
+            date = _('Yesterday')
         elif reminder_week == week:
             date = '%A'
         elif long_month:
@@ -158,14 +160,14 @@ class Reminder(Adw.ExpanderRow):
     def update_completed_property(self, button):
         if not self._completed:
             completed = True
-            button.set_label('Incomplete')
+            button.set_label(_('Incomplete'))
             self.done_button.set_css_classes(['opaque', 'incomplete'])
             if self.countdown_id is not None:
                 GLib.Source.remove(self.countdown_id)
             self.app.withdraw_notification(self.id)
         else:
             completed = False
-            button.set_label('Complete')
+            button.set_label(_('Complete'))
             self.done_button.set_css_classes(['opaque', 'complete'])
             if self.time_enabled:
                 self.set_countdown()
@@ -261,8 +263,8 @@ class Reminder(Adw.ExpanderRow):
     def on_remove(self, button):
         confirm_dialog = Adw.MessageDialog(
             transient_for=self.app.win,
-            heading='Remove reminder?',
-            body=f'This will remove the <b>{self.get_title()}</b> reminder.',
+            heading=_('Remove reminder?'),
+            body=_(f'This will remove the <b>{self.get_title()}</b> reminder.'),
             body_use_markup=True
         )
         confirm_dialog.add_response('cancel', _('Cancel'))

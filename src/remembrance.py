@@ -16,10 +16,11 @@
 
 import sys
 from gi.repository import Gio
+from remembrance import info
 
 install_dir = '@INSTALL_DIR@'
 
-resource = Gio.Resource.load(f'{install_dir}/remembrance.gresource')
+resource = Gio.Resource.load(f'{install_dir}/{info.project_name}.gresource')
 resource._register()
 
 if __name__ == '__main__':

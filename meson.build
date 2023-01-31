@@ -5,6 +5,9 @@ project(
     default_options: ['prefix=/usr']
 )
 
+app_name = 'Remembrance'
+app_id = 'com.github.dgsasha.Remembrance'
+
 gnome = import('gnome')
 python = import('python').find_installation('python3')
 

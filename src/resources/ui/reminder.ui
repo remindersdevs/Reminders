@@ -3,13 +3,13 @@
   <template class="reminder" parent="AdwExpanderRow">
     <child>
       <object class="AdwEntryRow" id="title_entry">
-        <property name="title">What should the reminder be called?</property>
+        <property name="title" translatable="yes">What should the reminder be called?</property>
         <signal name="changed" handler="check_unsaved_edits" swapped="no" />
       </object>
     </child>
     <child>
       <object class="AdwEntryRow" id="description_entry">
-        <property name="title">Enter a short description of the reminder (Optional).</property>
+        <property name="title" translatable="yes">Enter a short description of the reminder (Optional).</property>
         <signal name="changed" handler="check_unsaved_edits" swapped="no" />
       </object>
     </child>
@@ -31,7 +31,7 @@
                 <property name="spacing">5</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label">Set a time</property>
+                    <property name="label" translatable="yes">Set a time</property>
                     <style>
                       <class name="caption"/>
                     </style>
@@ -167,7 +167,7 @@
                 <property name="transition-type">GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label">There are unsaved changes</property>
+                    <property name="label" translatable="yes">There are unsaved changes</property>
                     <property name="halign">end</property>
                     <style>
                       <class name="caption"/>

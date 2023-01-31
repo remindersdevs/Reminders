@@ -1,19 +1,24 @@
-desktop_file = install_data(
-    'com.github.dgsasha.Remembrance.desktop',
-    install_dir: get_option('datadir') / 'applications',
-)
+conf = configuration_data()
+conf.set('PROJECT_NAME', meson.project_name())
+conf.set('APP_NAME', app_name)
+conf.set('APP_ID', app_name)
+conf.set('BINDIR', get_option('prefix') / get_option('bindir'))
 
 configure_file(
     input: 'com.github.dgsasha.Remembrance.service.in',
-    output: 'com.github.dgsasha.Remembrance.service',
+    output: '@0@.service'.format(app_id),
     install: true,
     install_dir: get_option('datadir') / 'dbus-1/services',
-    configuration: configuration_data({
-        'bindir': get_option('prefix') / get_option('bindir'),
-    }),
+    configuration: conf,
 )
 
-desktop_file = install_data(
-    'autostart/com.github.dgsasha.Remembrance.desktop',
-    install_dir: join_paths(get_option('sysconfdir'), 'xdg/autostart'),
+configure_file(
+    input: 'com.github.dgsasha.Remembrance.desktop.in',
+    output: '@0@.desktop'.format(app_id),
+    install: true,
+    install_dir: get_option('datadir') / 'applications',
+    configuration: conf,
 )
+
+subdir('autostart')
+subdir('icons')

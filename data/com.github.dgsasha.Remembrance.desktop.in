@@ -1,14 +1,14 @@
 [Desktop Entry]
 Type=Application
-Name=Remembrance
+Name=@APP_NAME@
 Comment=A reminder app for Linux
-Exec=remembrance
-Icon=system-help
+Exec=@PROJECT_NAME@
+Icon=@APP_ID@
 Terminal=false
-StartupWMClass=org.gnome.dgsasha.Remembrance
+StartupWMClass=@APP_ID@
 StartupNotify=true
 DBusActivatable=true
 X-SingleMainWindow=true
 X-GNOME-UsesNotifications=true
 Categories=Office;ProjectManagement;
-Keywords=Todo;Productivity;Task;Planning;Planner;Time;Management;Remembrance;
+Keywords=Todo;Productivity;Task;Planning;Planner;Time;Management;@APP_NAME@;

@@ -4,10 +4,10 @@ resources = files(
 )
 
 gnome.compile_resources(
-    'remembrance',
+    meson.project_name(),
     'remembrance.gresource.xml',
     install: true,
-    install_dir: python.get_install_dir() / 'remembrance',
+    install_dir: get_option('prefix') / python.get_install_dir() / meson.project_name(),
     dependencies: resources,
     gresource_bundle: true,
 )

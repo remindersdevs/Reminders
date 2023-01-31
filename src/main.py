@@ -25,7 +25,9 @@ from gi.repository import Gtk, Adw, GLib, Gio
 from gettext import gettext as _
 
 from remembrance.reminder import Reminder
-from remembrance.backend import Reminders, Calendar
+from remembrance.backend import Reminders
+from remembrance.about import about_window
+from remembrance import info
 
 @Gtk.Template(resource_path='/com/github/dgsasha/remembrance/ui/main.ui')
 class MainWindow(Adw.ApplicationWindow):
@@ -39,10 +41,10 @@ class MainWindow(Adw.ApplicationWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.upcoming_placeholder = Adw.ActionRow(
-            title='Press the plus button to add a reminder'
+            title=_('Press the plus button to add a reminder')
         )
         self.completed_placeholder = Adw.ActionRow(
-            title='No reminders have been marked as complete'
+            title=_('No reminders have been marked as complete')
         )
         self.app = self.get_application()
         self.upcoming_reminders_list.set_sort_func(self.sort_func)
@@ -141,8 +143,8 @@ class MainWindow(Adw.ApplicationWindow):
         if len(unsaved) > 0:
             confirm_dialog = Adw.MessageDialog(
                 transient_for=self,
-                heading='You have unsaved changes',
-                body=f'Are you sure you want to close the window?',
+                heading=_('You have unsaved changes'),
+                body=_('Are you sure you want to close the window?'),
             )
             confirm_dialog.add_response('cancel', _('Cancel'))
             confirm_dialog.add_response('yes', _('Yes'))
@@ -182,13 +184,18 @@ class Remembrance(Adw.Application):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.register()
-        reminder_completed_action = Gio.SimpleAction.new('reminder-completed', None)
-        reminder_completed_action.connect('activate', self.on_notification_completed)
-        reminder_completed_action.set_enabled(True)
-        self.add_action(reminder_completed_action)
+        self.create_action('reminder-completed', self.on_notification_completed)
+
         self.reminders = Reminders(self)
 
         self.connect('activate', self.on_activate)
+
+    def create_action(self, name, callback):
+        action = Gio.SimpleAction.new(name, None)
+        action.connect('activate', callback)
+        action.set_enabled(True)
+
+        self.add_action(action)
 
     def on_notification_completed(self, action, reminder_id):
         self.reminders.set_completed(reminder_id, True)
@@ -197,12 +204,21 @@ class Remembrance(Adw.Application):
         self.win = self.props.active_window
         if not self.win:
             self.win = MainWindow(application=app)
+        self.create_action('about', self.show_about)
+        self.create_action('quit', self.quit_app)
         provider = Gtk.CssProvider()
         provider.load_from_resource('/com/github/dgsasha/remembrance/stylesheet.css')
         Gtk.StyleContext.add_provider_for_display(self.win.get_display(), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
         self.win.present()
 
+    def show_about(self, action, data):
+        win = about_window(self.win)
+        win.present()
+
+    def quit_app(self, action, data):
+        self.quit()
+
 def main():
-    app = Remembrance(application_id='com.github.dgsasha.Remembrance', flags=Gio.ApplicationFlags.FLAGS_NONE)
+    app = Remembrance(application_id=info.app_id, flags=Gio.ApplicationFlags.FLAGS_NONE)
     return app.run(sys.argv)
