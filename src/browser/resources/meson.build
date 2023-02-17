@@ -1,13 +1,15 @@
 resources = files(
     'ui/main.ui',
-    'ui/reminder.ui'
+    'ui/reminder.ui',
+    'ui/preferences.ui',
+    'ui/time_box.ui'
 )
 
 gnome.compile_resources(
-    meson.project_name(),
+    app_executable,
     'remembrance.gresource.xml',
     install: true,
-    install_dir: get_option('prefix') / python.get_install_dir() / meson.project_name(),
+    install_dir: python.get_install_dir() / meson.project_name() / 'browser',
     dependencies: resources,
     gresource_bundle: true,
 )

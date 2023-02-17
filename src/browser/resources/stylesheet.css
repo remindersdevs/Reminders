@@ -1,0 +1,97 @@
+.page-heading {
+    margin: 20px 25px 10px;
+}
+
+.reminders-list {
+    margin: 10px 20px;
+}
+
+label.time {
+    font-weight: bold;
+    margin: 0 2px;
+}
+
+spinbutton.time entry {
+    font-weight: bold;
+}
+
+spinbutton.time button {
+    padding: 0 5px;
+    min-height: 20px;
+}
+
+.add-reminder {
+    min-height: 50px;
+    min-width: 50px;
+    margin: 10px;
+}
+
+box.bottom {
+    border-top: 1px solid alpha(currentcolor, 0.15);
+}
+
+row.time {
+    padding: 5px 5px 5px 15px;
+}
+
+row.time:dir(rtl) {
+    padding: 5px 5px 15px 5px;
+}
+
+.am-pm-button {
+    margin-right: 5px;
+}
+
+.am-pm-button:dir(rtl) {
+    margin-left: 5px;
+}
+
+.save-row {
+    padding: 10px;
+}
+
+button.complete {
+    background-color: @success_bg_color;
+}
+
+button.incomplete {
+    background-color: @warning_bg_color;
+}
+
+.navigation-sidebar row {
+    padding: 4px 12px;
+}
+
+.navigation-sidebar:disabled row image {
+    opacity: 0.5;
+}
+
+/* Elaborate fix for https://gitlab.gnome.org/GNOME/gtk/-/issues/5309 */
+.reminders-list > row:disabled + row:not(:disabled) {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+.reminders-list > row:disabled + row:not(:disabled) row.header {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.reminders-list > row:nth-last-child(2) {
+    border-bottom: 0;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+.reminders-list > row:nth-last-child(2):not(:checked) row.header {
+    border-bottom: 0;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+.reminders-list > row:nth-last-child(2) list.nested row:last-child {
+    border-bottom: 0;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+.reminders-list > row:nth-last-child(2) list.nested {
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}

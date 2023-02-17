@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=@SERVICE_ID@
+Exec=@LIBEXECDIR@/@SERVICE_EXECUTABLE@
+X-GNOME-UsesNotifications=true

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="PreferencesWindow" parent="AdwPreferencesWindow">
+    <property name="title" translatable="yes">Preferences</property>
+    <property name="default-width">400</property>
+    <property name="default-height">400</property>
+    <child>
+      <object class="AdwPreferencesPage">
+        <property name="title" translatable="yes">General</property>
+        <child>
+          <object class="AdwPreferencesGroup">
+            <child>
+              <object class="AdwComboRow" id="time_format_row">
+                <property name="title" translatable="yes">Time Format</property>
+                <property name="model">time_formats</property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwExpanderRow" id="completed_last_row">
+                <property name="title" translatable="yes">Show Completed Reminders Last</property>
+                <property name="show-enable-switch">true</property>
+                <child>
+                  <object class="AdwActionRow">
+                    <property name="title" translatable="yes">Reverse order of completed reminders</property>
+                    <property name="subtitle" translatable="yes">This only applies when sorting by time</property>
+                    <property name="activatable-widget">completed_reversed_switch</property>
+                    <child>
+                      <object class="GtkSwitch" id="completed_reversed_switch">
+                        <property name="valign">center</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkStringList" id="time_formats">
+    <items>
+      <item translatable="yes">Use Locale Default</item>
+      <item translatable="yes">12 hour time</item>
+      <item translatable="yes">24 hour time</item>
+    </items>
+  </object>
+</interface>

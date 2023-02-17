@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2023 Sasha Hale -->
+<component type="desktop-application">
+  <content_rating type="oars-1.1"/>
+
+  <developer_name>Sasha Hale</developer_name>
+  <update_contact>dgsasha04_at_gmail.com</update_contact>
+
+  <name>@APP_NAME@</name>
+  <summary>A simple reminder app for Linux.</summary>
+
+  <description>
+     <p>
+        Set reminders for anything you need help remembering.
+        Remembrance will send a notification at a specified time, and at any time you can mark a reminder as complete so it doesn't notify you.
+        You can also sort and filter your reminders, as well as search for specific reminders.
+     </p>
+  </description>
+
+  <id>@APP_ID@</id>
+  <launchable type="desktop-id">@APP_ID@.desktop</launchable>
+
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+
+  <provides>
+    <binary>@APP_EXECUTABLE@</binary>
+  </provides>
+
+  <requires>
+    <display_length>480</display_length>
+  </requires>
+
+  <recommends>
+    <display_length>480</display_length>
+  </recommends>
+
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+    <control>touch</control>
+  </supports>
+
+  <categories>
+    <category>GNOME</category>
+    <category>GTK</category>
+    <category>Office</category>
+    <category>ProjectManagement</category>
+  </categories>
+
+  <keywords>
+    <keyword>Todo</keyword>
+    <keyword>Productivity</keyword>
+    <keyword>Task</keyword>
+    <keyword>Planning</keyword>
+    <keyword>Planner</keyword>
+    <keyword>Time</keyword>
+    <keyword>Management</keyword>
+    <keyword>Reminder</keyword>
+    <keyword>Remembrance</keyword>
+  </keywords>
+
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/dgsasha/remembrance/main/screenshot.png</image>
+    </screenshot>
+  </screenshots>
+
+  <url type="homepage">https://github.com/dgsasha/remembrance</url>
+  <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
+</component>

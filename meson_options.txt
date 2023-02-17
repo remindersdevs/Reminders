@@ -1,0 +1,2 @@
+option('enable-portals', type: 'boolean', value: 'false', description: 'enable libportal, used by the flatpak')
+option('devel', type : 'boolean', value : false)

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=@SERVICE_EXECUTABLE@
+Comment=Service for Remembrance
+Exec=@LIBEXECDIR@/@SERVICE_EXECUTABLE@ --gapplication-replace
+Terminal=false
+NoDisplay=true
+X-GNOME-UsesNotifications=true

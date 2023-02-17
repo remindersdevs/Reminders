@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <enum id="com.github.dgsasha.Remembrance.TimeFormat">
+    <value value="0" nick="locale"/>
+    <value value="1" nick="12h"/>
+    <value value="2" nick="24h"/>
+  </enum>
+  <enum id="com.github.dgsasha.Remembrance.SortBy">
+    <value value="0" nick="time"/>
+    <value value="1" nick="title"/>
+  </enum>
+	<schema id="com.github.dgsasha.Remembrance" path="/com/github/dgsasha/remembrance/">
+    <key name="time-format" enum="com.github.dgsasha.Remembrance.TimeFormat">
+      <default>'locale'</default>
+      <summary>Time format</summary>
+      <description>What format to display the time in</description>
+    </key>
+    <key name="sort" enum="com.github.dgsasha.Remembrance.SortBy">
+      <default>'time'</default>
+      <summary>Sort by</summary>
+      <description>How to sort the reminders</description>
+    </key>
+    <key type="b" name="descending-sort">
+      <default>false</default>
+      <summary>Descending sort</summary>
+      <description>If reminders sort should be descending</description>
+    </key>
+    <key type="b" name="completed-last">
+      <default>true</default>
+      <summary>Completed last</summary>
+      <description>Show completed reminders last</description>
+    </key>
+    <key type="b" name="completed-reversed">
+      <default>true</default>
+      <summary>Completed reverse</summary>
+      <description>Reverse order of completed reminders when sorted by time</description>
+    </key>
+  </schema>
+</schemalist>

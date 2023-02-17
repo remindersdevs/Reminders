@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="time_box" parent="GtkBox">
+    <property name="orientation">horizontal</property>
+    <property name="halign">end</property>
+    <property name="hexpand">true</property>
+    <property name="spacing">10</property>
+    <child>
+      <object class="GtkMenuButton" id="date_button">
+        <property name="valign">center</property>
+        <property name="popover">
+          <object class="GtkPopover" id="calendar_popover">
+            <child>
+              <object class="GtkCalendar" id="calendar">
+                <signal name="day-selected" handler="day_changed" swapped="no" />
+              </object>
+            </child>
+          </object>
+        </property>
+        <style>
+          <class name="date"/>
+        </style>
+        <accessibility>
+          <property name="label" translatable="yes">Date</property>
+        </accessibility>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <child>
+          <object class="GtkSpinButton" id="hour_button">
+            <property name="width-request">40</property>
+            <property name="orientation">vertical</property>
+            <property name="wrap">true</property>
+            <property name="numeric">true</property>
+            <property name="adjustment">
+              <object class="GtkAdjustment" id="hour_adjustment">
+                <property name="step-increment">1</property>
+                <property name="lower">0</property>
+                <property name="upper">23</property>
+                <signal name="value-changed" handler="hour_changed" swapped="no"/>
+              </object>
+            </property>
+            <style>
+              <class name="time"/>
+            </style>
+            <accessibility>
+              <property name="label" translatable="yes">Hour</property>
+            </accessibility>
+            <signal name="wrapped" handler="wrap_hour" swapped="no"/>
+            <signal name="output" handler="hour_output" swapped="no"/>
+            <signal name="input" handler="hour_input" swapped="no"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label">:</property>
+            <style>
+              <class name="time"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="minute_button">
+            <property name="width-request">40</property>
+            <property name="orientation">vertical</property>
+            <property name="wrap">true</property>
+            <property name="numeric">true</property>
+            <property name="adjustment">
+              <object class="GtkAdjustment" id="minute_adjustment">
+                <property name="step-increment">1</property>
+                <property name="lower">0</property>
+                <property name="upper">59</property>
+                <signal name="value-changed" handler="minute_changed" swapped="no"/>
+              </object>
+            </property>
+            <style>
+              <class name="time"/>
+            </style>
+            <signal name="wrapped" handler="wrap_minute" swapped="no"/>
+            <signal name="output" handler="show_leading_zeros" swapped="no"/>
+            <accessibility>
+              <property name="label" translatable="yes">Minute</property>
+            </accessibility>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="am_pm_button">
+        <property name="valign">center</property>
+        <signal name="clicked" handler="on_am_pm_button_pressed" swapped="no"/>
+        <style>
+          <class name="circular"/>
+          <class name="am-pm-button"/>
+        </style>
+      </object>
+    </child>
+  </template>
+</interface>

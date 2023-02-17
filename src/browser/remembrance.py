@@ -20,10 +20,10 @@ from remembrance import info
 
 install_dir = '@INSTALL_DIR@'
 
-resource = Gio.Resource.load(f'{install_dir}/{info.project_name}.gresource')
+resource = Gio.Resource.load(f'{install_dir}/browser/{info.app_executable}.gresource')
 resource._register()
 
 if __name__ == '__main__':
-    from remembrance import main
+    from remembrance.browser.application import main
 
-    sys.exit(main.main())
+    sys.exit(main())

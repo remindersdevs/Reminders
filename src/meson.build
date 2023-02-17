@@ -1,40 +1,32 @@
-conf = configuration_data()
-conf.set('PYTHON_PATH', python.full_path())
-conf.set('INSTALL_DIR', get_option('prefix') / python.get_install_dir() / meson.project_name())
-
 info_conf = configuration_data()
 info_conf.set('VERSION', meson.project_version())
-info_conf.set('PROJECT_NAME', meson.project_name())
+info_conf.set('APP_EXECUTABLE', app_executable)
 info_conf.set('APP_NAME', app_name)
+info_conf.set('BASE_APP_ID', base_app_id)
 info_conf.set('APP_ID', app_id)
+info_conf.set('APP_PATH', get_option('prefix') / get_option('bindir') / meson.project_name())
 
-source_files = files(
-  '__init__.py',
-  'main.py',
-  'backend.py',
-  'reminder.py',
-  'about.py'
-)
+info_conf.set('SERVICE_ID', service_id)
+info_conf.set('SERVICE_EXECUTABLE', service_executable)
+info_conf.set('SERVICE_OBJECT', service_object)
+info_conf.set('SERVICE_PATH', get_option('prefix') / get_option('libexecdir') / service_executable)
 
-install_data(
-    source_files,
-    install_dir: get_option('prefix') / python.get_install_dir() / meson.project_name()
-)
+info_conf.set('SERVICE_VERSION', service_version)
+
+info_conf.set('PORTALS_ENABLED', get_option('enable-portals') ? 'True' : 'False')
 
 configure_file(
     input: 'info.py',
     output: 'info.py',
     configuration: info_conf,
     install: true,
-    install_dir: get_option('prefix') / python.get_install_dir() / meson.project_name()
+    install_dir: python.get_install_dir() / meson.project_name()
 )
 
-configure_file(
-    input: 'remembrance.py',
-    output: meson.project_name(),
-    configuration: conf,
-    install: true,
-    install_dir: get_option('prefix') / get_option('bindir')
+install_data(
+    '__init__.py',
+    install_dir: python.get_install_dir() / meson.project_name()
 )
 
-subdir('resources')
+subdir('service')
+subdir('browser')
