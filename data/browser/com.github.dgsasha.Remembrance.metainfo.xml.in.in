@@ -62,7 +62,7 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://github.com/dgsasha/remembrance/blob/4fd29f228d81da69f95c2f2fea8718feec5de331/screenshot.png</image>
+      <image>https://raw.githubusercontent.com/dgsasha/remembrance/4fd29f228d81da69f95c2f2fea8718feec5de331/screenshot.png</image>
     </screenshot>
   </screenshots>
 
@@ -70,5 +70,5 @@
 
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
-  <url type="translate">https://hosted.weblate.org/engage/remembrance</url>
+  <!-- url type="translate">https://hosted.weblate.org/engage/remembrance</url>
 </component>
