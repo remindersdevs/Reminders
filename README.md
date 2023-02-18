@@ -1,6 +1,6 @@
 <div align="center">
 
-![Remembrance](data/icons/hicolor/scalable/apps/com.github.dgsasha.Remembrance.svg)
+![Remembrance](data/icons/com.github.dgsasha.Remembrance.svg)
 # Remembrance, a simple reminder app for Linux
 
 This is pre-release software, expect bugs.
