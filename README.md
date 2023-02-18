@@ -9,6 +9,10 @@ This is pre-release software, expect bugs.
 
 </div>
 
+## Translators
+
+[Translate on Weblate](https://hosted.weblate.org/engage/remembrance)
+
 ## Installing dependencies (Flatpak):
 ```
 flatpak install flathub org.gnome.Sdk//43
