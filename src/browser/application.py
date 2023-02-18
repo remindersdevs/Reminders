@@ -57,7 +57,7 @@ class Remembrance(Adw.Application):
             GLib.OptionFlags.NONE,
             GLib.OptionArg.STRING,
             _('Start on a different page'),
-            _('(upcoming|overdue|completed)'),
+            '(upcoming|overdue|completed)',
         )
 
     def do_command_line(self, command):

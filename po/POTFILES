@@ -1,0 +1,16 @@
+# List of source files containing translatable strings.
+# Please keep this file sorted alphabetically.
+data/browser/com.github.dgsasha.Remembrance.desktop.in.in
+data/browser/com.github.dgsasha.Remembrance.gschema.xml.in
+data/browser/com.github.dgsasha.Remembrance.metainfo.xml.in.in
+data/service/com.github.dgsasha.Remembrance.Service.desktop.in.in
+src/browser/resources/ui/main.ui
+src/browser/resources/ui/preferences.ui
+src/browser/resources/ui/reminder.ui
+src/browser/resources/ui/time_box.ui
+src/browser/about.py
+src/browser/application.py
+src/browser/main_window.py
+src/browser/reminder.py
+src/info.py
+src/service/backend.py

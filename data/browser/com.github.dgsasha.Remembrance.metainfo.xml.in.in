@@ -3,10 +3,10 @@
 <component type="desktop-application">
   <content_rating type="oars-1.1"/>
 
-  <developer_name>Sasha Hale</developer_name>
+  <developer_name translatable="no">Sasha Hale</developer_name>
   <update_contact>dgsasha04_at_gmail.com</update_contact>
 
-  <name>@APP_NAME@</name>
+  <name>Remembrance</name>
   <summary>A simple reminder app for Linux.</summary>
 
   <description>
@@ -66,6 +66,9 @@
     </screenshot>
   </screenshots>
 
+  <translation type="gettext">@APP_EXECUTABLE@</translation>
+
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
+  <url type="translate">https://hosted.weblate.org/engage/remembrance</url>
 </component>

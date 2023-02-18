@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Name=@APP_NAME@
+Name=Remembrance
 Comment=A reminder app for Linux
 Exec=@BINDIR@/@APP_EXECUTABLE@
 Icon=@APP_ID@
@@ -10,16 +10,17 @@ StartupNotify=true
 DBusActivatable=true
 X-SingleMainWindow=true
 Categories=GNOME;GTK;Office;ProjectManagement;
-Keywords=Todo;Productivity;Task;Planning;Planner;Time;Management;Reminder;@APP_NAME@;
+Keywords=Todo;Productivity;Task;Planning;Planner;Time;Management;Reminder;Remembrance;
+Actions=Upcoming;Overdue;Completed;
 
 [Desktop Action Upcoming]
-Name=Start New Document
+Name=Upcoming Reminders
 Exec=@BINDIR@/@APP_EXECUTABLE@ --page upcoming
 
 [Desktop Action Overdue]
-Name=Start New Document
+Name=Overdue Reminders
 Exec=@BINDIR@/@APP_EXECUTABLE@ --page overdue
 
 [Desktop Action Completed]
-Name=Start New Document
+Name=Completed Reminders
 Exec=@BINDIR@/@APP_EXECUTABLE@ --page completed

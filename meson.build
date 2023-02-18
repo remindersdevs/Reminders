@@ -13,7 +13,6 @@ devel = get_option('devel')
 
 service_version = '0.1'
 
-app_name = 'Remembrance'
 app_executable = 'remembrance'
 
 base_app_id = 'com.github.dgsasha.Remembrance'
@@ -28,9 +27,12 @@ service_executable = 'remembrance-service'
 service_id = app_id + '.Service'
 service_object = path + '/Service'
 
+i18n = import('i18n')
+localedir = get_option('localedir')
 gnome = import('gnome')
 python = import('python').find_installation('python3')
 
+subdir('po')
 subdir('data')
 subdir('src')
 

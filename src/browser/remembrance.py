@@ -17,11 +17,19 @@
 import sys
 from gi.repository import Gio
 from remembrance import info
+import gettext
+import locale
 
 install_dir = '@INSTALL_DIR@'
+locale_dir = '@LOCALE_DIR@'
 
 resource = Gio.Resource.load(f'{install_dir}/browser/{info.app_executable}.gresource')
 resource._register()
+
+locale.bindtextdomain(info.app_executable, locale_dir)
+locale.textdomain(info.app_executable)
+gettext.bindtextdomain(info.app_executable, locale_dir)
+gettext.textdomain(info.app_executable)
 
 if __name__ == '__main__':
     from remembrance.browser.application import main

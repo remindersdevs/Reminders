@@ -1,5 +1,6 @@
 conf = configuration_data()
 conf.set('PYTHON_PATH', python.full_path())
+conf.set('LOCALE_DIR', get_option('prefix') / get_option('localedir'))
 
 source_files = files(
   '__init__.py',

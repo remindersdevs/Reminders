@@ -1,7 +1,6 @@
 [Desktop Entry]
 Type=Application
-Name=@SERVICE_EXECUTABLE@
-Comment=Service for Remembrance
+Name=Remembrance Service
 Exec=@LIBEXECDIR@/@SERVICE_EXECUTABLE@ --gapplication-replace
 Terminal=false
 NoDisplay=true

@@ -1,7 +1,6 @@
 info_conf = configuration_data()
 info_conf.set('VERSION', meson.project_version())
 info_conf.set('APP_EXECUTABLE', app_executable)
-info_conf.set('APP_NAME', app_name)
 info_conf.set('BASE_APP_ID', base_app_id)
 info_conf.set('APP_ID', app_id)
 info_conf.set('APP_PATH', get_option('prefix') / get_option('bindir') / meson.project_name())

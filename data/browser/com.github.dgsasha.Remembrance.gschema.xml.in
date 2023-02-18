@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schemalist>
+<schemalist gettext-domain="@APP_EXECUTABLE@">
   <enum id="com.github.dgsasha.Remembrance.TimeFormat">
     <value value="0" nick="locale"/>
     <value value="1" nick="12h"/>

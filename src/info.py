@@ -1,7 +1,8 @@
 from ast import literal_eval
+from gettext import gettext as _
 
 version = '@VERSION@'
-app_name = '@APP_NAME@'
+app_name = _('Remembrance')
 base_app_id = '@BASE_APP_ID@'
 app_id = '@APP_ID@'
 app_executable = '@APP_EXECUTABLE@'

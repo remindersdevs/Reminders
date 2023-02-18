@@ -1,0 +1,309 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the remembrance package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: remembrance\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-02-18 17:24-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: data/browser/com.github.dgsasha.Remembrance.desktop.in.in:4
+#: data/browser/com.github.dgsasha.Remembrance.metainfo.xml.in.in:9
+#: src/info.py:5
+msgid "Remembrance"
+msgstr ""
+
+#: data/browser/com.github.dgsasha.Remembrance.desktop.in.in:5
+msgid "A reminder app for Linux"
+msgstr ""
+
+#: data/browser/com.github.dgsasha.Remembrance.desktop.in.in:14
+msgid ""
+"Todo;Productivity;Task;Planning;Planner;Time;Management;Reminder;Remembrance;"
+msgstr ""
+
+#: data/browser/com.github.dgsasha.Remembrance.desktop.in.in:18
+#: src/browser/resources/ui/main.ui:105 src/browser/main_window.py:297
+msgid "Upcoming Reminders"
+msgstr ""
+
+#: data/browser/com.github.dgsasha.Remembrance.desktop.in.in:22
+#: src/browser/resources/ui/main.ui:128 src/browser/main_window.py:307
+msgid "Overdue Reminders"
+msgstr ""
+
+#: data/browser/com.github.dgsasha.Remembrance.desktop.in.in:26
+#: src/browser/resources/ui/main.ui:151 src/browser/main_window.py:317
+msgid "Completed Reminders"
+msgstr ""
+
+#: data/browser/com.github.dgsasha.Remembrance.gschema.xml.in:15
+msgid "Time format"
+msgstr ""
+
+#: data/browser/com.github.dgsasha.Remembrance.gschema.xml.in:16
+msgid "What format to display the time in"
+msgstr ""
+
+#: data/browser/com.github.dgsasha.Remembrance.gschema.xml.in:20
+#: src/browser/resources/ui/main.ui:44
+msgid "Sort by"
+msgstr ""
+
+#: data/browser/com.github.dgsasha.Remembrance.gschema.xml.in:21
+msgid "How to sort the reminders"
+msgstr ""
+
+#: data/browser/com.github.dgsasha.Remembrance.gschema.xml.in:25
+msgid "Descending sort"
+msgstr ""
+
+#: data/browser/com.github.dgsasha.Remembrance.gschema.xml.in:26
+msgid "If reminders sort should be descending"
+msgstr ""
+
+#: data/browser/com.github.dgsasha.Remembrance.gschema.xml.in:30
+msgid "Completed last"
+msgstr ""
+
+#: data/browser/com.github.dgsasha.Remembrance.gschema.xml.in:31
+msgid "Show completed reminders last"
+msgstr ""
+
+#: data/browser/com.github.dgsasha.Remembrance.gschema.xml.in:35
+msgid "Completed reverse"
+msgstr ""
+
+#: data/browser/com.github.dgsasha.Remembrance.gschema.xml.in:36
+msgid "Reverse order of completed reminders when sorted by time"
+msgstr ""
+
+#: data/browser/com.github.dgsasha.Remembrance.metainfo.xml.in.in:6
+msgid "Sasha Hale"
+msgstr ""
+
+#: data/browser/com.github.dgsasha.Remembrance.metainfo.xml.in.in:10
+msgid "A simple reminder app for Linux."
+msgstr ""
+
+#: data/browser/com.github.dgsasha.Remembrance.metainfo.xml.in.in:13
+msgid ""
+"Set reminders for anything you need help remembering. Remembrance will send "
+"a notification at a specified time, and at any time you can mark a reminder "
+"as complete so it doesn't notify you. You can also sort and filter your "
+"reminders, as well as search for specific reminders."
+msgstr ""
+
+#: data/service/com.github.dgsasha.Remembrance.Service.desktop.in.in:4
+msgid "Remembrance Service"
+msgstr ""
+
+#: src/browser/resources/ui/main.ui:27
+msgid "Search"
+msgstr ""
+
+#: src/browser/resources/ui/main.ui:36
+msgid "App Menu"
+msgstr ""
+
+#: src/browser/resources/ui/main.ui:43
+msgid "Sort direction"
+msgstr ""
+
+#: src/browser/resources/ui/main.ui:82 src/browser/resources/ui/main.ui:202
+#: src/browser/main_window.py:287
+msgid "All Reminders"
+msgstr ""
+
+#: src/browser/resources/ui/main.ui:243 src/browser/resources/ui/main.ui:251
+msgid "Add a reminder"
+msgstr ""
+
+#: src/browser/resources/ui/main.ui:269
+#: src/browser/resources/ui/preferences.ui:4
+msgid "Preferences"
+msgstr ""
+
+#: src/browser/resources/ui/main.ui:275
+msgid "About"
+msgstr ""
+
+#: src/browser/resources/ui/main.ui:282
+msgid "Sort"
+msgstr ""
+
+#: src/browser/resources/ui/main.ui:284
+msgid "Time"
+msgstr ""
+
+#: src/browser/resources/ui/main.ui:289
+msgid "Title"
+msgstr ""
+
+#: src/browser/resources/ui/preferences.ui:9
+msgid "General"
+msgstr ""
+
+#: src/browser/resources/ui/preferences.ui:14
+msgid "Time Format"
+msgstr ""
+
+#: src/browser/resources/ui/preferences.ui:20
+msgid "Show Completed Reminders Last"
+msgstr ""
+
+#: src/browser/resources/ui/preferences.ui:24
+msgid "Reverse order of completed reminders"
+msgstr ""
+
+#: src/browser/resources/ui/preferences.ui:25
+msgid "This only applies when sorting by time"
+msgstr ""
+
+#: src/browser/resources/ui/preferences.ui:43
+msgid "Use Locale Default"
+msgstr ""
+
+#: src/browser/resources/ui/preferences.ui:44
+msgid "12 hour time"
+msgstr ""
+
+#: src/browser/resources/ui/preferences.ui:45
+msgid "24 hour time"
+msgstr ""
+
+#: src/browser/resources/ui/reminder.ui:6
+msgid "What should the reminder be called?"
+msgstr ""
+
+#: src/browser/resources/ui/reminder.ui:12
+msgid "Enter a short description of the reminder. (Optional)"
+msgstr ""
+
+#: src/browser/resources/ui/reminder.ui:30
+msgid "Set a time"
+msgstr ""
+
+#: src/browser/resources/ui/reminder.ui:82
+msgid "There are unsaved changes"
+msgstr ""
+
+#: src/browser/resources/ui/reminder.ui:95
+#: src/browser/resources/ui/reminder.ui:103
+msgid "Save changes"
+msgstr ""
+
+#: src/browser/resources/ui/time_box.ui:24
+msgid "Date"
+msgstr ""
+
+#: src/browser/resources/ui/time_box.ui:48
+msgid "Hour"
+msgstr ""
+
+#: src/browser/resources/ui/time_box.ui:83
+msgid "Minute"
+msgstr ""
+
+#: src/browser/about.py:28
+msgid "Copyright 2023 Sasha Hale"
+msgstr ""
+
+#: src/browser/application.py:45
+msgid "Print the version of the app"
+msgstr ""
+
+#: src/browser/application.py:52
+msgid "Restart service before starting app"
+msgstr ""
+
+#: src/browser/application.py:59
+msgid "Start on a different page"
+msgstr ""
+
+#: src/browser/application.py:233
+msgid "You have unsaved changes"
+msgstr ""
+
+#: src/browser/application.py:234
+msgid "Are you sure you want to close the window?"
+msgstr ""
+
+#: src/browser/application.py:236 src/browser/reminder.py:276
+msgid "Cancel"
+msgstr ""
+
+#: src/browser/application.py:237
+msgid "Yes"
+msgstr ""
+
+#: src/browser/main_window.py:100
+msgid "Press the plus button below to add a reminder"
+msgstr ""
+
+#: src/browser/main_window.py:104
+msgid "No reminders match your search"
+msgstr ""
+
+#: src/browser/main_window.py:386
+#, python-brace-format
+msgid "Searching '{text}'"
+msgstr ""
+
+#: src/browser/main_window.py:391
+msgid "Start typing to search"
+msgstr ""
+
+#: src/browser/reminder.py:58 src/browser/reminder.py:97
+msgid "Incomplete"
+msgstr ""
+
+#: src/browser/reminder.py:61 src/browser/reminder.py:101
+msgid "Complete"
+msgstr ""
+
+#: src/browser/reminder.py:272
+msgid "Remove reminder?"
+msgstr ""
+
+#: src/browser/reminder.py:273
+msgid "This will remove the <b>{self.get_title()}</b> reminder."
+msgstr ""
+
+#: src/browser/reminder.py:277
+msgid "Remove"
+msgstr ""
+
+#: src/browser/reminder.py:330
+msgid "Today"
+msgstr ""
+
+#: src/browser/reminder.py:332
+msgid "Tomorrow"
+msgstr ""
+
+#: src/browser/reminder.py:334
+msgid "Yesterday"
+msgstr ""
+
+#: src/browser/reminder.py:368 src/browser/reminder.py:390
+msgid "PM"
+msgstr ""
+
+#: src/browser/reminder.py:372 src/browser/reminder.py:394
+msgid "AM"
+msgstr ""
+
+#: src/service/backend.py:239
+msgid "Mark as completed"
+msgstr ""

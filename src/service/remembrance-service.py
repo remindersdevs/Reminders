@@ -16,6 +16,17 @@
 
 import sys
 
+import gettext
+import locale
+from remembrance import info
+
+locale_dir = '@LOCALE_DIR@'
+
+locale.bindtextdomain(info.app_executable, locale_dir)
+locale.textdomain(info.app_executable)
+gettext.bindtextdomain(info.app_executable, locale_dir)
+gettext.textdomain(info.app_executable)
+
 if __name__ == '__main__':
     from remembrance.service.application import main
     sys.exit(main())
