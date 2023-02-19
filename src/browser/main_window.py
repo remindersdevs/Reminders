@@ -274,10 +274,11 @@ class MainWindow(Adw.ApplicationWindow):
             return 0
 
     def remove_reminder(self, reminder):
-        self.app.run_service_method(
-            'RemoveReminder',
-            GLib.Variant('(ss)', (info.app_id, reminder.id))
-        )
+    	if reminder.id is not None:
+		self.app.run_service_method(
+		    'RemoveReminder',
+		    GLib.Variant('(ss)', (info.app_id, reminder.id))
+		)
         self.reminders_list.remove(reminder)
 
     def all_reminders(self):
