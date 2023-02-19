@@ -194,14 +194,23 @@ class Reminder(Adw.ExpanderRow):
     def update_completed(self, button = None):
         if not self.completed:
             self.set_completed(True)
+            if self.editing:
+                self.app.win.selected = self.app.win.completed_row
+                self.app.win.selected.emit('activate')
         else:
             self.set_completed(False)
+            if self.editing:
+                self.app.win.selected = self.app.win.all_row
+                self.app.win.selected.emit('activate')
 
         self.app.run_service_method(
             'UpdateCompleted',
             GLib.Variant('(ssb)', (info.app_id, self.id, self.completed))
         )
-        self.set_expanded(False)
+
+        if not self.editing:
+            self.set_expanded(False)
+
         self.changed()
 
     @Gtk.Template.Callback()

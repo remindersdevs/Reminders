@@ -63,7 +63,6 @@
             </child>
             <child>
               <object class="GtkButton" id="done_button">
-                <property name="sensitive" bind-source="save_message" bind-property="reveal-child" bind-flags="invert-boolean"/>
                 <property name="valign">center</property>
                 <signal name="clicked" handler="update_completed" swapped="no"/>
               </object>

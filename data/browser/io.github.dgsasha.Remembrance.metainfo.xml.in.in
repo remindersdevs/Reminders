@@ -70,4 +70,16 @@
 
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
+  <releases>
+    <release version="0.1.2" date="2023-02-10">
+      <description>
+        <ul>
+          <li>Always show confirmation dialog when closing window and reminders havent been saved</li>
+          <li>Fix issue with reminder not being marked as saved when it should be</li>
+          <li>Fix issues when filtering reminders</li>
+          <li>Allow completing unsaved reminders</li>
+        </ul>
+      </description>
+    </release>
+  </releases>
 </component>

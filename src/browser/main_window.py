@@ -214,7 +214,7 @@ class MainWindow(Adw.ApplicationWindow):
     def overdue_filter(self, reminder):
         now = int(time.time())
         if reminder.timestamp == 0:
-            return False
+            retval = False
         elif reminder.timestamp < now and not reminder.completed:
             retval = True
         else:
