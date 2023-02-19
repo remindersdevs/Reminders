@@ -132,7 +132,7 @@ class Remembrance(Adw.Application):
         self.create_action('about', self.show_about)
         self.create_action('notification-clicked', lambda *args: self.notification_clicked_cb())
         self.provider = Gtk.CssProvider()
-        self.provider.load_from_resource('/com/github/dgsasha/remembrance/stylesheet.css')
+        self.provider.load_from_resource('/io/github/dgsasha/remembrance/stylesheet.css')
         Gtk.StyleContext.add_provider_for_display(self.win.get_display(), self.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         self.win.present()
 

@@ -29,7 +29,7 @@ TIME_FORMAT = {
     '24h': 1
 }
 
-@Gtk.Template(resource_path='/com/github/dgsasha/remembrance/ui/reminder.ui')
+@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/reminder.ui')
 class Reminder(Adw.ExpanderRow):
     '''Ui for each reminder'''
     __gtype_name__ = 'reminder'
@@ -280,7 +280,7 @@ class Reminder(Adw.ExpanderRow):
         confirm_dialog.connect('response::remove', lambda *args: self.app.win.remove_reminder(self))
         confirm_dialog.present()
 
-@Gtk.Template(resource_path='/com/github/dgsasha/remembrance/ui/time_box.ui')
+@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/time_box.ui')
 class TimeBox(Gtk.Box):
     '''Section of reminder for handling times'''
     __gtype_name__ = 'time_box'

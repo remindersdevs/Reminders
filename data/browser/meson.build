@@ -4,7 +4,7 @@ conf.set('APP_ID', app_id)
 conf.set('BINDIR', get_option('prefix') / get_option('bindir'))
 
 configure_file(
-    input: 'com.github.dgsasha.Remembrance.service.in',
+    input: 'io.github.dgsasha.Remembrance.service.in',
     output: '@0@.service'.format(app_id),
     install: true,
     install_dir: get_option('datadir') / 'dbus-1/services',
@@ -12,7 +12,7 @@ configure_file(
 )
 
 appstream_file = configure_file(
-    input: 'com.github.dgsasha.Remembrance.metainfo.xml.in.in',
+    input: 'io.github.dgsasha.Remembrance.metainfo.xml.in.in',
     output: '@0@.metainfo.xml.in'.format(app_id),
     configuration: conf,
 )
@@ -35,7 +35,7 @@ if appstreamcli.found()
 endif
 
 desktop_file = configure_file(
-    input: 'com.github.dgsasha.Remembrance.desktop.in.in',
+    input: 'io.github.dgsasha.Remembrance.desktop.in.in',
     output: '@0@.desktop.in'.format(app_id),
     configuration: conf,
 )
@@ -57,7 +57,7 @@ if desktop_utils.found()
 endif
 
 configure_file(
-    input: 'com.github.dgsasha.Remembrance.gschema.xml.in',
+    input: 'io.github.dgsasha.Remembrance.gschema.xml.in',
     output: '@0@..gschema.xml'.format(app_id),
     install: true,
     install_dir: join_paths(get_option('datadir'), 'glib-2.0/schemas'),

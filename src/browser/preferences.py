@@ -15,7 +15,7 @@
 
 from gi.repository import Gtk, Adw, Gio
 
-@Gtk.Template(resource_path='/com/github/dgsasha/remembrance/ui/preferences.ui')
+@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/preferences.ui')
 class PreferencesWindow(Adw.PreferencesWindow):
     '''Settings Window'''
     __gtype_name__ = 'PreferencesWindow'

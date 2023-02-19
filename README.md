@@ -1,6 +1,6 @@
 <div align="center">
 
-![Remembrance](data/icons/com.github.dgsasha.Remembrance.svg)
+![Remembrance](data/icons/io.github.dgsasha.Remembrance.svg)
 # Remembrance, a simple reminder app for Linux
 
 This is pre-release software, expect bugs.
@@ -16,10 +16,10 @@ flatpak install flathub org.gnome.Sdk//43
 
 ## Building (Flatpak):
 ```
-flatpak-builder --user --install --force-clean build-dir com.github.dgsasha.Remembrance.yml
+flatpak-builder --user --install --force-clean build-dir io.github.dgsasha.Remembrance.yml
 ```
 ```
-flatpak run com.github.dgsasha.Remembrance.Devel --restart-service
+flatpak run io.github.dgsasha.Remembrance.Devel --restart-service
 ```
 
 ## Dependencies (generic):

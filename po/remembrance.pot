@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-18 17:24-0500\n"
+"POT-Creation-Date: 2023-02-18 19:37-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,86 +17,86 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: data/browser/com.github.dgsasha.Remembrance.desktop.in.in:4
-#: data/browser/com.github.dgsasha.Remembrance.metainfo.xml.in.in:9
+#: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:4
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:9
 #: src/info.py:5
 msgid "Remembrance"
 msgstr ""
 
-#: data/browser/com.github.dgsasha.Remembrance.desktop.in.in:5
+#: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:5
 msgid "A reminder app for Linux"
 msgstr ""
 
-#: data/browser/com.github.dgsasha.Remembrance.desktop.in.in:14
+#: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:14
 msgid ""
 "Todo;Productivity;Task;Planning;Planner;Time;Management;Reminder;Remembrance;"
 msgstr ""
 
-#: data/browser/com.github.dgsasha.Remembrance.desktop.in.in:18
-#: src/browser/resources/ui/main.ui:105 src/browser/main_window.py:297
+#: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:18
+#: src/browser/resources/ui/main.ui:105 src/browser/main_window.py:298
 msgid "Upcoming Reminders"
 msgstr ""
 
-#: data/browser/com.github.dgsasha.Remembrance.desktop.in.in:22
-#: src/browser/resources/ui/main.ui:128 src/browser/main_window.py:307
+#: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:22
+#: src/browser/resources/ui/main.ui:128 src/browser/main_window.py:308
 msgid "Overdue Reminders"
 msgstr ""
 
-#: data/browser/com.github.dgsasha.Remembrance.desktop.in.in:26
-#: src/browser/resources/ui/main.ui:151 src/browser/main_window.py:317
+#: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:26
+#: src/browser/resources/ui/main.ui:151 src/browser/main_window.py:318
 msgid "Completed Reminders"
 msgstr ""
 
-#: data/browser/com.github.dgsasha.Remembrance.gschema.xml.in:15
+#: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:15
 msgid "Time format"
 msgstr ""
 
-#: data/browser/com.github.dgsasha.Remembrance.gschema.xml.in:16
+#: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:16
 msgid "What format to display the time in"
 msgstr ""
 
-#: data/browser/com.github.dgsasha.Remembrance.gschema.xml.in:20
+#: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:20
 #: src/browser/resources/ui/main.ui:44
 msgid "Sort by"
 msgstr ""
 
-#: data/browser/com.github.dgsasha.Remembrance.gschema.xml.in:21
+#: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:21
 msgid "How to sort the reminders"
 msgstr ""
 
-#: data/browser/com.github.dgsasha.Remembrance.gschema.xml.in:25
+#: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:25
 msgid "Descending sort"
 msgstr ""
 
-#: data/browser/com.github.dgsasha.Remembrance.gschema.xml.in:26
+#: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:26
 msgid "If reminders sort should be descending"
 msgstr ""
 
-#: data/browser/com.github.dgsasha.Remembrance.gschema.xml.in:30
+#: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:30
 msgid "Completed last"
 msgstr ""
 
-#: data/browser/com.github.dgsasha.Remembrance.gschema.xml.in:31
+#: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:31
 msgid "Show completed reminders last"
 msgstr ""
 
-#: data/browser/com.github.dgsasha.Remembrance.gschema.xml.in:35
+#: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:35
 msgid "Completed reverse"
 msgstr ""
 
-#: data/browser/com.github.dgsasha.Remembrance.gschema.xml.in:36
+#: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:36
 msgid "Reverse order of completed reminders when sorted by time"
 msgstr ""
 
-#: data/browser/com.github.dgsasha.Remembrance.metainfo.xml.in.in:6
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:6
 msgid "Sasha Hale"
 msgstr ""
 
-#: data/browser/com.github.dgsasha.Remembrance.metainfo.xml.in.in:10
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:10
 msgid "A simple reminder app for Linux."
 msgstr ""
 
-#: data/browser/com.github.dgsasha.Remembrance.metainfo.xml.in.in:13
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:13
 msgid ""
 "Set reminders for anything you need help remembering. Remembrance will send "
 "a notification at a specified time, and at any time you can mark a reminder "
@@ -104,7 +104,7 @@ msgid ""
 "reminders, as well as search for specific reminders."
 msgstr ""
 
-#: data/service/com.github.dgsasha.Remembrance.Service.desktop.in.in:4
+#: data/service/io.github.dgsasha.Remembrance.Service.desktop.in.in:4
 msgid "Remembrance Service"
 msgstr ""
 
@@ -121,7 +121,7 @@ msgid "Sort direction"
 msgstr ""
 
 #: src/browser/resources/ui/main.ui:82 src/browser/resources/ui/main.ui:202
-#: src/browser/main_window.py:287
+#: src/browser/main_window.py:288
 msgid "All Reminders"
 msgstr ""
 
@@ -255,12 +255,12 @@ msgstr ""
 msgid "No reminders match your search"
 msgstr ""
 
-#: src/browser/main_window.py:386
+#: src/browser/main_window.py:387
 #, python-brace-format
 msgid "Searching '{text}'"
 msgstr ""
 
-#: src/browser/main_window.py:391
+#: src/browser/main_window.py:392
 msgid "Start typing to search"
 msgstr ""
 

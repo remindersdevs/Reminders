@@ -15,12 +15,12 @@ service_version = '0.1'
 
 app_executable = 'remembrance'
 
-base_app_id = 'com.github.dgsasha.Remembrance'
+base_app_id = 'io.github.dgsasha.Remembrance'
 devel_app_id = base_app_id + '.Devel'
 
 app_id = devel ?  devel_app_id : base_app_id
 
-base_path = '/com/github/dgsasha/Remembrance'
+base_path = '/io/github/dgsasha/Remembrance'
 path = devel ? base_path + '/Devel' : base_path
 
 service_executable = 'remembrance-service'

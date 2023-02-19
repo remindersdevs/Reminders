@@ -1,4 +1,4 @@
-app-id: com.github.dgsasha.Remembrance.Devel
+app-id: io.github.dgsasha.Remembrance.Devel
 runtime: org.gnome.Platform
 runtime-version: '43'
 sdk: org.gnome.Sdk
@@ -9,10 +9,7 @@ finish-args:
   - --device=dri
   - --socket=wayland
   - --socket=fallback-x11
-  - --talk-name=org.freedesktop.Notifications
   - --system-talk-name=org.freedesktop.login1
-  - --own-name=com.github.dgsasha.Remembrance.Devel
-  - --own-name=com.github.dgsasha.Remembrance.Devel.Service
 
 modules:
   - name: libportal

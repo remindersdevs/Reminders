@@ -74,7 +74,7 @@ class Calendar(threading.Thread):
         except Exception as error:
             self.app.logger.error(f'{error}: Failed to set timeout to refresh date labels')
 
-@Gtk.Template(resource_path='/com/github/dgsasha/remembrance/ui/main.ui')
+@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/main.ui')
 class MainWindow(Adw.ApplicationWindow):
     '''Main application Window'''
     __gtype_name__ = 'application_window'
@@ -274,11 +274,11 @@ class MainWindow(Adw.ApplicationWindow):
             return 0
 
     def remove_reminder(self, reminder):
-    	if reminder.id is not None:
-		self.app.run_service_method(
-		    'RemoveReminder',
-		    GLib.Variant('(ss)', (info.app_id, reminder.id))
-		)
+        if reminder.id is not None:
+            self.app.run_service_method(
+                'RemoveReminder',
+                GLib.Variant('(ss)', (info.app_id, reminder.id))
+            )
         self.reminders_list.remove(reminder)
 
     def all_reminders(self):

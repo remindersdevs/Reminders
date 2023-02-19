@@ -10,7 +10,7 @@
    id="svg11300"
    sodipodi:version="0.32"
    inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
-   sodipodi:docname="com.github.dgsasha.Remembrance.Source.svg"
+   sodipodi:docname="io.github.dgsasha.Remembrance.Source.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    version="1.0"
    style="display:inline;enable-background:new"
@@ -1020,15 +1020,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="66.5"
-     inkscape:cy="97.5"
+     inkscape:cx="67.5"
+     inkscape:cy="98"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:grid-bbox="true"
      inkscape:document-units="px"
      inkscape:showpageshadow="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1137"
+     inkscape:window-width="2560"
+     inkscape:window-height="1377"
      inkscape:window-x="0"
      inkscape:window-y="0"
      width="400px"
@@ -3447,10 +3447,10 @@
        style="display:inline;enable-background:new;stroke-width:0.253356;vector-effect:none;fill:#b9646d;fill-opacity:1;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;marker-start:none;marker-mid:none;marker-end:none;paint-order:normal"
        transform="matrix(0.97368439,0,0,1,0.6838652,-1.25013)" />
     <g
-       id="com.github.dgsasha.Remembrance"
+       id="io.github.dgsasha.Remembrance"
        style="display:inline;enable-background:new"
        transform="translate(1.7607567e-4,-0.5000414)"
-       inkscape:label="com.github.dgsasha.Remembrance">
+       inkscape:label="io.github.dgsasha.Remembrance">
       <g
          id="g16389"
          transform="matrix(0.97368439,0,0,1,0.68351468,-1.2501085)"
@@ -3511,10 +3511,10 @@
          clip-path="none" />
     </g>
     <g
-       id="com.github.dgsasha.Remembrance-symbolic"
+       id="io.github.dgsasha.Remembrance-symbolic"
        transform="translate(160,172)"
        style="display:inline;enable-background:new"
-       inkscape:label="com.github.dgsasha.Remembrance-symbolic">
+       inkscape:label="io.github.dgsasha.Remembrance-symbolic">
       <path
          d="M 8,1 C 6.925781,1 5.671875,1.378906 4.921875,1.980469 1.5625,4.667969 3.222656,10.492188 1.28125,14.160156 1.140625,14.421875 1.035156,14.808594 1,15 H 15 C 14.964844,14.808594 14.859375,14.421875 14.722656,14.160156 12.777344,10.492188 14.4375,4.667969 11.082031,1.980469 10.328125,1.378906 9.074219,1 8,1 Z m 0,2 c 0.605469,0 1.605469,0.359375 1.832031,0.542969 1,0.800781 1.375,2.238281 1.609375,4.378906 0.167969,1.53125 0.226563,3.304687 0.710938,5.078125 H 3.847656 C 4.332031,11.226562 4.390625,9.453125 4.558594,7.921875 4.792969,5.78125 5.167969,4.34375 6.171875,3.542969 6.394531,3.359375 7.394531,3 8,3 Z m 0,0"
          id="path2" />
