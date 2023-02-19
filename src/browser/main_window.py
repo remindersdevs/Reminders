@@ -200,10 +200,10 @@ class MainWindow(Adw.ApplicationWindow):
         return True
 
     def upcoming_filter(self, reminder):
+        now = int(time.time())
         if reminder.timestamp == 0:
             retval = True
-        now = int(time.time())
-        if reminder.timestamp > now and not reminder.completed:
+        elif reminder.timestamp > now and not reminder.completed:
             retval = True
         else:
             retval = False
@@ -212,10 +212,10 @@ class MainWindow(Adw.ApplicationWindow):
         return retval
 
     def overdue_filter(self, reminder):
-        if reminder.timestamp == 0:
-            retval = False
         now = int(time.time())
-        if reminder.timestamp < now and not reminder.completed:
+        if reminder.timestamp == 0:
+            return False
+        elif reminder.timestamp < now and not reminder.completed:
             retval = True
         else:
             retval = False
@@ -373,6 +373,8 @@ class MainWindow(Adw.ApplicationWindow):
             self.sidebar_list.set_sensitive(False)
             self.search_changed_cb()
             self.search_entry.grab_focus()
+            if self.flap.get_folded():
+                self.flap.set_reveal_flap(False)
         else:
             self.stop_search()
 
