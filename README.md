@@ -5,7 +5,9 @@
 
 This is pre-release software, expect bugs.
 
-![screenshot](screenshot.png)
+![screenshot-dark](screenshot-dark.png)
+
+![screenshot-light](screenshot-light.png)
 
 </div>
 
