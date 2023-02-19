@@ -279,6 +279,8 @@ class MainWindow(Adw.ApplicationWindow):
                 'RemoveReminder',
                 GLib.Variant('(ss)', (info.app_id, reminder.id))
             )
+        if reminder in self.app.unsaved_reminders:
+            self.app.unsaved_reminders.remove(reminder)
         self.reminders_list.remove(reminder)
 
     def all_reminders(self):

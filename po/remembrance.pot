@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-18 20:34-0500\n"
+"POT-Creation-Date: 2023-02-19 11:24-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,17 +33,17 @@ msgid ""
 msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:18
-#: src/browser/resources/ui/main.ui:105 src/browser/main_window.py:298
+#: src/browser/resources/ui/main.ui:105 src/browser/main_window.py:299
 msgid "Upcoming Reminders"
 msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:22
-#: src/browser/resources/ui/main.ui:128 src/browser/main_window.py:308
+#: src/browser/resources/ui/main.ui:128 src/browser/main_window.py:309
 msgid "Overdue Reminders"
 msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:26
-#: src/browser/resources/ui/main.ui:151 src/browser/main_window.py:318
+#: src/browser/resources/ui/main.ui:151 src/browser/main_window.py:319
 msgid "Completed Reminders"
 msgstr ""
 
@@ -121,7 +121,7 @@ msgid "Sort direction"
 msgstr ""
 
 #: src/browser/resources/ui/main.ui:82 src/browser/resources/ui/main.ui:202
-#: src/browser/main_window.py:288
+#: src/browser/main_window.py:289
 msgid "All Reminders"
 msgstr ""
 
@@ -231,19 +231,19 @@ msgstr ""
 msgid "Start on a different page"
 msgstr ""
 
-#: src/browser/application.py:233
+#: src/browser/application.py:228
 msgid "You have unsaved changes"
 msgstr ""
 
-#: src/browser/application.py:234
+#: src/browser/application.py:229
 msgid "Are you sure you want to close the window?"
 msgstr ""
 
-#: src/browser/application.py:236 src/browser/reminder.py:280
+#: src/browser/application.py:231 src/browser/reminder.py:283
 msgid "Cancel"
 msgstr ""
 
-#: src/browser/application.py:237
+#: src/browser/application.py:232
 msgid "Yes"
 msgstr ""
 
@@ -255,12 +255,12 @@ msgstr ""
 msgid "No reminders match your search"
 msgstr ""
 
-#: src/browser/main_window.py:389
+#: src/browser/main_window.py:390
 #, python-brace-format
 msgid "Searching '{text}'"
 msgstr ""
 
-#: src/browser/main_window.py:394
+#: src/browser/main_window.py:395
 msgid "Start typing to search"
 msgstr ""
 
@@ -272,35 +272,35 @@ msgstr ""
 msgid "Complete"
 msgstr ""
 
-#: src/browser/reminder.py:276
+#: src/browser/reminder.py:279
 msgid "Remove reminder?"
 msgstr ""
 
-#: src/browser/reminder.py:277
+#: src/browser/reminder.py:280
 msgid "This will remove the <b>{self.get_title()}</b> reminder."
 msgstr ""
 
-#: src/browser/reminder.py:281
+#: src/browser/reminder.py:284
 msgid "Remove"
 msgstr ""
 
-#: src/browser/reminder.py:336
+#: src/browser/reminder.py:337
 msgid "Today"
 msgstr ""
 
-#: src/browser/reminder.py:338
+#: src/browser/reminder.py:339
 msgid "Tomorrow"
 msgstr ""
 
-#: src/browser/reminder.py:340
+#: src/browser/reminder.py:341
 msgid "Yesterday"
 msgstr ""
 
-#: src/browser/reminder.py:374 src/browser/reminder.py:396
+#: src/browser/reminder.py:375 src/browser/reminder.py:397
 msgid "PM"
 msgstr ""
 
-#: src/browser/reminder.py:378 src/browser/reminder.py:400
+#: src/browser/reminder.py:379 src/browser/reminder.py:401
 msgid "AM"
 msgstr ""
 

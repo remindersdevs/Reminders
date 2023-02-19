@@ -148,6 +148,8 @@ class Reminder(Adw.ExpanderRow):
             self.unsaved = []
         self.editing = False
         self.save_message.set_reveal_child(False)
+        if self in self.app.unsaved_reminders:
+            self.app.unsaved_reminders.remove(self)
 
     def unsaved_edits(self, name = None):
         if name is not None:
@@ -157,6 +159,8 @@ class Reminder(Adw.ExpanderRow):
                 return
         self.editing = True
         self.save_message.set_reveal_child(True)
+        if self not in self.app.unsaved_reminders:
+            self.app.unsaved_reminders.append(self)
 
     def check_time_enabled_saved(self):
         if self.time_enabled != self.time_switch.get_active():
@@ -270,21 +274,18 @@ class Reminder(Adw.ExpanderRow):
 
     @Gtk.Template.Callback()
     def on_remove(self, button):
-        if self.id is not None:
-            confirm_dialog = Adw.MessageDialog(
-                transient_for=self.app.win,
-                heading=_('Remove reminder?'),
-                body=_(f'This will remove the <b>{self.get_title()}</b> reminder.'),
-                body_use_markup=True
-            )
-            confirm_dialog.add_response('cancel', _('Cancel'))
-            confirm_dialog.add_response('remove', _('Remove'))
-            confirm_dialog.set_default_response('cancel')
-            confirm_dialog.set_response_appearance('remove', Adw.ResponseAppearance.DESTRUCTIVE)
-            confirm_dialog.connect('response::remove', lambda *args: self.app.win.remove_reminder(self))
-            confirm_dialog.present()
-        else:
-            self.app.win.remove_reminder(self)
+        confirm_dialog = Adw.MessageDialog(
+            transient_for=self.app.win,
+            heading=_('Remove reminder?'),
+            body=_(f'This will remove the <b>{self.get_title()}</b> reminder.'),
+            body_use_markup=True
+        )
+        confirm_dialog.add_response('cancel', _('Cancel'))
+        confirm_dialog.add_response('remove', _('Remove'))
+        confirm_dialog.set_default_response('cancel')
+        confirm_dialog.set_response_appearance('remove', Adw.ResponseAppearance.DESTRUCTIVE)
+        confirm_dialog.connect('response::remove', lambda *args: self.app.win.remove_reminder(self))
+        confirm_dialog.present()
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/time_box.ui')
 class TimeBox(Gtk.Box):

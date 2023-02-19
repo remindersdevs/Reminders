@@ -38,6 +38,7 @@ class Remembrance(Adw.Application):
         self.restart = False
         self.sandboxed = False
         self.page = 'all'
+        self.unsaved_reminders = []
         self.add_main_option(
             'version', ord('v'),
             GLib.OptionFlags.NONE,
@@ -222,12 +223,7 @@ class Remembrance(Adw.Application):
         return retval
 
     def on_close(self, window = None):
-        unsaved = []
-        for reminder in self.win.reminder_lookup_dict.values():
-            if reminder.editing:
-                unsaved.append(reminder)
-
-        if len(unsaved) > 0:
+        if len(self.unsaved_reminders) > 0:
             confirm_dialog = Adw.MessageDialog(
                 transient_for=self.win,
                 heading=_('You have unsaved changes'),
@@ -238,16 +234,16 @@ class Remembrance(Adw.Application):
             confirm_dialog.set_response_appearance('yes', Adw.ResponseAppearance.DESTRUCTIVE)
             confirm_dialog.set_default_response('cancel')
             confirm_dialog.set_close_response('cancel')
-            confirm_dialog.connect('response::cancel', lambda *args: self.cancel_close(unsaved))
+            confirm_dialog.connect('response::cancel', lambda *args: self.cancel_close())
             confirm_dialog.connect('response::yes', lambda *args: self.win.destroy())
             confirm_dialog.present()
             return True
         else:
             self.win.destroy()
 
-    def cancel_close(self, unsaved):
+    def cancel_close(self):
         self.win.search_bar.set_search_mode(False)
-        for reminder in unsaved:
+        for reminder in self.unsaved_reminders:
             reminder.set_expanded(True)
         self.win.selected = self.win.all_row
         self.win.selected.emit('activate')
