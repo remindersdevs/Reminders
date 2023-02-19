@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-18 19:37-0500\n"
+"POT-Creation-Date: 2023-02-18 20:34-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -239,7 +239,7 @@ msgstr ""
 msgid "Are you sure you want to close the window?"
 msgstr ""
 
-#: src/browser/application.py:236 src/browser/reminder.py:276
+#: src/browser/application.py:236 src/browser/reminder.py:280
 msgid "Cancel"
 msgstr ""
 
@@ -255,12 +255,12 @@ msgstr ""
 msgid "No reminders match your search"
 msgstr ""
 
-#: src/browser/main_window.py:387
+#: src/browser/main_window.py:389
 #, python-brace-format
 msgid "Searching '{text}'"
 msgstr ""
 
-#: src/browser/main_window.py:392
+#: src/browser/main_window.py:394
 msgid "Start typing to search"
 msgstr ""
 
@@ -272,35 +272,35 @@ msgstr ""
 msgid "Complete"
 msgstr ""
 
-#: src/browser/reminder.py:272
+#: src/browser/reminder.py:276
 msgid "Remove reminder?"
 msgstr ""
 
-#: src/browser/reminder.py:273
+#: src/browser/reminder.py:277
 msgid "This will remove the <b>{self.get_title()}</b> reminder."
 msgstr ""
 
-#: src/browser/reminder.py:277
+#: src/browser/reminder.py:281
 msgid "Remove"
 msgstr ""
 
-#: src/browser/reminder.py:330
+#: src/browser/reminder.py:336
 msgid "Today"
 msgstr ""
 
-#: src/browser/reminder.py:332
+#: src/browser/reminder.py:338
 msgid "Tomorrow"
 msgstr ""
 
-#: src/browser/reminder.py:334
+#: src/browser/reminder.py:340
 msgid "Yesterday"
 msgstr ""
 
-#: src/browser/reminder.py:368 src/browser/reminder.py:390
+#: src/browser/reminder.py:374 src/browser/reminder.py:396
 msgid "PM"
 msgstr ""
 
-#: src/browser/reminder.py:372 src/browser/reminder.py:394
+#: src/browser/reminder.py:378 src/browser/reminder.py:400
 msgid "AM"
 msgstr ""
 
