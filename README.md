@@ -19,7 +19,7 @@ flatpak install flathub org.gnome.Sdk//43
 flatpak-builder --user --install --force-clean build-dir com.github.dgsasha.Remembrance.yml
 ```
 ```
-flatpak run com.github.dgsasha.Remembrance --restart-service
+flatpak run com.github.dgsasha.Remembrance.Devel --restart-service
 ```
 
 ## Dependencies (generic):
@@ -41,7 +41,6 @@ remembrance --restart-service
 
 ## Todo
 Before first stable release:
-- Add support for translations
 - Add support for recurring reminders
 
 Future plans:
