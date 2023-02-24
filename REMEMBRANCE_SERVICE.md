@@ -1,6 +1,8 @@
 # Remembrance DBus Service Info, version 0.2
 name: io.github.dgsasha.Remembrance.Service1
+
 interface: io.github.dgsasha.Remembrance.Service1
+
 object: /io/github/dgsasha/Remembrance/Service1
 
 Currently this is only packaged with Remembrance and anyone who wants to use it will have to have the full Remembrance app installed. The reason this exists is to allow integrating the Remembrance app with desktop environments through extensions.
