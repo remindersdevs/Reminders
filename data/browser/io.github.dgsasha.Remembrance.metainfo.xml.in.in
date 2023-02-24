@@ -79,6 +79,7 @@
       <description>
         <ul>
           <li>Add support for recurring reminders</li>
+          <li>Add button to discard changes</li>
           <li>Lots of bugfixes</li>
         </ul>
       </description>
