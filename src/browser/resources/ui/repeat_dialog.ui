@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="repeat_dialog" parent="AdwWindow">
+    <property name="title" translatable="yes">Repeat Options</property>
+    <property name="default-width">450</property>
+    <property name="width-request">450</property>
+    <property name="default-height">400</property>
+    <property name="content">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkHeaderBar"/>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="vexpand">true</property>
+            <child>
+              <object class="AdwClamp">
+                <property name="maximum-size">600</property>
+                <property name="tightening-threshold">500</property>
+                <property name="orientation">horizontal</property>
+                <property name="halign">center</property>
+                <property name="valign">start</property>
+                <property name="vexpand">true</property>
+                <child>
+                  <object class="GtkListBox">
+                    <property name="selection-mode">none</property>
+                    <style>
+                      <class name="boxed-list"/>
+                      <class name="repeat-list"/>
+                    </style>
+                    <child>
+                      <object class="AdwExpanderRow" id="repeat_row">
+                        <property name="title" translatable="yes">Repeat the reminder</property>
+                        <property name="show-enable-switch">true</property>
+                        <child>
+                          <object class="GtkListBoxRow">
+                            <property name="activatable">false</property>
+                            <style>
+                              <class name="repeat-row"/>
+                            </style>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="orientation">horizontal</property>
+                                <property name="spacing">5</property>
+                                <property name="halign">start</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="label" translatable="yes">Repeat every</property>
+                                    <property name="halign">start</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkSpinButton" id="frequency_btn">
+                                    <property name="halign">start</property>
+                                    <property name="orientation">horizontal</property>
+                                    <property name="adjustment">
+                                      <object class="GtkAdjustment">
+                                        <property name="step-increment">1</property>
+                                        <property name="lower">1</property>
+                                        <property name="upper">100</property>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkDropDown" id="repeat_type_button">
+                                    <property name="valign">center</property>
+                                    <property name="model">repeat_list</property>
+                                    <signal name="notify::selected" handler="repeat_type_selected_changed" swapped="no"/>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkListBoxRow" id="week_repeat_row">
+                            <property name="activatable">false</property>
+                            <style>
+                              <class name="repeat-row"/>
+                            </style>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="orientation">horizontal</property>
+                                <property name="halign">center</property>
+                                <property name="valign">center</property>
+                                <property name="spacing">2</property>
+                                <child>
+                                  <object class="GtkToggleButton" id="mon_btn">
+                                    <property name="valign">center</property>
+                                    <property name="label" translatable="yes">Mon</property>
+                                    <property name="tooltip-text" translatable="yes">Monday</property>
+                                    <style>
+                                      <class name="flat"/>
+                                      <class name="circular"/>
+                                      <class name="day-button"/>
+                                    </style>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkToggleButton" id="tue_btn">
+                                    <property name="valign">center</property>
+                                    <property name="label" translatable="yes">Tue</property>
+                                    <property name="tooltip-text" translatable="yes">Tuesday</property>
+                                    <style>
+                                      <class name="flat"/>
+                                      <class name="circular"/>
+                                      <class name="day-button"/>
+                                    </style>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkToggleButton" id="wed_btn">
+                                    <property name="valign">center</property>
+                                    <property name="label" translatable="yes">Wed</property>
+                                    <property name="tooltip-text" translatable="yes">Wednesday</property>
+                                    <style>
+                                      <class name="flat"/>
+                                      <class name="circular"/>
+                                      <class name="day-button"/>
+                                    </style>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkToggleButton" id="thu_btn">
+                                    <property name="valign">center</property>
+                                    <property name="label" translatable="yes">Thu</property>
+                                    <property name="tooltip-text" translatable="yes">Thursday</property>
+                                    <style>
+                                      <class name="flat"/>
+                                      <class name="circular"/>
+                                      <class name="day-button"/>
+                                    </style>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkToggleButton" id="fri_btn">
+                                    <property name="valign">center</property>
+                                    <property name="label" translatable="yes">Fri</property>
+                                    <property name="tooltip-text" translatable="yes">Friday</property>
+                                    <style>
+                                      <class name="flat"/>
+                                      <class name="circular"/>
+                                      <class name="day-button"/>
+                                    </style>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkToggleButton" id="sat_btn">
+                                    <property name="valign">center</property>
+                                    <property name="label" translatable="yes">Sat</property>
+                                    <property name="tooltip-text" translatable="yes">Saturday</property>
+                                    <style>
+                                      <class name="flat"/>
+                                      <class name="circular"/>
+                                      <class name="day-button"/>
+                                    </style>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkToggleButton" id="sun_btn">
+                                    <property name="valign">center</property>
+                                    <property name="label" translatable="yes">Sun</property>
+                                    <property name="tooltip-text" translatable="yes">Sunday</property>
+                                    <style>
+                                      <class name="flat"/>
+                                      <class name="circular"/>
+                                      <class name="day-button"/>
+                                    </style>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkListBoxRow" id="repeat_times_row">
+                            <property name="activatable">false</property>
+                            <style>
+                              <class name="repeat-row"/>
+                            </style>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="orientation">horizontal</property>
+                                <property name="spacing">5</property>
+                                <property name="halign">start</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="label" translatable="yes">Repeat</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkDropDown" id="repeat_duration_button">
+                                    <property name="valign">center</property>
+                                    <property name="model">repeat_duration_list</property>
+                                    <signal name="notify::selected" handler="repeat_duration_selected_changed" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkBox" id="repeat_times_box">
+                                    <property name="orientation">horizontal</property>
+                                    <property name="spacing">5</property>
+                                    <child>
+                                      <object class="GtkSpinButton" id="repeat_times_btn">
+                                        <property name="halign">start</property>
+                                        <property name="orientation">horizontal</property>
+                                        <property name="adjustment">
+                                          <object class="GtkAdjustment">
+                                            <property name="step-increment">1</property>
+                                            <property name="lower">0</property>
+                                            <property name="upper">100</property>
+                                          </object>
+                                        </property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label" translatable="yes">total occurences</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkMenuButton" id="repeat_until_btn">
+                                    <property name="valign">center</property>
+                                    <property name="halign">end</property>
+                                    <property name="popover">
+                                      <object class="GtkPopover" id="calendar_popover">
+                                        <child>
+                                          <object class="GtkCalendar" id="calendar">
+                                            <signal name="day-selected" handler="day_changed" swapped="no"/>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </property>
+                                    <style>
+                                      <class name="date"/>
+                                    </style>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+  <object class="GtkStringList" id="repeat_list">
+    <items>
+      <item translatable="yes">minute(s)</item>
+      <item translatable="yes">hour(s)</item>
+      <item translatable="yes">day(s)</item>
+      <item translatable="yes">week(s)</item>
+    </items>
+  </object>
+  <object class="GtkStringList" id="repeat_duration_list">
+    <items>
+      <item translatable="yes">forever</item>
+      <item translatable="yes">for</item>
+      <item translatable="yes">until</item>
+    </items>
+  </object>
+</interface>

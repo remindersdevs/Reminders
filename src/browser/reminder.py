@@ -15,11 +15,18 @@
 
 import time
 import ctypes
+import datetime
 
 from gi.repository import Gtk, Adw, GLib
 from gettext import gettext as _
 
 from remembrance import info
+from remembrance.service.backend import RepeatType, RepeatDays
+from enum import IntEnum
+
+class TimeFormat(IntEnum):
+    TWENTYFOUR_HOUR = 0
+    TWELVE_HOUR = 1
 
 DEFAULT_TITLE = 'Title'
 DEFAULT_DESC = 'Description'
@@ -34,25 +41,53 @@ class Reminder(Adw.ExpanderRow):
     '''Ui for each reminder'''
     __gtype_name__ = 'reminder'
 
+    label_box = Gtk.Template.Child()
+    time_label = Gtk.Template.Child()
+    repeat_label = Gtk.Template.Child()
     title_entry = Gtk.Template.Child()
     description_entry = Gtk.Template.Child()
-    time_switch_box = Gtk.Template.Child()
-    time_switch = Gtk.Template.Child()
+    time_expander_row = Gtk.Template.Child()
     done_button = Gtk.Template.Child()
     save_message = Gtk.Template.Child()
-    time_box = None
+    discard_button = Gtk.Template.Child()
+    time_row = None
 
-    def __init__(self, app, reminder_id = None, timestamp = 0, default = False, completed = False, **kwargs):
+    def __init__(
+        self, app,
+        reminder_id = None,
+        timestamp = 0,
+        default = False,
+        completed = False,
+        repeat_type = 0,
+        repeat_frequency = 1,
+        repeat_days = 0,
+        repeat_until = 0,
+        repeat_times = 1,
+        **kwargs
+    ):
         super().__init__(**kwargs)
-        self.label = Gtk.Label()
         self.app = app
+        self.repeat_type = repeat_type
+        self.repeat_frequency = repeat_frequency
+        self.repeat_days = repeat_days
+        self.repeat_until = repeat_until
+        self.repeat_times = repeat_times
+        self.unsaved = []
+        self.editing = False
+
         self.time_enabled = (timestamp != 0)
-        self.time_box = TimeBox(self, timestamp, self.app.settings)
+        self.time_row = TimeRow(self, timestamp, self.app.settings)
         self.timestamp = timestamp
-        self.saved_edits()
+
+        if self.repeat_days == 0 or RepeatDays(self.repeat_days).bit_length() == 1:
+            weekday = datetime.date.fromtimestamp(timestamp).weekday()
+            self.repeat_days = 2**(weekday)
 
         self.completed = completed
         self.id = reminder_id
+        if self.id is None:
+            self.discard_button.set_sensitive(False)
+            self.done_button.set_sensitive(False)
 
         if self.completed:
             self.done_button.set_label(_('Incomplete'))
@@ -61,9 +96,8 @@ class Reminder(Adw.ExpanderRow):
             self.done_button.set_label(_('Complete'))
             self.done_button.set_css_classes(['opaque', 'complete'])
 
-        self.time_switch.set_active(self.time_enabled)
-        self.time_switch_box.append(self.time_box)
-        self.time_box.set_sensitive(self.time_enabled)
+        self.time_expander_row.set_enable_expansion(self.time_enabled)
+        self.time_expander_row.add_row(self.time_row)        
 
         if default:
             self.set_title(DEFAULT_TITLE)
@@ -77,18 +111,40 @@ class Reminder(Adw.ExpanderRow):
         self.add_action(self.completed_icon)
         self.completed_icon.set_visible(self.completed)
 
-        if self.time_enabled:
-            self.label.set_visible(True)
-            self.label.set_label(self.time_box.get_long_label())
-        else:
-            self.label.set_visible(False)
-
-        self.add_action(self.label)
+        self.add_action(self.label_box)
+        self.update_label()
 
         self.past_due = Gtk.Image(icon_name='task-past-due-symbolic', visible=False)
         self.add_action(self.past_due)
 
         self.refresh_time()
+
+    def set_repeat_times(self, times):
+        self.repeat_times = times
+        if not self.editing:
+            self.time_row.repeat_times = self.repeat_times
+            self.time_row.update_repeat_label()
+        else:
+            self.check_repeat_saved()
+        self.update_repeat_label()
+
+    def update_time_label(self):
+        if self.time_enabled:
+            self.time_label.set_label(self.time_row.get_long_label())
+            self.time_label.set_visible(True)
+        else:
+            self.time_label.set_visible(False)
+
+    def update_repeat_label(self):
+        if self.repeat_type != 0:
+            self.repeat_label.set_label(self.time_row.repeat_label.get_label())
+            self.repeat_label.set_visible(True)
+        else:
+            self.repeat_label.set_visible(False)
+
+    def update_label(self):
+        self.update_time_label()
+        self.update_repeat_label()
 
     def set_completed(self, completed):
         self.completed = completed
@@ -113,18 +169,24 @@ class Reminder(Adw.ExpanderRow):
         else:
             self.past_due.set_visible(False)
 
-    def update_label(self):
-        self.label.set_label(self.time_box.get_long_label())
-        self.time_box.update_date_button_label()
+    def update_day_label(self):
+        self.update_time_label()
+        self.time_row.update_date_button_label()
+
+    def set_timestamp(self, timestamp):
+        self.timestamp = timestamp
+        time = GLib.DateTime.new_from_unix_local(timestamp)
+        self.time_label.set_label(self.time_row.get_long_label(time))
+        if not self.editing:
+            self.time_row.set_time(timestamp)
+        else:
+            self.check_time_saved()
 
     def update_timestamp(self):
-        self.time_enabled = self.time_switch.get_active()
+        self.time_enabled = self.time_expander_row.get_enable_expansion()
         if self.time_enabled:
-            self.label.set_visible(True)
-            self.label.set_label(self.time_box.get_long_label())
-            self.timestamp = self.time_box.get_timestamp()
+            self.timestamp = self.time_row.get_timestamp()
         else:
-            self.label.set_visible(False)
             self.timestamp = 0
 
     def entry_check_empty(self):
@@ -139,6 +201,8 @@ class Reminder(Adw.ExpanderRow):
     def saved_edits(self, name = None):
         # If a name is specified this method will only set that object as saved
         # If no name is specified it will set the whole reminder as saved
+        if self.id is None and name is not None:
+            return
         if name is not None:
             if name in self.unsaved:
                 self.unsaved.remove(name)
@@ -163,32 +227,54 @@ class Reminder(Adw.ExpanderRow):
             self.app.unsaved_reminders.append(self)
 
     def check_time_enabled_saved(self):
-        if self.time_enabled != self.time_switch.get_active():
+        if self.time_enabled != self.time_expander_row.get_enable_expansion():
             self.unsaved_edits('time-enabled')
         else:
             self.saved_edits('time-enabled')
 
     def check_time_saved(self):
-        if self.time_box is not None and self.timestamp is not None:
-            if self.time_box.get_timestamp() != self.timestamp:
+        if self.time_row is not None and self.timestamp is not None:
+            if self.time_row.get_timestamp() != self.timestamp:
                 self.unsaved_edits('time')
             else:
                 self.saved_edits('time')
 
-    def update(self, title, description, timestamp):
+    def check_repeat_saved(self):
+        if self.time_row is not None:
+            if self.time_row.repeat_frequency != self.repeat_frequency or \
+            self.time_row.repeat_type != self.repeat_type or \
+            self.time_row.repeat_days != self.repeat_days or \
+            self.time_row.repeat_times != self.repeat_times or \
+            self.time_row.repeat_until != self.repeat_until:
+                self.unsaved_edits('repeat')
+            else:
+                self.saved_edits('repeat')
+
+    def update(self, title, description, timestamp, repeat_type, repeat_frequency, repeat_days, repeat_until, repeat_times):
         self.set_title(title)
         self.set_subtitle(description)
-        self.timestamp = timestamp
+        self.set_timestamp(timestamp)
+        self.repeat_type = repeat_type
+        self.repeat_days = repeat_days
+        self.repeat_frequency = repeat_frequency
+        self.repeat_until = repeat_until
+        self.repeat_times = repeat_times
 
         if not self.editing:
             self.time_enabled = (timestamp != 0)
             self.title_entry.set_text(title)
             self.description_entry.set_text(description)
-            self.time_box.set_time(timestamp)
-            self.time_switch.set_active(self.time_enabled)
-            self.time_box.set_sensitive(self.time_enabled)
+            self.time_row.set_time(timestamp)
+            self.time_expander_row.set_enable_expansion(self.time_enabled)
+            self.time_row.set_sensitive(self.time_enabled)
+            self.time_row.update_repeat()
+            self.changed()
         else:
             self.check_time_saved()
+            self.check_repeat_saved()
+
+        self.changed()
+        self.get_parent().invalidate_sort()
 
     @Gtk.Template.Callback()
     def update_completed(self, button = None):
@@ -230,9 +316,17 @@ class Reminder(Adw.ExpanderRow):
             self.saved_edits('description')
 
     @Gtk.Template.Callback()
-    def on_time_switch(self, switch, state):
-        self.time_box.set_sensitive(state)
+    def on_time_switch(self, switch, data = None):
         self.check_time_enabled_saved()
+
+    @Gtk.Template.Callback()
+    def discard_changes(self, button):
+        self.title_entry.set_text(self.get_title())
+        self.description_entry.set_text(self.get_subtitle())
+        self.time_expander_row.set_enable_expansion(self.time_enabled)
+        self.time_row.update_repeat()
+        self.time_row.set_time(self.timestamp)
+        self.saved_edits()
 
     @Gtk.Template.Callback()
     def on_save(self, button):
@@ -242,6 +336,25 @@ class Reminder(Adw.ExpanderRow):
         self.update_timestamp()
         self.set_title(self.title_entry.get_text())
         self.set_subtitle(self.description_entry.get_text())
+        self.repeat_type = self.time_row.repeat_type
+        self.repeat_frequency = self.time_row.repeat_frequency
+        self.repeat_days = self.time_row.repeat_days
+        self.repeat_until = self.time_row.repeat_until
+        self.update_label()
+
+        if self.repeat_type == 0 and self.timestamp > int(time.time()):
+            self.time_row.repeat_times = 1
+
+        self.repeat_times = self.time_row.repeat_times
+
+        self.saved_edits()
+        self.set_expanded(False)
+        self.refresh_time()
+        self.changed()
+        self.get_parent().invalidate_sort()
+        self.discard_button.set_sensitive(True)
+        self.done_button.set_sensitive(True)
+
         if self.id is None:
             reminder_id = self.app.run_service_method(
                 'AddReminder',
@@ -252,7 +365,12 @@ class Reminder(Adw.ExpanderRow):
                         {
                             'title': GLib.Variant('s', self.get_title()),
                             'description': GLib.Variant('s', self.get_subtitle()),
-                            'timestamp': GLib.Variant('u', self.timestamp)
+                            'timestamp': GLib.Variant('u', self.timestamp),
+                            'repeat-type': GLib.Variant('q', self.repeat_type),
+                            'repeat-frequency': GLib.Variant('q', self.repeat_frequency),
+                            'repeat-days': GLib.Variant('q', self.repeat_days),
+                            'repeat-times': GLib.Variant('n', self.repeat_times),
+                            'repeat-until': GLib.Variant('u', self.repeat_until)
                         }
                     )
                 )
@@ -270,23 +388,23 @@ class Reminder(Adw.ExpanderRow):
                             'id': GLib.Variant('s', self.id),
                             'title': GLib.Variant('s', self.get_title()),
                             'description': GLib.Variant('s', self.get_subtitle()),
-                            'timestamp': GLib.Variant('u', self.timestamp)
+                            'timestamp': GLib.Variant('u', self.timestamp),
+                            'repeat-type': GLib.Variant('q', self.repeat_type),
+                            'repeat-frequency': GLib.Variant('q', self.repeat_frequency),
+                            'repeat-days': GLib.Variant('q', self.repeat_days),
+                            'repeat-times': GLib.Variant('n', self.repeat_times),
+                            'repeat-until': GLib.Variant('u', self.repeat_until)
                         }
                     )
                 )
             )
-        self.saved_edits()
-        self.set_expanded(False)
-        self.refresh_time()
-        self.changed()
-        self.get_parent().invalidate_sort()
 
     @Gtk.Template.Callback()
     def on_remove(self, button):
         confirm_dialog = Adw.MessageDialog(
             transient_for=self.app.win,
             heading=_('Remove reminder?'),
-            body=_(f'This will remove the <b>{self.get_title()}</b> reminder.'),
+            body=_('This will remove the') + f' <b>{self.get_title()}</b> ' + _('reminder.'),
             body_use_markup=True
         )
         confirm_dialog.add_response('cancel', _('Cancel'))
@@ -296,10 +414,10 @@ class Reminder(Adw.ExpanderRow):
         confirm_dialog.connect('response::remove', lambda *args: self.app.win.remove_reminder(self))
         confirm_dialog.present()
 
-@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/time_box.ui')
-class TimeBox(Gtk.Box):
+@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/time_row.ui')
+class TimeRow(Gtk.ListBoxRow):
     '''Section of reminder for handling times'''
-    __gtype_name__ = 'time_box'
+    __gtype_name__ = 'time_row'
 
     date_button = Gtk.Template.Child()
     calendar = Gtk.Template.Child()
@@ -307,17 +425,89 @@ class TimeBox(Gtk.Box):
     hour_adjustment = Gtk.Template.Child()
     minute_adjustment = Gtk.Template.Child()
     am_pm_button = Gtk.Template.Child()
+    repeat_label = Gtk.Template.Child()
 
     def __init__(self, reminder, timestamp, settings, **kwargs):
         super().__init__(**kwargs)
 
         self.parent_reminder = reminder
 
+        self.update_repeat()
         self.set_time(timestamp)
 
         self.settings = settings
-        self.set_time_format(timestamp)
+        self.set_time_format()
         self.settings.connect('changed::time-format', self.set_time_format)
+
+    def update_repeat_day(self):
+        if self.repeat_days == 0 or self.repeat_days in RepeatDays.__members__.values():
+            repeat_days = 2**(self.time.get_day_of_week() - 1)
+            if self.repeat_days != repeat_days:
+                self.repeat_days = repeat_days
+                self.update_repeat_label()
+
+    def update_repeat_label(self):
+        repeat_days_flag = RepeatDays(self.repeat_days)
+        suffix = ''
+        time = None
+        if self.repeat_type == 0:
+            self.repeat_label.set_label(_('Does not repeat'))
+            return
+        if self.repeat_type == RepeatType.MINUTE:
+            if self.repeat_frequency == 1:
+                type_name = _('minute')
+            else:
+                type_name = self.repeat_frequency + ' ' + _('minutes')
+        elif self.repeat_type == RepeatType.HOUR:
+            if self.repeat_frequency == 1:
+                type_name = _('hour')
+            else:
+                type_name = self.repeat_frequency + ' ' + _('hours')
+        elif self.repeat_type == RepeatType.DAY:
+            if self.repeat_frequency == 1:
+                type_name = _('day')
+            else:
+                type_name = self.repeat_frequency + ' ' + _('days')
+        elif self.repeat_type == RepeatType.WEEK:
+            days = []
+            for day, flag in (
+                (_('M'), RepeatDays.MON),
+                (_('Tu'), RepeatDays.TUE),
+                (_('W'), RepeatDays.WED),
+                (_('Th'), RepeatDays.THU),
+                (_('F'), RepeatDays.FRI),
+                (_('Sa'), RepeatDays.SAT),
+                (_('Su'), RepeatDays.SUN)
+            ):
+                if flag in repeat_days_flag:
+                    days.append(day)
+
+            if self.repeat_frequency == 1:
+                type_name = _('week')
+            else:
+                type_name = str(self.repeat_frequency) + ' ' + _('weeks')
+    
+            suffix = f" ({', '.join(days)})"
+        
+        if self.repeat_until > 0:
+            date = GLib.DateTime.new_from_unix_local(self.repeat_until).format('%x')
+            suffix += ' ' + _('until') + ' ' + date
+        elif self.repeat_times == 1:
+            time = _('time')
+        elif self.repeat_times != -1:
+            time = _('times')
+        if time is not None:
+            suffix += f' ({self.repeat_times} {time})'
+
+        self.repeat_label.set_label(_('Every') + f' {type_name}{suffix}')
+
+    def update_repeat(self):
+        self.repeat_type = self.parent_reminder.repeat_type
+        self.repeat_frequency = self.parent_reminder.repeat_frequency
+        self.repeat_days = self.parent_reminder.repeat_days
+        self.repeat_until = self.parent_reminder.repeat_until
+        self.repeat_times = self.parent_reminder.repeat_times
+        self.update_repeat_label()
 
     def set_time(self, timestamp):
         self.time = GLib.DateTime.new_now_local() if timestamp == 0 else GLib.DateTime.new_from_unix_local(timestamp)
@@ -329,15 +519,18 @@ class TimeBox(Gtk.Box):
         self.date_button.set_label(self.time.format(self.get_date_label()))
         self.minute_adjustment.set_value(self.time.get_minute())
 
-    def get_long_label(self):
-        return self.time.format(f'{self.get_date_label(True)} {self.get_time_label()}')
+    def get_long_label(self, time = None):
+        if time is None:
+            time = self.time
+        return time.format(f'{self.get_date_label(True, time)} {self.get_time_label()}')
 
     def update_date_button_label(self):
         self.date_button.set_label(self.time.format(self.get_date_label()))
 
-    def get_date_label(self, long = False):
-        reminder_day = self.time.get_day_of_year()
-        reminder_week = self.time.get_week_of_year()
+    def get_date_label(self, long = False, time = None):
+        time = self.time if time is None else time
+        reminder_day = time.get_day_of_year()
+        reminder_week = time.get_week_of_year()
         now = GLib.DateTime.new_now(GLib.TimeZone.new_local())
         today = now.get_day_of_year()
         week = now.get_week_of_year()
@@ -357,7 +550,7 @@ class TimeBox(Gtk.Box):
         return date
 
     def get_time_label(self):
-        if self.time_format == TIME_FORMAT['12h']:
+        if self.time_format == TimeFormat.TWELVE_HOUR:
             time = f"%I:%M {_('PM') if self.pm else _('AM')}"
         else:
             time = '%H:%M'
@@ -374,11 +567,11 @@ class TimeBox(Gtk.Box):
             self.enable_12h()
         elif setting == 2:
             self.enable_24h()
-        self.parent_reminder.label.set_label(self.get_long_label())
+        self.parent_reminder.time_label.set_label(self.get_long_label())
 
     def enable_12h(self):
         self.am_pm_button.set_visible(True)
-        self.time_format = TIME_FORMAT['12h']
+        self.time_format = TimeFormat.TWELVE_HOUR
         self.hour_adjustment.set_upper(11)
         if self.time.get_hour() >= 12:
             self.am_pm_button.set_label(_('PM'))
@@ -391,7 +584,7 @@ class TimeBox(Gtk.Box):
 
     def enable_24h(self):
         self.am_pm_button.set_visible(False)
-        self.time_format = TIME_FORMAT['24h']
+        self.time_format = TimeFormat.TWENTYFOUR_HOUR
         self.hour_adjustment.set_upper(23)
         self.hour_adjustment.set_value(self.time.get_hour())
 
@@ -415,6 +608,27 @@ class TimeBox(Gtk.Box):
             self.set_am()
         else:
             self.set_pm()
+        self.hour_changed()
+
+    def close_request(self, window):
+        values = window.return_values()
+        self.repeat_type = values[0]
+        if self.repeat_type == 0 and self.parent_reminder.repeat_type == 0:
+            self.update_repeat()
+        else:
+            self.repeat_type, self.repeat_frequency, self.repeat_days, self.repeat_until, self.repeat_times = values
+    
+        self.update_repeat_label()
+        self.parent_reminder.check_repeat_saved()
+
+    @Gtk.Template.Callback()
+    def launch_repeat_window(self, button):
+        repeat_dialog = RepeatDialog(self)
+        repeat_dialog.set_transient_for(self.parent_reminder.app.win)
+        repeat_dialog.set_modal(True)
+        repeat_dialog.present()
+
+        repeat_dialog.connect('close-request', self.close_request)
 
     @Gtk.Template.Callback()
     def show_leading_zeros(self, spin_button):
@@ -424,7 +638,7 @@ class TimeBox(Gtk.Box):
     @Gtk.Template.Callback()
     def hour_output(self, spin_button):
         value = spin_button.get_value_as_int()
-        if self.time_format == TIME_FORMAT['12h'] and value == 0:
+        if self.time_format == TimeFormat.TWELVE_HOUR and value == 0:
             value = 12
         spin_button.set_text(f'{value:02d}')
         return True
@@ -432,7 +646,7 @@ class TimeBox(Gtk.Box):
     @Gtk.Template.Callback()
     def hour_input(self, spin_button, gpointer):
         new_value = int(spin_button.get_text())
-        if self.time_format == TIME_FORMAT['12h'] and new_value == 12:
+        if self.time_format == TimeFormat.TWELVE_HOUR and new_value == 12:
             new_value = 0
         double = ctypes.c_double.from_address(hash(gpointer))
         double.value = float(new_value)
@@ -441,19 +655,19 @@ class TimeBox(Gtk.Box):
     @Gtk.Template.Callback()
     def on_am_pm_button_pressed(self, button = None):
         self.toggle_am_pm()
-        self.hour_changed()
 
     @Gtk.Template.Callback()
     def minute_changed(self, adjustment = None):
         minutes = self.minute_adjustment.get_value() - self.time.get_minute()
         self.time = self.time.add_minutes(minutes)
         self.parent_reminder.check_time_saved()
+        self.update_repeat_day()
 
     @Gtk.Template.Callback()
     def hour_changed(self, adjustment = None):
         value = self.hour_adjustment.get_value()
         old_value = self.time.get_hour()
-        if self.time_format == TIME_FORMAT['12h']:
+        if self.time_format == TimeFormat.TWELVE_HOUR:
             if self.pm:
                 value += 12
             if value >= 12 and not self.pm:
@@ -467,15 +681,18 @@ class TimeBox(Gtk.Box):
 
         self.time = self.time.add_hours(hours)
         self.parent_reminder.check_time_saved()
+        self.update_repeat_day()
 
     @Gtk.Template.Callback()
     def day_changed(self, calendar):
-        new_day = calendar.get_date().get_day_of_year()
+        date = calendar.get_date()
+        new_day = date.get_day_of_year()
         old_day = self.time.get_day_of_year()
         days = new_day - old_day
         self.time = self.time.add_days(days)
         self.date_button.set_label(self.time.format(self.get_date_label()))
         self.parent_reminder.check_time_saved()
+        self.update_repeat_day()
 
     @Gtk.Template.Callback()
     def wrap_minute(self, button):
@@ -497,14 +714,144 @@ class TimeBox(Gtk.Box):
     @Gtk.Template.Callback()
     def wrap_hour(self, button = None):
         if self.hour_button.get_adjustment().get_value() == 0:
-            if not self.time_format == TIME_FORMAT['12h'] or self.pm:
+            if not self.time_format == TimeFormat.TWELVE_HOUR or self.pm:
                 self.time = self.time.add_days(1)
                 self.update_calendar()
-            if self.time_format == TIME_FORMAT['12h']:
+            if self.time_format == TimeFormat.TWELVE_HOUR:
                 self.toggle_am_pm()
         else:
-            if not self.time_format == TIME_FORMAT['12h'] or not self.pm:
+            if not self.time_format == TimeFormat.TWELVE_HOUR or not self.pm:
                 self.time = self.time.add_days(-1)
                 self.update_calendar()
-            if self.time_format == TIME_FORMAT['12h']:
+            if self.time_format == TimeFormat.TWELVE_HOUR:
                 self.toggle_am_pm()
+
+@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/repeat_dialog.ui')
+class RepeatDialog(Adw.Window):
+    '''Window for repeat settings'''
+    __gtype_name__ = 'repeat_dialog'
+
+    repeat_type_button = Gtk.Template.Child()
+    repeat_row = Gtk.Template.Child()
+    week_repeat_row = Gtk.Template.Child()
+    frequency_btn = Gtk.Template.Child()
+    mon_btn = Gtk.Template.Child()
+    tue_btn = Gtk.Template.Child()
+    wed_btn = Gtk.Template.Child()
+    thu_btn = Gtk.Template.Child()
+    fri_btn = Gtk.Template.Child()
+    sat_btn = Gtk.Template.Child()
+    sun_btn = Gtk.Template.Child()
+    repeat_times_btn = Gtk.Template.Child()
+    repeat_until_btn = Gtk.Template.Child()
+    repeat_times_box = Gtk.Template.Child()
+    calendar = Gtk.Template.Child()
+    repeat_duration_button = Gtk.Template.Child()
+
+    def __init__(self, time_row, **kwargs):
+        super().__init__(**kwargs)
+        self.time_row = time_row
+        self.setup()
+
+    def setup(self):
+        repeat_type = self.time_row.repeat_type
+        repeat_frequency = self.time_row.repeat_frequency
+        repeat_days = self.time_row.repeat_days
+        repeat_until = self.time_row.repeat_until
+        repeat_times = self.time_row.repeat_times
+
+        enabled = repeat_type != 0
+
+        if enabled:
+            self.repeat_type_button.set_selected(repeat_type - 1)
+
+        if enabled and repeat_times != -1:
+            self.repeat_times_btn.set_value(repeat_times)
+            self.repeat_duration_button.set_selected(1)
+        elif enabled and repeat_until > 0:
+            self.repeat_times_btn.set_value(5)
+            self.repeat_duration_button.set_selected(2)
+        else:
+            self.repeat_times_btn.set_value(5)
+            self.repeat_duration_button.set_selected(0)
+
+        self.frequency_btn.set_value(repeat_frequency)
+        self.repeat_duration_selected_changed()
+        self.repeat_type_selected_changed()
+
+        repeat_days_flag = RepeatDays(repeat_days)
+        for btn, flag in (
+            (self.mon_btn, RepeatDays.MON),
+            (self.tue_btn, RepeatDays.TUE),
+            (self.wed_btn, RepeatDays.WED),
+            (self.thu_btn, RepeatDays.THU),
+            (self.fri_btn, RepeatDays.FRI),
+            (self.sat_btn, RepeatDays.SAT),
+            (self.sun_btn, RepeatDays.SUN)
+        ):
+            btn.set_active(flag in repeat_days_flag)
+
+        self.day_changed()
+        self.repeat_row.set_enable_expansion(enabled)
+
+        if enabled:
+            self.repeat_row.set_expanded(True)
+
+    def return_values(self):
+        repeat_type = 0 if not self.repeat_row.get_enable_expansion() else self.repeat_type_button.get_selected() + 1
+        repeat_frequency = int(self.frequency_btn.get_value())
+        self.frequency_btn.update()
+        self.repeat_times_btn.update()
+
+        if repeat_type != 0:
+            if self.repeat_duration_button.get_selected() == 0:
+                repeat_times = -1
+                repeat_until = 0
+            elif self.repeat_duration_button.get_selected() == 1:
+                repeat_times = int(self.repeat_times_btn.get_value())
+                repeat_until = 0
+            elif self.repeat_duration_button.get_selected() == 2:
+                repeat_times = -1
+                repeat_until = self.calendar.get_date().to_unix()
+
+            repeat_days = 0
+            for btn, flag in (
+                (self.mon_btn, RepeatDays.MON),
+                (self.tue_btn, RepeatDays.TUE),
+                (self.wed_btn, RepeatDays.WED),
+                (self.thu_btn, RepeatDays.THU),
+                (self.fri_btn, RepeatDays.FRI),
+                (self.sat_btn, RepeatDays.SAT),
+                (self.sun_btn, RepeatDays.SUN)
+            ):
+                if btn.get_active():
+                    repeat_days += flag
+        else:
+            now = int(time.time())
+            repeat_frequency = 1
+            repeat_days = 0
+            repeat_until = 0
+            repeat_times = 1 if now > self.time_row.get_timestamp() else 0
+
+        return repeat_type, repeat_frequency, repeat_days, repeat_until, repeat_times
+
+    @Gtk.Template.Callback()
+    def day_changed(self, calendar = None):
+        self.repeat_until_btn.set_label(self.calendar.get_date().format('%d %b %Y'))
+
+    @Gtk.Template.Callback()
+    def repeat_duration_selected_changed(self, button = None, data = None):
+        if self.repeat_duration_button.get_selected() == 0:
+            self.repeat_times_box.set_visible(False)
+            self.repeat_until_btn.set_visible(False)
+        elif self.repeat_duration_button.get_selected() == 1:
+            self.repeat_times_box.set_visible(True)
+            self.repeat_until_btn.set_visible(False)
+        elif self.repeat_duration_button.get_selected() == 2:
+            self.repeat_times_box.set_visible(False)
+            self.repeat_until_btn.set_visible(True)
+
+    @Gtk.Template.Callback()
+    def repeat_type_selected_changed(self, button = None, data = None):
+        repeat_type = self.repeat_type_button.get_selected() + 1
+        self.week_repeat_row.set_visible(repeat_type == RepeatType.WEEK)

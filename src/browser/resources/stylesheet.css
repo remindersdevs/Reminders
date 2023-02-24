@@ -6,6 +6,22 @@
     margin: 10px 20px;
 }
 
+.repeat-list {
+    margin: 20px;
+}
+
+.repeat-row {
+    padding: 10px 20px;
+}
+
+.day-button {
+    padding: 2px;
+}
+
+.day-button:checked {
+    color: @accent_bg_color;
+}
+
 label.time {
     font-weight: bold;
     margin: 0 2px;
@@ -31,11 +47,7 @@ box.bottom {
 }
 
 row.time {
-    padding: 5px 5px 5px 15px;
-}
-
-row.time:dir(rtl) {
-    padding: 5px 5px 15px 5px;
+    padding: 5px 10px;
 }
 
 .am-pm-button {
@@ -71,27 +83,37 @@ button.incomplete {
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
 }
-.reminders-list > row:disabled + row:not(:disabled) row.header {
+.reminders-list > row:disabled + row:not(:disabled) > box > list > row.header {
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
 }
-
 .reminders-list > row:nth-last-child(2) {
     border-bottom: 0;
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
 }
-.reminders-list > row:nth-last-child(2):not(:checked) row.header {
+.reminders-list > row.expander:nth-last-child(2):not(:checked) > box > list > row.header {
     border-bottom: 0;
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
 }
-.reminders-list > row:nth-last-child(2) list.nested row:last-child {
+.reminders-list > row.expander:nth-last-child(2) > box > revealer > list.nested > row:last-child {
     border-bottom: 0;
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
 }
-.reminders-list > row:nth-last-child(2) list.nested {
+.reminders-list > row.expander:nth-last-child(2) > box > revealer > list.nested {
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
+}
+
+/* Add support for nested expander */
+list.nested row.header {
+    border-radius: 0;
+}
+list.nested row.expander {
+    border-bottom: 0;
+}
+list.nested list.nested {
+    background-color: transparent;
 }

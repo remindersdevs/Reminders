@@ -69,9 +69,9 @@
                         <child>
                           <object class="GtkBox">
                             <property name="orientation">horizontal</property>
+                            <property name="spacing">8</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="margin-end">8</property>
                                 <property name="halign">start</property>
                                 <property name="icon-name">view-list-symbolic</property>
                               </object>
@@ -92,9 +92,9 @@
                         <child>
                           <object class="GtkBox">
                             <property name="orientation">horizontal</property>
+                            <property name="spacing">8</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="margin-end">8</property>
                                 <property name="halign">start</property>
                                 <property name="icon-name">task-due-symbolic</property>
                               </object>
@@ -115,9 +115,9 @@
                         <child>
                           <object class="GtkBox">
                             <property name="orientation">horizontal</property>
+                            <property name="spacing">8</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="margin-end">8</property>
                                 <property name="halign">start</property>
                                 <property name="icon-name">task-past-due-symbolic</property>
                               </object>
@@ -138,9 +138,9 @@
                         <child>
                           <object class="GtkBox">
                             <property name="orientation">horizontal</property>
+                            <property name="spacing">8</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="margin-end">8</property>
                                 <property name="halign">start</property>
                                 <property name="icon-name">object-select-symbolic</property>
                               </object>

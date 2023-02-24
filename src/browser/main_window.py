@@ -27,6 +27,7 @@ from difflib import SequenceMatcher
 
 from remembrance import info
 from remembrance.browser.reminder import Reminder
+
 class Calendar(threading.Thread):
     '''Updates date labels when day changes'''
     def __init__(self, app):
@@ -47,7 +48,7 @@ class Calendar(threading.Thread):
 
     def on_countdown_done(self):
         for reminder in self.app.win.reminder_lookup_dict.values():
-            reminder.update_label()
+            reminder.update_day_label()
         self.countdown_id = 0
         self.run_countdown()
         return False
@@ -149,7 +150,12 @@ class MainWindow(Adw.ApplicationWindow):
                         dictionary['title'],
                         dictionary['description'],
                         dictionary['timestamp'],
-                        dictionary['completed']
+                        dictionary['repeat-type'],
+                        dictionary['repeat-frequency'],
+                        dictionary['repeat-days'],
+                        dictionary['completed'],
+                        dictionary['repeat-until'],
+                        dictionary['repeat-times']
                     )
 
     def set_completed_last(self, key = None, data = None):
@@ -169,14 +175,31 @@ class MainWindow(Adw.ApplicationWindow):
         self.sort_button.set_icon_name('view-sort-descending-symbolic' if self.descending_sort else 'view-sort-ascending-symbolic')
         self.reminders_list.invalidate_sort()
 
-    def display_reminder(self, reminder_id: str, title: str, description: str, timestamp: int, completed: bool = False):
+    def display_reminder(
+        self,
+        reminder_id: str,
+        title: str,
+        description: str,
+        timestamp: int,
+        repeat_type: int = 0,
+        repeat_frequency: int = 1,
+        repeat_days: int = 0,
+        completed: bool = False,
+        repeat_until: int = 0,
+        repeat_times: int = 0
+    ):
         reminder = Reminder(
             self.app,
             reminder_id=reminder_id,
             title=title,
             subtitle=description,
             timestamp=timestamp,
-            completed=completed
+            completed=completed,
+            repeat_type=repeat_type,
+            repeat_frequency=repeat_frequency,
+            repeat_days=repeat_days,
+            repeat_until=repeat_until,
+            repeat_times=repeat_times
         )
 
         self.reminders_list.append(reminder)
