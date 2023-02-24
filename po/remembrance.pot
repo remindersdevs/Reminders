@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-24 16:29-0500\n"
+"POT-Creation-Date: 2023-02-24 18:03-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -93,15 +93,16 @@ msgid "Sasha Hale"
 msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:10
-msgid "A simple reminder app for Linux."
+msgid "Set reminders for yourself"
 msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:13
 msgid ""
 "Set reminders for anything you need help remembering. Remembrance will send "
 "a notification at a specified time, and at any time you can mark a reminder "
-"as complete so it doesn't notify you. You can also sort and filter your "
-"reminders, as well as search for specific reminders."
+"as complete so it doesn't notify you. You can optionally make reminders "
+"recurring so they are shown multiple times. You can also sort and filter "
+"your reminders, as well as search for specific reminders."
 msgstr ""
 
 #: data/service/io.github.dgsasha.Remembrance.Service1.desktop.in.in:4
@@ -308,7 +309,7 @@ msgstr ""
 msgid "for"
 msgstr ""
 
-#: src/browser/resources/ui/repeat_dialog.ui:269 src/browser/reminder.py:491
+#: src/browser/resources/ui/repeat_dialog.ui:269 src/browser/reminder.py:494
 msgid "until"
 msgstr ""
 
@@ -342,19 +343,19 @@ msgstr ""
 msgid "Start on a different page"
 msgstr ""
 
-#: src/browser/application.py:248
+#: src/browser/application.py:249
 msgid "You have unsaved changes"
 msgstr ""
 
-#: src/browser/application.py:249
+#: src/browser/application.py:250
 msgid "Are you sure you want to close the window?"
 msgstr ""
 
-#: src/browser/application.py:251 src/browser/reminder.py:407
+#: src/browser/application.py:252 src/browser/reminder.py:410
 msgid "Cancel"
 msgstr ""
 
-#: src/browser/application.py:252
+#: src/browser/application.py:253
 msgid "Yes"
 msgstr ""
 
@@ -383,115 +384,115 @@ msgstr ""
 msgid "Complete"
 msgstr ""
 
-#: src/browser/reminder.py:403
+#: src/browser/reminder.py:406
 msgid "Remove reminder?"
 msgstr ""
 
-#: src/browser/reminder.py:404
+#: src/browser/reminder.py:407
 msgid "This will remove the"
 msgstr ""
 
-#: src/browser/reminder.py:404
+#: src/browser/reminder.py:407
 msgid "reminder."
 msgstr ""
 
-#: src/browser/reminder.py:408
+#: src/browser/reminder.py:411
 msgid "Remove"
 msgstr ""
 
-#: src/browser/reminder.py:451
+#: src/browser/reminder.py:454
 msgid "Does not repeat"
 msgstr ""
 
-#: src/browser/reminder.py:455
+#: src/browser/reminder.py:458
 msgid "minute"
 msgstr ""
 
-#: src/browser/reminder.py:457
+#: src/browser/reminder.py:460
 msgid "minutes"
 msgstr ""
 
-#: src/browser/reminder.py:460
+#: src/browser/reminder.py:463
 msgid "hour"
 msgstr ""
 
-#: src/browser/reminder.py:462
+#: src/browser/reminder.py:465
 msgid "hours"
 msgstr ""
 
-#: src/browser/reminder.py:465
+#: src/browser/reminder.py:468
 msgid "day"
 msgstr ""
 
-#: src/browser/reminder.py:467
+#: src/browser/reminder.py:470
 msgid "days"
 msgstr ""
 
-#: src/browser/reminder.py:471
+#: src/browser/reminder.py:474
 msgid "M"
 msgstr ""
 
-#: src/browser/reminder.py:472
+#: src/browser/reminder.py:475
 msgid "Tu"
 msgstr ""
 
-#: src/browser/reminder.py:473
+#: src/browser/reminder.py:476
 msgid "W"
 msgstr ""
 
-#: src/browser/reminder.py:474
+#: src/browser/reminder.py:477
 msgid "Th"
 msgstr ""
 
-#: src/browser/reminder.py:475
+#: src/browser/reminder.py:478
 msgid "F"
 msgstr ""
 
-#: src/browser/reminder.py:476
+#: src/browser/reminder.py:479
 msgid "Sa"
 msgstr ""
 
-#: src/browser/reminder.py:477
+#: src/browser/reminder.py:480
 msgid "Su"
 msgstr ""
 
-#: src/browser/reminder.py:483
+#: src/browser/reminder.py:486
 msgid "week"
 msgstr ""
 
-#: src/browser/reminder.py:485
+#: src/browser/reminder.py:488
 msgid "weeks"
 msgstr ""
 
-#: src/browser/reminder.py:493
+#: src/browser/reminder.py:496
 msgid "time"
 msgstr ""
 
-#: src/browser/reminder.py:495
+#: src/browser/reminder.py:498
 msgid "times"
 msgstr ""
 
-#: src/browser/reminder.py:499
+#: src/browser/reminder.py:502
 msgid "Every"
 msgstr ""
 
-#: src/browser/reminder.py:536
+#: src/browser/reminder.py:539
 msgid "Today"
 msgstr ""
 
-#: src/browser/reminder.py:538
+#: src/browser/reminder.py:541
 msgid "Tomorrow"
 msgstr ""
 
-#: src/browser/reminder.py:540
+#: src/browser/reminder.py:543
 msgid "Yesterday"
 msgstr ""
 
-#: src/browser/reminder.py:574 src/browser/reminder.py:596
+#: src/browser/reminder.py:577 src/browser/reminder.py:599
 msgid "PM"
 msgstr ""
 
-#: src/browser/reminder.py:578 src/browser/reminder.py:600
+#: src/browser/reminder.py:581 src/browser/reminder.py:603
 msgid "AM"
 msgstr ""
 
