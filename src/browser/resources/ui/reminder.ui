@@ -82,7 +82,6 @@
                     <style>
                       <class name="circular"/>
                       <class name="discard-button"/>
-                      <class name="destructive-action"/>
                     </style>
                     <signal name="clicked" handler="discard_changes" swapped="no" />
                     <accessibility>
@@ -127,7 +126,7 @@
           <property name="halign">end</property>
           <property name="visible">false</property>
           <style>
-            <class name="dim-label"/>
+            <class name="subtitle"/>
           </style>
         </object>
       </child>
