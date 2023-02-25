@@ -63,10 +63,10 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/dgsasha/remembrance/ae27d50d21cd5f9424738a2045045f0cc373ef84/screenshot-dark.png</image>
+      <image>https://raw.githubusercontent.com/dgsasha/remembrance/b7b0f823afb760ed2e4b66ed456d50f8a26f4ea1/screenshot-dark.png</image>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/dgsasha/remembrance/ae27d50d21cd5f9424738a2045045f0cc373ef84/screenshot-light.png</image>
+      <image>https://raw.githubusercontent.com/dgsasha/remembrance/b7b0f823afb760ed2e4b66ed456d50f8a26f4ea1/screenshot-light.png</image>
     </screenshot>
   </screenshots>
 
@@ -75,7 +75,7 @@
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
   <releases>
-    <release version="0.2" date="2023-02-24">
+    <release version="0.2" date="2023-02-25">
       <description>
         <ul>
           <li>Add support for recurring reminders</li>
