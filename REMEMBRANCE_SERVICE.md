@@ -1,15 +1,34 @@
-# Remembrance DBus Service Info, version 0.1
-name: io.github.dgsasha.Remembrance.Service
-interface: io.github.dgsasha.Remembrance.Service
-object: /io/github/dgsasha/Remembrance/Service
+# Remembrance DBus Service Info, version 0.2
+name: io.github.dgsasha.Remembrance.Service1
+
+interface: io.github.dgsasha.Remembrance.Service1
+
+object: /io/github/dgsasha/Remembrance/Service1
 
 Currently this is only packaged with Remembrance and anyone who wants to use it will have to have the full Remembrance app installed. The reason this exists is to allow integrating the Remembrance app with desktop environments through extensions.
 
 At some point I might seperate this from Remembrance and offer it as a standalone library, but until then you probably shouldn't use it if you are making your own reminder app.
 
-This service will have some breaking changes made to it at times, so make sure you use the GetVersion method to check that the right version is installed. You can relaunch the service with its desktop file to load the newest installed version, or by launching it in the command line with the `--gapplication-replace` argument.
+This service will have some breaking changes made to it at times, so make sure you use the GetVersion method to check that the right version is installed.
 
 Newer versions of this service should still always be compatible with apps that expect an older version. If this ever changes, the bus name will be updated
+
+## Enums
+### RepeatType(IntEnum)
+- DISABLED = 0
+- MINUTE = 1
+- HOUR = 2
+- DAY = 3
+- WEEK = 4
+
+### RepeatDays(IntFlag)
+- MON = 1
+- TUE = 2
+- WED = 4
+- THU = 8
+- FRI = 16
+- SAT = 32
+- SUN = 64
 
 ## Methods
 
@@ -20,8 +39,9 @@ Newer versions of this service should still always be compatible with apps that 
         - Explanation [here](#app_id-parameter)
     - reminder
         - type a{sv}
-        - {'title': s, 'description': s, 'timestamp': u}
-        - 'timestamp' should be a Unix timestamp
+        - {'title': s, 'description': s, 'timestamp': u, 'repeat-type': q, 'repeat-frequency': q, 'repeat-days': q, 'repeat-times': n, 'repeat-until': u}
+        - 'timestamp' and 'repeat-until' should be a Unix timestamp, set them to 0 to disable them
+        - 'repeat-times' should be -1 if you don't want to limit the repeat times
 
 - Returns (s)
     - reminder_id
@@ -35,10 +55,10 @@ Newer versions of this service should still always be compatible with apps that 
         - Explanation [here](#app_id-parameter)
     - reminder
         - type a{sv}
-        - {'id': s, 'title': s, 'description': s, 'timestamp': u}
+        - {'id': s, 'title': s, 'description': s, 'timestamp': u, 'repeat-type': q, 'repeat-frequency': q, 'repeat-days': q, 'repeat-times': n, 'repeat-until': u}
         - 'id' is the id of the reminder returned by AddReminder or ReturnReminders
-        - 'timestamp' should be a Unix timestamp
-
+        - 'timestamp' and 'repeat-until' should be a Unix timestamp, set them to 0 to disable them
+        - 'repeat-times' should be -1 if you don't want to limit the repeat times
 
 ### UpdateCompleted
 - Parameters (ssb)
@@ -74,14 +94,22 @@ Newer versions of this service should still always be compatible with apps that 
         - Type: d
         - The version of the service that is currently loaded
 
+### Quit
+Quits the service
 
 ## Signals
 
-### ReminderShown
+### RepeatUpdated
 - Parameters (s)
     - reminder_id
         - Type: s
         - The id of the reminder that was shown in a notification
+    - timestamp
+        - Type: s
+        - The new timestamp (will be same as before if not repeating)
+    - repeat-times
+        - Type: s
+        - How many times left that the reminder will repeat (-1 if no limit)
 
 ### CompletedUpdated
 - Parameters (ssb)
@@ -112,7 +140,7 @@ Newer versions of this service should still always be compatible with apps that 
     - reminder
         - Type: a{sv}
         - A dictionary with the new contents of the reminder that was updated
-        - {'id': s, 'title': s, 'description': s, 'timestamp': u}
+        - {'id': s, 'title': s, 'description': s, 'timestamp': u, 'repeat-type': q, 'repeat-frequency': q, 'repeat-days': q, 'repeat-times': n, 'repeat-until': u}
 
 ## app_id parameter
 This paremeter should be set to the id of your app, although it can be left empty. This will be returned in a signal after the reminder is updated, which will let you ignore the signal if you initiated the update.

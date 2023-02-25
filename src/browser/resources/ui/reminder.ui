@@ -4,40 +4,22 @@
     <child>
       <object class="AdwEntryRow" id="title_entry">
         <property name="title" translatable="yes">What should the reminder be called?</property>
-        <signal name="changed" handler="check_title_saved" swapped="no" />
+        <signal name="changed" handler="check_title_saved" swapped="no"/>
       </object>
     </child>
     <child>
       <object class="AdwEntryRow" id="description_entry">
         <property name="title" translatable="yes">Enter a short description of the reminder. (Optional)</property>
-        <signal name="changed" handler="check_description_saved" swapped="no" />
+        <signal name="changed" handler="check_description_saved" swapped="no"/>
       </object>
     </child>
     <child>
-      <object class="GtkListBoxRow" id="time_row">
+      <object class="AdwExpanderRow" id="time_expander_row">
         <property name="hexpand">true</property>
         <property name="activatable">false</property>
-        <style>
-          <class name="time"/>
-        </style>
-        <child>
-          <object class="GtkBox" id="time_switch_box">
-            <property name="orientation">horizontal</property>
-            <property name="hexpand">true</property>
-            <property name="spacing">10</property>
-            <child>
-              <object class="GtkLabel" id="time_switch_label">
-                <property name="label" translatable="yes">Set a time</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkSwitch" id="time_switch">
-                <property name="valign">center</property>
-                <signal name="state-set" handler="on_time_switch" swapped="no"/>
-              </object>
-            </child>
-          </object>
-        </child>
+        <property name="show-enable-switch">true</property>
+        <property name="title" translatable="yes">Set a time</property>
+        <signal name="notify::enable-expansion" handler="on_time_switch" swapped="no"/>
       </object>
     </child>
     <child>
@@ -78,7 +60,7 @@
                 <property name="transition-type">GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">There are unsaved changes</property>
+                    <property name="label" translatable="yes">Unsaved changes</property>
                     <property name="halign">end</property>
                     <style>
                       <class name="caption"/>
@@ -88,24 +70,67 @@
               </object>
             </child>
             <child>
-              <object class="GtkButton" id="save_button">
-                <property name="valign">center</property>
-                <property name="icon-name">object-select-symbolic</property>
-                <property name="tooltip-text" translatable="yes">Save changes</property>
-                <style>
-                  <class name="suggested-action"/>
-                  <class name="circular"/>
-                  <class name="save-button"/>
-                </style>
-                <signal name="clicked" handler="on_save" swapped="no" />
-                <accessibility>
-                  <property name="label" translatable="yes">Save changes</property>
-                </accessibility>
+              <object class="GtkBox">
+                <property name="orientation">horizontal</property>
+                <property name="spacing">5</property>
+                <property name="sensitive" bind-source="save_message" bind-property="reveal-child" bind-flags="sync-create"/>
+                <child>
+                  <object class="GtkButton" id="discard_button">
+                    <property name="valign">center</property>
+                    <property name="icon-name">document-revert-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">Discard changes</property>
+                    <style>
+                      <class name="circular"/>
+                      <class name="discard-button"/>
+                      <class name="destructive-action"/>
+                    </style>
+                    <signal name="clicked" handler="discard_changes" swapped="no" />
+                    <accessibility>
+                      <property name="label" translatable="yes">Discard changes</property>
+                    </accessibility>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="save_button">
+                    <property name="valign">center</property>
+                    <property name="icon-name">object-select-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">Save changes</property>
+                    <style>
+                      <class name="suggested-action"/>
+                      <class name="circular"/>
+                      <class name="save-button"/>
+                    </style>
+                    <signal name="clicked" handler="on_save" swapped="no" />
+                    <accessibility>
+                      <property name="label" translatable="yes">Save changes</property>
+                    </accessibility>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
         </child>
       </object>
     </child>
+    <object class="GtkBox" id="label_box">
+      <property name="valign">center</property>
+      <property name="halign">end</property>
+      <property name="orientation">vertical</property>
+      <child>
+        <object class="GtkLabel" id="time_label">
+          <property name="halign">end</property>
+          <property name="visible">false</property>
+        </object>
+      </child>
+      <child>
+        <object class="GtkLabel" id="repeat_label">
+          <property name="halign">end</property>
+          <property name="visible">false</property>
+          <style>
+            <class name="dim-label"/>
+          </style>
+        </object>
+      </child>
+    </object>
   </template>
 </interface>

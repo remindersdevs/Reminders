@@ -3,11 +3,12 @@
 data/browser/io.github.dgsasha.Remembrance.desktop.in.in
 data/browser/io.github.dgsasha.Remembrance.gschema.xml.in
 data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in
-data/service/io.github.dgsasha.Remembrance.Service.desktop.in.in
+data/service/io.github.dgsasha.Remembrance.Service1.desktop.in.in
 src/browser/resources/ui/main.ui
 src/browser/resources/ui/preferences.ui
 src/browser/resources/ui/reminder.ui
-src/browser/resources/ui/time_box.ui
+src/browser/resources/ui/repeat_dialog.ui
+src/browser/resources/ui/time_row.ui
 src/browser/about.py
 src/browser/application.py
 src/browser/main_window.py

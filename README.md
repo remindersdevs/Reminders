@@ -42,12 +42,8 @@ remembrance --restart-service
 ```
 
 ## Todo
-Before first stable release:
-- Add support for recurring reminders
-
-Future plans:
 - Make a GNOME Shell extension that lets you view (and maybe edit) your reminders
 - Maybe integrate the search with GNOME Shell
-- Possibly add some animations and UI improvements
+- Possibly add some more animations and UI improvements
 
 ## [DBus Service Documentation](REMEMBRANCE_SERVICE.md)
