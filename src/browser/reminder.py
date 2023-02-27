@@ -63,6 +63,7 @@ class Reminder(Adw.ExpanderRow):
         repeat_days = 0,
         repeat_until = 0,
         repeat_times = 1,
+        old_timestamp = 0,
         **kwargs
     ):
         super().__init__(**kwargs)
@@ -74,17 +75,21 @@ class Reminder(Adw.ExpanderRow):
         self.repeat_times = repeat_times
         self.unsaved = []
         self.editing = False
+        self.past = False
 
+        self.id = reminder_id
+
+        self.timestamp = timestamp
+        self.old_timestamp = old_timestamp
         self.time_enabled = (timestamp != 0)
         self.time_row = TimeRow(self, timestamp, self.app.settings)
-        self.timestamp = timestamp
+        self.time_row.set_time_format()
 
         if self.repeat_days == 0 or RepeatDays(self.repeat_days).bit_length() == 1:
             weekday = datetime.date.fromtimestamp(timestamp).weekday()
             self.repeat_days = 2**(weekday)
 
         self.completed = completed
-        self.id = reminder_id
         if self.id is None:
             self.discard_button.set_sensitive(False)
             self.done_button.set_sensitive(False)
@@ -119,6 +124,29 @@ class Reminder(Adw.ExpanderRow):
 
         self.refresh_time()
 
+    def set_time_label(self):
+        if self.time_row is not None:
+            timestamp = self.old_timestamp if self.past else self.timestamp
+            time = GLib.DateTime.new_from_unix_local(timestamp)
+
+        if timestamp != 0:
+            self.time_label.set_visible(True)
+            self.time_label.set_label(time.format(f'{self.time_row.get_date_label(True, time)} {self.time_row.get_time_label()}'))
+        else:
+            self.time_label.set_visible(False)
+
+    def set_past(self, past):
+        if self.past != past:
+            self.past = past
+            self.set_time_label()
+            self.refresh_time()
+
+    def update_repeat(self, timestamp, old_timestamp, repeat_times):
+        self.set_timestamp(timestamp, old_timestamp)
+        self.set_repeat_times(repeat_times)
+        self.changed()
+        self.get_parent().invalidate_sort()
+
     def set_repeat_times(self, times):
         self.repeat_times = times
         if not self.editing:
@@ -128,13 +156,6 @@ class Reminder(Adw.ExpanderRow):
             self.check_repeat_saved()
         self.update_repeat_label()
 
-    def update_time_label(self):
-        if self.time_enabled:
-            self.time_label.set_label(self.time_row.get_long_label())
-            self.time_label.set_visible(True)
-        else:
-            self.time_label.set_visible(False)
-
     def update_repeat_label(self):
         if self.repeat_type != 0:
             self.repeat_label.set_label(self.time_row.repeat_label.get_label())
@@ -143,7 +164,7 @@ class Reminder(Adw.ExpanderRow):
             self.repeat_label.set_visible(False)
 
     def update_label(self):
-        self.update_time_label()
+        self.set_time_label()
         self.update_repeat_label()
 
     def set_completed(self, completed):
@@ -159,28 +180,34 @@ class Reminder(Adw.ExpanderRow):
             self.completed_icon.set_visible(False)
 
         self.refresh_time()
-        self.changed()
         self.app.win.reminders_list.invalidate_sort()
 
     def refresh_time(self):
-        if self.time_enabled and not self.completed:
+        if self.past:
+            self.past_due.set_visible(True)
+        elif self.time_enabled and not self.completed:
+            timestamp = self.timestamp
             now = int(time.time())
-            self.past_due.set_visible(self.timestamp <= now)
+            self.past_due.set_visible(timestamp <= now)
         else:
             self.past_due.set_visible(False)
 
     def update_day_label(self):
-        self.update_time_label()
+        self.set_time_label()
         self.time_row.update_date_button_label()
 
-    def set_timestamp(self, timestamp):
-        self.timestamp = timestamp
-        time = GLib.DateTime.new_from_unix_local(timestamp)
-        self.time_label.set_label(self.time_row.get_long_label(time))
-        if not self.editing:
-            self.time_row.set_time(timestamp)
-        else:
-            self.check_time_saved()
+    def set_timestamp(self, timestamp, old_timestamp = None):
+        if old_timestamp is not None and old_timestamp != self.old_timestamp:
+            self.old_timestamp = old_timestamp
+        if timestamp != self.timestamp:
+            self.timestamp = timestamp
+            if not self.editing:
+                self.time_row.set_time(timestamp)
+            else:
+                self.check_time_saved()
+        self.set_time_label()
+        self.changed()
+        self.refresh_time()
 
     def update_timestamp(self):
         self.time_enabled = self.time_expander_row.get_enable_expansion()
@@ -233,7 +260,7 @@ class Reminder(Adw.ExpanderRow):
             self.saved_edits('time-enabled')
 
     def check_time_saved(self):
-        if self.time_row is not None and self.timestamp is not None:
+        if self.time_row is not None and self.timestamp != 0:
             if self.time_row.get_timestamp() != self.timestamp:
                 self.unsaved_edits('time')
             else:
@@ -436,7 +463,6 @@ class TimeRow(Gtk.ListBoxRow):
         self.set_time(timestamp)
 
         self.settings = settings
-        self.set_time_format()
         self.settings.connect('changed::time-format', self.set_time_format)
 
     def update_repeat_day(self):
@@ -519,11 +545,6 @@ class TimeRow(Gtk.ListBoxRow):
         self.date_button.set_label(self.time.format(self.get_date_label()))
         self.minute_adjustment.set_value(self.time.get_minute())
 
-    def get_long_label(self, time = None):
-        if time is None:
-            time = self.time
-        return time.format(f'{self.get_date_label(True, time)} {self.get_time_label()}')
-
     def update_date_button_label(self):
         self.date_button.set_label(self.time.format(self.get_date_label()))
 
@@ -567,7 +588,7 @@ class TimeRow(Gtk.ListBoxRow):
             self.enable_12h()
         elif setting == 2:
             self.enable_24h()
-        self.parent_reminder.time_label.set_label(self.get_long_label())
+        self.parent_reminder.set_time_label()
 
     def enable_12h(self):
         self.am_pm_button.set_visible(True)

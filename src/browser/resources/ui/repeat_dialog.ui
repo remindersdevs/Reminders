@@ -9,7 +9,11 @@
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkHeaderBar"/>
+          <object class="GtkHeaderBar">
+            <style>
+              <class name="flat"/>
+            </style>
+          </object>
         </child>
         <child>
           <object class="GtkScrolledWindow">

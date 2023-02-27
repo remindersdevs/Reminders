@@ -64,10 +64,12 @@ row.time {
 
 button.complete {
     background-color: @success_bg_color;
+    color: @accent_fg_color;
 }
 
 button.incomplete {
     background-color: @warning_bg_color;
+    color: @accent_fg_color;
 }
 
 .navigation-sidebar row {

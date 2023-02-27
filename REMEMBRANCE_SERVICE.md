@@ -105,8 +105,11 @@ Quits the service
         - Type: s
         - The id of the reminder that was shown in a notification
     - timestamp
-        - Type: s
+        - Type: u
         - The new timestamp (will be same as before if not repeating)
+    - old-timestamp
+        - Type: u
+        - The timestamp from the last notification
     - repeat-times
         - Type: s
         - How many times left that the reminder will repeat (-1 if no limit)
@@ -140,7 +143,7 @@ Quits the service
     - reminder
         - Type: a{sv}
         - A dictionary with the new contents of the reminder that was updated
-        - {'id': s, 'title': s, 'description': s, 'timestamp': u, 'repeat-type': q, 'repeat-frequency': q, 'repeat-days': q, 'repeat-times': n, 'repeat-until': u}
+        - {'id': s, 'title': s, 'description': s, 'timestamp': u, 'repeat-type': q, 'repeat-frequency': q, 'repeat-days': q, 'repeat-times': n, 'repeat-until': u, 'old-timestamp': u}
 
 ## app_id parameter
 This paremeter should be set to the id of your app, although it can be left empty. This will be returned in a signal after the reminder is updated, which will let you ignore the signal if you initiated the update.

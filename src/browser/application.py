@@ -29,7 +29,7 @@ from remembrance.browser.about import about_window
 from remembrance.browser.preferences import PreferencesWindow
 
 # Always update this when new features are added that require the service to restart
-MIN_SERVICE_VERSION = 0.2
+MIN_SERVICE_VERSION = 0.3
 
 class Remembrance(Adw.Application):
     '''Application for the frontend'''
@@ -58,7 +58,7 @@ class Remembrance(Adw.Application):
             GLib.OptionFlags.NONE,
             GLib.OptionArg.STRING,
             _('Start on a different page'),
-            '(upcoming|overdue|completed)',
+            '(upcoming|past|completed)',
         )
 
     def do_command_line(self, command):
@@ -73,7 +73,7 @@ class Remembrance(Adw.Application):
 
         if commands.contains('page'):
             value = commands.lookup_value('page').get_string()
-            if value in ('upcoming', 'overdue', 'completed'):
+            if value in ('upcoming', 'past', 'completed'):
                 self.page = value
             else:
                 print(f'{value} is not a valid page')
@@ -120,9 +120,10 @@ class Remembrance(Adw.Application):
 
     def do_activate(self):
         Adw.Application.do_activate(self)
+
         if win := self.get_active_window():
             self.win = win
-            self.win.activate_action('win.all', None)
+            self.win.activate_action(f'win.{self.page}', None)
             self.win.present()
             return
 
@@ -140,9 +141,14 @@ class Remembrance(Adw.Application):
         self.create_action('preferences', self.show_preferences)
         self.create_action('about', self.show_about)
         self.provider = Gtk.CssProvider()
+        self.create_action('notification-clicked', lambda *args: self.notification_clicked_cb())
         self.provider.load_from_resource('/io/github/dgsasha/remembrance/stylesheet.css')
         Gtk.StyleContext.add_provider_for_display(self.win.get_display(), self.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         self.win.present()
+
+    def notification_clicked_cb(self):
+        self.page = 'past'
+        self.do_activate()
 
     def notification_completed_cb(self, action, variant, data = None):
         reminder_id = variant.get_string()
@@ -161,14 +167,9 @@ class Remembrance(Adw.Application):
             self.win.reminder_lookup_dict[reminder_id].set_completed(completed)
 
     def repeat_updated_cb(self, proxy, sender_name, signal_name, parameters):
-        reminder_id, timestamp, repeat_times = parameters.unpack()
+        reminder_id, timestamp, old_timestamp, repeat_times = parameters.unpack()
         reminder = self.win.reminder_lookup_dict[reminder_id]
-        if timestamp != reminder.timestamp:
-            reminder.set_timestamp(timestamp)
-        reminder.set_repeat_times(repeat_times)
-        reminder.refresh_time()
-        reminder.changed()
-        reminder.get_parent().invalidate_sort()
+        reminder.update_repeat(timestamp, old_timestamp, repeat_times)
 
     def reminder_updated_cb(self, proxy, sender_name, signal_name, parameters):
         app_id, reminder = parameters.unpack()

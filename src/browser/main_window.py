@@ -88,7 +88,7 @@ class MainWindow(Adw.ApplicationWindow):
     add_reminder = Gtk.Template.Child()
     all_row = Gtk.Template.Child()
     upcoming_row = Gtk.Template.Child()
-    overdue_row = Gtk.Template.Child()
+    past_row = Gtk.Template.Child()
     completed_row = Gtk.Template.Child()
     sort_button = Gtk.Template.Child()
     flap = Gtk.Template.Child()
@@ -111,7 +111,7 @@ class MainWindow(Adw.ApplicationWindow):
 
         self.create_action('all', lambda *args: self.all_reminders())
         self.create_action('upcoming', lambda *args: self.upcoming_reminders())
-        self.create_action('overdue', lambda *args: self.overdue_reminders())
+        self.create_action('past', lambda *args: self.past_reminders())
         self.create_action('completed', lambda *args: self.completed_reminders())
         self.create_action('search', lambda *args: self.search_bar.set_search_mode(True), accels=['<Ctrl>f'])
         self.settings_create_action('sort')
@@ -155,7 +155,8 @@ class MainWindow(Adw.ApplicationWindow):
                         dictionary['repeat-days'],
                         dictionary['completed'],
                         dictionary['repeat-until'],
-                        dictionary['repeat-times']
+                        dictionary['repeat-times'],
+                        dictionary['old-timestamp']
                     )
 
     def set_completed_last(self, key = None, data = None):
@@ -186,7 +187,8 @@ class MainWindow(Adw.ApplicationWindow):
         repeat_days: int = 0,
         completed: bool = False,
         repeat_until: int = 0,
-        repeat_times: int = 0
+        repeat_times: int = 0,
+        old_timestamp: int = 0
     ):
         reminder = Reminder(
             self.app,
@@ -199,7 +201,8 @@ class MainWindow(Adw.ApplicationWindow):
             repeat_frequency=repeat_frequency,
             repeat_days=repeat_days,
             repeat_until=repeat_until,
-            repeat_times=repeat_times
+            repeat_times=repeat_times,
+            old_timestamp=old_timestamp
         )
 
         self.reminders_list.append(reminder)
@@ -218,28 +221,27 @@ class MainWindow(Adw.ApplicationWindow):
         self.add_action(action)
 
     def all_filter(self, reminder):
+        reminder.set_past(False)
         if not reminder.is_sensitive():
             reminder.set_sensitive(True)
         return True
 
     def upcoming_filter(self, reminder):
         now = int(time.time())
-        if reminder.timestamp == 0:
+        if reminder.timestamp == 0 or (reminder.timestamp > now and not reminder.completed):
             retval = True
-        elif reminder.timestamp > now and not reminder.completed:
-            retval = True
+            reminder.set_past(False)
         else:
             retval = False
         if reminder.is_sensitive() is not retval:
             reminder.set_sensitive(retval)
         return retval
 
-    def overdue_filter(self, reminder):
+    def past_filter(self, reminder):
         now = int(time.time())
-        if reminder.timestamp == 0:
-            retval = False
-        elif reminder.timestamp < now and not reminder.completed:
+        if reminder.old_timestamp != 0 and (reminder.old_timestamp < now and not reminder.completed):
             retval = True
+            reminder.set_past(True)
         else:
             retval = False
         if reminder.is_sensitive() is not retval:
@@ -249,6 +251,7 @@ class MainWindow(Adw.ApplicationWindow):
     def completed_filter(self, reminder):
         if reminder.completed:
             retval = True
+            reminder.set_past(False)
         else:
             retval = False
         if reminder.is_sensitive() is not retval:
@@ -326,13 +329,13 @@ class MainWindow(Adw.ApplicationWindow):
         if self.flap.get_folded():
             self.flap.set_reveal_flap(False)
 
-    def overdue_reminders(self):
-        if not self.overdue_row.is_selected():
-            self.sidebar_list.select_row(self.overdue_row)
-        self.reminders_list.set_filter_func(self.overdue_filter)
-        self.page_label.set_label(_('Overdue Reminders'))
+    def past_reminders(self):
+        if not self.past_row.is_selected():
+            self.sidebar_list.select_row(self.past_row)
+        self.reminders_list.set_filter_func(self.past_filter)
+        self.page_label.set_label(_('Past Reminders'))
         self.reminders_list.invalidate_sort()
-        self.selected = self.overdue_row
+        self.selected = self.past_row
         if self.flap.get_folded():
             self.flap.set_reveal_flap(False)
 
@@ -363,6 +366,9 @@ class MainWindow(Adw.ApplicationWindow):
             for word in words:
                 if word not in reminder_text:
                     retval = False
+
+            if retval:
+                reminder.set_past(False)
 
             if reminder.is_sensitive() is not retval:
                 reminder.set_sensitive(retval)

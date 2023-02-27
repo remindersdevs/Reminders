@@ -19,6 +19,7 @@ from gi.repository import Gtk, Adw, Gio
 class PreferencesWindow(Adw.PreferencesWindow):
     '''Settings Window'''
     __gtype_name__ = 'PreferencesWindow'
+    sound_switch = Gtk.Template.Child()
     time_format_row = Gtk.Template.Child()
     completed_last_row = Gtk.Template.Child()
     completed_reversed_switch = Gtk.Template.Child()
@@ -26,6 +27,7 @@ class PreferencesWindow(Adw.PreferencesWindow):
     def __init__(self, app, **kwargs):
         super().__init__(**kwargs)
         self.settings = app.settings
+        self.settings.bind('notification-sound', self.sound_switch, 'active', Gio.SettingsBindFlags.DEFAULT)
         self.settings.connect('changed::time-format', lambda *args : self.update_dropdown())
         self.update_dropdown()
         self.time_format_row.connect('notify::selected', lambda *args : self.update_time_format())

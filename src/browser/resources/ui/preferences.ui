@@ -16,6 +16,17 @@
               </object>
             </child>
             <child>
+              <object class="AdwActionRow">
+                <property name="title" translatable="yes">Play sound with notification</property>
+                <property name="activatable-widget">sound_switch</property>
+                <child>
+                  <object class="GtkSwitch" id="sound_switch">
+                    <property name="valign">center</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
               <object class="AdwExpanderRow" id="completed_last_row">
                 <property name="title" translatable="yes">Show Completed Reminders Last</property>
                 <property name="show-enable-switch">true</property>

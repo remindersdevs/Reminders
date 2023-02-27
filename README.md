@@ -18,7 +18,7 @@ flatpak install flathub org.gnome.Sdk//43
 
 ## Building (Flatpak):
 ```
-flatpak-builder --user --install --force-clean build-dir io.github.dgsasha.Remembrance.yml
+flatpak-builder --user --install --force-clean build-dir flatpak/io.github.dgsasha.Remembrance.yml
 ```
 ```
 flatpak run io.github.dgsasha.Remembrance.Devel --restart-service
@@ -29,6 +29,7 @@ flatpak run io.github.dgsasha.Remembrance.Devel --restart-service
 - Meson
 - Libadwaita
 - GLib
+- GSound
 
 ## Building (generic):
 ```

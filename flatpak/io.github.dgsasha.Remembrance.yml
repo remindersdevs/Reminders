@@ -10,8 +10,12 @@ finish-args:
   - --socket=wayland
   - --socket=fallback-x11
   - --system-talk-name=org.freedesktop.login1
+  - --socket=pulseaudio
 
 modules:
+  - shared-modules/intltool/intltool-0.51.json
+  - shared-modules/libcanberra/libcanberra.json
+
   - name: libportal
     buildsystem: meson
     config-opts:
@@ -22,6 +26,21 @@ modules:
         url: https://github.com/flatpak/libportal/archive/refs/tags/0.6.tar.gz
         sha256: 8ad326c4f53b7433645dc86d994fef0292bee8adda0fe67db9288ace19250a9c
 
+  - name: gsound
+    buildsystem: meson
+    config-opts:
+      - -Denable_vala=false
+    sources:
+      - type: archive
+        url: https://gitlab.gnome.org/GNOME/gsound/-/archive/1.0.3/gsound-1.0.3.tar.gz
+        sha256: ebee33c77f43bcae87406c20e051acaff08e86f8960c35b92911e243fddc7a0b
+
+  - name: sound-theme-freedesktop
+    sources:
+      - type: archive
+        url: http://people.freedesktop.org/~mccann/dist/sound-theme-freedesktop-0.8.tar.bz2
+        sha256: cb518b20eef05ec2e82dda1fa89a292c1760dc023aba91b8aa69bafac85e8a14
+
   - name: remembrance
     builddir: true
     buildsystem: meson
@@ -30,5 +49,5 @@ modules:
       - -Ddevel=true
     sources:
       - type: dir
-        path: '.'
+        path: '../'
 

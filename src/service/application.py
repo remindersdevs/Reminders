@@ -31,6 +31,7 @@ class RemembranceService(Gio.Application):
         Gio.Application.do_startup(self)
         self.configure_logging()
         self.logger.info(f'Starting {info.service_executable} version {info.service_version}')
+        self.settings = Gio.Settings(info.base_app_id)
 
         if info.portals_enabled:
             import gi
@@ -70,7 +71,7 @@ class RemembranceService(Gio.Application):
         self.add_action(action)
 
     def launch_browser(self, action = None, variant = None):
-        Gio.DesktopAppInfo.new(f'{info.app_id}.desktop').launch(None, None)
+        Gio.DesktopAppInfo.new(f'{info.app_id}.desktop').action_name('Past', None)
 
     def notification_completed_cb(self, action, variant, data = None):
         reminder_id = variant.get_string()

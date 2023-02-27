@@ -10,6 +10,11 @@
     <value value="1" nick="title"/>
   </enum>
 	<schema id="io.github.dgsasha.Remembrance" path="/io/github/dgsasha/remembrance/">
+    <key type="b" name="notification-sound">
+      <default>true</default>
+      <summary>Notification Sound</summary>
+      <description>Whether or not to play a notification sound</description>
+    </key>
     <key name="time-format" enum="io.github.dgsasha.Remembrance.TimeFormat">
       <default>'locale'</default>
       <summary>Time format</summary>

@@ -110,8 +110,8 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkListBoxRow" id="overdue_row">
-                        <property name="action-name">win.overdue</property>
+                      <object class="GtkListBoxRow" id="past_row">
+                        <property name="action-name">win.past</property>
                         <child>
                           <object class="GtkBox">
                             <property name="orientation">horizontal</property>
@@ -125,7 +125,7 @@
                             <child>
                               <object class="GtkLabel">
                                 <property name="halign">start</property>
-                                <property name="label" translatable="yes">Overdue Reminders</property>
+                                <property name="label" translatable="yes">Past Reminders</property>
                               </object>
                             </child>
                           </object>

@@ -63,10 +63,10 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/dgsasha/remembrance/d186148a3b8de08865e50b4012b65b595f33bdb8/screenshot-dark.png</image>
+      <image>https://raw.githubusercontent.com/dgsasha/remembrance/27ebf79ef091a727ee00ed31e05f99d928e22924/screenshot-dark.png</image>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/dgsasha/remembrance/d186148a3b8de08865e50b4012b65b595f33bdb8/screenshot-light.png</image>
+      <image>https://raw.githubusercontent.com/dgsasha/remembrance/27ebf79ef091a727ee00ed31e05f99d928e22924/screenshot-light.png</image>
     </screenshot>
   </screenshots>
 
@@ -75,6 +75,14 @@
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
   <releases>
+    <release version="0.3" date="2023-02-26">
+      <description>
+        <ul>
+          <li>Add support for notification sounds</li>
+          <li>Show past recurring reminders on overdue page</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.2" date="2023-02-25">
       <description>
         <ul>

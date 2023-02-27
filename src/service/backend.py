@@ -20,8 +20,10 @@ import logging
 import random
 import string
 import datetime
+import gi
 
-from gi.repository import GLib, Gio
+gi.require_version('GSound', '1.0')
+from gi.repository import GLib, Gio, GSound
 from remembrance import info
 from gettext import gettext as _
 from enum import IntFlag, IntEnum, auto
@@ -54,7 +56,8 @@ FIELDNAMES = [
     'repeat-frequency',
     'repeat-days',
     'repeat-until',
-    'repeat-times'
+    'repeat-times',
+    'old-timestamp'
 ]
 
 VERSION = info.service_version
@@ -107,6 +110,7 @@ def get_xml(dict_empty):
         <signal name='RepeatUpdated'>
             <arg name='reminder_id' direction='out' type='s'/>
             <arg name='timestamp' direction='out' type='u'/>
+            <arg name='old-timestamp' direction='out' type='u'/>
             <arg name='repeat-times' direction='out' type='n'/>
         </signal>
     </interface>
@@ -183,6 +187,8 @@ class Reminders():
         self.dict = {}
         self.app = app
         self.connection = Gio.bus_get_sync(Gio.BusType.SESSION, None)
+        self.sound = GSound.Context()
+        self.sound.init()
         self.countdowns = Countdowns()
         self._get_reminders()
         self._dict_empty = (len(self.dict.keys()) == 0)
@@ -275,31 +281,38 @@ class Reminders():
         notification = Gio.Notification.new(self.dict[reminder_id]['title'])
         notification.set_body(self.dict[reminder_id]['description'])
         notification.add_button_with_target(_('Mark as completed'), 'app.reminder-completed', GLib.Variant('s', reminder_id))
-        if not self.app.sandboxed:
-            notification.set_default_action('app.notification-clicked')
+        notification.set_default_action('app.notification-clicked')
 
         def do_send_notification():
-            emitted = False
             self.app.send_notification(reminder_id, notification)
+            if self.app.settings.get_boolean('notification-sound'):
+                try:
+                    self.sound.play_simple({GSound.ATTR_EVENT_ID: 'bell'})
+                except Exception as error:
+                    logger.error(f"{error} Couldn't play notification sound")
             self._shown(reminder_id)
             self.countdowns.dict[reminder_id]['id'] = 0
-            if self.dict[reminder_id]['repeat-type'] != 0:
-                emitted = self._repeat(reminder_id)
-            if not emitted:
-                self.do_emit('RepeatUpdated', GLib.Variant('(sun)', (reminder_id, self.dict[reminder_id]['timestamp'], self.dict[reminder_id]['repeat-times'])))
+            self._update_repeat(reminder_id)
             return False
 
         self.countdowns.add_countdown(self.dict[reminder_id]['timestamp'], do_send_notification, reminder_id)
+
+    def _update_repeat(self, reminder_id):
+        self.dict[reminder_id]['old-timestamp'] = self.dict[reminder_id]['timestamp']
+        if self.dict[reminder_id]['repeat-type'] != 0:
+            self._repeat(reminder_id)
+        self.do_emit('RepeatUpdated', GLib.Variant('(suun)', (reminder_id, self.dict[reminder_id]['timestamp'], self.dict[reminder_id]['old-timestamp'], self.dict[reminder_id]['repeat-times'])))
 
     def _repeat(self, reminder_id):
         delta = None
         repeat_times = self.dict[reminder_id]['repeat-times']
         if repeat_times == 0:
-            return False
+            return
         timestamp = self.dict[reminder_id]['timestamp']
+        old_timestamp = self.dict[reminder_id]['old-timestamp']
         repeat_until = self.dict[reminder_id]['repeat-until']
         if repeat_until > 0 and repeat_until < int(timestamp):
-            return False
+            return
 
         repeat_type = self.dict[reminder_id]['repeat-type']
         frequency = self.dict[reminder_id]['repeat-frequency']
@@ -317,12 +330,13 @@ class Reminders():
             timedate += delta
             timestamp = timedate.timestamp()
             while timestamp < int(time.time()):
-                if repeat_times == 0 or repeat_times == 1:
+                old_timestamp = timestamp
+                if repeat_times != -1:
+                    repeat_times -= 1
+                if repeat_times == 0:
                     break
                 timedate += delta
                 timestamp = timedate.timestamp()
-                if repeat_times != -1:
-                    repeat_times -= 1
 
         if repeat_type == RepeatType.WEEK:
             weekday = timedate.date().weekday()
@@ -342,7 +356,7 @@ class Reminders():
                     days.append(num)
 
             if len(days) == 0:
-                return False
+                return
 
             for i, value in enumerate(days):
                 if value == weekday:
@@ -358,7 +372,10 @@ class Reminders():
             timestamp = timedate.timestamp()
 
             while timestamp < int(time.time()):
-                if repeat_times == 1 or repeat_times == 0:
+                old_timestamp = timestamp
+                if repeat_times != -1:
+                    repeat_times -= 1
+                if repeat_times == 0:
                     break
                 weekday = timedate.date().weekday()
                 index += 1
@@ -366,23 +383,19 @@ class Reminders():
                     index = 0
                 timedate += datetime.timedelta(days=((days[index] - weekday) % 7))
                 timestamp = timedate.timestamp()
-                if repeat_times != -1:
-                    repeat_times -= 1
+
 
         if repeat_until > 0 and repeat_until < int(timestamp):
-            return False
+            return
 
         self.dict[reminder_id]['repeat-times'] = repeat_times
         self.dict[reminder_id]['timestamp'] = int(timestamp)
+        self.dict[reminder_id]['old-timestamp'] = int(old_timestamp)
 
         self._save_reminders()
 
-        self.do_emit('RepeatUpdated', GLib.Variant('(sun)', (reminder_id, self.dict[reminder_id]['timestamp'], self.dict[reminder_id]['repeat-times'])))
-
         if repeat_times != 0:
             self._set_countdown(reminder_id)
-
-        return True
 
     def _shown(self, reminder_id):
         if reminder_id in self.dict:
@@ -407,6 +420,7 @@ class Reminders():
                     'repeat-days': self.dict[reminder]['repeat-days'],
                     'repeat-times': self.dict[reminder]['repeat-times'],
                     'repeat-until': self.dict[reminder]['repeat-until'],
+                    'old-timestamp': self.dict[reminder]['old-timestamp']
                 })
 
     def _get_boolean(self, row, key):
@@ -432,7 +446,6 @@ class Reminders():
                         description = row['description']
                         timestamp = self._get_int(row, 'timestamp')
                         completed = self._get_boolean(row, 'completed')
-                            
                         repeat_type = self._get_int(row, 'repeat-type')
                         repeat_frequency = self._get_int(row, 'repeat-frequency', 1)
                         repeat_days = self._get_int(row, 'repeat-days')
@@ -441,6 +454,7 @@ class Reminders():
                         else:
                             repeat_times = self._get_int(row, 'repeat-times', 1)
                         repeat_until = self._get_int(row, 'repeat-until')
+                        old_timestamp = self._get_int(row, 'old-timestamp', timestamp if timestamp < int(time.time()) else 0)
                     except Exception as error:
                         logger.error(f'{error}: Failed to read reminder')
                         continue
@@ -454,7 +468,8 @@ class Reminders():
                         'repeat-frequency': repeat_frequency,
                         'repeat-days': repeat_days,
                         'repeat-times': repeat_times,
-                        'repeat-until': repeat_until
+                        'repeat-until': repeat_until,
+                        'old-timestamp': old_timestamp
                     }
 
                     self._set_countdown(reminder_id)
@@ -499,7 +514,8 @@ class Reminders():
             'repeat-frequency': repeat_frequency,
             'repeat-days': repeat_days,
             'repeat-times': repeat_times,
-            'repeat-until': repeat_until
+            'repeat-until': repeat_until,
+            'old-timestamp': 0
         }
         with open(REMINDERS_FILE, 'a', newline='') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=FIELDNAMES)
@@ -514,7 +530,8 @@ class Reminders():
                 'repeat-frequency': repeat_frequency,
                 'repeat-days': repeat_days,
                 'repeat-times': repeat_times,
-                'repeat-until': repeat_until
+                'repeat-until': repeat_until,
+                'old-timestamp': 0
             })
 
         reminder = {
@@ -586,7 +603,8 @@ class Reminders():
                 'repeat-frequency': GLib.Variant('q', self.dict[reminder]['repeat-frequency']),
                 'repeat-days': GLib.Variant('q', self.dict[reminder]['repeat-days']),
                 'repeat-times': GLib.Variant('n', self.dict[reminder]['repeat-times']),
-                'repeat-until': GLib.Variant('u', self.dict[reminder]['repeat-until'])
+                'repeat-until': GLib.Variant('u', self.dict[reminder]['repeat-until']),
+                'old-timestamp': GLib.Variant('u', self.dict[reminder]['old-timestamp'])
             })
 
         if len(array) > 0:

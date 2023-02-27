@@ -11,15 +11,15 @@ DBusActivatable=true
 X-SingleMainWindow=true
 Categories=GNOME;GTK;Office;ProjectManagement;
 Keywords=Todo;Productivity;Task;Planning;Planner;Time;Management;Reminder;Remembrance;
-Actions=Upcoming;Overdue;Completed;
+Actions=Upcoming;Past;Completed;
 
 [Desktop Action Upcoming]
 Name=Upcoming Reminders
 Exec=@BINDIR@/@APP_EXECUTABLE@ --page upcoming
 
-[Desktop Action Overdue]
-Name=Overdue Reminders
-Exec=@BINDIR@/@APP_EXECUTABLE@ --page overdue
+[Desktop Action Past]
+Name=Past Reminders
+Exec=@BINDIR@/@APP_EXECUTABLE@ --page past
 
 [Desktop Action Completed]
 Name=Completed Reminders
