@@ -29,7 +29,7 @@ from remembrance.browser.about import about_window
 from remembrance.browser.preferences import PreferencesWindow
 
 # Always update this when new features are added that require the service to restart
-MIN_SERVICE_VERSION = 0.1
+MIN_SERVICE_VERSION = 0.2
 
 class Remembrance(Adw.Application):
     '''Application for the frontend'''
@@ -84,7 +84,6 @@ class Remembrance(Adw.Application):
     def do_startup(self):
         Adw.Application.do_startup(self)
         self.configure_logging()
-        self.connect_to_service()
         if info.portals_enabled:
             import gi
             gi.require_version('Xdp', '1.0')
@@ -107,38 +106,43 @@ class Remembrance(Adw.Application):
         ).unpack()[0]
         if self.restart or loaded_service_version < MIN_SERVICE_VERSION:
             if MIN_SERVICE_VERSION <= info.service_version:
-                service = Gio.DesktopAppInfo.new(f'{info.service_id}.desktop')
-                service.launch(None, None)
+                try:
+                    self.run_service_method(
+                        'Quit',
+                        None
+                    )
+                    self.connect_to_service()
+                except Exception as error:
+                    self.logger.error(f"{error}: Couldn't quit {info.service_executable}")
             else:
                 self.logger.error(f'{info.service_executable} version is too low')
                 sys.exit(1)
 
     def do_activate(self):
         Adw.Application.do_activate(self)
-        self.check_service_version()
         if win := self.get_active_window():
             self.win = win
+            self.win.activate_action('win.all', None)
             self.win.present()
             return
 
+        self.connect_to_service()
+        self.check_service_version()
+
         self.settings = Gio.Settings(info.base_app_id)
         self.win = MainWindow(self.page, application=self)
-        self.service.connect('g-signal::ReminderShown', self.reminder_shown_cb)
         self.service.connect('g-signal::CompletedUpdated', self.reminder_completed_cb)
         self.service.connect('g-signal::ReminderDeleted', self.reminder_deleted_cb)
         self.service.connect('g-signal::ReminderUpdated', self.reminder_updated_cb)
+        self.service.connect('g-signal::RepeatUpdated', self.repeat_updated_cb)
         self.win.connect('close-request', self.on_close)
         self.create_action('quit', self.quit_app)
         self.create_action('preferences', self.show_preferences)
         self.create_action('about', self.show_about)
-        self.create_action('notification-clicked', lambda *args: self.notification_clicked_cb())
         self.provider = Gtk.CssProvider()
         self.provider.load_from_resource('/io/github/dgsasha/remembrance/stylesheet.css')
         Gtk.StyleContext.add_provider_for_display(self.win.get_display(), self.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         self.win.present()
-
-    def notification_clicked_cb(self):
-        self.win.activate_action('win.overdue', None)
 
     def notification_completed_cb(self, action, variant, data = None):
         reminder_id = variant.get_string()
@@ -151,14 +155,20 @@ class Remembrance(Adw.Application):
         except AttributeError:
             pass
 
-    def reminder_shown_cb(self, proxy, sender_name, signal_name, parameters):
-        reminder_id = parameters.unpack()[0]
-        self.win.reminder_lookup_dict[reminder_id].refresh_time()
-
     def reminder_completed_cb(self, proxy, sender_name, signal_name, parameters):
         app_id, reminder_id, completed = parameters.unpack()
         if app_id != info.app_id:
             self.win.reminder_lookup_dict[reminder_id].set_completed(completed)
+
+    def repeat_updated_cb(self, proxy, sender_name, signal_name, parameters):
+        reminder_id, timestamp, repeat_times = parameters.unpack()
+        reminder = self.win.reminder_lookup_dict[reminder_id]
+        if timestamp != reminder.timestamp:
+            reminder.set_timestamp(timestamp)
+        reminder.set_repeat_times(repeat_times)
+        reminder.refresh_time()
+        reminder.changed()
+        reminder.get_parent().invalidate_sort()
 
     def reminder_updated_cb(self, proxy, sender_name, signal_name, parameters):
         app_id, reminder = parameters.unpack()
@@ -167,14 +177,24 @@ class Remembrance(Adw.Application):
                 self.win.reminder_lookup_dict[reminder['id']].update(
                     reminder['title'],
                     reminder['description'],
-                    reminder['timestamp']
+                    reminder['timestamp'],
+                    reminder['repeat-type'],
+                    reminder['repeat-frequency'],
+                    reminder['repeat-days'],
+                    reminder['repeat-until'],
+                    reminder['repeat-times']
                 )
             except KeyError:
                 self.win.display_reminder(
                     reminder['id'],
                     reminder['title'],
                     reminder['description'],
-                    reminder['timestamp']
+                    reminder['timestamp'],
+                    reminder['repeat-type'],
+                    reminder['repeat-frequency'],
+                    reminder['repeat-days'],
+                    reminder['repeat-until'],
+                    reminder['repeat-times']
                 )
 
     def reminder_deleted_cb(self, proxy, sender_name, signal_name, parameters):

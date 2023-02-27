@@ -1,8 +1,10 @@
 resources = files(
     'ui/main.ui',
-    'ui/reminder.ui',
     'ui/preferences.ui',
-    'ui/time_box.ui'
+    'ui/reminder.ui',
+    'ui/repeat_dialog.ui',
+    'ui/time_row.ui',
+    'stylesheet.css'
 )
 
 gnome.compile_resources(

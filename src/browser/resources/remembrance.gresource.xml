@@ -2,9 +2,10 @@
 <gresources>
   <gresource prefix="/io/github/dgsasha/remembrance">
     <file>ui/main.ui</file>
-    <file>ui/reminder.ui</file>
     <file>ui/preferences.ui</file>
-    <file>ui/time_box.ui</file>
+    <file>ui/reminder.ui</file>
+    <file>ui/repeat_dialog.ui</file>
+    <file>ui/time_row.ui</file>
     <file>stylesheet.css</file>
   </gresource>
 </gresources>

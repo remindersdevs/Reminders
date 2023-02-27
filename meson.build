@@ -1,6 +1,6 @@
 project(
     'remembrance',
-    version: '0.1.2 Alpha',
+    version: '0.2 Alpha',
     meson_version: '>= 0.59',
     default_options: ['prefix=/usr']
 )
@@ -11,7 +11,7 @@ dependency('libadwaita-1')
 
 devel = get_option('devel')
 
-service_version = '0.1'
+service_version = '0.2'
 
 app_executable = 'remembrance'
 
@@ -24,8 +24,8 @@ base_path = '/io/github/dgsasha/Remembrance'
 path = devel ? base_path + '/Devel' : base_path
 
 service_executable = 'remembrance-service'
-service_id = app_id + '.Service'
-service_object = path + '/Service'
+service_id = app_id + '.Service1'
+service_object = path + '/Service1'
 
 i18n = import('i18n')
 localedir = get_option('localedir')

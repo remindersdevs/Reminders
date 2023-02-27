@@ -1,100 +1,101 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# German translation for the remembrance's package.
+# Copyright (C) 2023 THE remembrance'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the remembrance package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# gregorni <gregorniehl@web.de>, 2023.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-24 18:03-0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2023-02-19 11:24-0500\n"
+"PO-Revision-Date: 2023-02-22 17:15+0100\n"
+"Last-Translator: gregorni <gregorniehl@web.de>\n"
+"Language-Team: German <gnome-de@gnome.org>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:4
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:9
 #: src/info.py:5
 msgid "Remembrance"
-msgstr ""
+msgstr "Remembrance"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:5
 msgid "A reminder app for Linux"
-msgstr ""
+msgstr "Eine Reminder-App für Linux"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:14
 msgid ""
 "Todo;Productivity;Task;Planning;Planner;Time;Management;Reminder;Remembrance;"
 msgstr ""
+"Todo;Productivity;Task;Planning;Planner;Time;Management;Reminder;Remembrance;"
+"Produktivität;Aufgabe;Planung;Zeit;Ereignis;Erinnerung;"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:18
 #: src/browser/resources/ui/main.ui:105 src/browser/main_window.py:323
 msgid "Upcoming Reminders"
-msgstr ""
+msgstr "Anstehende Reminder"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:22
 #: src/browser/resources/ui/main.ui:128 src/browser/main_window.py:333
 msgid "Overdue Reminders"
-msgstr ""
+msgstr "Verpasste Reminder"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:26
 #: src/browser/resources/ui/main.ui:151 src/browser/main_window.py:343
 msgid "Completed Reminders"
-msgstr ""
+msgstr "Erledigte Reminder"
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:15
 msgid "Time format"
-msgstr ""
+msgstr "Zeitformat"
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:16
 msgid "What format to display the time in"
-msgstr ""
+msgstr "In welchem Format die Zeit angezeigt werden soll"
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:20
 #: src/browser/resources/ui/main.ui:44
 msgid "Sort by"
-msgstr ""
+msgstr "Sortieren nach"
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:21
 msgid "How to sort the reminders"
-msgstr ""
+msgstr "Wie die Reminder sortiert werden sollen"
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:25
 msgid "Descending sort"
-msgstr ""
+msgstr "Absteigende Sortierung"
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:26
 msgid "If reminders sort should be descending"
-msgstr ""
+msgstr "Ob die Reminder absteigend sortiert werden sollen"
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:30
 msgid "Completed last"
-msgstr ""
+msgstr "Zuletzt erledigt"
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:31
 msgid "Show completed reminders last"
-msgstr ""
+msgstr "Erledigte Reminder zuletzt anzeigen"
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:35
 msgid "Completed reverse"
-msgstr ""
+msgstr "Reihenfolge der erledigten Reminder umkehren"
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:36
 msgid "Reverse order of completed reminders when sorted by time"
-msgstr ""
+msgstr "Betrifft nur die Sortierung nach Zeit"
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:6
 msgid "Sasha Hale"
-msgstr ""
+msgstr "Sasha Hale"
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:10
 msgid "Set reminders for yourself"
-msgstr ""
+msgstr "Stellen Sie sich Reminder"
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:13
 msgid ""
@@ -104,398 +105,404 @@ msgid ""
 "recurring so they are shown multiple times. You can also sort and filter "
 "your reminders, as well as search for specific reminders."
 msgstr ""
+"Stellen Sie sich Reminder, wann immer Sie sich etwas für nachher merken "
+"wollen. Remembrance kann zu einem bestimmten Zeitpunkt eine Benachrichtigung "
+"senden. Sie können Reminder als erledigt markieren, damit die "
+"Benachrichtigung nicht gesendet wird. Reminder können auch wiederholt "
+"werden, sodass sie mehrmals gezeigt werden. Außerdem können Sie Reminder "
+"sortieren, suchen und filtern."
 
 #: data/service/io.github.dgsasha.Remembrance.Service1.desktop.in.in:4
 msgid "Remembrance Service"
-msgstr ""
+msgstr "Remembrance-Service"
 
 #: src/browser/resources/ui/main.ui:27
 msgid "Search"
-msgstr ""
+msgstr "Suche"
 
 #: src/browser/resources/ui/main.ui:36
 msgid "App Menu"
-msgstr ""
+msgstr "App-Menü"
 
 #: src/browser/resources/ui/main.ui:43
 msgid "Sort direction"
-msgstr ""
+msgstr "Reihenfolge"
 
 #: src/browser/resources/ui/main.ui:82 src/browser/resources/ui/main.ui:202
 #: src/browser/main_window.py:313
 msgid "All Reminders"
-msgstr ""
+msgstr "Alle Reminder"
 
 #: src/browser/resources/ui/main.ui:243 src/browser/resources/ui/main.ui:251
 msgid "Add a reminder"
-msgstr ""
+msgstr "Reminder hinzufügen"
 
 #: src/browser/resources/ui/main.ui:269
 #: src/browser/resources/ui/preferences.ui:4
 msgid "Preferences"
-msgstr ""
+msgstr "Einstellungen"
 
 #: src/browser/resources/ui/main.ui:275
 msgid "About"
-msgstr ""
+msgstr "Über"
 
 #: src/browser/resources/ui/main.ui:282
 msgid "Sort"
-msgstr ""
+msgstr "Sortierung"
 
 #: src/browser/resources/ui/main.ui:284
 msgid "Time"
-msgstr ""
+msgstr "Zeit"
 
 #: src/browser/resources/ui/main.ui:289
 msgid "Title"
-msgstr ""
+msgstr "Titel"
 
 #: src/browser/resources/ui/preferences.ui:9
 msgid "General"
-msgstr ""
+msgstr "Allgemein"
 
 #: src/browser/resources/ui/preferences.ui:14
 msgid "Time Format"
-msgstr ""
+msgstr "Zeitformat"
 
 #: src/browser/resources/ui/preferences.ui:20
 msgid "Show Completed Reminders Last"
-msgstr ""
+msgstr "Erledigte Reminder zuletzt anzeigen"
 
 #: src/browser/resources/ui/preferences.ui:24
 msgid "Reverse order of completed reminders"
-msgstr ""
+msgstr "Reihenfolge der erledigten Reminder umkehren"
 
 #: src/browser/resources/ui/preferences.ui:25
 msgid "This only applies when sorting by time"
-msgstr ""
+msgstr "Betrifft nur die Sortierung nach Zeit"
 
 #: src/browser/resources/ui/preferences.ui:43
 msgid "Use Locale Default"
-msgstr ""
+msgstr "Systemstandard"
 
 #: src/browser/resources/ui/preferences.ui:44
 msgid "12 hour time"
-msgstr ""
+msgstr "12-Stunden-Format"
 
 #: src/browser/resources/ui/preferences.ui:45
 msgid "24 hour time"
-msgstr ""
+msgstr "24-Stunden-Format"
 
 #: src/browser/resources/ui/reminder.ui:6
 msgid "What should the reminder be called?"
-msgstr ""
+msgstr "Wie soll der Reminder heißen?"
 
 #: src/browser/resources/ui/reminder.ui:12
 msgid "Enter a short description of the reminder. (Optional)"
-msgstr ""
+msgstr "Kurze Beschreibung des Reminders. (Optional)"
 
 #: src/browser/resources/ui/reminder.ui:21
 msgid "Set a time"
-msgstr ""
+msgstr "Zeit einstellen"
 
 #: src/browser/resources/ui/reminder.ui:63
 msgid "Unsaved changes"
-msgstr ""
+msgstr "Ungespeicherte Änderungen"
 
 #: src/browser/resources/ui/reminder.ui:81
 #: src/browser/resources/ui/reminder.ui:89
 msgid "Discard changes"
-msgstr ""
+msgstr "Änderungen verwerfen"
 
 #: src/browser/resources/ui/reminder.ui:97
 #: src/browser/resources/ui/reminder.ui:105
 msgid "Save changes"
-msgstr ""
+msgstr "Änderungen speichern"
 
 #: src/browser/resources/ui/repeat_dialog.ui:4
 msgid "Repeat Options"
-msgstr ""
+msgstr "Wiederholungsoptionen"
 
 #: src/browser/resources/ui/repeat_dialog.ui:34
 msgid "Repeat the reminder"
-msgstr ""
+msgstr "Reminder wiederholen"
 
 #: src/browser/resources/ui/repeat_dialog.ui:49
 msgid "Repeat every"
-msgstr ""
+msgstr "Wiederholung alle"
 
 #: src/browser/resources/ui/repeat_dialog.ui:92
 msgid "Mon"
-msgstr ""
+msgstr "Mo"
 
 #: src/browser/resources/ui/repeat_dialog.ui:93
 msgid "Monday"
-msgstr ""
+msgstr "Montag"
 
 #: src/browser/resources/ui/repeat_dialog.ui:104
 msgid "Tue"
-msgstr ""
+msgstr "Di"
 
 #: src/browser/resources/ui/repeat_dialog.ui:105
 msgid "Tuesday"
-msgstr ""
+msgstr "Dienstag"
 
 #: src/browser/resources/ui/repeat_dialog.ui:116
 msgid "Wed"
-msgstr ""
+msgstr "Mi"
 
 #: src/browser/resources/ui/repeat_dialog.ui:117
 msgid "Wednesday"
-msgstr ""
+msgstr "Mittwoch"
 
 #: src/browser/resources/ui/repeat_dialog.ui:128
 msgid "Thu"
-msgstr ""
+msgstr "Do"
 
 #: src/browser/resources/ui/repeat_dialog.ui:129
 msgid "Thursday"
-msgstr ""
+msgstr "Donnerstag"
 
 #: src/browser/resources/ui/repeat_dialog.ui:140
 msgid "Fri"
-msgstr ""
+msgstr "Fr"
 
 #: src/browser/resources/ui/repeat_dialog.ui:141
 msgid "Friday"
-msgstr ""
+msgstr "Freitag"
 
 #: src/browser/resources/ui/repeat_dialog.ui:152
 msgid "Sat"
-msgstr ""
+msgstr "Sa"
 
 #: src/browser/resources/ui/repeat_dialog.ui:153
 msgid "Saturday"
-msgstr ""
+msgstr "Samstag"
 
 #: src/browser/resources/ui/repeat_dialog.ui:164
 msgid "Sun"
-msgstr ""
+msgstr "So"
 
 #: src/browser/resources/ui/repeat_dialog.ui:165
 msgid "Sunday"
-msgstr ""
+msgstr "Sonntag"
 
 #: src/browser/resources/ui/repeat_dialog.ui:190
 msgid "Repeat"
-msgstr ""
+msgstr "Wiederholung"
 
 #: src/browser/resources/ui/repeat_dialog.ui:219
 msgid "total occurences"
-msgstr ""
+msgstr "Anzahl gesamt"
 
 #: src/browser/resources/ui/repeat_dialog.ui:259
 msgid "minute(s)"
-msgstr ""
+msgstr "Minute(n)"
 
 #: src/browser/resources/ui/repeat_dialog.ui:260
 msgid "hour(s)"
-msgstr ""
+msgstr "Stunde(n)"
 
 #: src/browser/resources/ui/repeat_dialog.ui:261
 msgid "day(s)"
-msgstr ""
+msgstr "Tag(e)"
 
 #: src/browser/resources/ui/repeat_dialog.ui:262
 msgid "week(s)"
-msgstr ""
+msgstr "Woche(n)"
 
 #: src/browser/resources/ui/repeat_dialog.ui:267
 msgid "forever"
-msgstr ""
+msgstr "für immer"
 
 #: src/browser/resources/ui/repeat_dialog.ui:268
 msgid "for"
-msgstr ""
+msgstr "für"
 
 #: src/browser/resources/ui/repeat_dialog.ui:269 src/browser/reminder.py:494
 msgid "until"
-msgstr ""
+msgstr "bis"
 
 #: src/browser/resources/ui/time_row.ui:29
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #: src/browser/resources/ui/time_row.ui:42
 #: src/browser/resources/ui/time_row.ui:55
 msgid "Hour"
-msgstr ""
+msgstr "Stunde"
 
 #: src/browser/resources/ui/time_row.ui:76
 #: src/browser/resources/ui/time_row.ui:91
 msgid "Minute"
-msgstr ""
+msgstr "Minute"
 
 #: src/browser/about.py:28
 msgid "Copyright 2023 Sasha Hale"
-msgstr ""
+msgstr "Copyright 2023 Sasha Hale"
 
 #: src/browser/application.py:46
 msgid "Print the version of the app"
-msgstr ""
+msgstr "Version der Anwendung ausgeben"
 
 #: src/browser/application.py:53
 msgid "Restart service before starting app"
-msgstr ""
+msgstr "Service neustarten, bevor die App gestartet wird"
 
 #: src/browser/application.py:60
 msgid "Start on a different page"
-msgstr ""
+msgstr "Auf einer anderen Seite starten"
 
 #: src/browser/application.py:249
 msgid "You have unsaved changes"
-msgstr ""
+msgstr "Es sind ungespeicherte Änderungen vorhanden"
 
 #: src/browser/application.py:250
 msgid "Are you sure you want to close the window?"
-msgstr ""
+msgstr "Soll das Fenster wirklich geschlossen werden?"
 
 #: src/browser/application.py:252 src/browser/reminder.py:410
 msgid "Cancel"
-msgstr ""
+msgstr "Abbrechen"
 
 #: src/browser/application.py:253
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: src/browser/main_window.py:101
 msgid "Press the plus button below to add a reminder"
-msgstr ""
+msgstr "Fügen Sie mit dem Plus-Button unten eine Reminder hinzu"
 
 #: src/browser/main_window.py:105
 msgid "No reminders match your search"
-msgstr ""
+msgstr "Keine passenden Reminder"
 
 #: src/browser/main_window.py:414
 #, python-brace-format
 msgid "Searching '{text}'"
-msgstr ""
+msgstr "Suche '{text}'"
 
 #: src/browser/main_window.py:419
 msgid "Start typing to search"
-msgstr ""
+msgstr "Tippen Sie, um zu suchen"
 
 #: src/browser/reminder.py:93 src/browser/reminder.py:153
 msgid "Incomplete"
-msgstr ""
+msgstr "Unvollständig"
 
 #: src/browser/reminder.py:96 src/browser/reminder.py:157
 msgid "Complete"
-msgstr ""
+msgstr "Erledigt"
 
 #: src/browser/reminder.py:406
 msgid "Remove reminder?"
-msgstr ""
+msgstr "Reminder entfernen?"
 
 #: src/browser/reminder.py:407
 msgid "This will remove the"
-msgstr ""
+msgstr "Der Reminder"
 
 #: src/browser/reminder.py:407
 msgid "reminder."
-msgstr ""
+msgstr "wird entfernt werden."
 
 #: src/browser/reminder.py:411
 msgid "Remove"
-msgstr ""
+msgstr "Entfernen"
 
 #: src/browser/reminder.py:454
 msgid "Does not repeat"
-msgstr ""
+msgstr "Wird nicht wiederholt"
 
 #: src/browser/reminder.py:458
 msgid "minute"
-msgstr ""
+msgstr "Minute"
 
 #: src/browser/reminder.py:460
 msgid "minutes"
-msgstr ""
+msgstr "Minuten"
 
 #: src/browser/reminder.py:463
 msgid "hour"
-msgstr ""
+msgstr "Stunde"
 
 #: src/browser/reminder.py:465
 msgid "hours"
-msgstr ""
+msgstr "Stunden"
 
 #: src/browser/reminder.py:468
 msgid "day"
-msgstr ""
+msgstr "Tag"
 
 #: src/browser/reminder.py:470
 msgid "days"
-msgstr ""
+msgstr "Tage"
 
 #: src/browser/reminder.py:474
 msgid "M"
-msgstr ""
+msgstr "Mo"
 
 #: src/browser/reminder.py:475
 msgid "Tu"
-msgstr ""
+msgstr "Di"
 
 #: src/browser/reminder.py:476
 msgid "W"
-msgstr ""
+msgstr "Mi"
 
 #: src/browser/reminder.py:477
 msgid "Th"
-msgstr ""
+msgstr "Do"
 
 #: src/browser/reminder.py:478
 msgid "F"
-msgstr ""
+msgstr "Fr"
 
 #: src/browser/reminder.py:479
 msgid "Sa"
-msgstr ""
+msgstr "Sa"
 
 #: src/browser/reminder.py:480
 msgid "Su"
-msgstr ""
+msgstr "So"
 
 #: src/browser/reminder.py:486
 msgid "week"
-msgstr ""
+msgstr "Woche"
 
 #: src/browser/reminder.py:488
 msgid "weeks"
-msgstr ""
+msgstr "Wochen"
 
 #: src/browser/reminder.py:496
 msgid "time"
-msgstr ""
+msgstr "mal"
 
 #: src/browser/reminder.py:498
 msgid "times"
-msgstr ""
+msgstr "mal"
 
 #: src/browser/reminder.py:502
 msgid "Every"
-msgstr ""
+msgstr "Alle"
 
 #: src/browser/reminder.py:539
 msgid "Today"
-msgstr ""
+msgstr "Heute"
 
 #: src/browser/reminder.py:541
 msgid "Tomorrow"
-msgstr ""
+msgstr "Morgen"
 
 #: src/browser/reminder.py:543
 msgid "Yesterday"
-msgstr ""
+msgstr "Gestern"
 
 #: src/browser/reminder.py:577 src/browser/reminder.py:599
 msgid "PM"
-msgstr ""
+msgstr "nachmittags"
 
 #: src/browser/reminder.py:581 src/browser/reminder.py:603
 msgid "AM"
-msgstr ""
+msgstr "vormittags"
 
 #: src/service/backend.py:277
 msgid "Mark as completed"
-msgstr ""
+msgstr "Als erledigt markieren"

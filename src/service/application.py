@@ -54,7 +54,7 @@ class RemembranceService(Gio.Application):
             # xdg-desktop-portal will try to run the actions on the frontend when the notification is interacted with
             # for this reason, we only need the actions here if we are not sandboxed
             self.create_action('reminder-completed', self.notification_completed_cb, GLib.VariantType.new('s'))
-            self.create_action('notification-clicked', self.launch_frontend, None)
+            self.create_action('notification-clicked', self.launch_browser, None)
 
         self.create_action('quit', self.quit_service, None)
 
@@ -70,7 +70,7 @@ class RemembranceService(Gio.Application):
         self.add_action(action)
 
     def launch_browser(self, action = None, variant = None):
-        Gio.DesktopAppInfo.new(f'{info.app_id}.desktop').action_name('Overdue', None)
+        Gio.DesktopAppInfo.new(f'{info.app_id}.desktop').launch(None, None)
 
     def notification_completed_cb(self, action, variant, data = None):
         reminder_id = variant.get_string()
