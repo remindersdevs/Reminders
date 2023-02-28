@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-27 16:22-0500\n"
+"POT-Creation-Date: 2023-02-28 14:28-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,17 +33,17 @@ msgid ""
 msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:18
-#: src/browser/resources/ui/main.ui:105 src/browser/main_window.py:326
+#: src/browser/resources/ui/main.ui:105 src/browser/main_window.py:327
 msgid "Upcoming Reminders"
 msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:22
-#: src/browser/resources/ui/main.ui:128 src/browser/main_window.py:336
+#: src/browser/resources/ui/main.ui:128 src/browser/main_window.py:337
 msgid "Past Reminders"
 msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:26
-#: src/browser/resources/ui/main.ui:151 src/browser/main_window.py:346
+#: src/browser/resources/ui/main.ui:151 src/browser/main_window.py:347
 msgid "Completed Reminders"
 msgstr ""
 
@@ -64,7 +64,7 @@ msgid "What format to display the time in"
 msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:25
-#: src/browser/resources/ui/main.ui:44
+#: src/browser/resources/ui/main.ui:43
 msgid "Sort by"
 msgstr ""
 
@@ -117,20 +117,20 @@ msgstr ""
 msgid "Remembrance Service"
 msgstr ""
 
-#: src/browser/resources/ui/main.ui:27
+#: src/browser/resources/ui/main.ui:26
 msgid "Search"
 msgstr ""
 
-#: src/browser/resources/ui/main.ui:36
+#: src/browser/resources/ui/main.ui:35
 msgid "App Menu"
 msgstr ""
 
-#: src/browser/resources/ui/main.ui:43
+#: src/browser/resources/ui/main.ui:42
 msgid "Sort direction"
 msgstr ""
 
 #: src/browser/resources/ui/main.ui:82 src/browser/resources/ui/main.ui:202
-#: src/browser/main_window.py:316
+#: src/browser/main_window.py:317
 msgid "All Reminders"
 msgstr ""
 
@@ -371,20 +371,20 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: src/browser/main_window.py:101
+#: src/browser/main_window.py:102
 msgid "Press the plus button below to add a reminder"
 msgstr ""
 
-#: src/browser/main_window.py:105
+#: src/browser/main_window.py:106
 msgid "No reminders match your search"
 msgstr ""
 
-#: src/browser/main_window.py:420
+#: src/browser/main_window.py:428
 #, python-brace-format
 msgid "Searching '{text}'"
 msgstr ""
 
-#: src/browser/main_window.py:425
+#: src/browser/main_window.py:433
 msgid "Start typing to search"
 msgstr ""
 
