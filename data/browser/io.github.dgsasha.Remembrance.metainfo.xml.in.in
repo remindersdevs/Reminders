@@ -75,11 +75,13 @@
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
   <releases>
-    <release version="0.3" date="2023-02-26">
+    <release version="0.3" date="2023-02-28">
       <description>
         <ul>
           <li>Add support for notification sounds</li>
           <li>Show past recurring reminders on overdue page</li>
+          <li>Fix issues when clicking on notifications</li>
+          <li>UI improvements</li>
         </ul>
       </description>
     </release>
