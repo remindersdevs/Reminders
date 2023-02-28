@@ -98,6 +98,7 @@ class Remembrance(Adw.Application):
             # for now, we can just add the action here if the app is sandboxed
             # later I will probably make the frontend of the app the owner of the notification to simplify things
             self.create_action('reminder-completed', self.notification_completed_cb, GLib.VariantType.new('s'))
+            self.create_action('notification-clicked', self.notification_clicked_cb)
 
     def check_service_version(self):
         loaded_service_version = self.run_service_method(
@@ -141,12 +142,11 @@ class Remembrance(Adw.Application):
         self.create_action('preferences', self.show_preferences)
         self.create_action('about', self.show_about)
         self.provider = Gtk.CssProvider()
-        self.create_action('notification-clicked', lambda *args: self.notification_clicked_cb())
         self.provider.load_from_resource('/io/github/dgsasha/remembrance/stylesheet.css')
         Gtk.StyleContext.add_provider_for_display(self.win.get_display(), self.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         self.win.present()
 
-    def notification_clicked_cb(self):
+    def notification_clicked_cb(self, action, variant, data = None):
         self.page = 'past'
         self.do_activate()
 
