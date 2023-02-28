@@ -414,6 +414,7 @@ class MainWindow(Adw.ApplicationWindow):
             self.search_changed_cb()
             self.search_entry.grab_focus()
             self.flap.set_fold_policy(Adw.FlapFoldPolicy.ALWAYS)
+            self.flap.set_reveal_flap(False)
         else:
             self.stop_search()
 
