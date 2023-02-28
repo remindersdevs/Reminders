@@ -92,6 +92,7 @@ class MainWindow(Adw.ApplicationWindow):
     completed_row = Gtk.Template.Child()
     sort_button = Gtk.Template.Child()
     flap = Gtk.Template.Child()
+    flap_button_revealer = Gtk.Template.Child()
     search_bar = Gtk.Template.Child()
     search_entry = Gtk.Template.Child()
 
@@ -350,6 +351,7 @@ class MainWindow(Adw.ApplicationWindow):
             self.flap.set_reveal_flap(False)
 
     def stop_search(self):
+        self.flap.set_fold_policy(Adw.FlapFoldPolicy.AUTO)
         self.sidebar_list.set_sensitive(True)
         self.reminders_list.set_placeholder(self.placeholder)
         self.reminders_list.set_sort_func(self.sort_func)
@@ -399,13 +401,19 @@ class MainWindow(Adw.ApplicationWindow):
         self.reminders_list.set_sort_func(search_sort_func)
 
     @Gtk.Template.Callback()
-    def search_enabled_cb(self, entry, data):
+    def show_flap_button(self, flap = None, data = None):
         if self.search_bar.get_search_mode():
-            self.sidebar_list.set_sensitive(False)
+            self.flap_button_revealer.set_reveal_child(False)
+        else:
+            self.flap_button_revealer.set_reveal_child(self.flap.get_folded())
+
+    @Gtk.Template.Callback()
+    def search_enabled_cb(self, entry, data):
+        self.show_flap_button()
+        if self.search_bar.get_search_mode():
             self.search_changed_cb()
             self.search_entry.grab_focus()
-            if self.flap.get_folded():
-                self.flap.set_reveal_flap(False)
+            self.flap.set_fold_policy(Adw.FlapFoldPolicy.ALWAYS)
         else:
             self.stop_search()
 

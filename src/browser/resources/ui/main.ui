@@ -9,11 +9,10 @@
         <child>
           <object class="AdwHeaderBar">
             <child>
-              <object class="GtkRevealer">
+              <object class="GtkRevealer" id="flap_button_revealer">
                 <property name="transition-type">3</property>
-                <property name="reveal-child" bind-source="flap" bind-property="folded" bind-flags="sync-create"/>
                 <child>
-                  <object class="GtkToggleButton" id="reveal_flap_button">
+                  <object class="GtkToggleButton">
                     <property name="icon-name">sidebar-show-symbolic</property>
                     <property name="active" bind-source="flap" bind-property="reveal-flap" bind-flags="sync-create|bidirectional"/>
                   </object>
@@ -50,6 +49,7 @@
         <child>
           <object class="AdwFlap" id="flap">
             <property name="swipe-to-close" bind-source="flap" bind-property="folded" bind-flags="sync-create"/>
+            <signal name="notify::folded" handler="show_flap_button" swapped="no"/>
             <property name="flap">
               <object class="GtkBox">
                 <style>
@@ -188,8 +188,8 @@
                         <property name="hexpand">true</property>
                         <child>
                           <object class="AdwClamp">
-                            <property name="maximum-size">1000</property>
-                            <property name="tightening-threshold">800</property>
+                            <property name="maximum-size">1400</property>
+                            <property name="tightening-threshold">1000</property>
                             <property name="orientation">horizontal</property>
                             <property name="halign">center</property>
                             <child>
