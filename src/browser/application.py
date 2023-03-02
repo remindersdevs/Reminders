@@ -299,5 +299,5 @@ class Remembrance(Adw.Application):
         self.quit()
 
 def main():
-    app = Remembrance(application_id=info.app_id, flags = Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
+    app = Remembrance(application_id=info.app_id, flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
     return app.run(sys.argv)

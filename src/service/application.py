@@ -71,7 +71,7 @@ class RemembranceService(Gio.Application):
         self.add_action(action)
 
     def launch_browser(self, action = None, variant = None):
-        Gio.DesktopAppInfo.new(f'{info.app_id}.desktop').action_name('Past', None)
+        Gio.DesktopAppInfo.new(f'{info.app_id}.desktop').launch_action('Past', None)
 
     def notification_completed_cb(self, action, variant, data = None):
         reminder_id = variant.get_string()

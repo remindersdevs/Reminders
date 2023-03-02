@@ -357,48 +357,49 @@ class MainWindow(Adw.ApplicationWindow):
         self.reminders_list.set_sort_func(self.sort_func)
         self.selected.emit('activate')
 
+    def search_filter(self, reminder):
+        retval = True
+        text = self.search_entry.get_text().lower()
+        words = text.split()
+        reminder_text = reminder.get_title().lower() + ' ' + reminder.get_subtitle().lower()
+
+        for word in words:
+            if word not in reminder_text:
+                retval = False
+
+        if retval:
+            reminder.set_past(False)
+
+        if reminder.is_sensitive() is not retval:
+            reminder.set_sensitive(retval)
+
+        return retval
+
+    def search_sort_func(self, row1, row2):
+        if (not row1.is_sensitive() and row2.is_sensitive()):
+            return -1
+        if (row1.is_sensitive() and not row2.is_sensitive()):
+            return 1
+        text = self.search_entry.get_text().lower()
+        row1_text = row1.get_title().lower() + ' ' + row1.get_subtitle().lower()
+        row2_text = row2.get_title().lower() + ' ' + row2.get_subtitle().lower()
+
+        row1_ratio = SequenceMatcher(a=text, b=row1_text).ratio()
+        row2_ratio = SequenceMatcher(a=text, b=row2_text).ratio()
+
+        if row1_ratio == row2_ratio:
+            return 0
+        elif row1_ratio < row2_ratio:
+            return 1
+        else:
+            return -1
+
     def start_search(self):
         self.searching = True
-        def search_filter(reminder):
-            retval = True
-            text = self.search_entry.get_text().lower()
-            words = text.split()
-            reminder_text = reminder.get_title().lower() + ' ' + reminder.get_subtitle().lower()
-
-            for word in words:
-                if word not in reminder_text:
-                    retval = False
-
-            if retval:
-                reminder.set_past(False)
-
-            if reminder.is_sensitive() is not retval:
-                reminder.set_sensitive(retval)
-
-            return retval
-
-        def search_sort_func(row1, row2):
-            if (not row1.is_sensitive() and row2.is_sensitive()):
-                return -1
-            if (row1.is_sensitive() and not row2.is_sensitive()):
-                return 1
-            text = self.search_entry.get_text().lower()
-            row1_text = row1.get_title().lower() + ' ' + row1.get_subtitle().lower()
-            row2_text = row2.get_title().lower() + ' ' + row2.get_subtitle().lower()
-
-            row1_ratio = SequenceMatcher(a=text, b=row1_text).ratio()
-            row2_ratio = SequenceMatcher(a=text, b=row2_text).ratio()
-
-            if row1_ratio == row2_ratio:
-                return 0
-            elif row1_ratio < row2_ratio:
-                return 1
-            else:
-                return -1
 
         self.reminders_list.set_placeholder(self.search_placeholder)
-        self.reminders_list.set_filter_func(search_filter)
-        self.reminders_list.set_sort_func(search_sort_func)
+        self.reminders_list.set_filter_func(self.search_filter)
+        self.reminders_list.set_sort_func(self.search_sort_func)
 
     @Gtk.Template.Callback()
     def show_flap_button(self, flap = None, data = None):

@@ -3,14 +3,6 @@ conf.set('APP_EXECUTABLE', app_executable)
 conf.set('APP_ID', app_id)
 conf.set('BINDIR', get_option('prefix') / get_option('bindir'))
 
-configure_file(
-    input: 'io.github.dgsasha.Remembrance.service.in',
-    output: '@0@.service'.format(app_id),
-    install: true,
-    install_dir: get_option('datadir') / 'dbus-1/services',
-    configuration: conf,
-)
-
 appstream_file = configure_file(
     input: 'io.github.dgsasha.Remembrance.metainfo.xml.in.in',
     output: '@0@.metainfo.xml.in'.format(app_id),

@@ -19,6 +19,12 @@ desktop = i18n.merge_file(
     install_dir: get_option('sysconfdir') / 'xdg/autostart',
 )
 
+meson.add_install_script(
+    'cp',
+    get_option('prefix') / get_option('sysconfdir') / 'xdg/autostart' / '@0@.desktop'.format(service_id),
+    get_option('prefix') / get_option('datadir') / 'applications'
+)
+
 desktop_utils = find_program('desktop-file-validate', required: false)
 if desktop_utils.found()
     test('Validate desktop file', desktop_utils,
