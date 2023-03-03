@@ -10,6 +10,7 @@ app_path = '@APP_PATH@'
 
 service_executable = '@SERVICE_EXECUTABLE@'
 service_id = '@SERVICE_ID@'
+service_interface = '@SERVICE_INTERFACE@'
 service_object = '@SERVICE_OBJECT@'
 service_path = '@SERVICE_PATH@'
 

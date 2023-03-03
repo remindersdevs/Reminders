@@ -27,8 +27,6 @@ class RemembranceService(Gio.Application):
         self.sandboxed = False
         self.portal = None
 
-    def do_startup(self):
-        Gio.Application.do_startup(self)
         self.configure_logging()
         self.logger.info(f'Starting {info.service_executable} version {info.service_version}')
         self.settings = Gio.Settings(info.base_app_id)
@@ -62,6 +60,9 @@ class RemembranceService(Gio.Application):
         self.reminders = Reminders(self)
         self.hold()
 
+    def do_startup(self):
+        Gio.Application.do_startup(self)
+
     def do_activate(self):
         Gio.Application.do_activate(self)
 
@@ -75,8 +76,7 @@ class RemembranceService(Gio.Application):
 
     def notification_completed_cb(self, action, variant, data = None):
         reminder_id = variant.get_string()
-        self.reminders.set_completed(reminder_id, True)
-        self.reminders.do_emit('CompletedUpdated', GLib.Variant('(sbs)', (reminder_id, True, info.service_id)))
+        self.reminders.set_completed(info.service_id, reminder_id, True)
 
     def configure_logging(self):
         handler = logging.StreamHandler()

@@ -11,7 +11,7 @@ dependency('libadwaita-1')
 
 devel = get_option('devel')
 
-service_version = '0.3'
+service_version = '0.4'
 
 app_executable = 'remembrance'
 
@@ -25,6 +25,7 @@ path = devel ? base_path + '/Devel' : base_path
 
 service_executable = 'remembrance-service'
 service_id = app_id + '.Service1'
+service_interface = service_id + '.Reminders'
 service_object = path + '/Service1'
 
 i18n = import('i18n')

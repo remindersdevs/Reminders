@@ -1,7 +1,7 @@
-# Remembrance DBus Service Info, version 0.2
+# Remembrance DBus Service Info, version 0.4
 name: io.github.dgsasha.Remembrance.Service1
 
-interface: io.github.dgsasha.Remembrance.Service1
+interface: io.github.dgsasha.Remembrance.Service1.Reminders
 
 object: /io/github/dgsasha/Remembrance/Service1
 

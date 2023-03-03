@@ -29,7 +29,7 @@ from remembrance.browser.about import about_window
 from remembrance.browser.preferences import PreferencesWindow
 
 # Always update this when new features are added that require the service to restart
-MIN_SERVICE_VERSION = 0.3
+MIN_SERVICE_VERSION = 0.4
 
 class Remembrance(Adw.Application):
     '''Application for the frontend'''
@@ -211,7 +211,7 @@ class Remembrance(Adw.Application):
             None,
             info.service_id,
             info.service_object,
-            info.service_id,
+            info.service_interface,
             None
         )
         if self.service is not None:

@@ -6,6 +6,7 @@ info_conf.set('APP_ID', app_id)
 info_conf.set('APP_PATH', get_option('prefix') / get_option('bindir') / meson.project_name())
 
 info_conf.set('SERVICE_ID', service_id)
+info_conf.set('SERVICE_INTERFACE', service_interface)
 info_conf.set('SERVICE_EXECUTABLE', service_executable)
 info_conf.set('SERVICE_OBJECT', service_object)
 info_conf.set('SERVICE_PATH', get_option('prefix') / get_option('libexecdir') / service_executable)

@@ -68,7 +68,7 @@ logger = logging.getLogger(info.service_executable)
 def get_xml(dict_empty):
     return_param = '' if dict_empty else "<arg name='reminders' direction='out' type='aa{sv}'/>" 
     xml = f'''<node name="/">
-    <interface name="{info.service_id}">
+    <interface name="{info.service_interface}">
         <method name='AddReminder'>
             <arg name='app_id' type='s'/>
             <arg name='args' type='a{{sv}}'/>
@@ -206,7 +206,7 @@ class Reminders():
         self.connection.emit_signal(
             None,
             info.service_object,
-            info.service_id,
+            info.service_interface,
             signal_name,
             parameters
         )
