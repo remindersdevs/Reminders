@@ -6,13 +6,13 @@
   <developer_name translatable="no">Sasha Hale</developer_name>
   <update_contact>dgsasha04_at_gmail.com</update_contact>
 
-  <name>Remembrance</name>
+  <name>Reminders</name>
   <summary>Set reminders for yourself</summary>
 
   <description>
      <p>
         Set reminders for anything you need help remembering.
-        Remembrance will send a notification at a specified time, and at any time you can mark a reminder as complete so it doesn't notify you.
+        Remind will send a notification at a specified time, and at any time you can mark a reminder as complete so it doesn't notify you.
         You can optionally make reminders recurring so they are shown multiple times.
         You can also sort and filter your reminders, as well as search for specific reminders.
      </p>
@@ -59,6 +59,7 @@
     <keyword>Management</keyword>
     <keyword>Reminder</keyword>
     <keyword>Remembrance</keyword>
+    <keyword>Reminders</keyword>
   </keywords>
 
   <screenshots>
@@ -75,6 +76,15 @@
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
   <releases>
+    <release version="0.4" date="2023-02-28">
+      <description>
+        <ul>
+          <li>Rename to "Remind"</li>
+          <li>Fix app not starting when dbus service isnt already running</li>
+          <li>Fix issues with non-sandboxed builds</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.3.1" date="2023-02-28">
       <description>
         <ul>

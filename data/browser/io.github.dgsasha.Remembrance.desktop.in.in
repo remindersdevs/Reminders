@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Name=Remembrance
-Comment=A reminder app for Linux
+Name=Reminders
+Comment=Set reminders for yourself
 Exec=@BINDIR@/@APP_EXECUTABLE@
 Icon=@APP_ID@
 Terminal=false
@@ -9,7 +9,7 @@ StartupWMClass=@APP_ID@
 StartupNotify=true
 X-SingleMainWindow=true
 Categories=GNOME;GTK;Office;ProjectManagement;
-Keywords=Todo;Productivity;Task;Planning;Planner;Time;Management;Reminder;Remembrance;
+Keywords=Todo;Productivity;Task;Planning;Planner;Time;Management;Reminder;Remembrance;Reminders;
 X-GNOME-UsesNotifications=true
 Actions=Upcoming;Past;Completed;
 

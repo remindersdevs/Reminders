@@ -1,7 +1,7 @@
 <div align="center">
 
-![Remembrance](data/icons/io.github.dgsasha.Remembrance.svg)
-# Remembrance, a simple reminder app for Linux
+![Reminders](data/icons/io.github.dgsasha.Remembrance.svg)
+# Reminders, a simple reminder app for Linux
 
 This is pre-release software, expect bugs.
 
