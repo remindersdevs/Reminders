@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-03 12:43-0500\n"
+"POT-Creation-Date: 2023-03-04 13:40-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,17 +36,17 @@ msgid ""
 msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:18
-#: src/browser/resources/ui/main.ui:105 src/browser/main_window.py:327
+#: src/browser/resources/ui/main.ui:108 src/browser/main_window.py:327
 msgid "Upcoming Reminders"
 msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:22
-#: src/browser/resources/ui/main.ui:128 src/browser/main_window.py:337
+#: src/browser/resources/ui/main.ui:131 src/browser/main_window.py:337
 msgid "Past Reminders"
 msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:26
-#: src/browser/resources/ui/main.ui:151 src/browser/main_window.py:347
+#: src/browser/resources/ui/main.ui:154 src/browser/main_window.py:347
 msgid "Completed Reminders"
 msgstr ""
 
@@ -67,7 +67,7 @@ msgid "What format to display the time in"
 msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:25
-#: src/browser/resources/ui/main.ui:43
+#: src/browser/resources/ui/main.ui:46
 msgid "Sort by"
 msgstr ""
 
@@ -129,7 +129,7 @@ msgid "Planner"
 msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:58
-#: src/browser/resources/ui/main.ui:284
+#: src/browser/resources/ui/main.ui:287
 msgid "Time"
 msgstr ""
 
@@ -215,41 +215,41 @@ msgstr ""
 msgid "Remembrance Service"
 msgstr ""
 
-#: src/browser/resources/ui/main.ui:26
+#: src/browser/resources/ui/main.ui:29
 msgid "Search"
 msgstr ""
 
-#: src/browser/resources/ui/main.ui:35
+#: src/browser/resources/ui/main.ui:38
 msgid "App Menu"
 msgstr ""
 
-#: src/browser/resources/ui/main.ui:42
+#: src/browser/resources/ui/main.ui:45
 msgid "Sort direction"
 msgstr ""
 
-#: src/browser/resources/ui/main.ui:82 src/browser/resources/ui/main.ui:202
+#: src/browser/resources/ui/main.ui:85 src/browser/resources/ui/main.ui:205
 #: src/browser/main_window.py:317
 msgid "All Reminders"
 msgstr ""
 
-#: src/browser/resources/ui/main.ui:243 src/browser/resources/ui/main.ui:251
+#: src/browser/resources/ui/main.ui:246 src/browser/resources/ui/main.ui:254
 msgid "Add a reminder"
 msgstr ""
 
-#: src/browser/resources/ui/main.ui:269
+#: src/browser/resources/ui/main.ui:272
 #: src/browser/resources/ui/preferences.ui:4
 msgid "Preferences"
 msgstr ""
 
-#: src/browser/resources/ui/main.ui:275
+#: src/browser/resources/ui/main.ui:278
 msgid "About"
 msgstr ""
 
-#: src/browser/resources/ui/main.ui:282
+#: src/browser/resources/ui/main.ui:285
 msgid "Sort"
 msgstr ""
 
-#: src/browser/resources/ui/main.ui:289
+#: src/browser/resources/ui/main.ui:292
 msgid "Title"
 msgstr ""
 
@@ -301,17 +301,17 @@ msgstr ""
 msgid "Set a time"
 msgstr ""
 
-#: src/browser/resources/ui/reminder.ui:63
+#: src/browser/resources/ui/reminder.ui:65
 msgid "Unsaved changes"
 msgstr ""
 
-#: src/browser/resources/ui/reminder.ui:81
 #: src/browser/resources/ui/reminder.ui:88
+#: src/browser/resources/ui/reminder.ui:95
 msgid "Discard changes"
 msgstr ""
 
-#: src/browser/resources/ui/reminder.ui:96
-#: src/browser/resources/ui/reminder.ui:104
+#: src/browser/resources/ui/reminder.ui:103
+#: src/browser/resources/ui/reminder.ui:111
 msgid "Save changes"
 msgstr ""
 
