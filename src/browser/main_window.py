@@ -93,7 +93,7 @@ class MainWindow(Adw.ApplicationWindow):
     sort_button = Gtk.Template.Child()
     flap = Gtk.Template.Child()
     flap_button_revealer = Gtk.Template.Child()
-    search_revealer = Gtk.Template.Child()
+    search_bar = Gtk.Template.Child()
     search_entry = Gtk.Template.Child()
 
     def __init__(self, page: str, *args, **kwargs):
@@ -114,12 +114,12 @@ class MainWindow(Adw.ApplicationWindow):
         self.create_action('upcoming', lambda *args: self.upcoming_reminders())
         self.create_action('past', lambda *args: self.past_reminders())
         self.create_action('completed', lambda *args: self.completed_reminders())
-        self.create_action('search', lambda *args: self.search_revealer.set_reveal_child(True), accels=['<Ctrl>f'])
-        self.search_entry.connect('stop-search', lambda *args: self.search_revealer.set_reveal_child(False))
+        self.create_action('search', lambda *args: self.search_bar.set_search_mode(True), accels=['<Ctrl>f'])
         self.settings_create_action('sort')
         self.settings_create_action('descending-sort')
         self.app.settings.connect('changed::sort', self.set_sort)
         self.app.settings.connect('changed::descending-sort', self.set_sort_direction)
+
         self.activate_action('win.' + page, None)
 
         self.set_completed_last()
@@ -351,7 +351,6 @@ class MainWindow(Adw.ApplicationWindow):
             self.flap.set_reveal_flap(False)
 
     def stop_search(self):
-        self.search_entry.set_text('')
         self.flap.set_fold_policy(Adw.FlapFoldPolicy.AUTO)
         self.sidebar_list.set_sensitive(True)
         self.reminders_list.set_placeholder(self.placeholder)
@@ -404,7 +403,7 @@ class MainWindow(Adw.ApplicationWindow):
 
     @Gtk.Template.Callback()
     def show_flap_button(self, flap = None, data = None):
-        if self.search_revealer.get_reveal_child():
+        if self.search_bar.get_search_mode():
             self.flap_button_revealer.set_reveal_child(False)
         else:
             self.flap_button_revealer.set_reveal_child(self.flap.get_folded())
@@ -412,7 +411,7 @@ class MainWindow(Adw.ApplicationWindow):
     @Gtk.Template.Callback()
     def search_enabled_cb(self, entry, data):
         self.show_flap_button()
-        if self.search_revealer.get_reveal_child():
+        if self.search_bar.get_search_mode():
             self.search_changed_cb()
             self.search_entry.grab_focus()
             self.flap.set_fold_policy(Adw.FlapFoldPolicy.ALWAYS)
