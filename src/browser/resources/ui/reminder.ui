@@ -52,19 +52,26 @@
             <child>
               <object class="GtkBox">
                 <property name="hexpand">true</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkRevealer" id="save_message">
-                <property name="reveal-child">false</property>
-                <property name="transition-type">GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT</property>
+                <property name="orientation">horizontal</property>
                 <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">Unsaved changes</property>
+                  <object class="GtkRevealer" id="save_message">
+                    <property name="reveal-child">false</property>
+                    <property name="hexpand">true</property>
                     <property name="halign">end</property>
-                    <style>
-                      <class name="caption"/>
-                    </style>
+                    <property name="valign">center</property>
+                    <property name="transition-type">GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">Unsaved changes</property>
+                        <property name="wrap">true</property>
+                        <property name="hexpand">true</property>
+                        <property name="halign">end</property>
+                        <property name="valign">center</property>
+                        <style>
+                          <class name="caption"/>
+                        </style>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>

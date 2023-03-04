@@ -8,6 +8,9 @@
         <property name="orientation">vertical</property>
         <child>
           <object class="AdwHeaderBar">
+            <property name="title-widget">
+              <object class="GtkBox"/>
+            </property>
             <child>
               <object class="GtkRevealer" id="flap_button_revealer">
                 <property name="transition-type">3</property>
@@ -38,7 +41,7 @@
             </child>
             <child type="end">
               <object class="AdwSplitButton" id="sort_button">
-                <property name="action_name">win.descending-sort</property>
+                <property name="action-name">win.descending-sort</property>
                 <property name="tooltip-text" translatable="yes">Sort direction</property>
                 <property name="dropdown-tooltip" translatable="yes">Sort by</property>
                 <property name="menu-model">sort_menu</property>
@@ -58,7 +61,7 @@
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkListBox" id="sidebar_list">
-                    <property name="width_request">220</property>
+                    <property name="width-request">220</property>
                     <property name="vexpand">True</property>
                     <style>
                       <class name="navigation-sidebar"/>
@@ -164,8 +167,8 @@
             </child>
             <child>
               <object class="GtkBox" id="content">
-                <property name="width-request">480</property>
-                <property name="height-request">500</property>
+                <property name="width-request">420</property>
+                <property name="height-request">400</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkSearchBar" id="search_bar">
@@ -173,7 +176,7 @@
                     <signal name="notify::search-mode-enabled" handler="search_enabled_cb" swapped="no"/>
                     <child>
                       <object class="GtkSearchEntry" id="search_entry">
-                        <property name="max-width-chars">20</property>
+                        <property name="max-width-chars">25</property>
                         <signal name="search-changed" handler="search_changed_cb" swapped="no"/>
                       </object>
                     </child>

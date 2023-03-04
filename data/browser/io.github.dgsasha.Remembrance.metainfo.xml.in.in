@@ -29,11 +29,11 @@
   </provides>
 
   <requires>
-    <display_length>480</display_length>
+    <display_length>420</display_length>
   </requires>
 
   <recommends>
-    <display_length>480</display_length>
+    <display_length>420</display_length>
   </recommends>
 
   <supports>

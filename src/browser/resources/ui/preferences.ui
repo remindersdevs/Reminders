@@ -2,8 +2,8 @@
 <interface>
   <template class="PreferencesWindow" parent="AdwPreferencesWindow">
     <property name="title" translatable="yes">Preferences</property>
-    <property name="default-width">400</property>
-    <property name="default-height">400</property>
+    <property name="default-width">450</property>
+    <property name="default-height">450</property>
     <child>
       <object class="AdwPreferencesPage">
         <property name="title" translatable="yes">General</property>
