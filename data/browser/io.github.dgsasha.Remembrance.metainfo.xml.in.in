@@ -64,10 +64,10 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/dgsasha/remembrance/8cf0c4c3b9d96fd5ebd5e47e32a3aac7ed8912e3/screenshot-dark.png</image>
+      <image>https://raw.githubusercontent.com/dgsasha/remembrance/9f15da8c0f3b7e697bb6adfe944b8fafc7821dd7/screenshot-dark.png</image>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/dgsasha/remembrance/8cf0c4c3b9d96fd5ebd5e47e32a3aac7ed8912e3/screenshot-light.png</image>
+      <image>https://raw.githubusercontent.com/dgsasha/remembrance/9f15da8c0f3b7e697bb6adfe944b8fafc7821dd7/screenshot-light.png</image>
     </screenshot>
   </screenshots>
 
@@ -76,7 +76,7 @@
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
   <releases>
-    <release version="0.4" date="2023-02-28">
+    <release version="0.4" date="2023-03-04">
       <description>
         <ul>
           <li>Rename to "Remind"</li>
