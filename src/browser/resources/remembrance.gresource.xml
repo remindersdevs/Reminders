@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/io/github/dgsasha/remembrance">
+    <file>ui/error_dialog.ui</file>
     <file>ui/main.ui</file>
     <file>ui/preferences.ui</file>
     <file>ui/reminder.ui</file>

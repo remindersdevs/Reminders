@@ -121,6 +121,8 @@ class Remembrance(Adw.Application):
 
     def do_activate(self):
         Adw.Application.do_activate(self)
+        self.provider = Gtk.CssProvider()
+        self.provider.load_from_resource('/io/github/dgsasha/remembrance/stylesheet.css')
 
         if win := self.get_active_window():
             self.win = win
@@ -141,8 +143,6 @@ class Remembrance(Adw.Application):
         self.create_action('quit', self.quit_app)
         self.create_action('preferences', self.show_preferences)
         self.create_action('about', self.show_about)
-        self.provider = Gtk.CssProvider()
-        self.provider.load_from_resource('/io/github/dgsasha/remembrance/stylesheet.css')
         Gtk.StyleContext.add_provider_for_display(self.win.get_display(), self.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         self.win.present()
 
@@ -229,15 +229,26 @@ class Remembrance(Adw.Application):
                 -1,
                 None
             )
-        except GLib.GError:
-            self.connect_to_service()
-            retval = self.service.call_sync(
-                method,
-                parameters,
-                Gio.DBusCallFlags.NONE,
-                -1,
-                None
-            )
+        except GLib.GError as error:
+            if 'The name is not activatable' in str(error):
+                builder = Gtk.Builder.new_from_resource('/io/github/dgsasha/remembrance/ui/error_dialog.ui')
+                error_dialog = builder.get_object('error_dialog')
+                Gtk.StyleContext.add_provider_for_display(error_dialog.get_display(), self.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+                loop = GLib.MainLoop()
+                error_dialog.connect('close-request', lambda *args: loop.quit())
+                error_dialog.set_application(self)
+                error_dialog.present()
+                loop.run()
+                sys.exit(1)
+            else:
+                self.connect_to_service()
+                retval = self.service.call_sync(
+                    method,
+                    parameters,
+                    Gio.DBusCallFlags.NONE,
+                    -1,
+                    None
+                )
         except:
             sys.exit(1)
 

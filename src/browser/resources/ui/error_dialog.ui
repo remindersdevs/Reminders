@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="AdwWindow" id="error_dialog">
+    <property name="default-height">200</property>
+    <property name="default-width">400</property>
+    <property name="resizable">false</property>
+    <property name="title" translatable="yes">Reminders failed to start</property>
+    <property name="content">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="AdwHeaderBar"/>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <child>
+              <object class="GtkLabel">
+                <property name="wrap">true</property>
+                <property name="label" translatable="yes">Due to a bug in Flatpak you will have to log out and log back in before using Reminders.</property>
+                <style>
+                  <class name="error-message"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+</interface>

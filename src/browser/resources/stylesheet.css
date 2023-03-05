@@ -80,6 +80,11 @@ button.incomplete {
     opacity: 0.5;
 }
 
+.error-message {
+    margin: 10px;
+    font-size: 125%;
+}
+
 /* Elaborate fix for https://gitlab.gnome.org/GNOME/gtk/-/issues/5309 */
 .reminders-list > row:disabled + row:not(:disabled) {
     border-top-left-radius: 12px;
