@@ -28,8 +28,8 @@ class TimeFormat(IntEnum):
     TWENTYFOUR_HOUR = 0
     TWELVE_HOUR = 1
 
-DEFAULT_TITLE = 'Title'
-DEFAULT_DESC = 'Description'
+DEFAULT_TITLE = _('Title')
+DEFAULT_DESC = _('Description')
 
 TIME_FORMAT = {
     '12h': 0,
@@ -428,10 +428,11 @@ class Reminder(Adw.ExpanderRow):
 
     @Gtk.Template.Callback()
     def on_remove(self, button):
+        reminder = f'<b>{self.get_title()}</b>'
         confirm_dialog = Adw.MessageDialog(
             transient_for=self.app.win,
             heading=_('Remove reminder?'),
-            body=_('This will remove the') + f' <b>{self.get_title()}</b> ' + _('reminder.'),
+            body=_(f'This will remove the {reminder} reminder.'),
             body_use_markup=True
         )
         confirm_dialog.add_response('cancel', _('Cancel'))
@@ -497,12 +498,19 @@ class TimeRow(Gtk.ListBoxRow):
         elif self.repeat_type == RepeatType.WEEK:
             days = []
             for day, flag in (
+                # Translators: This is an abbreviation for Monday
                 (_('M'), RepeatDays.MON),
+                # Translators: This is an abbreviation for Tuesday
                 (_('Tu'), RepeatDays.TUE),
+                # Translators: This is an abbreviation for Wednesday
                 (_('W'), RepeatDays.WED),
+                # Translators: This is an abbreviation for Thursday
                 (_('Th'), RepeatDays.THU),
+                # Translators: This is an abbreviation for Friday
                 (_('F'), RepeatDays.FRI),
+                # Translators: This is an abbreviation for Saturday
                 (_('Sa'), RepeatDays.SAT),
+                # Translators: This is an abbreviation for Sunday
                 (_('Su'), RepeatDays.SUN)
             ):
                 if flag in repeat_days_flag:
@@ -519,12 +527,15 @@ class TimeRow(Gtk.ListBoxRow):
             date = GLib.DateTime.new_from_unix_local(self.repeat_until).format('%x')
             suffix += ' ' + _('until') + ' ' + date
         elif self.repeat_times == 1:
+            # Translators: This is a noun, preceded by a number to represent the number of occurrences of something
             time = _('time')
         elif self.repeat_times != -1:
+            # Translators: This is a noun, preceded by a number to represent the number of occurrences of something
             time = _('times')
         if time is not None:
             suffix += f' ({self.repeat_times} {time})'
 
+        # Translators: This is a adjective, followed by a number to represent how often something occurs
         self.repeat_label.set_label(_('Every') + f' {type_name}{suffix}')
 
     def update_repeat(self):
