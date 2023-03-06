@@ -79,10 +79,9 @@
     <release version="0.5" date="2023-03-06">
       <description>
         <ul>
-          <li>Improvements to mobile layout</li>
+          <li>Lots of UI Improvements</li>
           <li>Fix issues with daylight savings time</li>
           <li>Fix some rare issues</li>
-          <li>Some UI Improvements</li>
         </ul>
       </description>
     </release>
