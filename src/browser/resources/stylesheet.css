@@ -85,6 +85,10 @@ button.incomplete {
     font-size: 125%;
 }
 
+.reminder-labels {
+  margin: 6px 0;
+}
+
 /* Elaborate fix for https://gitlab.gnome.org/GNOME/gtk/-/issues/5309 */
 .reminders-list > row:disabled + row:not(:disabled) {
     border-top-left-radius: 12px;

@@ -76,6 +76,15 @@
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
   <releases>
+    <release version="0.5" date="2023-03-06">
+      <description>
+        <ul>
+          <li>Improvements to mobile layout</li>
+          <li>Fix issues with daylight savings time</li>
+          <li>Fix some rare issues</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.4.1" date="2023-03-05">
       <description>
         <ul>
@@ -89,32 +98,6 @@
           <li>Rename to "Remind"</li>
           <li>Fix app not starting when dbus service isnt already running</li>
           <li>Fix issues with non-sandboxed builds</li>
-        </ul>
-      </description>
-    </release>
-    <release version="0.3.1" date="2023-02-28">
-      <description>
-        <ul>
-          <li>Small bugfix</li>
-        </ul>
-      </description>
-    </release>
-    <release version="0.3" date="2023-02-28">
-      <description>
-        <ul>
-          <li>Add support for notification sounds</li>
-          <li>Show past recurring reminders on overdue page</li>
-          <li>Fix issues when clicking on notifications</li>
-          <li>UI improvements</li>
-        </ul>
-      </description>
-    </release>
-    <release version="0.2" date="2023-02-25">
-      <description>
-        <ul>
-          <li>Add support for recurring reminders</li>
-          <li>Add button to discard changes</li>
-          <li>Lots of bugfixes</li>
         </ul>
       </description>
     </release>

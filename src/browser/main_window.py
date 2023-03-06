@@ -24,6 +24,7 @@ gi.require_version('Adw', '1')
 from gi.repository import Gtk, Adw, GLib, Gio
 from gettext import gettext as _
 from difflib import SequenceMatcher
+from math import floor, ceil
 
 from remembrance import info
 from remembrance.browser.reminder import Reminder
@@ -66,10 +67,10 @@ class Calendar(threading.Thread):
                 GLib.Source.remove(self.countdown_id)
                 self.countdown_id = 0
 
-            now = int(time.time())
-            self.wait = self.timestamp - now
+            now = time.time()
+            self.wait = int(1000 * (self.timestamp - now))
             if self.timestamp > 0:
-                self.countdown_id = GLib.timeout_add_seconds(self.wait, self.on_countdown_done)
+                self.countdown_id = GLib.timeout_add(self.wait, self.on_countdown_done)
             else:
                 self.on_countdown_done()
         except Exception as error:
@@ -228,7 +229,7 @@ class MainWindow(Adw.ApplicationWindow):
         return True
 
     def upcoming_filter(self, reminder):
-        now = int(time.time())
+        now = floor(time.time())
         if reminder.timestamp == 0 or (reminder.timestamp > now and not reminder.completed):
             retval = True
             reminder.set_past(False)
@@ -239,7 +240,7 @@ class MainWindow(Adw.ApplicationWindow):
         return retval
 
     def past_filter(self, reminder):
-        now = int(time.time())
+        now = ceil(time.time())
         if reminder.old_timestamp != 0 and (reminder.old_timestamp < now and not reminder.completed):
             retval = True
             reminder.set_past(True)

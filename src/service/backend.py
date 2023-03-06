@@ -27,6 +27,7 @@ from gi.repository import GLib, Gio, GSound
 from remembrance import info
 from gettext import gettext as _
 from enum import IntFlag, IntEnum, auto
+from math import floor
 
 class RepeatType(IntEnum):
     DISABLED = 0
@@ -168,11 +169,11 @@ class Countdowns():
             GLib.Source.remove(dictionary['id'])
             dictionary['id'] = 0
 
-        now = int(time.time())
-        wait = dictionary['timestamp'] - now
+        now = time.time()
+        wait = int(1000 * (dictionary['timestamp'] - now))
         if wait > 0:
             try: 
-                self.dict[reminder_id]['id'] = GLib.timeout_add_seconds(wait, dictionary['callback'])
+                self.dict[reminder_id]['id'] = GLib.timeout_add(wait, dictionary['callback'])
             except Exception as error:
                 logger.error(f'{error}: Failed to set timeout for {reminder_id}')
         else:
@@ -311,7 +312,7 @@ class Reminders():
         timestamp = self.dict[reminder_id]['timestamp']
         old_timestamp = self.dict[reminder_id]['old-timestamp']
         repeat_until = self.dict[reminder_id]['repeat-until']
-        if repeat_until > 0 and repeat_until < int(timestamp):
+        if repeat_until > 0 and repeat_until < timestamp:
             return
 
         repeat_type = self.dict[reminder_id]['repeat-type']
@@ -329,7 +330,7 @@ class Reminders():
         if delta is not None:
             timedate += delta
             timestamp = timedate.timestamp()
-            while timestamp < int(time.time()):
+            while timestamp < floor(time.time()):
                 old_timestamp = timestamp
                 if repeat_times != -1:
                     repeat_times -= 1
@@ -371,7 +372,7 @@ class Reminders():
             timedate += datetime.timedelta(days=((days[index] - weekday) % 7))
             timestamp = timedate.timestamp()
 
-            while timestamp < int(time.time()):
+            while timestamp < floor(time.time()):
                 old_timestamp = timestamp
                 if repeat_times != -1:
                     repeat_times -= 1
@@ -385,11 +386,11 @@ class Reminders():
                 timestamp = timedate.timestamp()
 
 
-        if repeat_until > 0 and repeat_until < int(timestamp):
+        if repeat_until > 0 and repeat_until < floor(timestamp):
             return
 
         self.dict[reminder_id]['repeat-times'] = repeat_times
-        self.dict[reminder_id]['timestamp'] = int(timestamp)
+        self.dict[reminder_id]['timestamp'] = floor(timestamp)
         self.dict[reminder_id]['old-timestamp'] = int(old_timestamp)
 
         self._save_reminders()
@@ -454,7 +455,7 @@ class Reminders():
                         else:
                             repeat_times = self._get_int(row, 'repeat-times', 1)
                         repeat_until = self._get_int(row, 'repeat-until')
-                        old_timestamp = self._get_int(row, 'old-timestamp', timestamp if timestamp < int(time.time()) else 0)
+                        old_timestamp = timestamp if timestamp < floor(time.time()) else self._get_int(row, 'old-timestamp')
                     except Exception as error:
                         logger.error(f'{error}: Failed to read reminder')
                         continue
@@ -587,6 +588,10 @@ class Reminders():
             'repeat-until': GLib.Variant('u', repeat_until)
         }
         self.do_emit('ReminderUpdated', GLib.Variant('(sa{sv})', (app_id, reminder)))
+
+        if timestamp < floor(time.time()):
+            self.dict[reminder_id]['old-timestamp'] = timestamp
+            self.do_emit('RepeatUpdated', GLib.Variant('(suun)', (reminder_id, timestamp, self.dict[reminder_id]['old-timestamp'], repeat_times)))
 
         self._set_countdown(reminder_id)
 

@@ -3,8 +3,6 @@
 ![Reminders](data/icons/io.github.dgsasha.Remembrance.svg)
 # Reminders, a simple reminder app for Linux
 
-This is pre-release software, expect bugs.
-
 ![screenshot-dark](screenshot-dark.png)
 
 ![screenshot-light](screenshot-light.png)
@@ -48,3 +46,6 @@ remembrance --restart-service
 - Possibly add some more animations and UI improvements
 
 ## [DBus Service Documentation](REMEMBRANCE_SERVICE.md)
+
+## Copying
+Reminders is licensed under the terms of the [GNU General Public License, version 3 or later](https://www.gnu.org/licenses/gpl-3.0.txt).

@@ -1,4 +1,4 @@
-# Remembrance DBus Service Info, version 0.4
+# Remembrance DBus Service Info, version 0.5
 name: io.github.dgsasha.Remembrance.Service1
 
 interface: io.github.dgsasha.Remembrance.Service1.Reminders
@@ -143,7 +143,7 @@ Quits the service
     - reminder
         - Type: a{sv}
         - A dictionary with the new contents of the reminder that was updated
-        - {'id': s, 'title': s, 'description': s, 'timestamp': u, 'repeat-type': q, 'repeat-frequency': q, 'repeat-days': q, 'repeat-times': n, 'repeat-until': u, 'old-timestamp': u}
+        - {'id': s, 'title': s, 'description': s, 'timestamp': u, 'repeat-type': q, 'repeat-frequency': q, 'repeat-days': q, 'repeat-times': n, 'repeat-until': u}
 
 ## app_id parameter
 This paremeter should be set to the id of your app, although it can be left empty. This will be returned in a signal after the reminder is updated, which will let you ignore the signal if you initiated the update.
