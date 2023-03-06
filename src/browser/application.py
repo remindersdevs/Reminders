@@ -274,7 +274,7 @@ class Remembrance(Adw.Application):
             self.win.destroy()
 
     def cancel_close(self):
-        self.win.search_bar.set_search_mode(False)
+        self.win.search_revealer.set_reveal_child(False)
         for reminder in self.unsaved_reminders:
             reminder.set_expanded(True)
         self.win.selected = self.win.all_row

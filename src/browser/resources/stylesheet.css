@@ -22,6 +22,10 @@
     color: @accent_bg_color;
 }
 
+button, splitbutton {
+  transition-property: outline-color, outline-width, outline-offset, background, filter;
+}
+
 label.time {
     font-weight: bold;
     margin: 0 2px;
