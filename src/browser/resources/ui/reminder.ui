@@ -121,7 +121,7 @@
       </object>
     </child>
     <object class="GtkBox" id="label_box">
-      <property name="valign">center</property>
+      <property name="valign">fill</property>
       <property name="halign">end</property>
       <property name="hexpand">true</property>
       <property name="orientation">vertical</property>
@@ -131,6 +131,7 @@
       <child>
         <object class="GtkLabel" id="time_label">
           <property name="halign">end</property>
+          <property name="vexpand">true</property>
           <property name="visible">false</property>
           <property name="xalign">1</property>
           <property name="wrap">true</property>
@@ -140,6 +141,7 @@
       <child>
         <object class="GtkLabel" id="repeat_label">
           <property name="halign">end</property>
+          <property name="vexpand">true</property>
           <property name="visible">false</property>
           <property name="xalign">1</property>
           <property name="wrap">true</property>

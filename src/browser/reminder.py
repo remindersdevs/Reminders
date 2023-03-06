@@ -121,13 +121,18 @@ class Reminder(Adw.ExpanderRow):
         self.add_action(self.label_box)
         label_box_parent = self.label_box.get_parent()
         label_box_parent.set_hexpand(True)
-        label_box_parent.set_valign(Gtk.Align.CENTER)
+        label_box_parent.get_parent().set_vexpand(True)
+        label_box_parent.set_valign(Gtk.Align.FILL)
         label_box_parent.set_halign(Gtk.Align.END)
         self.update_label()
 
         self.past_due = Gtk.Image(icon_name='task-past-due-symbolic', visible=False)
         self.add_action(self.past_due)
 
+        separator = Gtk.Separator.new(Gtk.Orientation.VERTICAL)
+        self.add_action(separator)
+        separator.set_hexpand(True)
+        separator.set_halign(Gtk.Align.START)
         self.refresh_time()
 
     def set_time_label(self):

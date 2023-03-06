@@ -29,4 +29,15 @@ def about_window():
         website = 'https://github.com/dgsasha/remembrance',
         developers = ['Sasha Hale https://github.com/dgsasha'],
         issue_url = 'https://github.com/dgsasha/remembrance/issues',
+        release_notes = '''
+            <ul>
+              <li>Lots of UI Improvements</li>
+              <li>Fix issues with daylight savings time</li>
+              <li>Fix some rare issues involving timestamps</li>
+            </ul>
+        ''',
+        release_notes_version = info.version,
+        # Translators: Do not translate this, instead put your name and email here.
+        # name <email>
+        translator_credits = _("translator-credits"),
     )

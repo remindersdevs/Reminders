@@ -73,15 +73,16 @@
 
   <translation type="gettext">@APP_EXECUTABLE@</translation>
 
+  <url type="translate">https://hosted.weblate.org/engage/reminders</url>
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
   <releases>
-    <release version="0.5" date="2023-03-06">
+    <release version="1.0" date="2023-03-06">
       <description>
         <ul>
           <li>Lots of UI Improvements</li>
           <li>Fix issues with daylight savings time</li>
-          <li>Fix some rare issues</li>
+          <li>Fix some rare issues involving timestamps</li>
         </ul>
       </description>
     </release>

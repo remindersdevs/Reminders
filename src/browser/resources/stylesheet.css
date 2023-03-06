@@ -89,8 +89,13 @@ button.incomplete {
     font-size: 125%;
 }
 
-.reminder-labels {
+box.header > box {
   margin: 6px 0;
+}
+
+row.header separator {
+  opacity: 0.5;
+  margin: 3px 0;
 }
 
 /* Elaborate fix for https://gitlab.gnome.org/GNOME/gtk/-/issues/5309 */

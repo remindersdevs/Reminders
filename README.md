@@ -9,6 +9,9 @@
 
 </div>
 
+## Translators
+You can translate Reminders on [Weblate](https://hosted.weblate.org/engage/reminders/)
+
 ## Installing dependencies (Flatpak):
 ```
 flatpak install flathub org.gnome.Sdk//43
