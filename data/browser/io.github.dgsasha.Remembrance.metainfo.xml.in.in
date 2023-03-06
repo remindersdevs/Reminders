@@ -64,10 +64,10 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/dgsasha/remembrance/9f15da8c0f3b7e697bb6adfe944b8fafc7821dd7/screenshot-dark.png</image>
+      <image>https://raw.githubusercontent.com/dgsasha/remembrance/9ca44ec236e66b7013caea33bfb12784e15c49dd/screenshot-dark.png</image>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/dgsasha/remembrance/9f15da8c0f3b7e697bb6adfe944b8fafc7821dd7/screenshot-light.png</image>
+      <image>https://raw.githubusercontent.com/dgsasha/remembrance/9ca44ec236e66b7013caea33bfb12784e15c49dd/screenshot-light.png</image>
     </screenshot>
   </screenshots>
 
@@ -82,6 +82,7 @@
           <li>Improvements to mobile layout</li>
           <li>Fix issues with daylight savings time</li>
           <li>Fix some rare issues</li>
+          <li>Some UI Improvements</li>
         </ul>
       </description>
     </release>
