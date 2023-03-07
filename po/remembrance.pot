@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-06 16:50-0500\n"
+"POT-Creation-Date: 2023-03-06 20:54-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -267,13 +267,13 @@ msgstr ""
 msgid "Unsaved changes"
 msgstr ""
 
-#: src/browser/resources/ui/reminder.ui:90
-#: src/browser/resources/ui/reminder.ui:97
+#: src/browser/resources/ui/reminder.ui:89
+#: src/browser/resources/ui/reminder.ui:96
 msgid "Discard changes"
 msgstr ""
 
-#: src/browser/resources/ui/reminder.ui:105
-#: src/browser/resources/ui/reminder.ui:113
+#: src/browser/resources/ui/reminder.ui:104
+#: src/browser/resources/ui/reminder.ui:112
 msgid "Save changes"
 msgstr ""
 
@@ -353,46 +353,55 @@ msgstr ""
 msgid "total occurences"
 msgstr ""
 
-#: src/browser/resources/ui/repeat_dialog.ui:263
-msgid "minute(s)"
-msgstr ""
-
-#: src/browser/resources/ui/repeat_dialog.ui:264
-msgid "hour(s)"
-msgstr ""
-
-#: src/browser/resources/ui/repeat_dialog.ui:265
-msgid "day(s)"
-msgstr ""
-
-#: src/browser/resources/ui/repeat_dialog.ui:266
-msgid "week(s)"
+#: src/browser/resources/ui/repeat_dialog.ui:233
+#: src/browser/resources/ui/time_row.ui:16
+msgid "Select date"
 msgstr ""
 
 #: src/browser/resources/ui/repeat_dialog.ui:271
-msgid "forever"
+msgid "minute(s)"
 msgstr ""
 
 #: src/browser/resources/ui/repeat_dialog.ui:272
+msgid "hour(s)"
+msgstr ""
+
+#: src/browser/resources/ui/repeat_dialog.ui:273
+msgid "day(s)"
+msgstr ""
+
+#: src/browser/resources/ui/repeat_dialog.ui:274
+msgid "week(s)"
+msgstr ""
+
+#: src/browser/resources/ui/repeat_dialog.ui:279
+msgid "forever"
+msgstr ""
+
+#: src/browser/resources/ui/repeat_dialog.ui:280
 msgid "for"
 msgstr ""
 
-#: src/browser/resources/ui/repeat_dialog.ui:273 src/browser/reminder.py:544
+#: src/browser/resources/ui/repeat_dialog.ui:281 src/browser/reminder.py:544
 msgid "until"
 msgstr ""
 
-#: src/browser/resources/ui/time_row.ui:29
+#: src/browser/resources/ui/time_row.ui:37
 msgid "Date"
 msgstr ""
 
-#: src/browser/resources/ui/time_row.ui:42
-#: src/browser/resources/ui/time_row.ui:55
+#: src/browser/resources/ui/time_row.ui:51
+#: src/browser/resources/ui/time_row.ui:64
 msgid "Hour"
 msgstr ""
 
-#: src/browser/resources/ui/time_row.ui:76
-#: src/browser/resources/ui/time_row.ui:91
+#: src/browser/resources/ui/time_row.ui:85
+#: src/browser/resources/ui/time_row.ui:100
 msgid "Minute"
+msgstr ""
+
+#: src/browser/resources/ui/time_row.ui:130
+msgid "Repeat options"
 msgstr ""
 
 #: src/browser/about.py:28
