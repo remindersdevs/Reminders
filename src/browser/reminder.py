@@ -80,6 +80,7 @@ class Reminder(Adw.ExpanderRow):
 
         self.id = reminder_id
 
+        self.separator = Gtk.Separator.new(Gtk.Orientation.VERTICAL)
         self.timestamp = timestamp
         self.old_timestamp = old_timestamp
         self.time_enabled = (timestamp != 0)
@@ -131,9 +132,8 @@ class Reminder(Adw.ExpanderRow):
         self.past_due = Gtk.Image(icon_name='task-past-due-symbolic', visible=False)
         self.add_action(self.past_due)
 
-        separator = Gtk.Separator.new(Gtk.Orientation.VERTICAL)
-        self.add_action(separator)
-        separator.set_halign(Gtk.Align.START)
+        self.add_action(self.separator)
+        self.separator.set_halign(Gtk.Align.START)
         self.refresh_time()
 
     def set_time_label(self):
@@ -143,9 +143,11 @@ class Reminder(Adw.ExpanderRow):
 
         if timestamp != 0:
             self.time_label.set_visible(True)
+            self.separator.set_visible(True)
             self.time_label.set_label(time.format(f'{self.time_row.get_date_label(True, time)} {self.time_row.get_time_label()}'))
         else:
             self.time_label.set_visible(False)
+            self.separator.set_visible(False)
 
     def set_past(self, past):
         if self.past != past:

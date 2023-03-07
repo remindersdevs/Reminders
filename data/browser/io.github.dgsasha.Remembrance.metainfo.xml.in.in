@@ -81,6 +81,7 @@
       <description>
         <ul>
           <li>Fix issues with frequency option on recurring reminders</li>
+          <li>Fix issues with separators</li>
         </ul>
       </description>
     </release>

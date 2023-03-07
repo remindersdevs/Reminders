@@ -235,15 +235,15 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkSeparator">
+                        <property name="hexpand">true</property>
+                        <property name="orientation">horizontal</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkBox">
                         <property name="valign">end</property>
-                        <style>
-                          <class name="bottom"/>
-                        </style>
+                        <property name="orientation">horizontal</property>
                         <child>
                           <object class="GtkBox">
                             <property name="hexpand">true</property>

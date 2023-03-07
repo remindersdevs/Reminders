@@ -32,6 +32,7 @@ def about_window():
         release_notes = '''
             <ul>
                 <li>Fix issues with frequency option on recurring reminders</li>
+                <li>Fix issues with separators</li>
             </ul>
         ''',
         release_notes_version = info.version,
