@@ -242,6 +242,8 @@
                                         <child>
                                           <object class="GtkCalendar" id="calendar">
                                             <signal name="day-selected" handler="day_changed" swapped="no"/>
+                                            <signal name="notify::year" handler="day_changed" swapped="no"/>
+                                            <signal name="notify::month" handler="day_changed" swapped="no"/>
                                           </object>
                                         </child>
                                       </object>

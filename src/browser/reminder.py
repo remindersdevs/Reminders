@@ -119,11 +119,13 @@ class Reminder(Adw.ExpanderRow):
         self.completed_icon_box.set_visible(self.completed)
 
         self.add_action(self.label_box)
-        label_box_parent = self.label_box.get_parent()
-        label_box_parent.set_hexpand(True)
-        label_box_parent.get_parent().set_vexpand(True)
-        label_box_parent.set_valign(Gtk.Align.FILL)
-        label_box_parent.set_halign(Gtk.Align.END)
+        actions_box = self.label_box.get_parent()
+        suffixes_box = actions_box.get_parent()
+        actions_box.set_hexpand(True)
+        actions_box.set_vexpand(False)
+        suffixes_box.set_vexpand(True)
+        actions_box.set_valign(Gtk.Align.FILL)
+        actions_box.set_halign(Gtk.Align.END)
         self.update_label()
 
         self.past_due = Gtk.Image(icon_name='task-past-due-symbolic', visible=False)
@@ -131,7 +133,6 @@ class Reminder(Adw.ExpanderRow):
 
         separator = Gtk.Separator.new(Gtk.Orientation.VERTICAL)
         self.add_action(separator)
-        separator.set_hexpand(True)
         separator.set_halign(Gtk.Align.START)
         self.refresh_time()
 
@@ -592,7 +593,7 @@ class TimeRow(Gtk.ListBoxRow):
         elif reminder_week == week:
             date = '%A'
         elif long:
-            date = '%d %b %Y'
+            date = '%d %B %Y'
         else:
             date = '%x'
         return date
@@ -604,7 +605,7 @@ class TimeRow(Gtk.ListBoxRow):
             time = '%H:%M'
         return time
 
-    def set_time_format(self, key = None, data = None):
+    def set_time_format(self):
         setting = self.settings.get_enum('time-format')
         if setting == 0:
             if time.strftime('%p'):
@@ -616,7 +617,7 @@ class TimeRow(Gtk.ListBoxRow):
         elif setting == 2:
             self.enable_24h()
 
-    def update_time_format(self):
+    def update_time_format(self, key = None, data = None):
         self.set_time_format()
         self.parent_reminder.set_time_label()
 
@@ -740,8 +741,8 @@ class TimeRow(Gtk.ListBoxRow):
         self.update_repeat_day()
 
     @Gtk.Template.Callback()
-    def day_changed(self, calendar):
-        date = calendar.get_date()
+    def day_changed(self, calendar = None, day = None):
+        date = self.calendar.get_date()
         new_day = date.get_day_of_year()
         old_day = self.time.get_day_of_year()
         days = new_day - old_day
@@ -898,7 +899,7 @@ class RepeatDialog(Adw.Window):
         return repeat_type, repeat_frequency, repeat_days, repeat_until, repeat_times
 
     @Gtk.Template.Callback()
-    def day_changed(self, calendar = None):
+    def day_changed(self, calendar = None, data = None):
         self.repeat_until_label.set_label(self.calendar.get_date().format('%d %b %Y'))
 
     @Gtk.Template.Callback()

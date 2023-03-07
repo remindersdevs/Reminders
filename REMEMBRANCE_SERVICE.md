@@ -1,11 +1,11 @@
-# Remembrance DBus Service Info, version 0.5
+# Reminders DBus Service Info, version 1.0
 name: io.github.dgsasha.Remembrance.Service1
 
 interface: io.github.dgsasha.Remembrance.Service1.Reminders
 
 object: /io/github/dgsasha/Remembrance/Service1
 
-Currently this is only packaged with Remembrance and anyone who wants to use it will have to have the full Remembrance app installed. The reason this exists is to allow integrating the Remembrance app with desktop environments through extensions.
+Currently this is only packaged with Reminders and anyone who wants to use it will have to have the full Reminders app installed. The reason this exists is to allow integrating the Reminders app with desktop environments through extensions.
 
 At some point I might seperate this from Remembrance and offer it as a standalone library, but until then you probably shouldn't use it if you are making your own reminder app.
 
@@ -14,14 +14,14 @@ This service will have some breaking changes made to it at times, so make sure y
 Newer versions of this service should still always be compatible with apps that expect an older version. If this ever changes, the bus name will be updated
 
 ## Enums
-### RepeatType(IntEnum)
+### RepeatType
 - DISABLED = 0
 - MINUTE = 1
 - HOUR = 2
 - DAY = 3
 - WEEK = 4
 
-### RepeatDays(IntFlag)
+### RepeatDays
 - MON = 1
 - TUE = 2
 - WED = 4
@@ -38,7 +38,7 @@ Newer versions of this service should still always be compatible with apps that 
         - Type: s
         - Explanation [here](#app_id-parameter)
     - reminder
-        - type a{sv}
+        - Type: a{sv}
         - {'title': s, 'description': s, 'timestamp': u, 'repeat-type': q, 'repeat-frequency': q, 'repeat-days': q, 'repeat-times': n, 'repeat-until': u}
         - 'timestamp' and 'repeat-until' should be a Unix timestamp, set them to 0 to disable them
         - 'repeat-times' should be -1 if you don't want to limit the repeat times
@@ -54,7 +54,7 @@ Newer versions of this service should still always be compatible with apps that 
         - Type: s
         - Explanation [here](#app_id-parameter)
     - reminder
-        - type a{sv}
+        - Type: a{sv}
         - {'id': s, 'title': s, 'description': s, 'timestamp': u, 'repeat-type': q, 'repeat-frequency': q, 'repeat-days': q, 'repeat-times': n, 'repeat-until': u}
         - 'id' is the id of the reminder returned by AddReminder or ReturnReminders
         - 'timestamp' and 'repeat-until' should be a Unix timestamp, set them to 0 to disable them
