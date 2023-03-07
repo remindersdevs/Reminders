@@ -862,8 +862,8 @@ class RepeatDialog(Adw.Window):
 
     def return_values(self):
         repeat_type = 0 if not self.repeat_row.get_enable_expansion() else self.repeat_type_button.get_selected() + 1
-        repeat_frequency = int(self.frequency_btn.get_value())
         self.frequency_btn.update()
+        repeat_frequency = int(self.frequency_btn.get_value())
         self.repeat_times_btn.update()
 
         if repeat_type != 0:

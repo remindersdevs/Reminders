@@ -1,6 +1,6 @@
 project(
     'remembrance',
-    version: '1.0',
+    version: '1.1',
     meson_version: '>= 0.59',
     default_options: ['prefix=/usr']
 )
@@ -11,7 +11,7 @@ dependency('libadwaita-1')
 
 devel = get_option('devel')
 
-service_version = '1.0'
+service_version = '1.1'
 
 app_executable = 'remembrance'
 

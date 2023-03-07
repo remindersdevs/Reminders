@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-07 14:50-0500\n"
+"POT-Creation-Date: 2023-03-07 18:24-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -146,30 +146,34 @@ msgid "Remembrance"
 msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:83
+msgid "Fix issues with frequency option on recurring reminders"
+msgstr ""
+
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:90
 msgid "Lots of UI Improvements"
 msgstr ""
 
-#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:84
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:91
 msgid "Fix issues with daylight savings time"
 msgstr ""
 
-#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:85
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:92
 msgid "Fix some rare issues involving timestamps"
 msgstr ""
 
-#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:92
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:99
 msgid "Add dialog to inform user if they need to log out before using the app"
 msgstr ""
 
-#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:99
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:106
 msgid "Rename to \"Remind\""
 msgstr ""
 
-#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:100
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:107
 msgid "Fix app not starting when dbus service isnt already running"
 msgstr ""
 
-#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:101
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:108
 msgid "Fix issues with non-sandboxed builds"
 msgstr ""
 
@@ -410,7 +414,7 @@ msgstr ""
 
 #. Translators: Do not translate this, instead put your name and email here.
 #. name <email>
-#: src/browser/about.py:42
+#: src/browser/about.py:40
 msgid "translator-credits"
 msgstr ""
 

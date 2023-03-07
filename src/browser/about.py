@@ -31,9 +31,7 @@ def about_window():
         issue_url = 'https://github.com/dgsasha/remembrance/issues',
         release_notes = '''
             <ul>
-              <li>Lots of UI Improvements</li>
-              <li>Fix issues with daylight savings time</li>
-              <li>Fix some rare issues involving timestamps</li>
+                <li>Fix issues with frequency option on recurring reminders</li>
             </ul>
         ''',
         release_notes_version = info.version,

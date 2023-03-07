@@ -340,6 +340,7 @@ class Reminders():
                 timestamp = timedate.timestamp()
 
         if repeat_type == RepeatType.WEEK:
+            week_frequency = 0
             weekday = timedate.date().weekday()
             repeat_days_flag = RepeatDays(repeat_days)
             index = 0
@@ -364,15 +365,21 @@ class Reminders():
                     index = i + 1
                     if index > len(days) - 1:
                         index = 0
+                        week_frequency = frequency - 1
                     break
                 if value > weekday:
                     index = i
                     break
+                if i == len(days) - 1:
+                    index = 0
+                    week_frequency = frequency - 1
+                    break
 
-            timedate += datetime.timedelta(days=((days[index] - weekday) % 7))
+            timedate += datetime.timedelta(days=(((days[index] - weekday) % 7) + 7 * week_frequency))
             timestamp = timedate.timestamp()
 
             while timestamp < floor(time.time()):
+                week_frequency = 0
                 old_timestamp = timestamp
                 if repeat_times != -1:
                     repeat_times -= 1
@@ -382,7 +389,9 @@ class Reminders():
                 index += 1
                 if index > len(days) - 1:
                     index = 0
-                timedate += datetime.timedelta(days=((days[index] - weekday) % 7))
+                    week_frequency = frequency - 1
+
+                timedate += datetime.timedelta(days=(((days[index] - weekday) % 7) + 7 * week_frequency))
                 timestamp = timedate.timestamp()
 
 
