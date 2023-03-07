@@ -461,7 +461,7 @@ class TimeRow(Gtk.ListBoxRow):
     '''Section of reminder for handling times'''
     __gtype_name__ = 'time_row'
 
-    date_button = Gtk.Template.Child()
+    date_label = Gtk.Template.Child()
     calendar = Gtk.Template.Child()
     hour_button = Gtk.Template.Child()
     hour_adjustment = Gtk.Template.Child()
@@ -537,7 +537,7 @@ class TimeRow(Gtk.ListBoxRow):
             else:
                 type_name = str(self.repeat_frequency) + ' ' + _('weeks')
     
-            suffix = f" ({', '.join(days)})"
+            suffix = f" ({','.join(days)})"
         
         if self.repeat_until > 0:
             date = GLib.DateTime.new_from_unix_local(self.repeat_until).format('%x')
@@ -569,11 +569,11 @@ class TimeRow(Gtk.ListBoxRow):
         self.time = self.time.add_seconds(-(seconds))
 
         self.calendar.select_day(self.time)
-        self.date_button.set_label(self.time.format(self.get_date_label()))
+        self.date_label.set_label(self.time.format(self.get_date_label()))
         self.minute_adjustment.set_value(self.time.get_minute())
 
     def update_date_button_label(self):
-        self.date_button.set_label(self.time.format(self.get_date_label()))
+        self.date_label.set_label(self.time.format(self.get_date_label()))
 
     def get_date_label(self, long = False, time = None):
         time = self.time if time is None else time
@@ -644,7 +644,7 @@ class TimeRow(Gtk.ListBoxRow):
 
     def update_calendar(self):
         self.calendar.select_day(self.time)
-        self.date_button.set_label(self.time.format(self.get_date_label()))
+        self.date_label.set_label(self.time.format(self.get_date_label()))
 
     def set_pm(self):
         self.am_pm_button.set_label(_('PM'))
@@ -748,7 +748,7 @@ class TimeRow(Gtk.ListBoxRow):
         self.time = self.time.add_days(days)
         if self.hour_set:
             self.hour_changed()
-        self.date_button.set_label(self.time.format(self.get_date_label()))
+        self.date_label.set_label(self.time.format(self.get_date_label()))
         self.parent_reminder.check_time_saved()
         self.update_repeat_day()
 
@@ -802,6 +802,7 @@ class RepeatDialog(Adw.Window):
     sun_btn = Gtk.Template.Child()
     repeat_times_btn = Gtk.Template.Child()
     repeat_until_btn = Gtk.Template.Child()
+    repeat_until_label = Gtk.Template.Child()
     repeat_times_box = Gtk.Template.Child()
     calendar = Gtk.Template.Child()
     repeat_duration_button = Gtk.Template.Child()
@@ -832,6 +833,9 @@ class RepeatDialog(Adw.Window):
         else:
             self.repeat_times_btn.set_value(5)
             self.repeat_duration_button.set_selected(0)
+
+        if repeat_until != 0:
+            self.calendar.select_day(GLib.DateTime.new_from_unix_local(repeat_until))
 
         self.frequency_btn.set_value(repeat_frequency)
         self.repeat_duration_selected_changed()
@@ -870,7 +874,7 @@ class RepeatDialog(Adw.Window):
                 repeat_until = 0
             elif self.repeat_duration_button.get_selected() == 2:
                 repeat_times = -1
-                repeat_until = self.calendar.get_date().to_unix()
+                repeat_until = datetime.datetime(self.calendar.props.year, self.calendar.props.month + 1, self.calendar.props.day).timestamp()
 
             repeat_days = 0
             for btn, flag in (
@@ -895,7 +899,7 @@ class RepeatDialog(Adw.Window):
 
     @Gtk.Template.Callback()
     def day_changed(self, calendar = None):
-        self.repeat_until_btn.set_label(self.calendar.get_date().format('%d %b %Y'))
+        self.repeat_until_label.set_label(self.calendar.get_date().format('%d %b %Y'))
 
     @Gtk.Template.Callback()
     def repeat_duration_selected_changed(self, button = None, data = None):

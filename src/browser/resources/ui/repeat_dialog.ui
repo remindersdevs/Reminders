@@ -3,7 +3,7 @@
   <template class="repeat_dialog" parent="AdwWindow">
     <property name="title" translatable="yes">Repeat Options</property>
     <property name="default-width">450</property>
-    <property name="width-request">420</property>
+    <property name="width-request">400</property>
     <property name="default-height">400</property>
     <property name="content">
       <object class="GtkBox">
@@ -221,6 +221,7 @@
                                     <child>
                                       <object class="GtkLabel">
                                         <property name="label" translatable="yes">total occurences</property>
+                                        <property name="wrap">true</property>
                                       </object>
                                     </child>
                                   </object>
@@ -229,6 +230,13 @@
                                   <object class="GtkMenuButton" id="repeat_until_btn">
                                     <property name="valign">center</property>
                                     <property name="halign">end</property>
+                                    <property name="tooltip-text" translatable="yes">Select date</property>
+                                    <property name="child">
+                                      <object class="GtkLabel" id="repeat_until_label">
+                                        <property name="halign">center</property>
+                                        <property name="valign">center</property>
+                                      </object>
+                                    </property>
                                     <property name="popover">
                                       <object class="GtkPopover" id="calendar_popover">
                                         <child>

@@ -29,11 +29,11 @@
   </provides>
 
   <requires>
-    <display_length>420</display_length>
+    <display_length>400</display_length>
   </requires>
 
   <recommends>
-    <display_length>420</display_length>
+    <display_length>400</display_length>
   </recommends>
 
   <supports>
@@ -77,7 +77,7 @@
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
   <releases>
-    <release version="1.0" date="2023-03-06">
+    <release version="1.0" date="2023-03-07">
       <description>
         <ul>
           <li>Lots of UI Improvements</li>

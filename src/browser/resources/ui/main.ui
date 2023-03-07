@@ -189,7 +189,7 @@
             </child>
             <child>
               <object class="GtkBox" id="content">
-                <property name="width-request">420</property>
+                <property name="width-request">400</property>
                 <property name="height-request">400</property>
                 <property name="orientation">vertical</property>
                 <child>

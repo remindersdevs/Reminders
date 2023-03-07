@@ -31,13 +31,10 @@ label.time {
     margin: 0 2px;
 }
 
-spinbutton.time entry {
-    font-weight: bold;
-}
-
-spinbutton.time button {
-    padding: 0 5px;
+spinbutton button {
+    padding: 2px;
     min-height: 20px;
+    min-width: 20px;
 }
 
 .add-reminder {
@@ -89,13 +86,21 @@ button.incomplete {
     font-size: 125%;
 }
 
+button.repeat label,
+menubutton button,
+dropdown button,
+.am-pm-button label,
+spinbutton text {
+    font-weight: 500;
+}
+
 box.header > box {
-  margin: 6px 0;
+    margin: 6px 0;
 }
 
 row.header separator {
-  opacity: 0.5;
-  margin: 3px 0;
+    opacity: 0.6;
+    margin: 3px 0;
 }
 
 /* Elaborate fix for https://gitlab.gnome.org/GNOME/gtk/-/issues/5309 */

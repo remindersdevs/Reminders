@@ -8,11 +8,18 @@
     <child>
       <object class="GtkBox">
         <property name="orientation">horizontal</property>
-        <property name="spacing">10</property>
+        <property name="spacing">5</property>
         <property name="hexpand">true</property>
         <child>
           <object class="GtkMenuButton" id="date_button">
             <property name="valign">center</property>
+            <property name="tooltip-text" translatable="yes">Select date</property>
+            <property name="child">
+              <object class="GtkLabel" id="date_label">
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+              </object>
+            </property>
             <property name="popover">
               <object class="GtkPopover" id="calendar_popover">
                 <child>
@@ -24,6 +31,7 @@
             </property>
             <style>
               <class name="date"/>
+              <class name="text-button"/>
             </style>
             <accessibility>
               <property name="label" translatable="yes">Date</property>
@@ -33,6 +41,7 @@
         <child>
           <object class="GtkBox">
             <property name="orientation">horizontal</property>
+            <property name="valign">center</property>
             <child>
               <object class="GtkSpinButton" id="hour_button">
                 <property name="width-request">40</property>
@@ -107,28 +116,29 @@
         <child>
           <object class="GtkBox">
             <property name="orientation">horizontal</property>
-            <property name="spacing">5</property>
             <property name="valign">center</property>
             <property name="halign">end</property>
-            <property name="hexpand">true</property>
             <child>
-              <object class="GtkLabel" id="repeat_label">
-                <property name="halign">end</property>
-                <property name="xalign">1</property>
-                <property name="valign">center</property>
-                <property name="wrap">true</property>
+              <object class="GtkBox">
                 <property name="hexpand">true</property>
-                <property name="justify">right</property>
               </object>
             </child>
             <child>
               <object class="GtkButton" id="repeat_btn">
                 <property name="halign">end</property>
                 <property name="valign">center</property>
-                <property name="icon-name">document-edit-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Repeat options</property>
+                <property name="child">
+                  <object class="GtkLabel" id="repeat_label">
+                    <property name="xalign">0.5</property>
+                    <property name="valign">center</property>
+                    <property name="wrap">true</property>
+                    <property name="wrap-mode">2</property>
+                    <property name="justify">center</property>
+                  </object>
+                </property>
                 <style>
                   <class name="repeat"/>
-                  <class name="circular"/>
                 </style>
                 <signal name="clicked" handler="launch_repeat_window" swapped="no"/>
               </object>
