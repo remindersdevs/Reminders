@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-07 18:40-0500\n"
+"POT-Creation-Date: 2023-03-08 12:21-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -353,45 +353,42 @@ msgstr ""
 msgid "Sunday"
 msgstr ""
 
-#: src/browser/resources/ui/repeat_dialog.ui:194
-msgid "Repeat"
+#. Translators: This is a noun, preceded by a number to represent the number of occurrences of something
+#: src/browser/resources/ui/repeat_dialog.ui:218
+msgid "time(s)"
 msgstr ""
 
-#: src/browser/resources/ui/repeat_dialog.ui:223
-msgid "total occurences"
-msgstr ""
-
-#: src/browser/resources/ui/repeat_dialog.ui:233
+#: src/browser/resources/ui/repeat_dialog.ui:228
 #: src/browser/resources/ui/time_row.ui:16
 msgid "Select date"
 msgstr ""
 
-#: src/browser/resources/ui/repeat_dialog.ui:273
+#: src/browser/resources/ui/repeat_dialog.ui:268
 msgid "minute(s)"
 msgstr ""
 
-#: src/browser/resources/ui/repeat_dialog.ui:274
+#: src/browser/resources/ui/repeat_dialog.ui:269
 msgid "hour(s)"
 msgstr ""
 
-#: src/browser/resources/ui/repeat_dialog.ui:275
+#: src/browser/resources/ui/repeat_dialog.ui:270
 msgid "day(s)"
 msgstr ""
 
-#: src/browser/resources/ui/repeat_dialog.ui:276
+#: src/browser/resources/ui/repeat_dialog.ui:271
 msgid "week(s)"
 msgstr ""
 
-#: src/browser/resources/ui/repeat_dialog.ui:281
-msgid "forever"
+#: src/browser/resources/ui/repeat_dialog.ui:276
+msgid "Repeat forever"
 msgstr ""
 
-#: src/browser/resources/ui/repeat_dialog.ui:282
-msgid "for"
+#: src/browser/resources/ui/repeat_dialog.ui:277
+msgid "Display a total of"
 msgstr ""
 
-#: src/browser/resources/ui/repeat_dialog.ui:283 src/browser/reminder.py:547
-msgid "until"
+#: src/browser/resources/ui/repeat_dialog.ui:278
+msgid "Repeat until"
 msgstr ""
 
 #: src/browser/resources/ui/time_row.ui:39
@@ -561,6 +558,10 @@ msgstr ""
 
 #: src/browser/reminder.py:541
 msgid "weeks"
+msgstr ""
+
+#: src/browser/reminder.py:547
+msgid "until"
 msgstr ""
 
 #. Translators: This is a noun, preceded by a number to represent the number of occurrences of something

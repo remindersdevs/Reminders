@@ -190,11 +190,6 @@
                                 <property name="spacing">5</property>
                                 <property name="halign">start</property>
                                 <child>
-                                  <object class="GtkLabel">
-                                    <property name="label" translatable="yes">Repeat</property>
-                                  </object>
-                                </child>
-                                <child>
                                   <object class="GtkDropDown" id="repeat_duration_button">
                                     <property name="valign">center</property>
                                     <property name="model">repeat_duration_list</property>
@@ -220,7 +215,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkLabel">
-                                        <property name="label" translatable="yes">total occurences</property>
+                                        <property name="label" translatable="yes" comments="Translators: This is a noun, preceded by a number to represent the number of occurrences of something">time(s)</property>
                                         <property name="wrap">true</property>
                                       </object>
                                     </child>
@@ -278,9 +273,9 @@
   </object>
   <object class="GtkStringList" id="repeat_duration_list">
     <items>
-      <item translatable="yes">forever</item>
-      <item translatable="yes">for</item>
-      <item translatable="yes">until</item>
+      <item translatable="yes">Repeat forever</item>
+      <item translatable="yes">Display a total of</item>
+      <item translatable="yes">Repeat until</item>
     </items>
   </object>
 </interface>

@@ -104,32 +104,22 @@ row.header separator {
 }
 
 /* Elaborate fix for https://gitlab.gnome.org/GNOME/gtk/-/issues/5309 */
-.reminders-list > row:disabled + row:not(:disabled) {
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-}
-.reminders-list > row:disabled + row:not(:disabled) > box > list > row.header {
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-}
-.reminders-list > row:nth-last-child(2) {
-    border-bottom: 0;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-}
-.reminders-list > row.expander:nth-last-child(2):not(:checked) > box > list > row.header {
-    border-bottom: 0;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-}
+.reminders-list > row:nth-last-child(2),
+.reminders-list > row.expander:nth-last-child(2):not(:checked) > box > list > row.header /* Only if using expander rows */,
 .reminders-list > row.expander:nth-last-child(2) > box > revealer > list.nested > row:last-child {
     border-bottom: 0;
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
 }
+
 .reminders-list > row.expander:nth-last-child(2) > box > revealer > list.nested {
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
+}
+.reminders-list > row:disabled + row:not(:disabled),
+.reminders-list > row:disabled + row.expander:not(:disabled) > box > list > row.header {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
 }
 
 /* Add support for nested expander */
