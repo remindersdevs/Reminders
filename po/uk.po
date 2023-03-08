@@ -8,95 +8,101 @@ msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-07 18:40-0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2023-03-08 17:23+0000\n"
+"Last-Translator: Dan <denqwerta@gmail.com>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/reminders/"
+"reminders/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:4
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:9
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:62
 #: src/info.py:5
 msgid "Reminders"
-msgstr ""
+msgstr "Нагадування"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:5
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:10
 msgid "Set reminders for yourself"
-msgstr ""
+msgstr "Встановіть собі нагадування"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:13
 msgid ""
 "Todo;Productivity;Task;Planning;Planner;Time;Management;Reminder;Remembrance;"
 "Reminders;"
 msgstr ""
+"Зробити; Продуктивність; Завдання; Планування; Планувальник; Час; Керування; "
+"Нагадування; Пам’ять; Нагадування;"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:18
 #: src/browser/resources/ui/main.ui:130 src/browser/main_window.py:329
 msgid "Upcoming Reminders"
-msgstr ""
+msgstr "Майбутні нагадування"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:22
 #: src/browser/resources/ui/main.ui:153 src/browser/main_window.py:339
 msgid "Past Reminders"
-msgstr ""
+msgstr "Минулі нагадування"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:26
 #: src/browser/resources/ui/main.ui:176 src/browser/main_window.py:349
 msgid "Completed Reminders"
-msgstr ""
+msgstr "Завершені нагадування"
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:15
 msgid "Notification Sound"
-msgstr ""
+msgstr "Звук сповіщення"
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:16
 msgid "Whether or not to play a notification sound"
-msgstr ""
+msgstr "Вмикати звук сповіщення чи ні"
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:20
 msgid "Time format"
-msgstr ""
+msgstr "Формат часу"
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:21
 msgid "What format to display the time in"
-msgstr ""
+msgstr "У якому форматі відображати час"
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:25
 #: src/browser/resources/ui/main.ui:43
 msgid "Sort by"
-msgstr ""
+msgstr "Сортувати за"
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:26
 msgid "How to sort the reminders"
-msgstr ""
+msgstr "Як сортувати нагадування"
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:30
 msgid "Descending sort"
-msgstr ""
+msgstr "Сортування за спаданням"
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:31
 msgid "If reminders sort should be descending"
-msgstr ""
+msgstr "Якщо нагадування мають бути відсортовані за спаданням"
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:35
 msgid "Completed last"
-msgstr ""
+msgstr "Завершено останнім"
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:36
 msgid "Show completed reminders last"
-msgstr ""
+msgstr "Показувати виконані нагадування останніми"
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:40
 msgid "Completed reverse"
-msgstr ""
+msgstr "Змінити порядок Виконаних"
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:41
 msgid "Reverse order of completed reminders when sorted by time"
-msgstr ""
+msgstr "Зворотний порядок виконаних нагадувань при сортуванні за часом"
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:13
 msgid ""
@@ -106,497 +112,509 @@ msgid ""
 "recurring so they are shown multiple times. You can also sort and filter "
 "your reminders, as well as search for specific reminders."
 msgstr ""
+"Встановлення нагадувань для будь-чого, що вам потрібно, щоб запам’ятати. "
+"Нагадування надішле сповіщення у вказаний час, і в будь-який час ви можете "
+"позначити нагадування як завершене, щоб воно не сповіщало вас. За бажанням "
+"можна повторювати нагадування, щоб вони відображалися кілька разів. Ви також "
+"можете сортувати та фільтрувати нагадування, а також шукати певні "
+"нагадування."
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:53
 msgid "Todo"
-msgstr ""
+msgstr "Зробити"
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:54
 msgid "Productivity"
-msgstr ""
+msgstr "Продуктивність"
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:55
 msgid "Task"
-msgstr ""
+msgstr "Завдання"
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:56
 msgid "Planning"
-msgstr ""
+msgstr "Планування"
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:57
 msgid "Planner"
-msgstr ""
+msgstr "Планувальник"
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:58
 #: src/browser/resources/ui/main.ui:297
 msgid "Time"
-msgstr ""
+msgstr "час"
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:59
 msgid "Management"
-msgstr ""
+msgstr "Управління"
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:60
 msgid "Reminder"
-msgstr ""
+msgstr "Нагадування"
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:61
 msgid "Remembrance"
-msgstr ""
+msgstr "Пам'ять"
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:83
 msgid "Fix issues with frequency option on recurring reminders"
-msgstr ""
+msgstr "Виправлено проблеми з налаштуванням частоти повторюваних нагадувань"
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:84
 msgid "Fix issues with separators"
-msgstr ""
+msgstr "Виправлено проблеми з роздільниками"
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:91
 msgid "Lots of UI Improvements"
-msgstr ""
+msgstr "Багато покращень користувацького інтерфейсу"
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:92
 msgid "Fix issues with daylight savings time"
-msgstr ""
+msgstr "Виправлення проблеми з переходом на літній час"
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:93
 msgid "Fix some rare issues involving timestamps"
-msgstr ""
+msgstr "Виправлено деякі рідкісні проблеми з мітками часу"
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:100
 msgid "Add dialog to inform user if they need to log out before using the app"
 msgstr ""
+"Додати діалогове вікно для інформування користувача про необхідність виходу "
+"з системи перед використанням застосунку"
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:107
 msgid "Rename to \"Remind\""
-msgstr ""
+msgstr "Перейменувати на \"Нагадування\""
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:108
 msgid "Fix app not starting when dbus service isnt already running"
 msgstr ""
+"Виправлено помилку, коли застосунок не запускається, якщо служба dbus ще не "
+"запущена"
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:109
 msgid "Fix issues with non-sandboxed builds"
-msgstr ""
+msgstr "Виправлено проблеми зі збірками без пісочниці"
 
 #: data/service/io.github.dgsasha.Remembrance.Service1.desktop.in.in:4
 msgid "Remembrance Service"
-msgstr ""
+msgstr "Служба пам'яті"
 
 #: src/browser/resources/ui/main.ui:42
 msgid "Sort direction"
-msgstr ""
+msgstr "Порядок сортування"
 
 #: src/browser/resources/ui/main.ui:57
 msgid "Search"
-msgstr ""
+msgstr "Пошук"
 
 #: src/browser/resources/ui/main.ui:66
 msgid "App Menu"
-msgstr ""
+msgstr "Меню застосунку"
 
 #: src/browser/resources/ui/main.ui:107 src/browser/resources/ui/main.ui:215
 #: src/browser/main_window.py:319
 msgid "All Reminders"
-msgstr ""
+msgstr "Всі нагадування"
 
 #: src/browser/resources/ui/main.ui:256 src/browser/resources/ui/main.ui:264
 msgid "Add a reminder"
-msgstr ""
+msgstr "Додати нагадування"
 
 #: src/browser/resources/ui/main.ui:282
 #: src/browser/resources/ui/preferences.ui:4
 msgid "Preferences"
-msgstr ""
+msgstr "Параметри"
 
 #: src/browser/resources/ui/main.ui:288
 msgid "About"
-msgstr ""
+msgstr "Про застосунок"
 
 #: src/browser/resources/ui/main.ui:295
 msgid "Sort"
-msgstr ""
+msgstr "Сортувати"
 
 #: src/browser/resources/ui/main.ui:302 src/browser/reminder.py:32
 msgid "Title"
-msgstr ""
+msgstr "Назва"
 
 #: src/browser/resources/ui/preferences.ui:9
 msgid "General"
-msgstr ""
+msgstr "Загальне"
 
 #: src/browser/resources/ui/preferences.ui:14
 msgid "Time Format"
-msgstr ""
+msgstr "Формат часу"
 
 #: src/browser/resources/ui/preferences.ui:20
 msgid "Play sound with notification"
-msgstr ""
+msgstr "Відтворення звуку зі сповіщенням"
 
 #: src/browser/resources/ui/preferences.ui:31
 msgid "Show Completed Reminders Last"
-msgstr ""
+msgstr "Показати останні виконані нагадування"
 
 #: src/browser/resources/ui/preferences.ui:35
 msgid "Reverse order of completed reminders"
-msgstr ""
+msgstr "Зворотний порядок заповнених нагадувань"
 
 #: src/browser/resources/ui/preferences.ui:36
 msgid "This only applies when sorting by time"
-msgstr ""
+msgstr "Це стосується лише сортування за часом"
 
 #: src/browser/resources/ui/preferences.ui:54
 msgid "Use Locale Default"
-msgstr ""
+msgstr "Використовувати локальні налаштування за замовчуванням"
 
 #: src/browser/resources/ui/preferences.ui:55
 msgid "12 hour time"
-msgstr ""
+msgstr "12-годинний час"
 
 #: src/browser/resources/ui/preferences.ui:56
 msgid "24 hour time"
-msgstr ""
+msgstr "24-годинний час"
 
 #: src/browser/resources/ui/reminder.ui:6
 msgid "What should the reminder be called?"
-msgstr ""
+msgstr "Як назвати нагадування?"
 
 #: src/browser/resources/ui/reminder.ui:12
 msgid "Enter a short description of the reminder. (Optional)"
-msgstr ""
+msgstr "Введіть короткий опис нагадування. (Необов'язково)"
 
 #: src/browser/resources/ui/reminder.ui:21
 msgid "Set a time"
-msgstr ""
+msgstr "Встановіть час"
 
 #: src/browser/resources/ui/reminder.ui:65
 msgid "Unsaved changes"
-msgstr ""
+msgstr "Незбережені зміни"
 
 #: src/browser/resources/ui/reminder.ui:89
 #: src/browser/resources/ui/reminder.ui:96
 msgid "Discard changes"
-msgstr ""
+msgstr "Скасувати зміни"
 
 #: src/browser/resources/ui/reminder.ui:104
 #: src/browser/resources/ui/reminder.ui:112
 msgid "Save changes"
-msgstr ""
+msgstr "Зберегти зміни"
 
 #: src/browser/resources/ui/repeat_dialog.ui:4
 msgid "Repeat Options"
-msgstr ""
+msgstr "Параметри повтору"
 
 #: src/browser/resources/ui/repeat_dialog.ui:38
 msgid "Repeat the reminder"
-msgstr ""
+msgstr "Повторити нагадування"
 
 #: src/browser/resources/ui/repeat_dialog.ui:53
 msgid "Repeat every"
-msgstr ""
+msgstr "Повторювати кожні"
 
 #: src/browser/resources/ui/repeat_dialog.ui:96
 msgid "Mon"
-msgstr ""
+msgstr "Пн"
 
 #: src/browser/resources/ui/repeat_dialog.ui:97
 msgid "Monday"
-msgstr ""
+msgstr "Понеділок"
 
 #: src/browser/resources/ui/repeat_dialog.ui:108
 msgid "Tue"
-msgstr ""
+msgstr "Вт"
 
 #: src/browser/resources/ui/repeat_dialog.ui:109
 msgid "Tuesday"
-msgstr ""
+msgstr "Вівторок"
 
 #: src/browser/resources/ui/repeat_dialog.ui:120
 msgid "Wed"
-msgstr ""
+msgstr "Ср"
 
 #: src/browser/resources/ui/repeat_dialog.ui:121
 msgid "Wednesday"
-msgstr ""
+msgstr "Середа"
 
 #: src/browser/resources/ui/repeat_dialog.ui:132
 msgid "Thu"
-msgstr ""
+msgstr "Чт"
 
 #: src/browser/resources/ui/repeat_dialog.ui:133
 msgid "Thursday"
-msgstr ""
+msgstr "Четвер"
 
 #: src/browser/resources/ui/repeat_dialog.ui:144
 msgid "Fri"
-msgstr ""
+msgstr "Пт"
 
 #: src/browser/resources/ui/repeat_dialog.ui:145
 msgid "Friday"
-msgstr ""
+msgstr "П'ятниця"
 
 #: src/browser/resources/ui/repeat_dialog.ui:156
 msgid "Sat"
-msgstr ""
+msgstr "Сб"
 
 #: src/browser/resources/ui/repeat_dialog.ui:157
 msgid "Saturday"
-msgstr ""
+msgstr "Субота"
 
 #: src/browser/resources/ui/repeat_dialog.ui:168
 msgid "Sun"
-msgstr ""
+msgstr "Нд"
 
 #: src/browser/resources/ui/repeat_dialog.ui:169
 msgid "Sunday"
-msgstr ""
+msgstr "Неділя"
 
 #: src/browser/resources/ui/repeat_dialog.ui:194
 msgid "Repeat"
-msgstr ""
+msgstr "Повторити"
 
 #: src/browser/resources/ui/repeat_dialog.ui:223
 msgid "total occurences"
-msgstr ""
+msgstr "загальна кількість випадків"
 
 #: src/browser/resources/ui/repeat_dialog.ui:233
 #: src/browser/resources/ui/time_row.ui:16
 msgid "Select date"
-msgstr ""
+msgstr "Виберіть дату"
 
 #: src/browser/resources/ui/repeat_dialog.ui:273
 msgid "minute(s)"
-msgstr ""
+msgstr "хвилина(и)"
 
 #: src/browser/resources/ui/repeat_dialog.ui:274
 msgid "hour(s)"
-msgstr ""
+msgstr "година(и)"
 
 #: src/browser/resources/ui/repeat_dialog.ui:275
 msgid "day(s)"
-msgstr ""
+msgstr "день (дні)"
 
 #: src/browser/resources/ui/repeat_dialog.ui:276
 msgid "week(s)"
-msgstr ""
+msgstr "тиждень(тижні)"
 
 #: src/browser/resources/ui/repeat_dialog.ui:281
 msgid "forever"
-msgstr ""
+msgstr "назавжди"
 
 #: src/browser/resources/ui/repeat_dialog.ui:282
 msgid "for"
-msgstr ""
+msgstr "для"
 
 #: src/browser/resources/ui/repeat_dialog.ui:283 src/browser/reminder.py:547
 msgid "until"
-msgstr ""
+msgstr "поки"
 
 #: src/browser/resources/ui/time_row.ui:39
 msgid "Date"
-msgstr ""
+msgstr "Дата"
 
 #: src/browser/resources/ui/time_row.ui:53
 #: src/browser/resources/ui/time_row.ui:66
 msgid "Hour"
-msgstr ""
+msgstr "Година"
 
 #: src/browser/resources/ui/time_row.ui:87
 #: src/browser/resources/ui/time_row.ui:102
 msgid "Minute"
-msgstr ""
+msgstr "Хвилина"
 
 #: src/browser/resources/ui/time_row.ui:132
 msgid "Repeat options"
-msgstr ""
+msgstr "Параметри повторення"
 
 #: src/browser/about.py:28
 msgid "Copyright 2023 Sasha Hale"
-msgstr ""
+msgstr "Авторське право 2023 Саша Хейл"
 
 #. Translators: Do not translate this, instead put your name and email here.
 #. name <email>
 #: src/browser/about.py:41
 msgid "translator-credits"
 msgstr ""
+"Dan\n"
+"denqwerta@gmail.com"
 
 #: src/browser/application.py:46
 msgid "Print the version of the app"
-msgstr ""
+msgstr "Вихідна версія застосунку"
 
 #: src/browser/application.py:53
 msgid "Restart service before starting app"
-msgstr ""
+msgstr "Перезапуск служби перед запуском застосунку"
 
 #: src/browser/application.py:60
 msgid "Start on a different page"
-msgstr ""
+msgstr "Почати з іншої сторінки"
 
 #: src/browser/application.py:261
 msgid "You have unsaved changes"
-msgstr ""
+msgstr "У вас є незбережені зміни"
 
 #: src/browser/application.py:262
 msgid "Are you sure you want to close the window?"
-msgstr ""
+msgstr "Ви впевнені, що хочете закрити вікно?"
 
 #: src/browser/application.py:264 src/browser/reminder.py:455
 msgid "Cancel"
-msgstr ""
+msgstr "Скасувати"
 
 #: src/browser/application.py:265
 msgid "Yes"
-msgstr ""
+msgstr "Так"
 
 #: src/browser/main_window.py:103
 msgid "Press the plus button below to add a reminder"
-msgstr ""
+msgstr "Натисніть кнопку \"плюс\" нижче, щоб додати нагадування"
 
 #: src/browser/main_window.py:107
 msgid "No reminders match your search"
-msgstr ""
+msgstr "За вашим запитом не знайдено нагадувань"
 
 #: src/browser/main_window.py:434
 #, python-brace-format
 msgid "Searching '{text}'"
-msgstr ""
+msgstr "Пошук '{text}'"
 
 #: src/browser/main_window.py:440
 msgid "Start typing to search"
-msgstr ""
+msgstr "Почніть вводити для пошуку"
 
 #: src/browser/reminder.py:33
 msgid "Description"
-msgstr ""
+msgstr "Опис"
 
 #: src/browser/reminder.py:100 src/browser/reminder.py:188
 msgid "Incomplete"
-msgstr ""
+msgstr "Не завершено"
 
 #: src/browser/reminder.py:103 src/browser/reminder.py:192
 msgid "Complete"
-msgstr ""
+msgstr "Завершено"
 
 #: src/browser/reminder.py:451
 msgid "Remove reminder?"
-msgstr ""
+msgstr "Видалити нагадування?"
 
 #: src/browser/reminder.py:452
 #, python-brace-format
 msgid "This will remove the {reminder} reminder."
-msgstr ""
+msgstr "Це призведе до видалення нагадування {reminder}."
 
 #: src/browser/reminder.py:456
 msgid "Remove"
-msgstr ""
+msgstr "Видалити"
 
 #: src/browser/reminder.py:500
 msgid "Does not repeat"
-msgstr ""
+msgstr "Не повторювати"
 
 #: src/browser/reminder.py:504
 msgid "minute"
-msgstr ""
+msgstr "хвилина"
 
 #: src/browser/reminder.py:506
 msgid "minutes"
-msgstr ""
+msgstr "хвилин"
 
 #: src/browser/reminder.py:509
 msgid "hour"
-msgstr ""
+msgstr "година"
 
 #: src/browser/reminder.py:511
 msgid "hours"
-msgstr ""
+msgstr "години"
 
 #: src/browser/reminder.py:514
 msgid "day"
-msgstr ""
+msgstr "день"
 
 #: src/browser/reminder.py:516
 msgid "days"
-msgstr ""
+msgstr "днів"
 
 #. Translators: This is an abbreviation for Monday
 #: src/browser/reminder.py:521
 msgid "M"
-msgstr ""
+msgstr "Пн"
 
 #. Translators: This is an abbreviation for Tuesday
 #: src/browser/reminder.py:523
 msgid "Tu"
-msgstr ""
+msgstr "Вт"
 
 #. Translators: This is an abbreviation for Wednesday
 #: src/browser/reminder.py:525
 msgid "W"
-msgstr ""
+msgstr "Ср"
 
 #. Translators: This is an abbreviation for Thursday
 #: src/browser/reminder.py:527
 msgid "Th"
-msgstr ""
+msgstr "Чт"
 
 #. Translators: This is an abbreviation for Friday
 #: src/browser/reminder.py:529
 msgid "F"
-msgstr ""
+msgstr "Пт"
 
 #. Translators: This is an abbreviation for Saturday
 #: src/browser/reminder.py:531
 msgid "Sa"
-msgstr ""
+msgstr "Сб"
 
 #. Translators: This is an abbreviation for Sunday
 #: src/browser/reminder.py:533
 msgid "Su"
-msgstr ""
+msgstr "Нд"
 
 #: src/browser/reminder.py:539
 msgid "week"
-msgstr ""
+msgstr "тиждень"
 
 #: src/browser/reminder.py:541
 msgid "weeks"
-msgstr ""
+msgstr "тижнів"
 
 #. Translators: This is a noun, preceded by a number to represent the number of occurrences of something
 #: src/browser/reminder.py:550
 msgid "time"
-msgstr ""
+msgstr "час"
 
 #. Translators: This is a noun, preceded by a number to represent the number of occurrences of something
 #: src/browser/reminder.py:553
 msgid "times"
-msgstr ""
+msgstr "разів"
 
 #. Translators: This is a adjective, followed by a number to represent how often something occurs
 #: src/browser/reminder.py:558
 msgid "Every"
-msgstr ""
+msgstr "Кожні"
 
 #: src/browser/reminder.py:590
 msgid "Today"
-msgstr ""
+msgstr "Сьогодні"
 
 #: src/browser/reminder.py:592
 msgid "Tomorrow"
-msgstr ""
+msgstr "Завтра"
 
 #: src/browser/reminder.py:594
 msgid "Yesterday"
-msgstr ""
+msgstr "Вчора"
 
 #: src/browser/reminder.py:631 src/browser/reminder.py:653
 msgid "PM"
-msgstr ""
+msgstr "PM"
 
 #: src/browser/reminder.py:635 src/browser/reminder.py:657
 msgid "AM"
-msgstr ""
+msgstr "AM"
 
 #: src/service/backend.py:284
 msgid "Mark as completed"
-msgstr ""
+msgstr "Позначити як виконане"
