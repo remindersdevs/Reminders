@@ -1,6 +1,6 @@
 resources = files(
     'ui/error_dialog.ui',
-    'ui/main.ui',
+    'ui/main_window.ui',
     'ui/preferences.ui',
     'ui/reminder.ui',
     'ui/repeat_dialog.ui',

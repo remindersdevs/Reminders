@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="application_window" parent="AdwApplicationWindow">
-    <property name="default-height">700</property>
-    <property name="default-width">800</property>
     <property name="content">
       <object class="GtkBox">
         <property name="orientation">vertical</property>

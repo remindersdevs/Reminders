@@ -135,6 +135,9 @@ class Remembrance(Adw.Application):
 
         self.settings = Gio.Settings(info.base_app_id)
         self.win = MainWindow(self.page, application=self)
+        self.settings.bind('width', self.win, 'default-width', Gio.SettingsBindFlags.DEFAULT)
+        self.settings.bind('height', self.win, 'default-height', Gio.SettingsBindFlags.DEFAULT)
+        self.settings.bind('is-maximized', self.win, 'maximized', Gio.SettingsBindFlags.DEFAULT)
         self.service.connect('g-signal::CompletedUpdated', self.reminder_completed_cb)
         self.service.connect('g-signal::ReminderDeleted', self.reminder_deleted_cb)
         self.service.connect('g-signal::ReminderUpdated', self.reminder_updated_cb)

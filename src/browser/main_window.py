@@ -76,7 +76,7 @@ class Calendar(threading.Thread):
         except Exception as error:
             self.app.logger.error(f'{error}: Failed to set timeout to refresh date labels')
 
-@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/main.ui')
+@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/main_window.ui')
 class MainWindow(Adw.ApplicationWindow):
     '''Main application Window'''
     __gtype_name__ = 'application_window'
