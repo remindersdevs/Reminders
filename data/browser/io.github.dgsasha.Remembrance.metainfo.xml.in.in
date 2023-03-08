@@ -12,7 +12,7 @@
   <description>
      <p>
         Set reminders for anything you need help remembering.
-        Remind will send a notification at a specified time, and at any time you can mark a reminder as complete so it doesn't notify you.
+        Reminders will send a notification at a specified time, and at any time you can mark a reminder as complete so it doesn't notify you.
         You can optionally make reminders recurring so they are shown multiple times.
         You can also sort and filter your reminders, as well as search for specific reminders.
      </p>
