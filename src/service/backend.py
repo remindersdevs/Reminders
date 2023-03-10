@@ -529,22 +529,7 @@ class Reminders():
             'repeat-until': repeat_until,
             'old-timestamp': 0
         }
-        with open(REMINDERS_FILE, 'a', newline='') as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=FIELDNAMES)
-
-            writer.writerow({
-                'id': reminder_id,
-                'title': title,
-                'description': description,
-                'timestamp': timestamp,
-                'completed': False,
-                'repeat-type': repeat_type,
-                'repeat-frequency': repeat_frequency,
-                'repeat-days': repeat_days,
-                'repeat-times': repeat_times,
-                'repeat-until': repeat_until,
-                'old-timestamp': 0
-            })
+        self._save_reminders()
 
         reminder = {
             'id': GLib.Variant('s', reminder_id),
