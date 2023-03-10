@@ -11,7 +11,7 @@
           <object class="AdwPreferencesGroup">
             <child>
               <object class="AdwComboRow" id="time_format_row">
-                <property name="title" translatable="yes">Time Format</property>
+                <property name="title" translatable="yes">Time format</property>
                 <property name="model">time_formats</property>
               </object>
             </child>
@@ -28,7 +28,7 @@
             </child>
             <child>
               <object class="AdwExpanderRow" id="completed_last_row">
-                <property name="title" translatable="yes">Show Completed Reminders Last</property>
+                <property name="title" translatable="yes">Show completed reminders last</property>
                 <property name="show-enable-switch">true</property>
                 <child>
                   <object class="AdwActionRow">
@@ -51,7 +51,7 @@
   </template>
   <object class="GtkStringList" id="time_formats">
     <items>
-      <item translatable="yes">Use Locale Default</item>
+      <item translatable="yes">Use locale default</item>
       <item translatable="yes">12 hour time</item>
       <item translatable="yes">24 hour time</item>
     </items>
