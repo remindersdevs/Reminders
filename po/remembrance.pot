@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-09 20:45-0500\n"
+"POT-Creation-Date: 2023-03-10 13:26-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -146,42 +146,46 @@ msgid "Remembrance"
 msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:83
+msgid "Fix issue with app not starting when clicking notification"
+msgstr ""
+
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:90
 msgid "Update translations"
 msgstr ""
 
-#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:84
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:91
 msgid "Improved icon for u/kokulumisket"
 msgstr ""
 
-#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:85
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:92
 msgid "Fixed issue with service crashing upon logging in"
 msgstr ""
 
-#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:86
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:93
 msgid "Make some things more clear in the repeat dialog"
 msgstr ""
 
-#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:87
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:94
 msgid "Save and restore the window state when closing and reopening the app"
 msgstr ""
 
-#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:94
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:101
 msgid "Fix issues with frequency option on recurring reminders"
 msgstr ""
 
-#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:95
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:102
 msgid "Fix issues with separators"
 msgstr ""
 
-#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:102
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:109
 msgid "Lots of UI Improvements"
 msgstr ""
 
-#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:103
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:110
 msgid "Fix issues with daylight savings time"
 msgstr ""
 
-#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:104
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:111
 msgid "Fix some rare issues involving timestamps"
 msgstr ""
 

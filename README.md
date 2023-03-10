@@ -39,7 +39,7 @@ flatpak run io.github.dgsasha.Remembrance.Devel --restart-service
 
 ## Building (generic):
 ```
-meson build
+meson build -Ddevel=true
 ```
 ```
 ninja -C build install

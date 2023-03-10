@@ -441,6 +441,7 @@ class MainWindow(Adw.ApplicationWindow):
 
     @Gtk.Template.Callback()
     def new_reminder(self, button):
+        self.search_revealer.set_reveal_child(False)
         self.selected = self.all_row
         self.selected.emit('activate')
         reminder = Reminder(

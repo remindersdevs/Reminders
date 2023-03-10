@@ -64,3 +64,11 @@ if compile_schemas.found()
         args: ['--strict', '--dry-run', meson.current_source_dir()]
     )
 endif
+
+configure_file(
+    input: 'io.github.dgsasha.Remembrance.service.in',
+    output: '@0@.service'.format(app_id),
+    install: true,
+    install_dir: get_option('datadir') / 'dbus-1/services',
+    configuration: conf,
+)
