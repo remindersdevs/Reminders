@@ -33,6 +33,7 @@ def about_window():
             <ul>
                 <li>Update translations</li>
                 <li>Improved icon just for u/kokulumisket</li>
+                <li>Fixed issue with service crashing upon logging in</li>
                 <li>Make some things more clear in the repeat dialog</li>
                 <li>Save and restore the window state when closing and reopening the app</li>
             </ul>

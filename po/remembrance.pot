@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-09 19:28-0500\n"
+"POT-Creation-Date: 2023-03-09 20:45-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -154,30 +154,34 @@ msgid "Improved icon for u/kokulumisket"
 msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:85
-msgid "Make some things more clear in the repeat dialog"
+msgid "Fixed issue with service crashing upon logging in"
 msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:86
+msgid "Make some things more clear in the repeat dialog"
+msgstr ""
+
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:87
 msgid "Save and restore the window state when closing and reopening the app"
 msgstr ""
 
-#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:93
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:94
 msgid "Fix issues with frequency option on recurring reminders"
 msgstr ""
 
-#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:94
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:95
 msgid "Fix issues with separators"
 msgstr ""
 
-#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:101
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:102
 msgid "Lots of UI Improvements"
 msgstr ""
 
-#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:102
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:103
 msgid "Fix issues with daylight savings time"
 msgstr ""
 
-#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:103
+#: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:104
 msgid "Fix some rare issues involving timestamps"
 msgstr ""
 
@@ -416,7 +420,7 @@ msgstr ""
 
 #. Translators: Do not translate this, instead put your name and email here.
 #. name <email>
-#: src/browser/about.py:43
+#: src/browser/about.py:44
 msgid "translator-credits"
 msgstr ""
 
@@ -600,6 +604,6 @@ msgstr ""
 msgid "AM"
 msgstr ""
 
-#: src/service/backend.py:284
+#: src/service/backend.py:288
 msgid "Mark as completed"
 msgstr ""

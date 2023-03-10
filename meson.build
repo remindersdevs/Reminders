@@ -8,10 +8,11 @@ project(
 dependency('glib-2.0')
 dependency('pygobject-3.0')
 dependency('libadwaita-1')
+dependency('gsound')
 
 devel = get_option('devel')
 
-service_version = '1.1'
+service_version = '1.2'
 
 app_executable = 'remembrance'
 

@@ -29,7 +29,7 @@ from remembrance.browser.about import about_window
 from remembrance.browser.preferences import PreferencesWindow
 
 # Always update this when new features are added that require the service to restart
-MIN_SERVICE_VERSION = 1.1
+MIN_SERVICE_VERSION = 1.2
 
 class Remembrance(Adw.Application):
     '''Application for the frontend'''

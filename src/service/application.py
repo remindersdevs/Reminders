@@ -58,14 +58,13 @@ class RemembranceService(Gio.Application):
         self.create_action('quit', self.quit_service, None)
 
         self.reminders = Reminders(self)
+
         self.hold()
 
     def do_startup(self):
         Gio.Application.do_startup(self)
-
-    def do_activate(self):
-        Gio.Application.do_activate(self)
-
+        self.reminders.start_countdowns()
+        
     def create_action(self, name, callback, variant = None):
         action = Gio.SimpleAction.new(name, variant)
         action.connect('activate', callback)

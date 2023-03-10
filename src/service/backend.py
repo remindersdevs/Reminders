@@ -203,6 +203,10 @@ class Reminders():
         }
         self._register()
 
+    def start_countdowns(self):
+        for reminder_id in self.dict.keys():
+            self._set_countdown(reminder_id)
+
     def do_emit(self, signal_name, parameters):
         self.connection.emit_signal(
             None,
@@ -481,8 +485,6 @@ class Reminders():
                         'repeat-until': repeat_until,
                         'old-timestamp': old_timestamp
                     }
-
-                    self._set_countdown(reminder_id)
 
     # Below methods can be accessed by other apps over dbus
     def set_completed(self, app_id: str, reminder_id: str, completed: bool):
