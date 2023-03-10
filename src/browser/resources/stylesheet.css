@@ -43,10 +43,6 @@ spinbutton button {
     margin: 10px;
 }
 
-box.bottom {
-    border-top: 1px solid alpha(currentcolor, 0.15);
-}
-
 row.time {
     padding: 5px 10px;
 }
