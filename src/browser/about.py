@@ -31,7 +31,7 @@ def about_window():
         issue_url = 'https://github.com/dgsasha/remembrance/issues',
         release_notes = '''
             <ul>
-                <li>Fix issue with app not starting when clicking notification</li>
+                <li>Fix issue where app can corrupt or lose its data.</li>
             </ul>
         ''',
         release_notes_version = info.version,
