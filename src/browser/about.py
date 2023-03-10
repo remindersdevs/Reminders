@@ -31,8 +31,10 @@ def about_window():
         issue_url = 'https://github.com/dgsasha/remembrance/issues',
         release_notes = '''
             <ul>
-                <li>Fix issues with frequency option on recurring reminders</li>
-                <li>Fix issues with separators</li>
+                <li>Update translations</li>
+                <li>Improved icon just for u/kokulumisket</li>
+                <li>Make some things more clear in the repeat dialog</li>
+                <li>Save and restore the window state when closing and reopening the app</li>
             </ul>
         ''',
         release_notes_version = info.version,

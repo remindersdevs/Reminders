@@ -77,6 +77,16 @@
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
   <releases>
+    <release version="1.2" date="2023-03-09">
+      <description>
+        <ul>
+          <li>Update translations</li>
+          <li>Improved icon for u/kokulumisket</li>
+          <li>Make some things more clear in the repeat dialog</li>
+          <li>Save and restore the window state when closing and reopening the app</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.1" date="2023-03-07">
       <description>
         <ul>
@@ -91,22 +101,6 @@
           <li>Lots of UI Improvements</li>
           <li>Fix issues with daylight savings time</li>
           <li>Fix some rare issues involving timestamps</li>
-        </ul>
-      </description>
-    </release>
-    <release version="0.4.1" date="2023-03-05">
-      <description>
-        <ul>
-          <li>Add dialog to inform user if they need to log out before using the app</li>
-        </ul>
-      </description>
-    </release>
-    <release version="0.4" date="2023-03-04">
-      <description>
-        <ul>
-          <li>Rename to "Remind"</li>
-          <li>Fix app not starting when dbus service isnt already running</li>
-          <li>Fix issues with non-sandboxed builds</li>
         </ul>
       </description>
     </release>
