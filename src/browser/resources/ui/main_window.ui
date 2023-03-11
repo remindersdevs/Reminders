@@ -4,6 +4,7 @@
     <property name="content">
       <object class="GtkBox">
         <property name="orientation">vertical</property>
+        <property name="height-request">360</property>
         <child>
           <object class="AdwHeaderBar">
             <property name="title-widget">
@@ -188,7 +189,6 @@
             <child>
               <object class="GtkBox" id="content">
                 <property name="width-request">360</property>
-                <property name="height-request">360</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkBox" id="main_box">

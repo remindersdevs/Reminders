@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-11 11:57-0500\n"
+"POT-Creation-Date: 2023-03-11 12:10-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,17 +36,17 @@ msgid ""
 msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:18
-#: src/browser/resources/ui/main_window.ui:128 src/browser/main_window.py:329
+#: src/browser/resources/ui/main_window.ui:129 src/browser/main_window.py:329
 msgid "Upcoming Reminders"
 msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:22
-#: src/browser/resources/ui/main_window.ui:151 src/browser/main_window.py:339
+#: src/browser/resources/ui/main_window.ui:152 src/browser/main_window.py:339
 msgid "Past Reminders"
 msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:26
-#: src/browser/resources/ui/main_window.ui:174 src/browser/main_window.py:349
+#: src/browser/resources/ui/main_window.ui:175 src/browser/main_window.py:349
 msgid "Completed Reminders"
 msgstr ""
 
@@ -68,7 +68,7 @@ msgid "What format to display the time in"
 msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.gschema.xml.in:25
-#: src/browser/resources/ui/main_window.ui:41
+#: src/browser/resources/ui/main_window.ui:42
 msgid "Sort by"
 msgstr ""
 
@@ -203,19 +203,19 @@ msgstr ""
 msgid "Remembrance Service"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:40
+#: src/browser/resources/ui/main_window.ui:41
 msgid "Sort direction"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:55
+#: src/browser/resources/ui/main_window.ui:56
 msgid "Search"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:64
+#: src/browser/resources/ui/main_window.ui:65
 msgid "App Menu"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:105
+#: src/browser/resources/ui/main_window.ui:106
 #: src/browser/resources/ui/main_window.ui:217 src/browser/main_window.py:319
 msgid "All Reminders"
 msgstr ""
