@@ -26,21 +26,19 @@
 
   <provides>
     <binary>@APP_EXECUTABLE@</binary>
+    <dbus type="session">io.github.dgsasha.Remembrance.Service1</dbus>
   </provides>
 
   <requires>
-    <display_length>400</display_length>
+    <display_length compare="ge">360</display_length>
+    <internet>offline-only</internet>
   </requires>
 
   <recommends>
-    <display_length>400</display_length>
-  </recommends>
-
-  <supports>
     <control>pointing</control>
     <control>keyboard</control>
     <control>touch</control>
-  </supports>
+  </recommends>
 
   <categories>
     <category>GNOME</category>
