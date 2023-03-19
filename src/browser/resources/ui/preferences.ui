@@ -3,12 +3,44 @@
   <template class="PreferencesWindow" parent="AdwPreferencesWindow">
     <property name="title" translatable="yes">Preferences</property>
     <property name="default-width">450</property>
-    <property name="default-height">450</property>
+    <property name="width-request">360</property>
+    <property name="default-height">600</property>
     <child>
       <object class="AdwPreferencesPage">
-        <property name="title" translatable="yes">General</property>
+        <child>
+          <object class="AdwPreferencesGroup" id="ms_sync">
+            <property name="title" translatable="yes">Sync with Microsoft To Do</property>
+            <style>
+              <class name="ms-accounts"/>
+            </style>
+            <child>
+              <object class="AdwActionRow" id="add_account_row">
+                <style>
+                  <class name="row-button"/>
+                  <class name="suggested-action"/>
+                </style>
+                <property name="activatable">true</property>
+                <child type="prefix">
+                  <object class="GtkLabel">
+                    <property name="valign">center</property>
+                    <property name="halign">center</property>
+                    <property name="label" translatable="yes">Add Account</property>
+                  </object>
+                </child>
+                <child type="prefix">
+                  <object class="GtkBox">
+                    <property name="hexpand">true</property>
+                    <property name="halign">start</property>
+                  </object>
+                </child>
+                <signal name="activated" handler="sign_in" swapped="no"/>
+              </object>
+            </child>
+          </object>
+        </child>
         <child>
           <object class="AdwPreferencesGroup">
+            <property name="title" translatable="yes">General</property>
             <child>
               <object class="AdwComboRow" id="time_format_row">
                 <property name="title" translatable="yes">Time format</property>

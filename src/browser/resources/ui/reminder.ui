@@ -1,30 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="reminder" parent="AdwExpanderRow">
-    <child>
-      <object class="AdwEntryRow" id="title_entry">
-        <property name="title" translatable="yes">What should the reminder be called?</property>
-        <signal name="changed" handler="check_title_saved" swapped="no"/>
+    <child type="prefix">
+      <object class="GtkImage" id="completed_icon">
+        <property name="icon-name">object-select-symbolic</property>
       </object>
     </child>
-    <child>
-      <object class="AdwEntryRow" id="description_entry">
-        <property name="title" translatable="yes">Enter a short description of the reminder. (Optional)</property>
-        <signal name="changed" handler="check_description_saved" swapped="no"/>
-      </object>
-    </child>
-    <child>
-      <object class="AdwExpanderRow" id="time_expander_row">
+    <child type="action">
+      <object class="GtkBox" id="label_box">
+        <property name="valign">fill</property>
+        <property name="halign">end</property>
         <property name="hexpand">true</property>
-        <property name="activatable">false</property>
-        <property name="show-enable-switch">true</property>
-        <property name="title" translatable="yes">Set a time</property>
-        <signal name="notify::enable-expansion" handler="on_time_switch" swapped="no"/>
+        <property name="orientation">vertical</property>
+        <style>
+          <class name="reminder-labels"/>
+        </style>
+        <child>
+          <object class="GtkLabel" id="time_label">
+            <property name="halign">end</property>
+            <property name="vexpand">true</property>
+            <property name="visible">false</property>
+            <property name="xalign">1</property>
+            <property name="wrap">true</property>
+            <property name="justify">right</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="repeat_label">
+            <property name="halign">end</property>
+            <property name="vexpand">true</property>
+            <property name="visible">false</property>
+            <property name="xalign">1</property>
+            <property name="wrap">true</property>
+            <property name="justify">right</property>
+            <style>
+              <class name="subtitle"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child type="action">
+      <object class="GtkImage" id="past_due_icon">
+        <property name="visible">false</property>
+        <property name="icon-name">task-past-due-symbolic</property>
+      </object>
+    </child>
+    <child type="action">
+      <object class="GtkSeparator" id="separator">
+        <property name="orientation">vertical</property>
       </object>
     </child>
     <child>
       <object class="GtkListBoxRow">
         <property name="activatable">false</property>
+        <property name="hexpand">true</property>
         <style>
           <class name="save-row"/>
         </style>
@@ -36,120 +66,52 @@
             <child>
               <object class="GtkButton" id="remove_button">
                 <property name="valign">center</property>
-                <property name="label">Remove</property>
+                <property name="child">
+                  <object class="AdwButtonContent">
+                    <property name="icon-name">edit-delete-symbolic</property>
+                    <property name="label" translatable="yes">Remove</property>
+                  </object>
+                </property>
                 <style>
-                  <class name="destructive-action"/>
+                  <class name="remove"/>
+                  <class name="rounded"/>
                 </style>
-                <signal name="clicked" handler="on_remove" swapped="no" />
+                <signal name="clicked" handler="on_remove" swapped="no"/>
               </object>
             </child>
             <child>
               <object class="GtkButton" id="done_button">
                 <property name="valign">center</property>
+                <property name="child">
+                  <object class="AdwButtonContent" id="done_btn_content"/>
+                </property>
                 <signal name="clicked" handler="update_completed" swapped="no"/>
               </object>
             </child>
             <child>
               <object class="GtkBox">
                 <property name="hexpand">true</property>
-                <property name="orientation">horizontal</property>
-                <child>
-                  <object class="GtkRevealer" id="save_message">
-                    <property name="reveal-child">false</property>
-                    <property name="hexpand">true</property>
-                    <property name="halign">end</property>
-                    <property name="valign">center</property>
-                    <property name="transition-type">GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="label" translatable="yes">Unsaved changes</property>
-                        <property name="ellipsize">3</property>
-                        <property name="hexpand">true</property>
-                        <property name="halign">end</property>
-                        <property name="valign">center</property>
-                        <property name="justify">right</property>
-                        <style>
-                          <class name="caption"/>
-                        </style>
-                      </object>
-                    </child>
-                  </object>
-                </child>
               </object>
             </child>
             <child>
-              <object class="GtkBox">
-                <property name="orientation">horizontal</property>
-                <property name="spacing">5</property>
-                <property name="sensitive" bind-source="save_message" bind-property="reveal-child" bind-flags="sync-create"/>
-                <child>
-                  <object class="GtkButton" id="discard_button">
-                    <property name="valign">center</property>
-                    <property name="icon-name">document-revert-symbolic</property>
-                    <property name="tooltip-text" translatable="yes">Discard changes</property>
-                    <style>
-                      <class name="circular"/>
-                      <class name="discard-button"/>
-                    </style>
-                    <signal name="clicked" handler="discard_changes" swapped="no" />
-                    <accessibility>
-                      <property name="label" translatable="yes">Discard changes</property>
-                    </accessibility>
+              <object class="GtkButton" id="edit_button">
+                <property name="valign">center</property>
+                <property name="halign">end</property>
+                <property name="child">
+                  <object class="AdwButtonContent">
+                    <property name="icon-name">document-edit-symbolic</property>
+                    <property name="label" translatable="yes">Edit</property>
                   </object>
-                </child>
-                <child>
-                  <object class="GtkButton" id="save_button">
-                    <property name="valign">center</property>
-                    <property name="icon-name">object-select-symbolic</property>
-                    <property name="tooltip-text" translatable="yes">Save changes</property>
-                    <style>
-                      <class name="suggested-action"/>
-                      <class name="circular"/>
-                      <class name="save-button"/>
-                    </style>
-                    <signal name="clicked" handler="on_save" swapped="no" />
-                    <accessibility>
-                      <property name="label" translatable="yes">Save changes</property>
-                    </accessibility>
-                  </object>
-                </child>
+                </property>
+                <style>
+                  <class name="rounded"/>
+                </style>
+                <signal name="clicked" handler="edit" swapped="no"/>
               </object>
             </child>
           </object>
         </child>
       </object>
     </child>
-    <object class="GtkBox" id="label_box">
-      <property name="valign">fill</property>
-      <property name="halign">end</property>
-      <property name="hexpand">true</property>
-      <property name="orientation">vertical</property>
-      <style>
-        <class name="reminder-labels"/>
-      </style>
-      <child>
-        <object class="GtkLabel" id="time_label">
-          <property name="halign">end</property>
-          <property name="vexpand">true</property>
-          <property name="visible">false</property>
-          <property name="xalign">1</property>
-          <property name="wrap">true</property>
-          <property name="justify">right</property>
-        </object>
-      </child>
-      <child>
-        <object class="GtkLabel" id="repeat_label">
-          <property name="halign">end</property>
-          <property name="vexpand">true</property>
-          <property name="visible">false</property>
-          <property name="xalign">1</property>
-          <property name="wrap">true</property>
-          <property name="justify">right</property>
-          <style>
-            <class name="subtitle"/>
-          </style>
-        </object>
-      </child>
-    </object>
   </template>
 </interface>

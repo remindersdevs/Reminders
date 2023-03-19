@@ -10,12 +10,14 @@
   <summary>Set reminders for yourself</summary>
 
   <description>
-     <p>
-        Set reminders for anything you need help remembering.
-        Reminders will send a notification at a specified time, and at any time you can mark a reminder as complete so it doesn't notify you.
-        You can optionally make reminders recurring so they are shown multiple times.
-        You can also sort and filter your reminders, as well as search for specific reminders.
-     </p>
+    <p>Features:</p>
+    <ul>
+      <li>Recurring reminders</li>
+      <li>Scheduled notifications</li>
+      <li>Sort, filter, and search for reminders</li>
+      <li>Organize reminders using lists</li>
+      <li>Optionally sync with Microsoft To Do</li>
+    </ul>
   </description>
 
   <id>@APP_ID@</id>
@@ -75,6 +77,18 @@
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
   <releases>
+    <release version="2.0" date="2023-03-16">
+      <description>
+        <ul>
+          <li>Add support for task lists</li>
+          <li>Add support for syncing with Microsoft To Do</li>
+          <li>Reduced memory usage</li>
+          <li>Redesigned some UI elements</li>
+          <li>Better support for mobile devices</li>
+          <li>Fix some issues that occur when the service errors</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.5" date="2023-03-10">
       <description>
         <ul>

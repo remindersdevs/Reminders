@@ -1,20 +1,23 @@
 app-id: io.github.dgsasha.Remembrance.Devel
 runtime: org.gnome.Platform
-runtime-version: '43'
+runtime-version: '44'
 sdk: org.gnome.Sdk
 command: remembrance
 
 finish-args:
+  - --share=network
   - --share=ipc
   - --device=dri
   - --socket=wayland
   - --socket=fallback-x11
   - --system-talk-name=org.freedesktop.login1
+  - --talk-name=org.freedesktop.secrets
   - --socket=pulseaudio
 
 modules:
   - shared-modules/intltool/intltool-0.51.json
   - shared-modules/libcanberra/libcanberra.json
+  - python3-modules.json
 
   - name: libportal
     buildsystem: meson

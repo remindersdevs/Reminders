@@ -29,7 +29,7 @@ from remembrance.browser.about import about_window
 from remembrance.browser.preferences import PreferencesWindow
 
 # Always update this when new features are added that require the service to restart
-MIN_SERVICE_VERSION = 1.4
+MIN_SERVICE_VERSION = 2.0
 
 class Remembrance(Adw.Application):
     '''Application for the frontend'''
@@ -37,8 +37,8 @@ class Remembrance(Adw.Application):
         super().__init__(**kwargs)
         self.restart = False
         self.sandboxed = False
+        self.preferences = None
         self.page = 'all'
-        self.unsaved_reminders = []
         self.add_main_option(
             'version', ord('v'),
             GLib.OptionFlags.NONE,
@@ -142,15 +142,19 @@ class Remembrance(Adw.Application):
         self.service.connect('g-signal::ReminderDeleted', self.reminder_deleted_cb)
         self.service.connect('g-signal::ReminderUpdated', self.reminder_updated_cb)
         self.service.connect('g-signal::RepeatUpdated', self.repeat_updated_cb)
-        self.win.connect('close-request', self.on_close)
+        self.service.connect('g-signal::Refreshed', self.refreshed_cb)
+        self.service.connect('g-signal::ListUpdated', self.list_updated_cb)
+        self.service.connect('g-signal::ListRemoved', self.list_removed_cb)
         self.create_action('quit', self.quit_app)
-        self.create_action('preferences', self.show_preferences)
+        self.create_action('refresh', self.refresh_reminders, accels=['<Ctrl>r'])
+        self.create_action('preferences', self.show_preferences, accels=['<control>comma'])
         self.create_action('about', self.show_about)
         Gtk.StyleContext.add_provider_for_display(self.win.get_display(), self.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         self.win.present()
 
     def notification_clicked_cb(self, action, variant, data = None):
         self.page = 'past'
+        self.settings.set_value('selected-task-list', GLib.Variant('(ss)', ('all', 'all')))
         self.do_activate()
 
     def notification_completed_cb(self, action, variant, data = None):
@@ -164,6 +168,22 @@ class Remembrance(Adw.Application):
         except AttributeError:
             pass
 
+    def list_updated_cb(self, proxy, sender_name, signal_name, parameters):
+        app_id, user_id, list_id, list_name = parameters.unpack()
+        self.win.list_updated(user_id, list_id, list_name)
+        if self.preferences is not None:
+            self.preferences.list_updated(user_id, list_id, list_name)
+        if app_id != info.app_id and self.win.edit_lists_window is not None:
+            self.win.edit_lists_window.list_updated(user_id, list_id, list_name)
+
+    def list_removed_cb(self, proxy, sender_name, signal_name, parameters):
+        app_id, user_id, list_id = parameters.unpack()
+        self.win.list_removed(user_id, list_id)
+        if self.preferences is not None:
+            self.preferences.list_removed(user_id, list_id)
+        if app_id != info.app_id and self.win.edit_lists_window is not None:
+            self.win.edit_lists_window.list_removed(user_id, list_id)
+
     def reminder_completed_cb(self, proxy, sender_name, signal_name, parameters):
         app_id, reminder_id, completed = parameters.unpack()
         if app_id != info.app_id:
@@ -174,38 +194,43 @@ class Remembrance(Adw.Application):
         reminder = self.win.reminder_lookup_dict[reminder_id]
         reminder.update_repeat(timestamp, old_timestamp, repeat_times)
 
+    def refreshed_cb(self, proxy, sender_name, signal_name, parameters):
+        new_reminders, deleted_reminders = parameters.unpack()
+        for new_reminder in new_reminders:
+            reminder_id = new_reminder['id']
+            if reminder_id in self.win.reminder_lookup_dict:
+                reminder = self.win.reminder_lookup_dict[reminder_id]
+                reminder.update(new_reminder)
+                if new_reminder['completed'] != reminder.completed:
+                    reminder.set_completed(new_reminder['completed'])
+            else:
+                self.win.display_reminder(**new_reminder)
+        for reminder_id in deleted_reminders:
+            self.delete_reminder(reminder_id)
+
     def reminder_updated_cb(self, proxy, sender_name, signal_name, parameters):
         app_id, reminder = parameters.unpack()
         if app_id != info.app_id:
-            try:
-                self.win.reminder_lookup_dict[reminder['id']].update(
-                    reminder['title'],
-                    reminder['description'],
-                    reminder['timestamp'],
-                    reminder['repeat-type'],
-                    reminder['repeat-frequency'],
-                    reminder['repeat-days'],
-                    reminder['repeat-until'],
-                    reminder['repeat-times']
-                )
-            except KeyError:
-                self.win.display_reminder(
-                    reminder['id'],
-                    reminder['title'],
-                    reminder['description'],
-                    reminder['timestamp'],
-                    reminder['repeat-type'],
-                    reminder['repeat-frequency'],
-                    reminder['repeat-days'],
-                    reminder['repeat-until'],
-                    reminder['repeat-times']
-                )
+            reminder_id = reminder['id']
+            if reminder_id in self.win.reminder_lookup_dict:
+                self.win.reminder_lookup_dict[reminder_id].update(reminder)
+            else:
+                self.win.display_reminder(**reminder)
+
+    def delete_reminder(self, reminder_id):
+        try:
+            reminder = self.win.reminder_lookup_dict[reminder_id]
+
+            self.win.reminders_list.remove(reminder)
+
+            self.win.reminder_lookup_dict.pop(reminder_id)
+        except:
+            pass
 
     def reminder_deleted_cb(self, proxy, sender_name, signal_name, parameters):
         app_id, reminder_id = parameters.unpack()
         if app_id != info.app_id:
-            reminder = self.win.reminder_lookup_dict[reminder_id]
-            self.win.reminders_list.remove(reminder)
+            self.delete_reminder(reminder_id)
 
     def connect_to_service(self):
         self.service = Gio.DBusProxy.new_for_bus_sync(
@@ -243,7 +268,9 @@ class Remembrance(Adw.Application):
                 error_dialog.present()
                 loop.run()
                 sys.exit(1)
-            else:
+            elif 'failed to execute' in str(error): # method failed
+                raise error
+            else: # service was probably disconnected
                 self.connect_to_service()
                 retval = self.service.call_sync(
                     method,
@@ -257,36 +284,13 @@ class Remembrance(Adw.Application):
 
         return retval
 
-    def on_close(self, window = None):
-        if len(self.unsaved_reminders) > 0:
-            confirm_dialog = Adw.MessageDialog(
-                transient_for=self.win,
-                heading=_('You have unsaved changes'),
-                body=_('Are you sure you want to close the window?'),
-            )
-            confirm_dialog.add_response('cancel', _('Cancel'))
-            confirm_dialog.add_response('yes', _('Yes'))
-            confirm_dialog.set_response_appearance('yes', Adw.ResponseAppearance.DESTRUCTIVE)
-            confirm_dialog.set_default_response('cancel')
-            confirm_dialog.set_close_response('cancel')
-            confirm_dialog.connect('response::cancel', lambda *args: self.cancel_close())
-            confirm_dialog.connect('response::yes', lambda *args: self.win.destroy())
-            confirm_dialog.present()
-            return True
-        else:
-            self.win.destroy()
-
-    def cancel_close(self):
-        self.win.search_revealer.set_reveal_child(False)
-        for reminder in self.unsaved_reminders:
-            reminder.set_expanded(True)
-        self.win.selected = self.win.all_row
-        self.win.selected.emit('activate')
-
-    def create_action(self, name, callback, variant = None):
+    def create_action(self, name, callback, variant = None, accels = None):
         action = Gio.SimpleAction.new(name, variant)
         action.connect('activate', callback)
         action.set_enabled(True)
+
+        if accels is not None:
+            self.set_accels_for_action('app.' + name, accels)
 
         self.add_action(action)
 
@@ -296,9 +300,11 @@ class Remembrance(Adw.Application):
         win.present()
 
     def show_preferences(self, action, data):
-        win = PreferencesWindow(self)
-        win.set_transient_for(self.win)
-        win.present()
+        if self.preferences is None:
+            self.preferences = PreferencesWindow(self)
+            self.preferences.present()
+        else:
+            self.preferences.set_visible(True)
 
     def configure_logging(self):
         handler = logging.StreamHandler()
@@ -309,9 +315,15 @@ class Remembrance(Adw.Application):
         self.logger.setLevel(logging.INFO)
         self.logger.addHandler(handler)
 
+    def refresh_reminders(self, action = None, data = None):
+        self.run_service_method('Refresh', None)
+
     def quit_app(self, action, data):
         self.quit()
 
 def main():
-    app = Remembrance(application_id=info.app_id, flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
-    return app.run(sys.argv)
+    try:
+        app = Remembrance(application_id=info.app_id, flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
+        return app.run(sys.argv)
+    except:
+        sys.exit(1)
