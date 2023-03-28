@@ -10,12 +10,17 @@
     padding: 2px;
 }
 
+.reminders-list {
+    margin-bottom: 20px;
+}
+
 .day-button:checked {
     color: @accent_bg_color;
 }
 
-button, splitbutton {
-  transition-property: outline-color, outline-width, outline-offset, background, filter;
+button,
+splitbutton {
+    transition-property: outline-color, outline-width, outline-offset, background, filter;
 }
 
 label.time {
@@ -30,13 +35,13 @@ spinbutton button {
 }
 
 .add-reminder {
-    min-height: 50px;
-    min-width: 50px;
+    min-height: 48px;
+    min-width: 48px;
     margin: 10px;
 }
 
 row.time {
-    padding: 5px 10px;
+    padding: 5px 15px;
 }
 
 .am-pm-button {
@@ -51,22 +56,12 @@ row.time {
     padding: 10px;
 }
 
-button.complete {
-    background-color: @success_bg_color;
-    color: @accent_fg_color;
-}
-
-button.incomplete {
-    background-color: @warning_bg_color;
-    color: @accent_fg_color;
-}
-
 .navigation-sidebar row {
     padding: 3px 11px;
 }
 
-.navigation-sidebar:disabled row image {
-    opacity: 0.5;
+.task-lists {
+    margin: 24px;
 }
 
 .error-message {
@@ -95,13 +90,116 @@ box.main {
     padding: 15px;
 }
 
-.page-heading {
+.page-heading-box {
     margin: 0 5px;
+}
+
+.page-sub-heading {
+    opacity: 0.6;
+    font-weight: 650;
+}
+
+.task-list-row {
+    padding: 2px 10px;
+    min-height: 44px;
+}
+
+.ms-accounts box.header {
+    padding: 0;
+    min-height: 44px;
+}
+
+.row-button {
+    font-weight: 500;
+}
+
+.row-button.suggested-action {
+    color: @accent_bg_color;
+}
+
+.row-button.destructive-action {
+    color: @destructive_bg_color;
+}
+
+.row-button.activatable:hover {
+    background-color: alpha(currentColor, 0.07);
+}
+
+.row-button.activatable:active {
+    background-color: alpha(currentColor, 0.16);
+}
+
+button.rounded {border-radius: 17px;}
+
+button.remove {
+    background-color: alpha(@destructive_bg_color, 0.3);
+}
+
+button.complete {
+    background-color: alpha(@success_bg_color, 0.3);
+}
+
+button.incomplete {
+    background-color: alpha(@warning_bg_color, 0.3);
+}
+
+button.remove:hover {
+    background-color: alpha(@destructive_bg_color, 0.4);
+}
+
+button.complete:hover {
+    background-color: alpha(@success_bg_color, 0.4);
+}
+
+button.incomplete:hover {
+    background-color: alpha(@warning_bg_color, 0.4);
+}
+
+button.remove:active {
+    background-color: alpha(@destructive_bg_color, 0.55);
+}
+
+button.complete:active {
+    background-color: alpha(@success_bg_color, 0.55);
+}
+
+button.incomplete:active {
+    background-color: alpha(@warning_bg_color, 0.55);
+}
+
+.main-box {
+    margin: 24px 12px;
+    border-spacing: 24px;
+}
+
+.reminder-edit-window .response-area > button {
+    padding: 12px 14px;
+    border-radius: 0;
+    box-shadow: none;
+    margin-top: -1px;
+    margin-right: -1px;
+    margin-left: -1px;
+}
+
+.reminder-edit-window .response-area > button.suggested {
+    color: @accent_bg_color;
+}
+
+.reminder-edit-window .response-area > button:first-child:dir(ltr),
+.reminder-edit-window .response-area > button:last-child:dir(rtl) {
+    border-bottom-left-radius: 12px;
+    margin-left: 0;
+}
+
+.reminder-edit-window .response-area > button:last-child:dir(ltr),
+.reminder-edit-window .response-area > button:first-child:dir(rtl) {
+    border-bottom-right-radius: 12px;
+    margin-right: 0;
 }
 
 /* Elaborate fix for https://gitlab.gnome.org/GNOME/gtk/-/issues/5309 */
 .reminders-list > row:nth-last-child(2),
-.reminders-list > row.expander:nth-last-child(2):not(:checked) > box > list > row.header /* Only if using expander rows */,
+.reminders-list > row.expander:nth-last-child(2):not(:checked) > box > list > row.header,
 .reminders-list > row.expander:nth-last-child(2) > box > revealer > list.nested > row:last-child {
     border-bottom: 0;
     border-bottom-left-radius: 12px;
@@ -112,21 +210,13 @@ box.main {
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
 }
-.reminders-list > row:disabled + row:not(:disabled),
-.reminders-list > row:disabled + row.expander:not(:disabled) > box > list > row.header {
+
+.reminders-list > row:disabled+row:not(:disabled),
+.reminders-list > row:disabled+row.expander:not(:disabled) > box > list > row.header {
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
 }
 
-/* Add support for nested expander */
-list.nested row.header {
-    border-radius: 0;
-}
-list.nested row.expander {
-    border-bottom: 0;
-}
-list.nested list.nested {
-    background-color: transparent;
-}
+
 
 

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="application_window" parent="AdwApplicationWindow">
+    <style>
+      <class name="remembrance"/>
+    </style>
     <property name="content">
       <object class="GtkBox">
         <property name="orientation">vertical</property>
@@ -82,7 +85,7 @@
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkListBox" id="sidebar_list">
-                    <property name="width-request">220</property>
+                    <property name="width-request">240</property>
                     <property name="vexpand">True</property>
                     <style>
                       <class name="navigation-sidebar"/>
@@ -181,6 +184,23 @@
                     </child>
                   </object>
                 </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="halign">center</property>
+                    <property name="valign">end</property>
+                    <style>
+                      <class name="task-lists"/>
+                    </style>
+                    <child>
+                      <object class="GtkMenuButton" id="task_list_picker">
+                        <property name="tooltip-text" translatable="yes">Select task list</property>
+                        <style>
+                          <class name="flat"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </property>
             <child type="separator">
@@ -211,14 +231,34 @@
                                 <property name="spacing">15</property>
                                 <property name="orientation">vertical</property>
                                 <child>
-                                  <object class="GtkLabel" id="page_label">
-                                    <property name="valign">start</property>
-                                    <property name="halign">start</property>
-                                    <property name="label" translatable="yes">All Reminders</property>
+                                  <object class="GtkBox">
+                                    <property name="orientation">vertical</property>
+                                    <property name="spacing">2</property>
                                     <style>
-                                      <class name="title-1"/>
-                                      <class name="page-heading"/>
+                                      <class name="page-heading-box"/>
                                     </style>
+                                    <child>
+                                      <object class="GtkLabel" id="page_label">
+                                        <property name="valign">start</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">All Reminders</property>
+                                        <style>
+                                          <class name="title-1"/>
+                                          <class name="page-heading"/>
+                                        </style>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="page_sub_label">
+                                        <property name="valign">start</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" bind-source="task_list_picker" bind-property="label" bind-flags="sync-create"/>
+                                        <style>
+                                          <class name="title-4"/>
+                                          <class name="page-sub-heading"/>
+                                        </style>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                                 <child>
@@ -255,7 +295,7 @@
                           <object class="GtkButton" id="add_reminder">
                             <property name="icon-name">list-add-symbolic</property>
                             <property name="halign">end</property>
-                            <property name="tooltip-text" translatable="yes">Add a reminder</property>
+                            <property name="tooltip-text" translatable="yes">Add a reminder (Ctrl+N)</property>
                             <style>
                               <class name="suggested-action"/>
                               <class name="circular"/>
@@ -281,13 +321,21 @@
   <menu id="menu">
     <section>
       <item>
-        <attribute name="label" translatable="yes">Preferences</attribute>
-        <attribute name="action">app.preferences</attribute>
+        <attribute name="label" translatable="yes">Refresh</attribute>
+        <attribute name="action">app.refresh</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Create/Edit Lists</attribute>
+        <attribute name="action">win.edit-task-lists</attribute>
       </item>
     </section>
     <section>
       <item>
-        <attribute name="label" translatable="yes">About</attribute>
+        <attribute name="label" translatable="yes">Preferences</attribute>
+        <attribute name="action">app.preferences</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">About Reminders</attribute>
         <attribute name="action">app.about</attribute>
       </item>
     </section>

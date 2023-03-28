@@ -1,10 +1,11 @@
 resources = files(
+    'ui/edit_lists_window.ui',
     'ui/error_dialog.ui',
     'ui/main_window.ui',
+    'ui/ms_user_row.ui',
     'ui/preferences.ui',
     'ui/reminder.ui',
-    'ui/repeat_dialog.ui',
-    'ui/time_row.ui',
+    'ui/reminder_edit_window.ui',
     'stylesheet.css'
 )
 

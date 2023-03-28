@@ -49,5 +49,20 @@
     <key name="is-maximized" type="b">
       <default>false</default>
     </key>
+    <key name="sync-ms" type="b">
+      <default>false</default>
+      <summary>Sync with Microsoft To Do</summary>
+      <description>Reverse order of completed reminders when sorted by time</description>
+    </key>
+    <key name="synced-task-lists" type="a{sas}">
+      <default>[]</default>
+      <summary>Task lists that should be synced</summary>
+      <description>{user_id: [task_list_ids]}, task_list_ids can be 'all' or an array of ids</description>
+    </key>
+    <key name="selected-task-list" type="(ss)">
+      <default>('all', 'all')</default>
+      <summary>Task lists that should be visible</summary>
+      <description>(user_id, task_id) ids can be 'all', 'local', or an actual id</description>
+    </key>
   </schema>
 </schemalist>

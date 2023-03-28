@@ -36,6 +36,8 @@ flatpak run io.github.dgsasha.Remembrance.Devel --restart-service
 - `Libadwaita`
 - `GLib`
 - `GSound`
+- `python3-msal`
+- `python3-requests`
 
 ## Building (generic):
 ```
@@ -49,10 +51,10 @@ remembrance --restart-service
 ```
 
 ## Todo
-- Possibly allow syncing with Microsoft To Do
-- Make a GNOME Shell extension that lets you view (and maybe edit) your reminders
+- Show some kind of spinner when refreshing
+- Warn user when they are offline
+- Make a GNOME Shell extension that lets you view your reminders
 - Maybe integrate the search with GNOME Shell
-- Possibly add some more animations and UI improvements
 
 If you want to contribute anything, just open a pull request. Depending on what you are going to contribute, you might want to [email me](mailto:dgsasha04@gmail.com) first. This will let me help you get started and it will also help me make sure that multiple people aren't working on the same feature without knowing it.
 

@@ -4,11 +4,13 @@ conf.set('LOCALE_DIR', get_option('prefix') / get_option('localedir'))
 
 source_files = files(
   '__init__.py',
-  'application.py',
-  'main_window.py',
-  'reminder.py',
   'about.py',
-  'preferences.py'
+  'application.py',
+  'edit_lists_window.py',
+  'main_window.py',
+  'preferences.py',
+  'reminder.py',
+  'reminder_edit_window.py'
 )
 
 install_data(

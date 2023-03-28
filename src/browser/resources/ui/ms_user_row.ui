@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="user_row" parent="AdwExpanderRow">
+    <child>
+      <object class="GtkListBoxRow" id="task_list_row">
+        <property name="activatable">false</property>
+        <style>
+          <class name="task-list-row"/>
+        </style>
+        <child>
+          <object class="GtkGrid" id="task_list_grid">
+            <property name="row-spacing">5</property>
+            <property name="column-spacing">5</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkCheckButton" id="all_check">
+                <property name="hexpand">true</property>
+                <property name="label" translatable="yes">All</property>
+                <signal name="toggled" handler="all_lists_selected" swapped="no"/>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwActionRow" id="sign_out_row">
+        <property name="activatable">true</property>
+        <style>
+          <class name="row-button"/>
+          <class name="destructive-action"/>
+        </style>
+        <child type="prefix">
+          <object class="GtkLabel">
+            <property name="valign">center</property>
+            <property name="halign">center</property>
+            <property name="label" translatable="yes">Sign Out</property>
+          </object>
+        </child>
+        <child type="prefix">
+          <object class="GtkBox">
+            <property name="hexpand">true</property>
+            <property name="halign">start</property>
+          </object>
+        </child>
+        <signal name="activated" handler="sign_out" swapped="no"/>
+      </object>
+    </child>
+  </template>
+</interface>
