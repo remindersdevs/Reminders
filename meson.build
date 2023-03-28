@@ -1,6 +1,6 @@
 project(
     'remembrance',
-    version: '2.0 Alpha',
+    version: '2.0 Beta',
     meson_version: '>= 0.59',
     default_options: ['prefix=/usr']
 )
@@ -10,19 +10,30 @@ dependency('pygobject-3.0')
 dependency('libadwaita-1')
 dependency('gsound')
 
-devel = get_option('devel')
+release_type = get_option('release-type')
 
 service_version = '2.0'
 
 app_executable = 'remembrance'
 
 base_app_id = 'io.github.dgsasha.Remembrance'
+beta_app_id = base_app_id + '.Beta'
 devel_app_id = base_app_id + '.Devel'
 
-app_id = devel ?  devel_app_id : base_app_id
-
 base_path = '/io/github/dgsasha/Remembrance'
-path = devel ? base_path + '/Devel' : base_path
+beta_path = base_path + '/Beta'
+devel_path = base_path + '/Devel'
+
+if release_type == 'beta'
+    app_id = beta_app_id
+    path = beta_path
+elif release_type == 'devel'
+    app_id = devel_app_id
+    path = devel_path
+else
+    app_id = base_app_id
+    path = base_path
+endif
 
 service_executable = 'remembrance-service'
 service_id = app_id + '.Service1'

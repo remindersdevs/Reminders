@@ -49,7 +49,7 @@ modules:
     buildsystem: meson
     config-opts:
       - -Denable-portals=true
-      - -Ddevel=true
+      - -Drelease-type=devel
     sources:
       - type: dir
         path: '../'
