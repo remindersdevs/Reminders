@@ -1035,6 +1035,8 @@ class Reminders():
                     ms_list_names.pop('local')
                 list_names['local'] = all_list_names['local'] if 'local' in all_list_names.keys() else {}
 
+        if 'local' not in list_names.keys():
+            list_names['local'] = {}
         if 'local' not in list_names['local'].keys():
             list_names['local']['local'] = _('Local Reminders')
 
