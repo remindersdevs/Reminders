@@ -1,4 +1,4 @@
-# reminder.py - UI For each reminder
+# reminder.py
 # Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify it under
@@ -39,37 +39,20 @@ class Reminder(Adw.ExpanderRow):
     done_btn_content = Gtk.Template.Child()
 
     def __init__(
-        self, win,
+        self,
+        win,
+        options,
         reminder_id = None,
-        timestamp = 0,
         completed = False,
-        repeat_type = 0,
-        repeat_frequency = 1,
-        repeat_days = 0,
-        repeat_until = 0,
-        repeat_times = 1,
-        old_timestamp = 0,
-        task_list = 'local',
-        user_id = 'local',
         **kwargs
     ):
         super().__init__(**kwargs)
         self.win = win
         self.app = win.app
         self.id = reminder_id
-        self.options = {
-            'title': self.get_title(),
-            'description': self.get_subtitle(),
-            'timestamp': timestamp,
-            'repeat-type': repeat_type,
-            'repeat-frequency': repeat_frequency,
-            'repeat-days': repeat_days,
-            'repeat-until': repeat_until,
-            'repeat-times': repeat_times,
-            'old-timestamp': old_timestamp,
-            'list': task_list,
-            'user-id': user_id 
-        }
+        self.options = options
+        self.set_title(options['title'])
+        self.set_subtitle(options['description'])
         self.past = False
 
         self.completed_icon_box = self.completed_icon.get_parent().get_parent()
@@ -87,10 +70,6 @@ class Reminder(Adw.ExpanderRow):
         self.refresh_time()
 
         self.win.connect('notify::time-format', lambda *args: self.set_time_label())
-
-        if self.id is None:
-            self.set_visible(False)
-            self.edit()
 
     def set_past(self, past):
         if self.past != past:
@@ -135,6 +114,8 @@ class Reminder(Adw.ExpanderRow):
                 edit_win.task_list = options['list']
                 edit_win.user_id = options['user-id']
                 edit_win.set_task_list_dropdown_selected()
+    
+            self.edit_win.options = options.copy()
 
         self.set_options(options)
 

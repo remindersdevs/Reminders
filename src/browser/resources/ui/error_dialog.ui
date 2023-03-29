@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <object class="AdwWindow" id="error_dialog">
-    <property name="default-height">200</property>
-    <property name="default-width">400</property>
-    <property name="resizable">false</property>
-    <property name="title" translatable="yes">Reminders failed to start</property>
+  <template class="error_dialog" parent="AdwWindow">
+    <property name="default-height">300</property>
+    <property name="default-width">500</property>
     <property name="content">
       <object class="GtkBox">
         <property name="orientation">vertical</property>
@@ -13,18 +11,46 @@
         </child>
         <child>
           <object class="GtkBox">
+            <property name="spacing">16</property>
+            <property name="orientation">vertical</property>
+            <style>
+              <class name="error-body"/>
+            </style>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="body">
                 <property name="wrap">true</property>
-                <property name="label" translatable="yes">Due to a bug in Flatpak you will have to log out and log back in before using Reminders.</property>
+                <property name="halign">start</property>
                 <style>
-                  <class name="error-message"/>
+                  <class name="error-text"/>
                 </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkExpander">
+                <child type="label">
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">View Error</property>
+                    <style>
+                      <class name="error-text"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="vexpand">true</property>
+                    <child>
+                      <object class="GtkTextView" id="error">
+                        <property name="editable">false</property>
+                        <property name="monospace">true</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
         </child>
       </object>
     </property>
-  </object>
+  </template>
 </interface>

@@ -1,5 +1,5 @@
 #!@PYTHON_PATH@
-# Remembrance service - Backend for Remembrance
+# remembrance-service.py
 # Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify it under

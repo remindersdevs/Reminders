@@ -1,4 +1,4 @@
-# reminder.py - UI For each reminder
+# reminder_edit_window.py
 # Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify it under
@@ -22,6 +22,21 @@ from gettext import gettext as _
 from math import floor
 
 from remembrance import info
+from remembrance.browser.reminder import Reminder
+
+DEFAULT_OPTIONS = {
+    'title': '',
+    'description': '',
+    'timestamp': 0,
+    'repeat-type': 0,
+    'repeat-frequency': 1,
+    'repeat-days': 0,
+    'repeat-until': 0,
+    'repeat-times': 1,
+    'old-timestamp': 0,
+    'list': 'local',
+    'user-id': 'local' 
+}
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/reminder_edit_window.ui')
 class ReminderEditWindow(Adw.Window):
@@ -54,52 +69,58 @@ class ReminderEditWindow(Adw.Window):
     repeat_until_calendar = Gtk.Template.Child()
     repeat_duration_button = Gtk.Template.Child()
 
-    def __init__(self, reminder, **kwargs):
+    def __init__(self, win, app, reminder = None, **kwargs):
         super().__init__(**kwargs)
         self.task_list_row_connection = None
-        self.win = reminder.win
-        self.app = reminder.app
-        self.set_transient_for(self.win)
+        self.win = win
+        self.app = app
+        self.set_transient_for(win)
         self.setup(reminder)
         self.win.connect('notify::time-format', lambda *args: self.time_format_updated())
 
     def setup(self, reminder):
-        self.id = reminder.id
         self.reminder = reminder
 
-        self.task_list = reminder.options['list']
-        self.user_id = reminder.options['user-id']
+        if reminder is not None:
+            self.options = reminder.options.copy()
+            self.id = reminder.id
+            self.task_list = self.options['list']
+            self.user_id = self.options['user-id']
+        else:
+            self.options = DEFAULT_OPTIONS.copy()
+            self.id = None
+            self.task_list = self.win.selected_list_id if self.win.selected_list_id != 'all' else 'local'
+            self.user_id = self.win.selected_user_id if self.win.selected_user_id != 'all' else 'local'
 
         self.time_set = False
-        self.repeat_days = reminder.options['repeat-days']
-        self.set_time(reminder.options['timestamp'])
+        self.repeat_days = self.options['repeat-days']
+        self.set_time(self.options['timestamp'])
         self.time_format_updated()
         self.time_set = True
 
         self.set_task_list_dropdown()
         self.task_list_visibility_changed()
 
-        self.set_repeat_type(reminder.options['repeat-type'])
-        self.set_repeat_frequency(reminder.options['repeat-frequency'])
+        self.set_repeat_type(self.options['repeat-type'])
+        self.set_repeat_frequency(self.options['repeat-frequency'])
         self.repeat_days = 0 # this will get set again
-        self.set_repeat_days(reminder.options['repeat-days'])
-        self.set_repeat_duration(reminder.options['repeat-until'], reminder.options['repeat-times'])
+        self.set_repeat_days(self.options['repeat-days'])
+        self.set_repeat_duration(self.options['repeat-until'], self.options['repeat-times'])
         self.repeat_day_changed()
 
-        if self.id is not None:
-            self.title_entry.set_text(reminder.options['title'])
-            self.description_entry.set_text(reminder.options['description'])
+        self.title_entry.set_text(self.options['title'])
+        self.description_entry.set_text(self.options['description'])
+
+        if reminder is not None:
             self.set_title(_('Edit Reminder'))
         else:
-            self.title_entry.set_text('')
-            self.description_entry.set_text('')
             self.set_title(_('New Reminder'))
 
         self.repeat_duration_selected_changed()
         self.repeat_type_selected_changed()
 
     def get_options(self):
-        options = self.reminder.options.copy()
+        options = self.options.copy()
         options['title'] = self.title_entry.get_text()
         options['description'] = self.description_entry.get_text()
         options['timestamp'] = self.get_timestamp() if self.time_row.get_enable_expansion() else 0
@@ -131,13 +152,13 @@ class ReminderEditWindow(Adw.Window):
             options['repeat-until'] = 0
             if options['timestamp'] > floor(time.time()):
                 options['repeat-times'] = 1
-            elif self.reminder.options['repeat-type'] != 0:
+            elif self.reminder is not None and self.reminder.options['repeat-type'] != 0:
                 options['repeat-times'] = 0
 
         return options
 
     def check_changed(self, options):
-        return options != self.reminder.options
+        return options != self.options
 
     def task_list_changed(self, row = None, param = None):
         self.task_list, self.user_id = self.win.task_list_ids[self.task_list_row.get_selected()]
@@ -164,7 +185,7 @@ class ReminderEditWindow(Adw.Window):
 
     def update_date_button_label(self):
         self.date_button.set_label(self.win.get_date_label(self.time))
-        self.repeat_until_btn.set_label(self.win.get_date_label(self.time))
+        self.repeat_until_btn.set_label(self.win.get_date_label(self.repeat_until_calendar.get_date()))
 
     def get_timestamp(self):
         return self.time.to_unix()
@@ -490,8 +511,6 @@ class ReminderEditWindow(Adw.Window):
                     )
                 )
                 self.id = reminder_id.unpack()[0]
-                self.win.reminder_lookup_dict[self.id] = self.reminder
-                self.reminder.id = self.id
             else:
                 self.app.run_service_method(
                     'UpdateReminder',
@@ -517,8 +536,13 @@ class ReminderEditWindow(Adw.Window):
                     )
                 )
 
-            self.reminder.set_options(options)
+            self.options = options
+
+            if self.reminder is not None:
+                self.reminder.set_options(self.options)
+            else:
+                self.reminder = Reminder(self.win, self.options, self.id)
+                self.win.reminders_list.append(self.reminder)
+                self.win.reminder_lookup_dict[self.id] = self.reminder
 
         self.set_visible(False)
-        if not self.reminder.get_visible():
-            self.reminder.set_visible(True)

@@ -8,32 +8,37 @@
     <child>
       <object class="AdwPreferencesPage">
         <child>
-          <object class="AdwPreferencesGroup" id="ms_sync">
-            <property name="title" translatable="yes">Sync with Microsoft To Do</property>
+          <object class="AdwPreferencesGroup" id="cloud_syncing">
+            <property name="title" translatable="yes">Cloud Syncing</property>
             <style>
               <class name="ms-accounts"/>
             </style>
             <child>
-              <object class="AdwActionRow" id="add_account_row">
-                <style>
-                  <class name="row-button"/>
-                  <class name="suggested-action"/>
-                </style>
-                <property name="activatable">true</property>
-                <child type="prefix">
-                  <object class="GtkLabel">
-                    <property name="valign">center</property>
-                    <property name="halign">center</property>
-                    <property name="label" translatable="yes">Add Account</property>
+              <object class="AdwExpanderRow" id="ms_sync_row">
+                <property name="title" translatable="yes">Microsoft To Do</property>
+                <child>
+                  <object class="AdwActionRow" id="add_account_row">
+                    <style>
+                      <class name="row-button"/>
+                      <class name="suggested-action"/>
+                    </style>
+                    <property name="activatable">true</property>
+                    <child type="prefix">
+                      <object class="GtkLabel">
+                        <property name="valign">center</property>
+                        <property name="halign">center</property>
+                        <property name="label" translatable="yes">Add Account</property>
+                      </object>
+                    </child>
+                    <child type="prefix">
+                      <object class="GtkBox">
+                        <property name="hexpand">true</property>
+                        <property name="halign">start</property>
+                      </object>
+                    </child>
+                    <signal name="activated" handler="sign_in" swapped="no"/>
                   </object>
                 </child>
-                <child type="prefix">
-                  <object class="GtkBox">
-                    <property name="hexpand">true</property>
-                    <property name="halign">start</property>
-                  </object>
-                </child>
-                <signal name="activated" handler="sign_in" swapped="no"/>
               </object>
             </child>
           </object>

@@ -1,4 +1,4 @@
-# ms_to_do.py - Syncing with Microsoft To Do
+# ms_to_do.py
 # Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify it under
@@ -59,16 +59,18 @@ class MSToDo():
         except:
             pass
 
-    def do_request(self, method, url, data = None, headers = None):
+    def do_request(self, method, url, user_id, data = None, retry = True):
         try:
-            results = requests.request(method, url, data=data, headers=headers)
+            if data is None:
+                results = requests.request(method, f'{GRAPH}/{url}', headers={'Authorization': f'Bearer {self.tokens[user_id]}'})
+            else:
+                results = requests.request(method, f'{GRAPH}/{url}', data=json.dumps(data), headers={'Authorization': f'Bearer {self.tokens[user_id]}', 'Content-Type': 'application/json'})
             results.raise_for_status()
             return results
         except requests.HTTPError as error:
-            if error.response.status_code == 401:
+            if error.response.status_code == 401 and retry:
                 self.get_tokens()
-                results = requests.request(method, url, data=data, headers=headers)
-                results.raise_for_status()
+                results = self.do_request(method, url, user_id, data, False)
                 return results
             else:
                 logger.error(error)
@@ -83,7 +85,7 @@ class MSToDo():
             accounts = self.app.get_accounts()
             for account in accounts:
                 token = self.app.acquire_token_silent(SCOPES, account)['access_token']
-                result = self.do_request('GET', f'{GRAPH}/me', headers={'Authorization': f'Bearer {token}'}).json()
+                result = self.do_request('GET', 'me', result['id']).json()
 
                 self.tokens[result['id']] = token
                 self.users[result['id']] = {
@@ -137,7 +139,7 @@ class MSToDo():
         token = response['access_token']
         local_account_id = response['id_token_claims']['oid']
         try:
-            result = self.do_request('GET', f'{GRAPH}/me', headers={'Authorization': f'Bearer {token}'}).json()
+            result = self.do_request('GET', 'me', result['id']).json()
 
             self.tokens[result['id']] = token
             self.users[result['id']] = {
@@ -215,7 +217,7 @@ class MSToDo():
                 self.get_tokens()
 
             if user_id in self.tokens.keys():
-                results = self.do_request('POST', f'{GRAPH}/me/todo/lists/{task_list}/tasks', data=json.dumps(task), headers={'Authorization': f'Bearer {self.tokens[user_id]}', 'Content-Type': 'application/json'})
+                results = self.do_request('POST', f'me/todo/lists/{task_list}/tasks', user_id, data=json.dumps(task))
                 results = results.json()
                 return results['id']
         except requests.ConnectionError as error:
@@ -232,7 +234,7 @@ class MSToDo():
                 self.get_tokens()
 
             if user_id in self.tokens.keys():
-                results = self.do_request('PATCH', f'{GRAPH}/me/todo/lists/{task_list}/tasks/{task_id}', data=json.dumps(task), headers={'Authorization': f'Bearer {self.tokens[user_id]}', 'Content-Type': 'application/json'})
+                results = self.do_request('PATCH', f'me/todo/lists/{task_list}/tasks/{task_id}', user_id, data=json.dumps(task))
                 results = results.json()
                 return results['id']
         except requests.ConnectionError as error:
@@ -249,7 +251,7 @@ class MSToDo():
                 self.get_tokens()
 
             if user_id in self.tokens.keys():
-                self.do_request('DELETE', f'{GRAPH}/me/todo/lists/{task_list}/tasks/{task_id}', headers={'Authorization': f'Bearer {self.tokens[user_id]}'})
+                self.do_request('DELETE', f'me/todo/lists/{task_list}/tasks/{task_id}', user_id)
         except requests.ConnectionError as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
@@ -265,7 +267,7 @@ class MSToDo():
                 self.get_tokens()
 
             if user_id in self.tokens.keys():
-                results = self.do_request('POST', f'{GRAPH}/me/todo/lists', data=json.dumps(content), headers={'Authorization': f'Bearer {self.tokens[user_id]}', 'Content-Type': 'application/json'})
+                results = self.do_request('POST', f'me/todo/lists', user_id, data=json.dumps(content))
                 results = results.json()
                 return results['id']
         except requests.ConnectionError as error:
@@ -283,7 +285,7 @@ class MSToDo():
                 self.get_tokens()
 
             if user_id in self.tokens.keys():
-                results = self.do_request('PATCH', f'{GRAPH}/me/todo/lists/{ms_id}', data=json.dumps(content), headers={'Authorization': f'Bearer {self.tokens[user_id]}', 'Content-Type': 'application/json'})
+                results = self.do_request('PATCH', f'me/todo/lists/{ms_id}', user_id, data=json.dumps(content))
         except requests.ConnectionError as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
@@ -298,7 +300,7 @@ class MSToDo():
                 self.get_tokens()
 
             if user_id in self.tokens.keys():
-                results = self.do_request('DELETE', f'{GRAPH}/me/todo/lists/{ms_id}', headers={'Authorization': f'Bearer {self.tokens[user_id]}'})
+                results = self.do_request('DELETE', f'me/todo/lists/{ms_id}', user_id)
         except requests.ConnectionError as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
@@ -315,7 +317,7 @@ class MSToDo():
 
         for user_id in self.tokens.keys():
             try:
-                results = self.do_request('GET', f'{GRAPH}/me/todo/lists', headers={'Authorization': f'Bearer {self.tokens[user_id]}'})
+                results = self.do_request('GET', 'me/todo/lists', user_id)
                 lists = results.json()
 
                 task_lists[user_id] = []
@@ -327,7 +329,7 @@ class MSToDo():
                     if user_id not in synced_lists or ('all' not in synced_lists[user_id] and list_id not in synced_lists[user_id]):
                         tasks = []
                     else:
-                        results = self.do_request('GET', f'{GRAPH}/me/todo/lists/{list_id}/tasks', headers={'Authorization': f'Bearer {self.tokens[user_id]}'})
+                        results = self.do_request('GET', f'me/todo/lists/{list_id}/tasks', user_id)
                         tasks = results.json()['value']
 
                     task_lists[user_id].append({

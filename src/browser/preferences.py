@@ -1,4 +1,4 @@
-# Remembrance preferences window
+# preferences.py
 # Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify it under
@@ -25,7 +25,7 @@ class PreferencesWindow(Adw.PreferencesWindow):
     time_format_row = Gtk.Template.Child()
     completed_last_row = Gtk.Template.Child()
     completed_reversed_switch = Gtk.Template.Child()
-    ms_sync = Gtk.Template.Child()
+    ms_sync_row = Gtk.Template.Child()
     add_account_row = Gtk.Template.Child()
 
     def __init__(self, app, **kwargs):
@@ -69,22 +69,24 @@ class PreferencesWindow(Adw.PreferencesWindow):
                 check.set_active(list_id in self.synced[user_id])
 
     def on_close(self, window, data = None):
-        self.synced = {}
+        synced = {}
         for user_id, row in self.user_rows.items():
             if row.task_list_row.get_visible():
                 row.update_synced()
-                self.synced[user_id] = row.synced
-        self.settings.set_value('synced-task-lists', GLib.Variant('a{sas}', self.synced))
-        self.app.refresh_reminders()
+                synced[user_id] = row.synced
+        if self.synced != synced:
+            self.synced = synced
+            self.settings.set_value('synced-task-lists', GLib.Variant('a{sas}', self.synced))
+            self.app.refresh_reminders()
         self.set_visible(False)
         return True
 
     def on_signed_in(self, user_id, email):
         names = self.app.win.all_task_list_names[user_id] if user_id in self.app.win.all_task_list_names else {}
         self.user_rows[user_id] = MSUserRow(self, user_id, email, names)
-        self.ms_sync.add(self.user_rows[user_id])
-        self.ms_sync.remove(self.add_account_row)
-        self.ms_sync.add(self.add_account_row) # move to end
+        self.ms_sync_row.add_row(self.user_rows[user_id])
+        self.ms_sync_row.remove(self.add_account_row)
+        self.ms_sync_row.add_row(self.add_account_row) # move to end
 
     def list_updated(self, user_id, list_id, list_name):
         if user_id in self.user_rows.keys():
@@ -95,7 +97,7 @@ class PreferencesWindow(Adw.PreferencesWindow):
             self.user_rows[user_id].task_list_deleted(list_id)
 
     def on_signed_out(self, user_id):
-        self.ms_sync.remove(self.user_rows[user_id])
+        self.ms_sync_row.remove(self.user_rows[user_id])
         self.user_rows.pop(user_id)
 
     def update_dropdown(self):

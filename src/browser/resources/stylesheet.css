@@ -64,9 +64,12 @@ row.time {
     margin: 24px;
 }
 
-.error-message {
+.error-body {
     margin: 10px;
-    font-size: 125%;
+}
+
+.error-text {
+    font-size: 120%;
 }
 
 button.repeat label,
@@ -218,5 +221,18 @@ button.incomplete:active {
 }
 
 
+/* Add support for nested expander */
+list.nested row.header {
+    border-radius: 0;
+}
 
+list.nested row.expander:not(:checked) {
+    border-bottom: 0;
+}
 
+list.nested list.nested {
+    background-color: alpha(@card_shade_color, 0.3);
+    border-radius: 0;
+}
+
+    

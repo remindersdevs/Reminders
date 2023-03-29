@@ -1,4 +1,4 @@
-# application.py - Frontend application for Remembrance
+# application.py
 # Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify it under
@@ -16,6 +16,7 @@
 import sys
 import gi
 import logging
+import traceback
 
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
@@ -24,6 +25,7 @@ from gi.repository import Gtk, Adw, GLib, Gio
 from gettext import gettext as _
 
 from remembrance import info
+from remembrance.browser.error_dialog import ErrorDialog
 from remembrance.browser.main_window import MainWindow
 from remembrance.browser.about import about_window
 from remembrance.browser.preferences import PreferencesWindow
@@ -38,6 +40,7 @@ class Remembrance(Adw.Application):
         self.restart = False
         self.sandboxed = False
         self.preferences = None
+        self.win = None
         self.page = 'all'
         self.add_main_option(
             'version', ord('v'),
@@ -84,6 +87,7 @@ class Remembrance(Adw.Application):
     def do_startup(self):
         Adw.Application.do_startup(self)
         self.configure_logging()
+
         if info.portals_enabled:
             import gi
             gi.require_version('Xdp', '1.0')
@@ -134,7 +138,7 @@ class Remembrance(Adw.Application):
         self.check_service_version()
 
         self.settings = Gio.Settings(info.base_app_id)
-        self.win = MainWindow(self.page, application=self)
+        self.win = MainWindow(self.page, self)
         self.settings.bind('width', self.win, 'default-width', Gio.SettingsBindFlags.DEFAULT)
         self.settings.bind('height', self.win, 'default-height', Gio.SettingsBindFlags.DEFAULT)
         self.settings.bind('is-maximized', self.win, 'maximized', Gio.SettingsBindFlags.DEFAULT)
@@ -207,6 +211,8 @@ class Remembrance(Adw.Application):
                 self.win.display_reminder(**new_reminder)
         for reminder_id in deleted_reminders:
             self.delete_reminder(reminder_id)
+        if self.win.spinner.get_spinning():
+            self.win.spinner.stop()
 
     def reminder_updated_cb(self, proxy, sender_name, signal_name, parameters):
         app_id, reminder = parameters.unpack()
@@ -248,7 +254,7 @@ class Remembrance(Adw.Application):
             self.logger.error('Faled to start proxy to connect to service')
             sys.exit(1)
 
-    def run_service_method(self, method, parameters):
+    def run_service_method(self, method, parameters, retry = True):
         try:
             retval = self.service.call_sync(
                 method,
@@ -258,30 +264,16 @@ class Remembrance(Adw.Application):
                 None
             )
         except GLib.GError as error:
+            error_text = ''.join(traceback.format_exception(error))
             if 'The name is not activatable' in str(error):
-                builder = Gtk.Builder.new_from_resource('/io/github/dgsasha/remembrance/ui/error_dialog.ui')
-                error_dialog = builder.get_object('error_dialog')
-                Gtk.StyleContext.add_provider_for_display(error_dialog.get_display(), self.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-                loop = GLib.MainLoop()
-                error_dialog.connect('close-request', lambda *args: loop.quit())
-                error_dialog.set_application(self)
-                error_dialog.present()
-                loop.run()
-                sys.exit(1)
-            elif 'failed to execute' in str(error): # method failed
+                error_dialog = ErrorDialog(self, _('Reminders failed to start'), _('You will probably have to log out and log back in before using Reminders, this is likely due to a bug in Flatpak.'), error_text)
                 raise error
-            else: # service was probably disconnected
+            elif 'failed to execute' in str(error) or not retry: # method failed
+                error_dialog = ErrorDialog(self, _('Something went wrong'), _('Changes were not saved. This bug should be reported.'), error_text)
+                raise error
+            elif retry: # service was probably disconnected 
                 self.connect_to_service()
-                retval = self.service.call_sync(
-                    method,
-                    parameters,
-                    Gio.DBusCallFlags.NONE,
-                    -1,
-                    None
-                )
-        except:
-            sys.exit(1)
-
+                retval = self.run_service_method(method, parameters, False)
         return retval
 
     def create_action(self, name, callback, variant = None, accels = None):
@@ -317,6 +309,7 @@ class Remembrance(Adw.Application):
 
     def refresh_reminders(self, action = None, data = None):
         self.run_service_method('Refresh', None)
+        self.win.spinner.start()
 
     def quit_app(self, action, data):
         self.quit()

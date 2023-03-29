@@ -238,14 +238,23 @@
                                       <class name="page-heading-box"/>
                                     </style>
                                     <child>
-                                      <object class="GtkLabel" id="page_label">
+                                      <object class="GtkBox">
+                                        <property name="orientation">horizontal</property>
                                         <property name="valign">start</property>
                                         <property name="halign">start</property>
-                                        <property name="label" translatable="yes">All Reminders</property>
-                                        <style>
-                                          <class name="title-1"/>
-                                          <class name="page-heading"/>
-                                        </style>
+                                        <property name="spacing">5</property>
+                                        <child>
+                                          <object class="GtkLabel" id="page_label">
+                                            <property name="label" translatable="yes">All Reminders</property>
+                                            <style>
+                                              <class name="title-1"/>
+                                              <class name="page-heading"/>
+                                            </style>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkSpinner" id="spinner"/>
+                                        </child>
                                       </object>
                                     </child>
                                     <child>

@@ -1,4 +1,4 @@
-# main_window.py - Main Window for Remembrance
+# main_window.py
 # Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify it under
@@ -14,73 +14,24 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
-import threading
 import time
 import gi
 
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 
-from gi.repository import Gtk, Adw, GLib, Gio, GObject
+from gi.repository import Gtk, Adw, GLib, Gio, GObject, Gdk
 from gettext import gettext as _
 from difflib import SequenceMatcher
 from math import floor, ceil
 
 from remembrance import info
 from remembrance.browser.reminder import Reminder
+from remembrance.browser.calendar import Calendar
 from remembrance.browser.edit_lists_window import EditListsWindow
 from remembrance.browser.reminder_edit_window import ReminderEditWindow
 
 ALL_LABEL = _('All Lists')
-
-class Calendar(threading.Thread):
-    '''Updates date labels when day changes'''
-    def __init__(self, app):
-        self.app = app
-        self.time = datetime.datetime.combine(datetime.date.today(), datetime.time())
-        self.countdown_id = 0
-        super().__init__(target=self.run_countdown)
-        self.start()
-
-    def bus_callback(self, obj, result):
-        proxy = obj.new_for_bus_finish(result)
-        proxy.connect("g-signal", self.on_signal_received)
-
-    def on_signal_received(self, proxy, sender, signal, parameters):
-        if signal == "PrepareForSleep" and parameters[0]:
-            self.app.logger.info('Resuming from sleep')
-            self.run_countdown(False)
-
-    def on_countdown_done(self):
-        for reminder in self.app.win.reminder_lookup_dict.values():
-            reminder.set_time_label()
-        if self.reminder_edit_win is not None:
-            self.reminder_edit_win.update_date_button_label()
-        self.countdown_id = 0
-        self.run_countdown()
-        return False
-
-    def remove_countdown(self):
-        GLib.Source.remove(self.countdown_id)
-
-    def run_countdown(self, new_day = True):
-        try:
-            if new_day:
-                self.time = self.time + datetime.timedelta(days=1)
-                self.timestamp = self.time.timestamp()
-
-            if self.countdown_id != 0:
-                GLib.Source.remove(self.countdown_id)
-                self.countdown_id = 0
-
-            now = time.time()
-            self.wait = int(1000 * (self.timestamp - now))
-            if self.timestamp > 0:
-                self.countdown_id = GLib.timeout_add(self.wait, self.on_countdown_done)
-            else:
-                self.on_countdown_done()
-        except Exception as error:
-            self.app.logger.error(f'{error}: Failed to set timeout to refresh date labels')
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/main_window.ui')
 class MainWindow(Adw.ApplicationWindow):
@@ -104,8 +55,9 @@ class MainWindow(Adw.ApplicationWindow):
     search_entry = Gtk.Template.Child()
     task_list_picker = Gtk.Template.Child()
     page_sub_label = Gtk.Template.Child()
+    spinner = Gtk.Template.Child()
 
-    def __init__(self, page: str, *args, **kwargs):
+    def __init__(self, page: str, app, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.placeholder = Adw.ActionRow(
             title=_('Press the plus button below to add a reminder')
@@ -120,7 +72,7 @@ class MainWindow(Adw.ApplicationWindow):
         self.reminder_edit_win = None
         self.edit_lists_window = None
 
-        self.app = self.get_application()
+        self.app = app
         self.selected_user_id, self.selected_list_id = self.app.settings.get_value('selected-task-list').unpack()
         self.set_time_format()
 
@@ -176,6 +128,7 @@ class MainWindow(Adw.ApplicationWindow):
         self.unpack_reminders(reminders)
 
         self.app.settings.connect('changed::time-format', lambda *args: self.set_time_format())
+        self.set_application(self.app)
 
     @GObject.Property(type=int)
     def time_format(self):
@@ -185,9 +138,9 @@ class MainWindow(Adw.ApplicationWindow):
     def time_format(self, value):
         self._time_format = value
 
-    def new_edit_win(self, reminder):
+    def new_edit_win(self, reminder = None):
         if self.reminder_edit_win is None:
-            self.reminder_edit_win = ReminderEditWindow(reminder)
+            self.reminder_edit_win = ReminderEditWindow(self, self.app, reminder)
             self.reminder_edit_win.present()
             self.reminder_edit_win.connect('close-request', self.close_edit_win)
         else:
@@ -206,18 +159,11 @@ class MainWindow(Adw.ApplicationWindow):
             confirm_dialog.set_response_appearance('yes', Adw.ResponseAppearance.DESTRUCTIVE)
             confirm_dialog.set_default_response('cancel')
             confirm_dialog.set_close_response('cancel')
-            confirm_dialog.connect('response::yes', lambda *args: self.do_close_edit_win())
+            confirm_dialog.connect('response::yes', lambda *args: self.reminder_edit_win.set_visible(False))
             confirm_dialog.present()
             return True
         else:
-            self.do_close_edit_win()
-
-    def do_close_edit_win(self):
-        self.reminder_edit_win.set_visible(False)
-        if self.reminder_edit_win.id is None:
-            self.reminders_list.remove(self.reminder_edit_win.reminder)
-            self.reminder_edit_win.reminder = None
-            
+            self.reminder_edit_win.set_visible(False)
 
     def get_repeat_label(self, repeat_type, repeat_frequency, repeat_days, repeat_until, repeat_times):
         repeat_days_flag = info.RepeatDays(repeat_days)
@@ -503,19 +449,21 @@ class MainWindow(Adw.ApplicationWindow):
         if reminder_id not in self.reminder_lookup_dict.keys():
             reminder = Reminder(
                 self,
-                reminder_id=reminder_id,
-                timestamp=timestamp,
-                completed=completed,
-                repeat_type=repeat_type,
-                repeat_frequency=repeat_frequency,
-                repeat_days=repeat_days,
-                repeat_until=repeat_until,
-                repeat_times=repeat_times,
-                old_timestamp=old_timestamp,
-                task_list=task_list,
-                user_id=user_id,
-                title=title,
-                subtitle=description
+                {
+                    'title': title,
+                    'description': description,
+                    'timestamp': timestamp,
+                    'repeat-type': repeat_type,
+                    'repeat-frequency': repeat_frequency,
+                    'repeat-days': repeat_days,
+                    'repeat-until': repeat_until,
+                    'repeat-times': repeat_times,
+                    'old-timestamp': old_timestamp,
+                    'list': task_list,
+                    'user-id': user_id 
+                },
+                reminder_id,
+                completed
             )
 
             self.reminders_list.append(reminder)
@@ -794,10 +742,4 @@ class MainWindow(Adw.ApplicationWindow):
         self.search_revealer.set_reveal_child(False)
         self.selected = self.all_row
         self.selected.emit('activate')
-        reminder = Reminder(
-            self,
-            task_list=self.selected_list_id if self.selected_list_id != 'all' else 'local',
-            user_id=self.selected_user_id if self.selected_user_id != 'all' else 'local'
-        )
-        self.reminders_list.append(reminder)
-
+        self.new_edit_win()
