@@ -222,7 +222,8 @@ button.incomplete:active {
 
 
 /* Add support for nested expander */
-list.nested row.header {
+list.nested row.header,
+list.nested list.nested row {
     border-radius: 0;
 }
 
@@ -234,5 +235,3 @@ list.nested list.nested {
     background-color: alpha(@card_shade_color, 0.3);
     border-radius: 0;
 }
-
-    

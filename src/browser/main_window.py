@@ -320,7 +320,7 @@ class MainWindow(Adw.ApplicationWindow):
         self.reminders_list.invalidate_sort()
 
     def list_updated(self, user_id, list_id, list_name):
-        if user_id == 'local' or (user_id in self.synced_ids and ('all' in self.synced_ids[user_id] or key in self.synced_ids[user_id])):
+        if user_id == 'local' or (user_id in self.synced_ids and ('all' in self.synced_ids[user_id] or list_id in self.synced_ids[user_id])):
             for dictionary in self.all_task_list_names, self.task_list_names:
                 if user_id not in dictionary.keys():
                     dictionary[user_id] = {}

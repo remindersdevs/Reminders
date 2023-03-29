@@ -85,7 +85,9 @@ class MSToDo():
             accounts = self.app.get_accounts()
             for account in accounts:
                 token = self.app.acquire_token_silent(SCOPES, account)['access_token']
-                result = self.do_request('GET', 'me', result['id']).json()
+                result = requests.request('GET', f'{GRAPH}/me', headers={'Authorization': f'Bearer {token}'})
+                result.raise_for_status()
+                result = result.json()
 
                 self.tokens[result['id']] = token
                 self.users[result['id']] = {
@@ -139,7 +141,9 @@ class MSToDo():
         token = response['access_token']
         local_account_id = response['id_token_claims']['oid']
         try:
-            result = self.do_request('GET', 'me', result['id']).json()
+            result = requests.request('GET', f'{GRAPH}/me', headers={'Authorization': f'Bearer {token}'})
+            result.raise_for_status()
+            result = result.json()
 
             self.tokens[result['id']] = token
             self.users[result['id']] = {
@@ -190,8 +194,10 @@ class MSToDo():
                         self.app.remove_account(account)
             except:
                 pass
-            self.tokens.pop(user_id)
-            self.users.pop(user_id)
+            if user_id in self.tokens:
+                self.tokens.pop(user_id)
+            if user_id in self.users:
+                self.users.pop(user_id)
             if self.users == {}:
                 Secret.password_clear_sync(
                     self.schema,
@@ -217,8 +223,7 @@ class MSToDo():
                 self.get_tokens()
 
             if user_id in self.tokens.keys():
-                results = self.do_request('POST', f'me/todo/lists/{task_list}/tasks', user_id, data=json.dumps(task))
-                results = results.json()
+                results = self.do_request('POST', f'me/todo/lists/{task_list}/tasks', user_id, data=task).json()
                 return results['id']
         except requests.ConnectionError as error:
             if user_id in self.tokens.keys():
@@ -234,8 +239,7 @@ class MSToDo():
                 self.get_tokens()
 
             if user_id in self.tokens.keys():
-                results = self.do_request('PATCH', f'me/todo/lists/{task_list}/tasks/{task_id}', user_id, data=json.dumps(task))
-                results = results.json()
+                results = self.do_request('PATCH', f'me/todo/lists/{task_list}/tasks/{task_id}', user_id, data=task).json()
                 return results['id']
         except requests.ConnectionError as error:
             if user_id in self.tokens.keys():
@@ -267,8 +271,7 @@ class MSToDo():
                 self.get_tokens()
 
             if user_id in self.tokens.keys():
-                results = self.do_request('POST', f'me/todo/lists', user_id, data=json.dumps(content))
-                results = results.json()
+                results = self.do_request('POST', 'me/todo/lists', user_id, content).json()
                 return results['id']
         except requests.ConnectionError as error:
             if user_id in self.tokens.keys():
@@ -285,7 +288,7 @@ class MSToDo():
                 self.get_tokens()
 
             if user_id in self.tokens.keys():
-                results = self.do_request('PATCH', f'me/todo/lists/{ms_id}', user_id, data=json.dumps(content))
+                self.do_request('PATCH', f'me/todo/lists/{ms_id}', user_id, content)
         except requests.ConnectionError as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
@@ -300,7 +303,7 @@ class MSToDo():
                 self.get_tokens()
 
             if user_id in self.tokens.keys():
-                results = self.do_request('DELETE', f'me/todo/lists/{ms_id}', user_id)
+                self.do_request('DELETE', f'me/todo/lists/{ms_id}', user_id)
         except requests.ConnectionError as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
@@ -317,8 +320,7 @@ class MSToDo():
 
         for user_id in self.tokens.keys():
             try:
-                results = self.do_request('GET', 'me/todo/lists', user_id)
-                lists = results.json()
+                lists = self.do_request('GET', 'me/todo/lists', user_id).json()
 
                 task_lists[user_id] = []
 
@@ -329,8 +331,7 @@ class MSToDo():
                     if user_id not in synced_lists or ('all' not in synced_lists[user_id] and list_id not in synced_lists[user_id]):
                         tasks = []
                     else:
-                        results = self.do_request('GET', f'me/todo/lists/{list_id}/tasks', user_id)
-                        tasks = results.json()['value']
+                        tasks = self.do_request('GET', f'me/todo/lists/{list_id}/tasks', user_id).json()['value']
 
                     task_lists[user_id].append({
                         'id': list_id,

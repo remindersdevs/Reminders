@@ -1066,8 +1066,6 @@ class Reminders():
             new_ids = []
             removed_ids = []
             for new, old in (local, self.local), (ms, self.ms):
-                logger.info(new)
-                logger.info(old)
                 for reminder_id, reminder in new.items():
                     if reminder_id not in old.keys() or reminder != old[reminder_id]:
                         new_ids.append(reminder_id)
