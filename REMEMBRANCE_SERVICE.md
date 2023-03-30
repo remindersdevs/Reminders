@@ -155,8 +155,6 @@ Get all lists
 
 ### Refresh
 Read reminders file again and also check for remote updates.
-This runs automatically every 10 minutes.
-
 
 ### MSGetEmails
 Get emails of currently logged in Microsoft accounts

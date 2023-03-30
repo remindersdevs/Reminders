@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-30 09:12-0400\n"
+"POT-Creation-Date: 2023-03-30 11:14-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,76 +53,84 @@ msgstr ""
 msgid "Remembrance Service"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.gschema.xml.in:15
-msgid "Notification Sound"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.gschema.xml.in:16
-msgid "Whether or not to play a notification sound"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.gschema.xml.in:20
-#: src/browser/resources/ui/preferences.ui:51
+#: data/io.github.dgsasha.Remembrance.gschema.xml.in:21
+#: src/browser/resources/ui/preferences.ui:62
 msgid "Time format"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.gschema.xml.in:21
+#: data/io.github.dgsasha.Remembrance.gschema.xml.in:22
 msgid "What format to display the time in"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.gschema.xml.in:25
+#: data/io.github.dgsasha.Remembrance.gschema.xml.in:26
 #: src/browser/resources/ui/main_window.ui:45
 msgid "Sort by"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.gschema.xml.in:26
+#: data/io.github.dgsasha.Remembrance.gschema.xml.in:27
 msgid "How to sort the reminders"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.gschema.xml.in:30
-msgid "Descending sort"
-msgstr ""
-
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:31
-msgid "If reminders sort should be descending"
+msgid "Auto refresh frequency"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.gschema.xml.in:35
-msgid "Completed last"
+#: data/io.github.dgsasha.Remembrance.gschema.xml.in:32
+msgid "How often the reminders are refreshed (minutes)"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:36
-#: src/browser/resources/ui/preferences.ui:68
-msgid "Show completed reminders last"
+msgid "Notification Sound"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.gschema.xml.in:40
-msgid "Completed reverse"
+#: data/io.github.dgsasha.Remembrance.gschema.xml.in:37
+msgid "Whether or not to play a notification sound"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:41
-#: data/io.github.dgsasha.Remembrance.gschema.xml.in:55
+msgid "Descending sort"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.gschema.xml.in:42
+msgid "If reminders sort should be descending"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.gschema.xml.in:46
+msgid "Completed last"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.gschema.xml.in:47
+#: src/browser/resources/ui/preferences.ui:79
+msgid "Show completed reminders last"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.gschema.xml.in:51
+msgid "Completed reverse"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.gschema.xml.in:52
+#: data/io.github.dgsasha.Remembrance.gschema.xml.in:66
 msgid "Reverse order of completed reminders when sorted by time"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.gschema.xml.in:54
+#: data/io.github.dgsasha.Remembrance.gschema.xml.in:65
 msgid "Sync with Microsoft To Do"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.gschema.xml.in:59
+#: data/io.github.dgsasha.Remembrance.gschema.xml.in:70
 msgid "Task lists that should be synced"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.gschema.xml.in:60
+#: data/io.github.dgsasha.Remembrance.gschema.xml.in:71
 msgid ""
 "{user_id: [task_list_ids]}, task_list_ids can be 'all' or an array of ids"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.gschema.xml.in:64
+#: data/io.github.dgsasha.Remembrance.gschema.xml.in:75
 msgid "Task lists that should be visible"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.gschema.xml.in:65
+#: data/io.github.dgsasha.Remembrance.gschema.xml.in:76
 msgid "(user_id, task_id) ids can be 'all', 'local', or an actual id"
 msgstr ""
 
@@ -299,6 +307,7 @@ msgid "Add a reminder"
 msgstr ""
 
 #: src/browser/resources/ui/main_window.ui:333
+#: src/browser/resources/ui/preferences.ui:50
 msgid "Refresh"
 msgstr ""
 
@@ -323,12 +332,12 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: src/browser/resources/ui/ms_user_row.ui:42 src/browser/preferences.py:211
+#: src/browser/resources/ui/ms_user_row.ui:42 src/browser/preferences.py:223
 msgid "Sign Out"
 msgstr ""
 
 #: src/browser/resources/ui/preferences.ui:12
-msgid "Cloud Syncing"
+msgid "Syncing"
 msgstr ""
 
 #: src/browser/resources/ui/preferences.ui:18
@@ -339,33 +348,53 @@ msgstr ""
 msgid "Add Account"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:48
+#: src/browser/resources/ui/preferences.ui:46
+msgid "Auto Refresh Frequency"
+msgstr ""
+
+#: src/browser/resources/ui/preferences.ui:59
 #: src/browser/resources/ui/reminder_edit_window.ui:36
 msgid "General"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:57
+#: src/browser/resources/ui/preferences.ui:68
 msgid "Play sound with notification"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:72
+#: src/browser/resources/ui/preferences.ui:83
 msgid "Reverse order of completed reminders"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:73
+#: src/browser/resources/ui/preferences.ui:84
 msgid "This only applies when sorting by time"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:91
+#: src/browser/resources/ui/preferences.ui:102
 msgid "Use locale default"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:92
+#: src/browser/resources/ui/preferences.ui:103
 msgid "12 hour time"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:93
+#: src/browser/resources/ui/preferences.ui:104
 msgid "24 hour time"
+msgstr ""
+
+#: src/browser/resources/ui/preferences.ui:109
+msgid "5 mins"
+msgstr ""
+
+#: src/browser/resources/ui/preferences.ui:110
+msgid "15 mins"
+msgstr ""
+
+#: src/browser/resources/ui/preferences.ui:111
+msgid "30 mins"
+msgstr ""
+
+#: src/browser/resources/ui/preferences.ui:112
+msgid "60 mins"
 msgstr ""
 
 #: src/browser/resources/ui/reminder.ui:72 src/browser/edit_lists_window.py:138
@@ -483,7 +512,7 @@ msgstr ""
 
 #: src/browser/resources/ui/reminder_edit_window.ui:430
 #: src/browser/edit_lists_window.py:137 src/browser/main_window.py:157
-#: src/browser/preferences.py:210 src/browser/reminder.py:227
+#: src/browser/preferences.py:222 src/browser/reminder.py:227
 msgid "Cancel"
 msgstr ""
 
@@ -715,11 +744,11 @@ msgstr ""
 msgid "Start typing to search"
 msgstr ""
 
-#: src/browser/preferences.py:206
+#: src/browser/preferences.py:218
 msgid "Are you sure you want to sign out?"
 msgstr ""
 
-#: src/browser/preferences.py:207
+#: src/browser/preferences.py:219
 #, python-brace-format
 msgid "This will sign out <b>{self.email}</b>"
 msgstr ""
@@ -763,10 +792,10 @@ msgstr ""
 msgid "Microsoft reminders currently don't support recurrence"
 msgstr ""
 
-#: src/service/backend.py:548
+#: src/service/backend.py:552
 msgid "Mark as completed"
 msgstr ""
 
-#: src/service/backend.py:839
+#: src/service/backend.py:843
 msgid "Local Reminders"
 msgstr ""

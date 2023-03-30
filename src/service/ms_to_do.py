@@ -321,7 +321,6 @@ class MSToDo():
         for user_id in self.tokens.keys():
             try:
                 lists = self.do_request('GET', 'me/todo/lists', user_id).json()['value']
-                logger.info(lists)
 
                 task_lists[user_id] = []
 

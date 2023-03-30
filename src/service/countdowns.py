@@ -87,7 +87,7 @@ class Countdowns():
 
         now = time.time()
         if 'interval' in dictionary.keys():
-            wait = dictionary['interval']
+            wait = dictionary['interval'] * 60000
             if resuming:
                 dictionary['callback']()
         else:

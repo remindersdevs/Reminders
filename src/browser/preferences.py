@@ -27,6 +27,8 @@ class PreferencesWindow(Adw.PreferencesWindow):
     completed_reversed_switch = Gtk.Template.Child()
     ms_sync_row = Gtk.Template.Child()
     add_account_row = Gtk.Template.Child()
+    refresh_button = Gtk.Template.Child()
+    refresh_time_row = Gtk.Template.Child()
 
     def __init__(self, app, **kwargs):
         super().__init__(**kwargs)
@@ -34,14 +36,18 @@ class PreferencesWindow(Adw.PreferencesWindow):
         self.settings = app.settings
         self.set_transient_for(self.app.win)
         self.settings.bind('notification-sound', self.sound_switch, 'active', Gio.SettingsBindFlags.DEFAULT)
-        self.settings.connect('changed::time-format', lambda *args : self.update_dropdown())
-        self.settings.connect('changed::synced-task-lists', lambda *args : self.synced_lists_updated())
-        self.update_dropdown()
-        self.time_format_row.connect('notify::selected', lambda *args : self.update_time_format())
+        self.settings.connect('changed::time-format', lambda *args: self.update_time_dropdown())
+        self.settings.connect('changed::refresh-frequency', lambda *args: self.update_refresh_dropdown())
+        self.settings.connect('changed::synced-task-lists', lambda *args: self.synced_lists_updated())
+        self.update_time_dropdown()
+        self.update_refresh_dropdown()
+        self.time_format_row.connect('notify::selected', lambda *args: self.update_time_format())
+        self.refresh_time_row.connect('notify::selected', lambda *args: self.update_refresh_time())
         self.settings.bind('completed-last', self.completed_last_row, 'enable-expansion', Gio.SettingsBindFlags.DEFAULT)
         self.settings.bind('completed-reversed', self.completed_reversed_switch, 'active', Gio.SettingsBindFlags.DEFAULT)
         self.app.service.connect('g-signal::MSSignedIn', self.signed_in_cb)
         self.app.service.connect('g-signal::MSSignedOut', self.signed_out_cb)
+        self.refresh_button.connect('clicked', lambda *args: self.app.refresh_reminders())
         self.connect('close-request', self.on_close)
         self.synced = self.settings.get_value('synced-task-lists').unpack()
         self.user_rows = {}
@@ -100,7 +106,13 @@ class PreferencesWindow(Adw.PreferencesWindow):
         self.ms_sync_row.remove(self.user_rows[user_id])
         self.user_rows.pop(user_id)
 
-    def update_dropdown(self):
+    def update_refresh_dropdown(self):
+        self.refresh_time_row.set_selected(self.settings.get_enum('refresh-frequency'))
+
+    def update_refresh_time(self):
+        self.settings.set_enum('refresh-frequency', self.refresh_time_row.get_selected())
+
+    def update_time_dropdown(self):
         self.time_format_row.set_selected(self.settings.get_enum('time-format'))
 
     def update_time_format(self):

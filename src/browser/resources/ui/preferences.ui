@@ -9,7 +9,7 @@
       <object class="AdwPreferencesPage">
         <child>
           <object class="AdwPreferencesGroup" id="cloud_syncing">
-            <property name="title" translatable="yes">Cloud Syncing</property>
+            <property name="title" translatable="yes">Syncing</property>
             <style>
               <class name="ms-accounts"/>
             </style>
@@ -37,6 +37,17 @@
                       </object>
                     </child>
                     <signal name="activated" handler="sign_in" swapped="no"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwComboRow" id="refresh_time_row">
+                <property name="title" translatable="yes">Auto Refresh Frequency</property>
+                <property name="model">refresh_frequency</property>
+                <child type="suffix">
+                  <object class="GtkButton" id="refresh_button">
+                    <property name="label" translatable="yes">Refresh</property>
                   </object>
                 </child>
               </object>
@@ -91,6 +102,14 @@
       <item translatable="yes">Use locale default</item>
       <item translatable="yes">12 hour time</item>
       <item translatable="yes">24 hour time</item>
+    </items>
+  </object>
+  <object class="GtkStringList" id="refresh_frequency">
+    <items>
+      <item translatable="yes">5 mins</item>
+      <item translatable="yes">15 mins</item>
+      <item translatable="yes">30 mins</item>
+      <item translatable="yes">60 mins</item>
     </items>
   </object>
 </interface>

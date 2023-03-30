@@ -35,8 +35,6 @@ from gettext import gettext as _
 from math import floor
 from threading import Thread
 
-REFRESH_TIME = 600000 # 10 min
-
 REMINDERS_FILE = f'{info.data_dir}/reminders.csv'
 MS_REMINDERS_FILE = f'{info.data_dir}/ms_reminders.csv'
 TASK_LISTS_FILE = f'{info.data_dir}/task_lists.json'
@@ -215,8 +213,10 @@ class Reminders():
         self.sound = GSound.Context()
         self.sound.init()
         self.countdowns = Countdowns()
+        self.refresh_time = int(self.app.settings.get_string('refresh-frequency').strip('m'))
         self.synced_ids = self.app.settings.get_value('synced-task-lists').unpack()
         self.app.settings.connect('changed::synced-task-lists', lambda *args: self._synced_task_list_changed())
+        self.app.settings.connect('changed::refresh-frequency', lambda *args: self._refresh_time_changed())
         self.local, self.ms, self.list_names, self.list_ids = self._get_reminders()
         try:
             self.queue.load()
@@ -275,7 +275,7 @@ class Reminders():
         for reminder_id in self.ms.keys():
             self._set_countdown(reminder_id)
 
-        self.countdowns.add_timeout(REFRESH_TIME, self.refresh, -1)
+        self.countdowns.add_timeout(self.refresh_time, self.refresh, -1)
 
     def do_emit(self, signal_name, parameters):
         self.connection.emit_signal(
@@ -285,6 +285,10 @@ class Reminders():
             signal_name,
             parameters
         )
+
+    def _refresh_time_changed(self):
+        self.refresh_time = int(self.app.settings.get_string('refresh-frequency').strip('m'))
+        self.countdowns.add_timeout(self.refresh_time, self.refresh, -1)
 
     def _synced_task_list_changed(self):
         self.synced_ids = self.app.settings.get_value('synced-task-lists').unpack()
@@ -1059,7 +1063,7 @@ class Reminders():
 
     def refresh(self):
         try:
-            self.countdowns.add_timeout(REFRESH_TIME, self.refresh, -1)
+            self.countdowns.add_timeout(self.refresh_time, self.refresh, -1)
 
             local, ms, list_names, list_ids = self._get_reminders()
 

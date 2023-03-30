@@ -9,12 +9,13 @@
     <value value="0" nick="time"/>
     <value value="1" nick="title"/>
   </enum>
-	<schema id="io.github.dgsasha.Remembrance" path="/io/github/dgsasha/remembrance/">
-    <key type="b" name="notification-sound">
-      <default>true</default>
-      <summary>Notification Sound</summary>
-      <description>Whether or not to play a notification sound</description>
-    </key>
+  <enum id="io.github.dgsasha.Remembrance.RefreshFrequency">
+    <value value="0" nick="5m"/>
+    <value value="1" nick="15m"/>
+    <value value="2" nick="30m"/>
+    <value value="3" nick="60m"/>
+  </enum>
+  <schema id="io.github.dgsasha.Remembrance" path="/io/github/dgsasha/remembrance/">
     <key name="time-format" enum="io.github.dgsasha.Remembrance.TimeFormat">
       <default>'locale'</default>
       <summary>Time format</summary>
@@ -24,6 +25,16 @@
       <default>'time'</default>
       <summary>Sort by</summary>
       <description>How to sort the reminders</description>
+    </key>
+    <key name="refresh-frequency" enum="io.github.dgsasha.Remembrance.RefreshFrequency">
+      <default>'15m'</default>
+      <summary>Auto refresh frequency</summary>
+      <description>How often the reminders are refreshed (minutes)</description>
+    </key>
+    <key type="b" name="notification-sound">
+      <default>true</default>
+      <summary>Notification Sound</summary>
+      <description>Whether or not to play a notification sound</description>
     </key>
     <key type="b" name="descending-sort">
       <default>false</default>
