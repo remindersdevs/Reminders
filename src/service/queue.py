@@ -174,7 +174,7 @@ class Queue():
                     new_ms_id = self.to_do.create_list(user_id, list_name, list_id)
 
                     if new_ms_id is not None:
-                        new_list_ids[list_id]['ms-id'] = new_ms_id
+                        list_ids[list_id]['ms-id'] = new_ms_id
 
                 except requests.ConnectionError as error:
                     raise error
