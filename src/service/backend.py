@@ -1021,7 +1021,7 @@ class Reminders():
                 try:
                     self.queue.load()
                     ms_id = self.list_ids[list_id]['ms-id']
-                    self.to_do.update_list(user_id, ms_id, list_name, list_id)
+                    self.to_do.update_list(user_id, ms_id, new_name, list_id)
                 except requests.ConnectionError:
                     self.queue.update_list(list_id)
             self.list_names[user_id][list_id] = new_name
