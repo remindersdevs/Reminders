@@ -48,6 +48,9 @@
                 <child type="suffix">
                   <object class="GtkButton" id="refresh_button">
                     <property name="label" translatable="yes">Refresh</property>
+                    <style>
+                      <class name="refresh"/>
+                    </style>
                   </object>
                 </child>
               </object>

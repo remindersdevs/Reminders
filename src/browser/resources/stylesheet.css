@@ -200,6 +200,14 @@ button.incomplete:active {
     margin-right: 0;
 }
 
+button.refresh:dir(ltr)  {
+    margin-left: 6px;
+}
+
+button.refresh:dir(rtl)  {
+    margin-right: 6px;
+}
+
 /* Elaborate fix for https://gitlab.gnome.org/GNOME/gtk/-/issues/5309 */
 .reminders-list > row:nth-last-child(2),
 .reminders-list > row.expander:nth-last-child(2):not(:checked) > box > list > row.header,

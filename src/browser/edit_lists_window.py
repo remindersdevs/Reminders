@@ -29,17 +29,18 @@ class EditListsWindow(Adw.Window):
         self.set_transient_for(win)
         self.users = {}
         self.win = win
+        self.unsaved = []
 
-        for user_id, value in win.task_list_names.items():
+        for user_id, value in self.win.task_list_names.items():
             if user_id in self.win.emails.keys() or user_id == 'local':
-                self.users[user_id] = ListGroup(win, user_id, value)
+                self.users[user_id] = ListGroup(self, user_id, value)
                 self.box.append(self.users[user_id])
 
     def list_updated(self, user_id, list_id, list_name):
         if user_id in self.users.keys():
             self.users[user_id].add_child(list_name, list_id)
         else:
-            self.users[user_id] = ListGroup(self.win, user_id, {list_id: list_name})
+            self.users[user_id] = ListGroup(self, user_id, {list_id: list_name})
 
     def list_removed(self, user_id, list_id):
         if user_id in self.users.keys():
@@ -48,12 +49,44 @@ class EditListsWindow(Adw.Window):
                 self.box.remove(self.users[user_id])
                 self.users.pop(user_id)
 
+    def do_close(self):
+        for row in self.unsaved:
+            if row.list_id is None:
+                row.group.remove(row)
+            else:
+                row.set_text(row.list_name)
+
+        self.unsaved = []
+
+        self.set_visible(False)
+
+    @Gtk.Template.Callback()
+    def on_close(self, window = None):
+        if len(self.unsaved) > 0:
+            confirm_dialog = Adw.MessageDialog(
+                transient_for=self,
+                heading=_('You have unsaved changes'),
+                body=_('Are you sure you want to close the window?'),
+            )
+            confirm_dialog.add_response('cancel', _('Cancel'))
+            confirm_dialog.add_response('yes', _('Yes'))
+            confirm_dialog.set_response_appearance('yes', Adw.ResponseAppearance.DESTRUCTIVE)
+            confirm_dialog.set_default_response('cancel')
+            confirm_dialog.set_close_response('cancel')
+            confirm_dialog.connect('response::yes', lambda *args: self.do_close())
+            confirm_dialog.present()
+        else:
+            self.do_close()
+
+        return True
+
 class ListGroup(Adw.PreferencesGroup):
-    def __init__(self, win, user_id, lists, *args, **kwargs):
+    def __init__(self, edit_win, user_id, lists, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.win = win
+        self.edit_win = edit_win
+        self.win = edit_win.win
         self.user_id = user_id
-        self.set_title(_('Local') if user_id == 'local' else win.emails[user_id])
+        self.set_title(_('Local') if user_id == 'local' else self.win.emails[user_id])
         self.lists = {}
         for list_id, list_name in lists.items():
             self.add_child(list_name, list_id)
@@ -69,7 +102,7 @@ class ListGroup(Adw.PreferencesGroup):
         if list_id in self.lists.keys():
             self.lists[list_id].set_text(list_name)
         else:
-            child = ListRow(self, self.win, self.user_id, list_name, list_id)
+            child = ListRow(self, self.user_id, list_name, list_id)
             self.add(child)
             if focus:
                 child.grab_focus()
@@ -88,13 +121,14 @@ class ListGroup(Adw.PreferencesGroup):
         self.remove(child)
 
 class ListRow(Adw.EntryRow):
-    def __init__(self, group, win, user_id, list_name = None, list_id = None, *args, **kwargs):
+    def __init__(self, group, user_id, list_name = None, list_id = None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.group = group
+        self.edit_win = group.edit_win
         self.user_id = user_id
         self.list_id = list_id
         self.set_title(_('What should the list be called?'))
-        self.win = win
+        self.win = group.win
         self.list_name = list_name
         self.set_text(DEFAULT_LIST_TITLE if list_name is None else list_name)
         self.save_button = Gtk.Button.new_from_icon_name('object-select-symbolic')
@@ -142,4 +176,9 @@ class ListRow(Adw.EntryRow):
         confirm_dialog.present()
 
     def check_saved(self):
-        self.save_button.set_sensitive(len(self.get_text()) != 0 and self.get_text() != self.list_name)
+        unsaved = len(self.get_text()) != 0 and self.get_text() != self.list_name
+        self.save_button.set_sensitive(unsaved)
+        if unsaved and self not in self.edit_win.unsaved:
+            self.edit_win.unsaved.append(self)
+        elif not unsaved and self in self.edit_win.unsaved:
+            self.edit_win.unsaved.remove(self)

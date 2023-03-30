@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-30 11:37-0400\n"
+"POT-Creation-Date: 2023-03-30 15:02-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,8 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:4
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:9
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:62 src/info.py:8
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:9 src/info.py:8
 msgid "Reminders"
 msgstr ""
 
@@ -54,7 +53,7 @@ msgid "Remembrance Service"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:21
-#: src/browser/resources/ui/preferences.ui:62
+#: src/browser/resources/ui/preferences.ui:65
 msgid "Time format"
 msgstr ""
 
@@ -101,7 +100,7 @@ msgid "Completed last"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:47
-#: src/browser/resources/ui/preferences.ui:79
+#: src/browser/resources/ui/preferences.ui:82
 msgid "Show completed reminders last"
 msgstr ""
 
@@ -135,6 +134,10 @@ msgstr ""
 msgid "(user_id, task_id) ids can be 'all', 'local', or an actual id"
 msgstr ""
 
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:6
+msgid "Sasha Hale"
+msgstr ""
+
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:13
 msgid "Features:"
 msgstr ""
@@ -157,80 +160,6 @@ msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:19
 msgid "Optionally sync with Microsoft To Do"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:53
-msgid "Todo"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:54
-msgid "Productivity"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:55
-msgid "Task"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:56
-msgid "Planning"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:57
-msgid "Planner"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:58
-#: src/browser/resources/ui/main_window.ui:356
-#: src/browser/resources/ui/reminder_edit_window.ui:59
-msgid "Time"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:59
-msgid "Management"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:60
-msgid "Reminder"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:61
-msgid "Remembrance"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:83
-msgid "Add support for creating and editing task lists"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:84
-msgid "Add support for syncing with Microsoft To Do"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:85
-msgid "Reduced memory usage"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:86
-msgid "Redesigned some UI elements"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:87
-msgid "Better support for mobile devices"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:88
-msgid "Better error dialogs"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:89
-msgid "Fix some issues that occur when the service errors"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:96
-msgid "Some small UI improvements."
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:103
-msgid "Fix issue where app can corrupt or lose its data."
 msgstr ""
 
 #: src/browser/resources/ui/edit_lists_window.ui:4
@@ -285,6 +214,11 @@ msgstr ""
 msgid "Sort"
 msgstr ""
 
+#: src/browser/resources/ui/main_window.ui:356
+#: src/browser/resources/ui/reminder_edit_window.ui:59
+msgid "Time"
+msgstr ""
+
 #: src/browser/resources/ui/main_window.ui:361
 msgid "Title"
 msgstr ""
@@ -309,52 +243,52 @@ msgstr ""
 msgid "Add Account"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:59
+#: src/browser/resources/ui/preferences.ui:62
 #: src/browser/resources/ui/reminder_edit_window.ui:36
 msgid "General"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:68
+#: src/browser/resources/ui/preferences.ui:71
 msgid "Play sound with notification"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:83
+#: src/browser/resources/ui/preferences.ui:86
 msgid "Reverse order of completed reminders"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:84
+#: src/browser/resources/ui/preferences.ui:87
 msgid "This only applies when sorting by time"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:102
+#: src/browser/resources/ui/preferences.ui:105
 msgid "Use locale default"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:103
+#: src/browser/resources/ui/preferences.ui:106
 msgid "12 hour time"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:104
+#: src/browser/resources/ui/preferences.ui:107
 msgid "24 hour time"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:109
+#: src/browser/resources/ui/preferences.ui:112
 msgid "5 mins"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:110
+#: src/browser/resources/ui/preferences.ui:113
 msgid "15 mins"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:111
+#: src/browser/resources/ui/preferences.ui:114
 msgid "30 mins"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:112
+#: src/browser/resources/ui/preferences.ui:115
 msgid "60 mins"
 msgstr ""
 
-#: src/browser/resources/ui/reminder.ui:72 src/browser/edit_lists_window.py:138
+#: src/browser/resources/ui/reminder.ui:72 src/browser/edit_lists_window.py:172
 #: src/browser/reminder.py:228
 msgid "Remove"
 msgstr ""
@@ -468,8 +402,9 @@ msgid "time(s)"
 msgstr ""
 
 #: src/browser/resources/ui/reminder_edit_window.ui:430
-#: src/browser/edit_lists_window.py:137 src/browser/main_window.py:157
-#: src/browser/preferences.py:222 src/browser/reminder.py:227
+#: src/browser/edit_lists_window.py:71 src/browser/edit_lists_window.py:171
+#: src/browser/main_window.py:157 src/browser/preferences.py:222
+#: src/browser/reminder.py:227
 msgid "Cancel"
 msgstr ""
 
@@ -545,23 +480,35 @@ msgstr ""
 msgid "Changes were not saved. This bug should be reported."
 msgstr ""
 
-#: src/browser/edit_lists_window.py:19 src/browser/edit_lists_window.py:62
+#: src/browser/edit_lists_window.py:19 src/browser/edit_lists_window.py:95
 msgid "New List"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:56 src/browser/main_window.py:373
+#: src/browser/edit_lists_window.py:68 src/browser/main_window.py:154
+msgid "You have unsaved changes"
+msgstr ""
+
+#: src/browser/edit_lists_window.py:69 src/browser/main_window.py:155
+msgid "Are you sure you want to close the window?"
+msgstr ""
+
+#: src/browser/edit_lists_window.py:72 src/browser/main_window.py:158
+msgid "Yes"
+msgstr ""
+
+#: src/browser/edit_lists_window.py:89 src/browser/main_window.py:373
 msgid "Local"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:96
+#: src/browser/edit_lists_window.py:130
 msgid "What should the list be called?"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:133
+#: src/browser/edit_lists_window.py:167
 msgid "Remove list?"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:134
+#: src/browser/edit_lists_window.py:168
 #, python-brace-format
 msgid "This will remove {list_name} and cannot be undone."
 msgstr ""
@@ -576,18 +523,6 @@ msgstr ""
 
 #: src/browser/main_window.py:67
 msgid "No reminders match your search"
-msgstr ""
-
-#: src/browser/main_window.py:154
-msgid "You have unsaved changes"
-msgstr ""
-
-#: src/browser/main_window.py:155
-msgid "Are you sure you want to close the window?"
-msgstr ""
-
-#: src/browser/main_window.py:158
-msgid "Yes"
 msgstr ""
 
 #: src/browser/main_window.py:173
