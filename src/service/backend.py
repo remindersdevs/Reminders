@@ -1000,18 +1000,15 @@ class Reminders():
                 try:
                     self.queue.load()
                     ms_id = self.to_do.create_list(user_id, list_name, list_id)
-                    self.list_ids[list_id] = {
-                        'ms-id': '' if ms_id is None else ms_id,
-                        'user-id': user_id
-                    }
-                    self._save_list_ids()
                 except requests.ConnectionError:
-                    self.list_ids[list_id] = {
-                        'ms-id': '',
-                        'user-id': user_id
-                    }
-                    self._save_list_ids()
+                    ms_id = None
                     self.queue.add_list(list_id)
+
+            self.list_ids[list_id] = {
+                'ms-id': '' if ms_id is None else ms_id,
+                'user-id': user_id
+            }
+            self._save_list_ids()
 
             self.list_names[user_id][list_id] = list_name
             self._save_lists()

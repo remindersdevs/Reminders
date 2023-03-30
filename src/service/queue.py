@@ -15,6 +15,7 @@
 
 import os
 import json
+import requests
 
 from remembrance import info
 QUEUE_FILE = f'{info.data_dir}/queue.json'
@@ -120,7 +121,7 @@ class Queue():
 
     def add_list(self, list_id, retry = True):
         try:
-            if reminder_id in self.queue['lists']['create']:
+            if list_id not in self.queue['lists']['create']:
                 self.queue['lists']['create'].append(list_id)
                 self.write()
         except Exception as error:
