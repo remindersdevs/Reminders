@@ -116,7 +116,7 @@ class ListRow(Adw.EntryRow):
     def update(self):
         list_name = self.get_text()
         count = 0
-        while list_name in self.win.task_list_names[self.user_id].values():
+        while list_name in self.win.all_task_list_names[self.user_id].values():
             count += 1
             list_name = f'{self.get_text()} ({count})' 
         self.list_id = self.win.update_list(self.user_id, list_name, self.list_id)
