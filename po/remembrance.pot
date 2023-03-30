@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-29 20:00-0400\n"
+"POT-Creation-Date: 2023-03-29 20:03-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:4
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:9 src/info.py:8
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:9
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:62 src/info.py:8
 msgid "Reminders"
 msgstr ""
 
@@ -125,10 +126,6 @@ msgstr ""
 msgid "(user_id, task_id) ids can be 'all', 'local', or an actual id"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:6
-msgid "Sasha Hale"
-msgstr ""
-
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:13
 msgid "Features:"
 msgstr ""
@@ -151,6 +148,120 @@ msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:19
 msgid "Optionally sync with Microsoft To Do"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:53
+msgid "Todo"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:54
+msgid "Productivity"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:55
+msgid "Task"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:56
+msgid "Planning"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:57
+msgid "Planner"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:58
+#: src/browser/resources/ui/main_window.ui:356
+#: src/browser/resources/ui/reminder_edit_window.ui:59
+msgid "Time"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:59
+msgid "Management"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:60
+msgid "Reminder"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:61
+msgid "Remembrance"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:83
+msgid "Add support for task lists"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:84
+msgid "Add support for syncing with Microsoft To Do"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:85
+msgid "Reduced memory usage"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:86
+msgid "Redesigned some UI elements"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:87
+msgid "Better support for mobile devices"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:88
+msgid "Fix some issues that occur when the service errors"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:95
+msgid "Some small UI improvements."
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:102
+msgid "Fix issue where app can corrupt or lose its data."
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:109
+msgid "Fix issue with app not starting when clicking notification"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:116
+msgid "Update translations"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:117
+msgid "Improved icon for u/kokulumisket"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:118
+msgid "Fixed issue with service crashing upon logging in"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:119
+msgid "Make some things more clear in the repeat dialog"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:120
+msgid "Save and restore the window state when closing and reopening the app"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:127
+msgid "Fix issues with frequency option on recurring reminders"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:128
+msgid "Fix issues with separators"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:135
+msgid "Lots of UI Improvements"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:136
+msgid "Fix issues with daylight savings time"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:137
+msgid "Fix some rare issues involving timestamps"
 msgstr ""
 
 #: src/browser/resources/ui/edit_lists_window.ui:4
@@ -202,11 +313,6 @@ msgstr ""
 
 #: src/browser/resources/ui/main_window.ui:354
 msgid "Sort"
-msgstr ""
-
-#: src/browser/resources/ui/main_window.ui:356
-#: src/browser/resources/ui/reminder_edit_window.ui:59
-msgid "Time"
 msgstr ""
 
 #: src/browser/resources/ui/main_window.ui:361
