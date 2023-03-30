@@ -180,6 +180,7 @@ class Queue():
                     raise error
                 except Exception as error:
                     traceback.print_exception(error)
+                    continue
 
                 self.queue['lists']['create'].pop(index)
 
@@ -194,6 +195,7 @@ class Queue():
                     raise error
                 except Exception as error:
                     traceback.print_exception(error)
+                    continue
 
                 self.queue['reminders']['create'].pop(index)
 
@@ -206,6 +208,7 @@ class Queue():
                     raise error
                 except Exception as error:
                     traceback.print_exception(error)
+                    continue
 
                 self.queue['reminders']['complete'].pop(index)
 
@@ -221,6 +224,7 @@ class Queue():
                     raise error
                 except Exception as error:
                     traceback.print_exception(error)
+                    continue
 
                 self.queue['reminders']['update'].pop(reminder_id)
 
@@ -236,6 +240,7 @@ class Queue():
                     raise error
                 except Exception as error:
                     traceback.print_exception(error)
+                    continue
 
                 self.queue['lists']['update'].pop(index)
 
@@ -250,6 +255,7 @@ class Queue():
                     raise error
                 except Exception as error:
                     traceback.print_exception(error)
+                    continue
 
                 self.queue['reminders']['delete'].pop(index)
 
@@ -264,6 +270,7 @@ class Queue():
                     raise error
                 except Exception as error:
                     traceback.print_exception(error)
+                    continue
 
                 self.queue['lists']['delete'].pop(index)
         except requests.ConnectionError as error:
