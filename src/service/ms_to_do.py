@@ -312,7 +312,7 @@ class MSToDo():
             traceback.print_exception(error)
             raise error
 
-    def get_lists(self, synced_lists):
+    def get_lists(self):
         task_lists = {}
 
         if self.users.keys() != self.tokens.keys():
@@ -320,18 +320,17 @@ class MSToDo():
 
         for user_id in self.tokens.keys():
             try:
-                lists = self.do_request('GET', 'me/todo/lists', user_id).json()
+                lists = self.do_request('GET', 'me/todo/lists', user_id).json()['value']
+                logger.info(lists)
 
                 task_lists[user_id] = []
 
-                for task_list in lists['value']:
+                for task_list in lists:
                     list_id = task_list['id']
                     list_name = task_list['displayName']
                     is_default = task_list['wellknownListName'] == 'defaultList'
-                    if user_id not in synced_lists or ('all' not in synced_lists[user_id] and list_id not in synced_lists[user_id]):
-                        tasks = []
-                    else:
-                        tasks = self.do_request('GET', f'me/todo/lists/{list_id}/tasks', user_id).json()['value']
+
+                    tasks = self.do_request('GET', f'me/todo/lists/{list_id}/tasks', user_id).json()['value']
 
                     task_lists[user_id].append({
                         'id': list_id,

@@ -314,7 +314,7 @@ class Reminders():
 
     def _sync_ms(self, old_ms, old_lists, old_list_ids):
         try:
-            lists = self.to_do.get_lists(self.synced_ids)
+            lists = self.to_do.get_lists()
         except:
             return old_ms, old_lists, old_list_ids
         if lists is None:
@@ -345,6 +345,9 @@ class Reminders():
                     }
 
                 list_names[user_id][list_id] = task_list['name']
+
+                if user_id not in self.synced_ids or ('all' not in self.synced_ids[user_id] and list_id not in self.synced_ids[user_id]):
+                    continue
 
                 for task in task_list['tasks']:
                     task_id = task['id']
