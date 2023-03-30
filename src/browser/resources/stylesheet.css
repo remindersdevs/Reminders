@@ -227,7 +227,7 @@ list.nested list.nested row {
     border-radius: 0;
 }
 
-list.nested row.expander:not(:checked) {
+list.nested row.expander {
     border-bottom: 0;
 }
 
