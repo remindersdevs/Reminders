@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-30 11:15-0400\n"
+"POT-Creation-Date: 2023-03-30 11:37-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -198,7 +198,7 @@ msgid "Remembrance"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:83
-msgid "Add support for task lists"
+msgid "Add support for creating and editing task lists"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:84
@@ -218,59 +218,19 @@ msgid "Better support for mobile devices"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:88
+msgid "Better error dialogs"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:89
 msgid "Fix some issues that occur when the service errors"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:95
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:96
 msgid "Some small UI improvements."
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:102
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:103
 msgid "Fix issue where app can corrupt or lose its data."
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:109
-msgid "Fix issue with app not starting when clicking notification"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:116
-msgid "Update translations"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:117
-msgid "Improved icon for u/kokulumisket"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:118
-msgid "Fixed issue with service crashing upon logging in"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:119
-msgid "Make some things more clear in the repeat dialog"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:120
-msgid "Save and restore the window state when closing and reopening the app"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:127
-msgid "Fix issues with frequency option on recurring reminders"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:128
-msgid "Fix issues with separators"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:135
-msgid "Lots of UI Improvements"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:136
-msgid "Fix issues with daylight savings time"
-msgstr ""
-
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:137
-msgid "Fix some rare issues involving timestamps"
 msgstr ""
 
 #: src/browser/resources/ui/edit_lists_window.ui:4
@@ -551,7 +511,7 @@ msgstr ""
 
 #. Translators: Do not translate this, instead put your name and email here.
 #. name <email>
-#: src/browser/about.py:45
+#: src/browser/about.py:46
 msgid "translator-credits"
 msgstr ""
 

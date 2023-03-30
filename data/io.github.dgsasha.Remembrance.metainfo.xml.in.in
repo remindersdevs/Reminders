@@ -77,14 +77,15 @@
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
   <releases>
-    <release version="2.0" date="2023-03-16">
+    <release version="2.0" date="2023-03-30">
       <description>
         <ul>
-          <li>Add support for task lists</li>
+          <li>Add support for creating and editing task lists</li>
           <li>Add support for syncing with Microsoft To Do</li>
           <li>Reduced memory usage</li>
           <li>Redesigned some UI elements</li>
           <li>Better support for mobile devices</li>
+          <li>Better error dialogs</li>
           <li>Fix some issues that occur when the service errors</li>
         </ul>
       </description>
@@ -100,41 +101,6 @@
       <description>
         <ul>
           <li>Fix issue where app can corrupt or lose its data.</li>
-        </ul>
-      </description>
-    </release>
-    <release version="1.3" date="2023-03-10">
-      <description>
-        <ul>
-          <li>Fix issue with app not starting when clicking notification</li>
-        </ul>
-      </description>
-    </release>
-    <release version="1.2" date="2023-03-09">
-      <description>
-        <ul>
-          <li>Update translations</li>
-          <li>Improved icon for u/kokulumisket</li>
-          <li>Fixed issue with service crashing upon logging in</li>
-          <li>Make some things more clear in the repeat dialog</li>
-          <li>Save and restore the window state when closing and reopening the app</li>
-        </ul>
-      </description>
-    </release>
-    <release version="1.1" date="2023-03-07">
-      <description>
-        <ul>
-          <li>Fix issues with frequency option on recurring reminders</li>
-          <li>Fix issues with separators</li>
-        </ul>
-      </description>
-    </release>
-    <release version="1.0" date="2023-03-07">
-      <description>
-        <ul>
-          <li>Lots of UI Improvements</li>
-          <li>Fix issues with daylight savings time</li>
-          <li>Fix some rare issues involving timestamps</li>
         </ul>
       </description>
     </release>
