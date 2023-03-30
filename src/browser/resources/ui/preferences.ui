@@ -43,7 +43,7 @@
             </child>
             <child>
               <object class="AdwComboRow" id="refresh_time_row">
-                <property name="title" translatable="yes">Auto Refresh Frequency</property>
+                <property name="title" translatable="yes">Auto refresh frequency</property>
                 <property name="model">refresh_frequency</property>
                 <child type="suffix">
                   <object class="GtkButton" id="refresh_button">
