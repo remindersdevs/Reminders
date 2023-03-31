@@ -5,6 +5,7 @@
     <property name="default-width">450</property>
     <property name="width-request">360</property>
     <property name="default-height">600</property>
+    <property name="destroy-with-parent">true</property>
     <child>
       <object class="AdwPreferencesPage">
         <child>

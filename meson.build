@@ -12,7 +12,7 @@ dependency('gsound')
 
 release_type = get_option('release-type')
 
-service_version = '2.1'
+service_version = '2.2'
 
 app_executable = 'remembrance'
 

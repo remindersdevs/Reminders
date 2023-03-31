@@ -71,6 +71,7 @@ class MainWindow(Adw.ApplicationWindow):
         self.dropdown_connection = None
         self.reminder_edit_win = None
         self.edit_lists_window = None
+        self.spinning_cursor = Gdk.Cursor.new_from_name('wait')
 
         self.app = app
         self.selected_user_id, self.selected_list_id = self.app.settings.get_value('selected-task-list').unpack()
@@ -113,18 +114,12 @@ class MainWindow(Adw.ApplicationWindow):
 
         self.app.settings.connect('changed::synced-task-lists', lambda *args : self.set_synced_ids())
 
-        self.emails = self.app.run_service_method(
-            'MSGetEmails',
-            None
-        ).unpack()[0]
+        self.emails = self.app.run_service_method('MSGetEmails', None).unpack()[0]
 
         self.all_task_list_names = self.app.run_service_method('ReturnLists', None).unpack()[0]
         self.set_synced_ids()
 
-        reminders = self.app.run_service_method(
-            'ReturnReminders',
-            None
-        ).unpack()[0]
+        reminders = self.app.run_service_method('ReturnReminders', None).unpack()[0]
         self.unpack_reminders(reminders)
 
         self.app.settings.connect('changed::time-format', lambda *args: self.set_time_format())
@@ -137,6 +132,16 @@ class MainWindow(Adw.ApplicationWindow):
     @time_format.setter
     def time_format(self, value):
         self._time_format = value
+
+    def set_busy(self, busy, win = None):
+        if win is None:
+            win = self
+        if busy:
+            win.get_native().get_surface().set_cursor(self.spinning_cursor)
+            self.app.mark_busy()
+        else:
+            win.get_native().get_surface().set_cursor(None)
+            self.app.unmark_busy()
 
     def new_edit_win(self, reminder = None):
         if self.reminder_edit_win is None:
@@ -491,16 +496,10 @@ class MainWindow(Adw.ApplicationWindow):
         )
 
     def sign_out(self, user_id):
-        self.app.run_service_method(
-            'MSLogout',
-            GLib.Variant('(s)', (user_id,))
-        )
+        self.app.run_service_method('MSLogout', GLib.Variant('(s)', (user_id,)), False)
 
     def sign_in(self):
-        self.app.run_service_method(
-            'MSLogin',
-            None
-        )
+        self.app.run_service_method('MSLogin', None, False)
 
     def create_action(self, name, callback, variant = None, accels = None):
         action = Gio.SimpleAction.new(name, variant)
@@ -598,16 +597,6 @@ class MainWindow(Adw.ApplicationWindow):
                 return -1 if self.descending_sort else 1
         except:
             return 0
-
-    def remove_reminder(self, reminder):
-        if reminder.id is not None:
-            self.app.run_service_method(
-                'RemoveReminder',
-                GLib.Variant('(ss)', (info.app_id, reminder.id))
-            )
-            if reminder.id in self.reminder_lookup_dict:
-                self.reminder_lookup_dict.pop(reminder.id)
-        self.reminders_list.remove(reminder)
 
     def all_reminders(self):
         if not self.all_row.is_selected():

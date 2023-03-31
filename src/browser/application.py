@@ -31,7 +31,7 @@ from remembrance.browser.about import about_window
 from remembrance.browser.preferences import PreferencesWindow
 
 # Always update this when new features are added that require the service to restart
-MIN_SERVICE_VERSION = 2.1
+MIN_SERVICE_VERSION = 2.2
 
 class Remembrance(Adw.Application):
     '''Application for the frontend'''
@@ -211,8 +211,6 @@ class Remembrance(Adw.Application):
                 self.win.display_reminder(**new_reminder)
         for reminder_id in deleted_reminders:
             self.delete_reminder(reminder_id)
-        if self.win.spinner.get_spinning():
-            self.win.spinner.stop()
 
     def reminder_updated_cb(self, proxy, sender_name, signal_name, parameters):
         app_id, reminder = parameters.unpack()
@@ -254,26 +252,37 @@ class Remembrance(Adw.Application):
             self.logger.error('Faled to start proxy to connect to service')
             sys.exit(1)
 
-    def run_service_method(self, method, parameters, retry = True):
+    def run_service_method(self, method, parameters, sync = True, callback = None, retry = True):
         try:
-            retval = self.service.call_sync(
-                method,
-                parameters,
-                Gio.DBusCallFlags.NONE,
-                -1,
-                None
-            )
+            if sync:
+                retval = self.service.call_sync(
+                    method,
+                    parameters,
+                    Gio.DBusCallFlags.NONE,
+                    -1,
+                    None
+                )
+            else:
+                retval = self.service.call(
+                    method,
+                    parameters,
+                    Gio.DBusCallFlags.NONE,
+                    -1,
+                    None,
+                    callback,
+                    None
+                )
         except GLib.GError as error:
             error_text = ''.join(traceback.format_exception(error))
             if 'The name is not activatable' in str(error):
-                error_dialog = ErrorDialog(self, _('Reminders failed to start'), _('You will probably have to log out and log back in before using Reminders, this is likely due to a bug in Flatpak.'), error_text)
+                error_dialog = ErrorDialog(self, _('Reminders failed to start'), _('You will probably have to log out and log back in before using Reminders, this is due to a bug in Flatpak.'), error_text)
                 raise error
             elif 'failed to execute' in str(error) or not retry: # method failed
                 error_dialog = ErrorDialog(self, _('Something went wrong'), _('Changes were not saved. This bug should be reported.'), error_text)
                 raise error
             elif retry: # service was probably disconnected 
                 self.connect_to_service()
-                retval = self.run_service_method(method, parameters, False)
+                retval = self.run_service_method(method, parameters, sync, callback, False)
         return retval
 
     def create_action(self, name, callback, variant = None, accels = None):
@@ -308,7 +317,7 @@ class Remembrance(Adw.Application):
         self.logger.addHandler(handler)
 
     def refresh_reminders(self, action = None, data = None):
-        self.run_service_method('Refresh', None)
+        self.run_service_method('Refresh', None, False, lambda *args: self.win.spinner.stop())
         self.win.spinner.start()
 
     def quit_app(self, action, data):

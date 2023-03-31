@@ -54,7 +54,6 @@ remembrance --restart-service
 ```
 
 ## Todo
-- Warn user when they are offline
 - Make a GNOME Shell extension that lets you view your reminders
 - Maybe integrate the search with GNOME Shell
 

@@ -16,6 +16,7 @@
 import time
 import ctypes
 import datetime
+import logging
 
 from gi.repository import Gtk, Adw, GLib, Gdk, Gio
 from gettext import gettext as _
@@ -23,6 +24,8 @@ from math import floor
 
 from remembrance import info
 from remembrance.browser.reminder import Reminder
+
+logger = logging.getLogger(info.app_executable)
 
 DEFAULT_OPTIONS = {
     'title': '',
@@ -304,6 +307,72 @@ class ReminderEditWindow(Adw.Window):
 
         self.day_changed()
 
+    def do_save(self, data = None):
+        try:
+            options = self.get_options()
+            if self.check_changed(options):
+                if self.id is None:
+                    reminder_id = self.app.run_service_method(
+                        'AddReminder',
+                        GLib.Variant(
+                            '(sa{sv})',
+                            (
+                                info.app_id,
+                                {
+                                    'title': GLib.Variant('s', options['title']),
+                                    'description': GLib.Variant('s', options['description']),
+                                    'timestamp': GLib.Variant('u', options['timestamp']),
+                                    'repeat-type': GLib.Variant('q', options['repeat-type']),
+                                    'repeat-frequency': GLib.Variant('q', options['repeat-frequency']),
+                                    'repeat-days': GLib.Variant('q', options['repeat-days']),
+                                    'repeat-times': GLib.Variant('n', options['repeat-times']),
+                                    'repeat-until': GLib.Variant('u', options['repeat-until']),
+                                    'list': GLib.Variant('s', options['list']),
+                                    'user-id': GLib.Variant('s', options['user-id'])
+                                }
+                            )
+                        )
+                    )
+                    self.id = reminder_id.unpack()[0]
+                else:
+                    self.app.run_service_method(
+                        'UpdateReminder',
+                        GLib.Variant(
+                            '(sa{sv})',
+                            (
+                                info.app_id,
+                                {
+                                    'id': GLib.Variant('s', self.id),
+                                    'title': GLib.Variant('s', options['title']),
+                                    'description': GLib.Variant('s', options['description']),
+                                    'timestamp': GLib.Variant('u', options['timestamp']),
+                                    'repeat-type': GLib.Variant('q', options['repeat-type']),
+                                    'repeat-frequency': GLib.Variant('q', options['repeat-frequency']),
+                                    'repeat-days': GLib.Variant('q', options['repeat-days']),
+                                    'repeat-times': GLib.Variant('n', options['repeat-times']),
+                                    'repeat-until': GLib.Variant('u', options['repeat-until']),
+                                    'old-timestamp': GLib.Variant('u', options['old-timestamp']),
+                                    'list': GLib.Variant('s', options['list']),
+                                    'user-id': GLib.Variant('s', options['user-id'])
+                                }
+                            )
+                        )
+                    )
+
+                self.options = options
+
+                if self.reminder is not None:
+                    self.reminder.set_options(self.options)
+                else:
+                    self.reminder = Reminder(self.win, self.options, self.id)
+                    self.win.reminders_list.append(self.reminder)
+                    self.win.reminder_lookup_dict[self.id] = self.reminder
+
+            self.set_visible(False)
+        except Exception as error:
+            logger.error(error)
+        self.win.set_busy(False, self)
+
     @Gtk.Template.Callback()
     def repeat_days_changed(self, button):
         for btn, flag in (
@@ -486,63 +555,5 @@ class ReminderEditWindow(Adw.Window):
         if self.entry_check_empty():
             return
 
-        options = self.get_options()
-        if self.check_changed(options):
-            if self.id is None:
-                reminder_id = self.app.run_service_method(
-                    'AddReminder',
-                    GLib.Variant(
-                        '(sa{sv})',
-                        (
-                            info.app_id, 
-                            {
-                                'title': GLib.Variant('s', options['title']),
-                                'description': GLib.Variant('s', options['description']),
-                                'timestamp': GLib.Variant('u', options['timestamp']),
-                                'repeat-type': GLib.Variant('q', options['repeat-type']),
-                                'repeat-frequency': GLib.Variant('q', options['repeat-frequency']),
-                                'repeat-days': GLib.Variant('q', options['repeat-days']),
-                                'repeat-times': GLib.Variant('n', options['repeat-times']),
-                                'repeat-until': GLib.Variant('u', options['repeat-until']),
-                                'list': GLib.Variant('s', options['list']),
-                                'user-id': GLib.Variant('s', options['user-id'])
-                            }
-                        )
-                    )
-                )
-                self.id = reminder_id.unpack()[0]
-            else:
-                self.app.run_service_method(
-                    'UpdateReminder',
-                    GLib.Variant(
-                        '(sa{sv})',
-                        (
-                            info.app_id,
-                            {
-                                'id': GLib.Variant('s', self.id),
-                                'title': GLib.Variant('s', options['title']),
-                                'description': GLib.Variant('s', options['description']),
-                                'timestamp': GLib.Variant('u', options['timestamp']),
-                                'repeat-type': GLib.Variant('q', options['repeat-type']),
-                                'repeat-frequency': GLib.Variant('q', options['repeat-frequency']),
-                                'repeat-days': GLib.Variant('q', options['repeat-days']),
-                                'repeat-times': GLib.Variant('n', options['repeat-times']),
-                                'repeat-until': GLib.Variant('u', options['repeat-until']),
-                                'old-timestamp': GLib.Variant('u', options['old-timestamp']),
-                                'list': GLib.Variant('s', options['list']),
-                                'user-id': GLib.Variant('s', options['user-id'])
-                            }
-                        )
-                    )
-                )
-
-            self.options = options
-
-            if self.reminder is not None:
-                self.reminder.set_options(self.options)
-            else:
-                self.reminder = Reminder(self.win, self.options, self.id)
-                self.win.reminders_list.append(self.reminder)
-                self.win.reminder_lookup_dict[self.id] = self.reminder
-
-        self.set_visible(False)
+        self.win.set_busy(True, self)
+        GLib.idle_add(self.do_save)

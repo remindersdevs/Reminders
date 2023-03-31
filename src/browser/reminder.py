@@ -15,12 +15,15 @@
 
 import time
 import datetime
+import logging
 
 from gi.repository import Gtk, Adw, GLib
 from gettext import gettext as _
 from math import floor
 
 from remembrance import info
+
+logger = logging.getLogger(info.app_executable)
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/reminder.ui')
 class Reminder(Adw.ExpanderRow):
@@ -199,21 +202,42 @@ class Reminder(Adw.ExpanderRow):
         self.refresh_time()
         self.win.reminders_list.invalidate_sort()
 
+    def remove(self):
+        try:
+            if self.id is not None:
+                self.app.run_service_method(
+                    'RemoveReminder',
+                    GLib.Variant('(ss)', (info.app_id, self.id))
+                )
+                if self.id in self.win.reminder_lookup_dict:
+                    self.win.reminder_lookup_dict.pop(self.id)
+            self.win.reminders_list.remove(self)
+        except Exception as error:
+            logger.error(error)
+
+    def do_update_completed(self):
+        try:
+            if not self.completed:
+                self.set_completed(True)
+            else:
+                self.set_completed(False)
+
+            self.app.run_service_method(
+                'UpdateCompleted',
+                GLib.Variant('(ssb)', (info.app_id, self.id, self.completed))
+            )
+
+            self.set_expanded(False)
+
+            self.changed()
+        except Exception as error:
+            logger.error(error)
+        self.win.set_busy(False)
+
     @Gtk.Template.Callback()
     def update_completed(self, button = None):
-        if not self.completed:
-            self.set_completed(True)
-        else:
-            self.set_completed(False)
-
-        self.app.run_service_method(
-            'UpdateCompleted',
-            GLib.Variant('(ssb)', (info.app_id, self.id, self.completed))
-        )
-
-        self.set_expanded(False)
-
-        self.changed()
+        self.win.set_busy(True)
+        GLib.idle_add(self.do_update_completed)
 
     @Gtk.Template.Callback()
     def on_remove(self, button):
@@ -228,7 +252,7 @@ class Reminder(Adw.ExpanderRow):
         confirm_dialog.add_response('remove', _('Remove'))
         confirm_dialog.set_default_response('cancel')
         confirm_dialog.set_response_appearance('remove', Adw.ResponseAppearance.DESTRUCTIVE)
-        confirm_dialog.connect('response::remove', lambda *args: self.win.remove_reminder(self))
+        confirm_dialog.connect('response::remove', lambda *args: self.remove())
         confirm_dialog.present()
 
     @Gtk.Template.Callback()

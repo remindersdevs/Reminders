@@ -76,7 +76,23 @@ class RemembranceService(Gio.Application):
         self.add_action(action)
 
     def launch_browser(self, action = None, variant = None):
-        Gio.DesktopAppInfo.new(f'{info.app_id}.desktop').launch_action('Past', None)
+        browser = Gio.DBusProxy.new_for_bus_sync(
+            Gio.BusType.SESSION,
+            Gio.DBusProxyFlags.NONE,
+            None,
+            info.app_id,
+            info.app_path,
+            'org.gtk.Actions',
+            None
+        )
+
+        proxy.call_sync(
+            'Activate',
+            GLib.Variant('(sava{sv})', ('notification-clicked', None, None)),
+            Gio.DBusCallFlags.NONE,
+            -1,
+            None
+        )
 
     def notification_completed_cb(self, action, variant, data = None):
         reminder_id = variant.get_string()

@@ -13,10 +13,16 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk, Adw
+import logging
+
+from gi.repository import Gtk, Adw, GLib
 from gettext import gettext as _
 
+from remembrance import info
+
 DEFAULT_LIST_TITLE = _('New List')
+
+logger = logging.getLogger(info.app_executable)
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/edit_lists_window.ui')
 class EditListsWindow(Adw.Window):
@@ -141,26 +147,35 @@ class ListRow(Adw.EntryRow):
         self.delete_button.set_valign(Gtk.Align.CENTER)
         self.delete_button.add_css_class('circular')
         self.delete_button.add_css_class('destructive-action')
-        self.delete_button.connect('clicked', lambda *args: self.delete())
+        self.delete_button.connect('clicked', lambda *args: self.show_delete_dialog())
         self.add_suffix(self.delete_button)
         self.connect('changed', lambda *args: self.check_saved())
         self.check_saved()
         self.delete_button.set_sensitive(not self.list_id in ('ms-tasks', 'local'))
 
     def update(self):
-        list_name = self.get_text()
-        count = 0
-        while list_name in self.win.all_task_list_names[self.user_id].values():
-            count += 1
-            list_name = f'{self.get_text()} ({count})' 
-        self.list_id = self.win.update_list(self.user_id, list_name, self.list_id)
-        self.list_name = list_name
-        self.save_button.set_sensitive(False)
-        self.delete_button.set_sensitive(not self.list_id in ('ms-tasks', 'local'))
-        self.group.lists[self.list_id] = self
-        self.set_text(self.list_name)
+        self.win.set_busy(True, self.edit_win)
+        GLib.idle_add(self.do_update)
 
-    def delete(self):
+    def do_update(self):
+        try:
+            list_name = self.get_text()
+            count = 0
+            while list_name in self.win.all_task_list_names[self.user_id].values():
+                count += 1
+                list_name = f'{self.get_text()} ({count})'
+            self.list_id = self.win.update_list(self.user_id, list_name, self.list_id)
+            self.list_name = list_name
+            self.save_button.set_sensitive(False)
+            self.delete_button.set_sensitive(not self.list_id in ('ms-tasks', 'local'))
+            self.group.lists[self.list_id] = self
+            self.set_text(self.list_name)
+        except Exception as error:
+            logger.error(error)
+
+        self.win.set_busy(False, self.edit_win)
+
+    def show_delete_dialog(self):
         list_name = f'<b>{self.get_text()}</b>'
         confirm_dialog = Adw.MessageDialog(
             transient_for=self.win,
@@ -172,8 +187,14 @@ class ListRow(Adw.EntryRow):
         confirm_dialog.add_response('remove', _('Remove'))
         confirm_dialog.set_default_response('cancel')
         confirm_dialog.set_response_appearance('remove', Adw.ResponseAppearance.DESTRUCTIVE)
-        confirm_dialog.connect('response::remove', lambda *args: self.group.remove_child(self, self.user_id, self.list_id))
+        confirm_dialog.connect('response::remove', lambda *args: self.delete())
         confirm_dialog.present()
+
+    def delete(self):
+        try:
+            self.group.remove_child(self, self.user_id, self.list_id)
+        except Exception as error:
+            logger.error(error)
 
     def check_saved(self):
         unsaved = len(self.get_text()) != 0 and self.get_text() != self.list_name

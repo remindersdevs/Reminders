@@ -27,11 +27,18 @@ class ErrorDialog(Adw.Window):
         self.set_title(title)
         self.body.set_label(body)
         self.error.set_buffer(Gtk.TextBuffer(text=error))
-        win = app.get_active_window()
-        if win is not None:
-            self.set_transient_for(win)
+        if app.win is not None:
+            window = app.win
+            if app.preferences is not None and app.preferences.is_visible():
+                window = app.preferences
+            elif app.win.reminder_edit_win is not None and app.win.reminder_edit_win.is_visible():
+                window = app.win.reminder_edit_win
+            elif app.win.edit_lists_window is not None and app.win.edit_lists_window.is_visible():
+                window = app.win.edit_lists_window
+            self.set_transient_for(window)
             self.set_modal(True)
         else:
             Gtk.StyleContext.add_provider_for_display(self.get_display(), app.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
             self.set_application(app)
+
         self.present()

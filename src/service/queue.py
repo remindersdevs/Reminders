@@ -16,6 +16,7 @@
 import os
 import json
 import requests
+import traceback
 
 from remembrance import info
 QUEUE_FILE = f'{info.data_dir}/queue.json'

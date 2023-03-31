@@ -201,23 +201,20 @@ class Reminders():
         super().__init__(**kwargs)
         if not os.path.isdir(info.data_dir):
             os.mkdir(info.data_dir)
-        self.list_names = {}
-        self.list_ids = {}
-        self.local = {}
-        self.ms = {}
+        self.connection = Gio.bus_get_sync(Gio.BusType.SESSION, None)
+        self.app = app
+        self.local = self.ms = self.list_names = self.list_ids = {}
+        self._regid = None
+        self.synced_ids = self.app.settings.get_value('synced-task-lists').unpack()
         self.to_do = MSToDo(self)
         self.queue = Queue(self)
-        self._regid = None
-        self.app = app
-        self.connection = Gio.bus_get_sync(Gio.BusType.SESSION, None)
+        self.local, self.ms, self.list_names, self.list_ids = self._get_reminders()
         self.sound = GSound.Context()
         self.sound.init()
         self.countdowns = Countdowns()
         self.refresh_time = int(self.app.settings.get_string('refresh-frequency').strip('m'))
-        self.synced_ids = self.app.settings.get_value('synced-task-lists').unpack()
         self.app.settings.connect('changed::synced-task-lists', lambda *args: self._synced_task_list_changed())
         self.app.settings.connect('changed::refresh-frequency', lambda *args: self._refresh_time_changed())
-        self.local, self.ms, self.list_names, self.list_ids = self._get_reminders()
         try:
             self.queue.load()
         except:
@@ -234,8 +231,8 @@ class Reminders():
             'GetVersion': self.get_version,
             'MSGetEmails': self.get_emails,
             'ReturnLists': self.return_lists,
-            'Refresh': (self.refresh, True),
-            'MSLogout': (self.logout_todo, True),
+            'Refresh': self.refresh,
+            'MSLogout': self.logout_todo,
             'MSGetSyncedLists': self.get_enabled_lists,
             'MSSetSyncedLists': self.set_enabled_lists,
             'CreateList': self.create_list,
@@ -320,7 +317,8 @@ class Reminders():
         try:
             lists = self.to_do.get_lists()
         except:
-            return old_ms, old_lists, old_list_ids
+            return old_ms, old_lists, old_list_ids            
+
         if lists is None:
             return {}, {}, {}
 
@@ -491,14 +489,7 @@ class Reminders():
                 thread.start()
                 return
 
-            return_first = False
             method = self._methods[method]
-            if isinstance(method, tuple):
-                return_first = method[1]
-                method = method[0]
-
-            if return_first:
-                invocation.return_value(None)
 
             if parameters is not None:
                 parameters = list(parameters.unpack())
@@ -512,8 +503,8 @@ class Reminders():
                 retval = method(*args, **kwargs)
             else:
                 retval = method()
-            if not return_first:
-                invocation.return_value(retval)
+
+            invocation.return_value(retval)
         except Exception as error:
             invocation.return_dbus_error('org.freedesktop.DBus.Error.Failed', f'{error} - Method {method} failed to execute\n{"".join(traceback.format_exception(error))}')
 
@@ -1110,19 +1101,18 @@ class Reminders():
             except:
                 pass
 
-            new_reminders = self.return_reminders(ids=new_ids, return_variant=False)
+            if len(new_ids) > 0 or len(removed_ids) > 0:
+                new_reminders = self.return_reminders(ids=new_ids, return_variant=False)
 
-            self.do_emit('Refreshed', GLib.Variant('(aa{sv}as)', (new_reminders, removed_ids)))
+                self.do_emit('Refreshed', GLib.Variant('(aa{sv}as)', (new_reminders, removed_ids)))
 
-            for reminder_id in new_ids:
-                self._set_countdown(reminder_id)
+                for reminder_id in new_ids:
+                    self._set_countdown(reminder_id)
 
-            for reminder_id in removed_ids:
-                self._remove_countdown(reminder_id)
+                for reminder_id in removed_ids:
+                    self._remove_countdown(reminder_id)
 
         except Exception as error:
-            # The refreshed signal should always be emitted
-            self.do_emit('Refreshed', GLib.Variant('(aa{sv}as)', ([{}], [])))
             traceback.print_exception(error)
 
     def return_lists(self):
