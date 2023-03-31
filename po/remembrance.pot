@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-31 16:49-0400\n"
+"POT-Creation-Date: 2023-03-31 19:11-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -236,19 +236,19 @@ msgid "App Menu"
 msgstr ""
 
 #: src/browser/resources/ui/main_window.ui:109
-#: src/browser/resources/ui/main_window.ui:248 src/browser/main_window.py:605
+#: src/browser/resources/ui/main_window.ui:248 src/browser/main_window.py:611
 msgid "All Reminders"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:132 src/browser/main_window.py:615
+#: src/browser/resources/ui/main_window.ui:132 src/browser/main_window.py:621
 msgid "Upcoming Reminders"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:155 src/browser/main_window.py:625
+#: src/browser/resources/ui/main_window.ui:155 src/browser/main_window.py:631
 msgid "Past Reminders"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:178 src/browser/main_window.py:635
+#: src/browser/resources/ui/main_window.ui:178 src/browser/main_window.py:641
 msgid "Completed Reminders"
 msgstr ""
 
@@ -351,7 +351,7 @@ msgstr ""
 msgid "60 mins"
 msgstr ""
 
-#: src/browser/resources/ui/reminder.ui:72 src/browser/edit_lists_window.py:187
+#: src/browser/resources/ui/reminder.ui:72 src/browser/edit_lists_window.py:188
 #: src/browser/reminder.py:252
 msgid "Remove"
 msgstr ""
@@ -465,7 +465,7 @@ msgid "time(s)"
 msgstr ""
 
 #: src/browser/resources/ui/reminder_edit_window.ui:430
-#: src/browser/edit_lists_window.py:77 src/browser/edit_lists_window.py:186
+#: src/browser/edit_lists_window.py:78 src/browser/edit_lists_window.py:187
 #: src/browser/main_window.py:162 src/browser/preferences.py:222
 #: src/browser/reminder.py:251
 msgid "Cancel"
@@ -543,35 +543,35 @@ msgstr ""
 msgid "Changes were not saved. This bug should be reported."
 msgstr ""
 
-#: src/browser/edit_lists_window.py:23 src/browser/edit_lists_window.py:101
+#: src/browser/edit_lists_window.py:23 src/browser/edit_lists_window.py:102
 msgid "New List"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:74 src/browser/main_window.py:159
+#: src/browser/edit_lists_window.py:75 src/browser/main_window.py:159
 msgid "You have unsaved changes"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:75 src/browser/main_window.py:160
+#: src/browser/edit_lists_window.py:76 src/browser/main_window.py:160
 msgid "Are you sure you want to close the window?"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:78 src/browser/main_window.py:163
+#: src/browser/edit_lists_window.py:79 src/browser/main_window.py:163
 msgid "Yes"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:95 src/browser/main_window.py:378
+#: src/browser/edit_lists_window.py:96 src/browser/main_window.py:384
 msgid "Local"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:136
+#: src/browser/edit_lists_window.py:137
 msgid "What should the list be called?"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:182
+#: src/browser/edit_lists_window.py:183
 msgid "Remove list?"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:183
+#: src/browser/edit_lists_window.py:184
 #, python-brace-format
 msgid "This will remove {list_name} and cannot be undone."
 msgstr ""
@@ -690,12 +690,12 @@ msgstr ""
 msgid "Yesterday"
 msgstr ""
 
-#: src/browser/main_window.py:719
+#: src/browser/main_window.py:725
 #, python-brace-format
 msgid "Searching '{text}'"
 msgstr ""
 
-#: src/browser/main_window.py:726
+#: src/browser/main_window.py:732
 msgid "Start typing to search"
 msgstr ""
 

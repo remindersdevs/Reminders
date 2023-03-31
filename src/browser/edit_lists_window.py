@@ -47,6 +47,7 @@ class EditListsWindow(Adw.Window):
             self.users[user_id].add_child(list_name, list_id)
         else:
             self.users[user_id] = ListGroup(self, user_id, {list_id: list_name})
+            self.box.append(self.users[user_id])
 
     def list_removed(self, user_id, list_id):
         if user_id in self.users.keys():
