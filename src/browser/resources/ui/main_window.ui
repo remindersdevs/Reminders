@@ -85,7 +85,7 @@
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkListBox" id="sidebar_list">
-                    <property name="width-request">240</property>
+                    <property name="width-request">230</property>
                     <property name="vexpand">True</property>
                     <style>
                       <class name="navigation-sidebar"/>
@@ -228,12 +228,11 @@
                                 <style>
                                   <class name="main"/>
                                 </style>
-                                <property name="spacing">15</property>
+                                <property name="spacing">12</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkBox">
                                     <property name="orientation">vertical</property>
-                                    <property name="spacing">2</property>
                                     <style>
                                       <class name="page-heading-box"/>
                                     </style>
