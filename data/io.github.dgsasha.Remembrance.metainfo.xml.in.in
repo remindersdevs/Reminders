@@ -10,10 +10,10 @@
   <summary>Set reminders for yourself</summary>
 
   <description>
-    <p>Features:</p>
+    <p>What you can do with Reminders:</p>
     <ul>
-      <li>Recurring reminders</li>
-      <li>Scheduled notifications</li>
+      <li>Set recurring reminders</li>
+      <li>Schedule notifications</li>
       <li>Sort, filter, and search for reminders</li>
       <li>Organize reminders using lists</li>
       <li>Optionally sync with Microsoft To Do</li>
