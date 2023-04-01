@@ -328,31 +328,12 @@ class MainWindow(Adw.ApplicationWindow):
         if user_id not in self.all_task_list_names.keys():
             self.all_task_list_names[user_id] = {}
         self.all_task_list_names[user_id][list_id] = list_name
-
-        if user_id == 'local' or (user_id in self.synced_ids and ('all' in self.synced_ids[user_id] or list_id in self.synced_ids[user_id])):
-            if user_id not in self.task_list_names.keys():
-                self.task_list_names[user_id] = {}
-            self.task_list_names[user_id][list_id] = list_name
-            if user_id not in self.menuitems.keys():
-                self.menuitems[user_id] = {}
-                self.sections[user_id] = Gio.Menu()
-                self.task_list_menu.append_section(self.emails[user_id], self.sections[user_id])
-            if list_id not in self.menuitems[user_id]:
-                item = Gio.MenuItem.new(list_name, 'win.selected-task-list')
-                item.set_attribute_value(Gio.MENU_ATTRIBUTE_TARGET, GLib.Variant('(ss)', (user_id, list_id)))
-                self.sections[user_id].append_item(item)
-                self.menuitems[user_id][list_id] = item
-            else:
-                self.menuitems[user_id][list_id].set_label(list_name)
-
-            self.set_reminder_task_list_dropdown()
+        self.set_task_list_dropdown()
 
     def list_removed(self, user_id, list_id):
-        for dictionary in self.all_task_list_names, self.task_list_names:
-            try:
-                dictionary[user_id].pop(list_id)
-            except:
-                pass
+        self.all_task_list_names[user_id].pop(list_id)
+        if len(self.all_task_list_names[user_id]) == 0:
+            self.all_task_list_names.pop(user_id)
         self.set_task_list_dropdown()
 
     def set_task_list_dropdown(self):
@@ -364,25 +345,20 @@ class MainWindow(Adw.ApplicationWindow):
                 if user_id == 'local' or (user_id in self.synced_ids and ('all' in self.synced_ids[user_id] or key in self.synced_ids[user_id])):
                     self.task_list_names[user_id][key] = value
 
-        self.task_list_menu = Gio.Menu()
+        menu = Gio.Menu()
         all_item = Gio.MenuItem.new(ALL_LABEL, 'win.selected-task-list')
         all_item.set_attribute_value(Gio.MENU_ATTRIBUTE_TARGET, GLib.Variant('(ss)', ('all', 'all')))
-        self.task_list_menu.append_item(all_item)
+        menu.append_item(all_item)
 
-        self.sections = {}
-        self.menuitems = {}
         for user_id in self.task_list_names.keys():
             if user_id in self.emails or user_id == 'local':
-                self.sections[user_id] = Gio.Menu()
+                section = Gio.Menu()
                 for list_id, name in self.task_list_names[user_id].items():
                     item = Gio.MenuItem.new(name, 'win.selected-task-list')
                     item.set_attribute_value(Gio.MENU_ATTRIBUTE_TARGET, GLib.Variant('(ss)', (user_id, list_id)))
-                    self.sections[user_id].append_item(item)
-                    if user_id not in self.menuitems.keys():
-                        self.menuitems[user_id] = {}
-                    self.menuitems[user_id][list_id] = item
-                self.task_list_menu.append_section(_('Local') if user_id == 'local' else self.emails[user_id], self.sections[user_id])
-        self.task_list_picker.set_menu_model(self.task_list_menu)
+                    section.append_item(item)
+                menu.append_section(_('Local') if user_id == 'local' else self.emails[user_id], section)
+        self.task_list_picker.set_menu_model(menu)
         self.set_reminder_task_list_dropdown()
 
         self.update_task_list()
