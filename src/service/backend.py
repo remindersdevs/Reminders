@@ -434,6 +434,8 @@ class Reminders():
         if task_list != 'local' and user_id != 'local':
             if reminder['completed']:
                 reminder_json['status'] = 'completed'
+            else:
+                reminder_json['status'] = 'notStarted'
 
             if not only_completed:
                 reminder_json['title'] = reminder['title']
