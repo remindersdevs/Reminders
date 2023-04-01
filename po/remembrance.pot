@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-31 19:11-0400\n"
+"POT-Creation-Date: 2023-04-01 12:08-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -165,7 +165,7 @@ msgid "Planner"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:58
-#: src/browser/resources/ui/main_window.ui:356
+#: src/browser/resources/ui/main_window.ui:355
 #: src/browser/resources/ui/reminder_edit_window.ui:59
 msgid "Time"
 msgstr ""
@@ -207,7 +207,7 @@ msgid "Better error dialogs"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:89
-msgid "Fix some issues that occur when the service errors"
+msgid "Fix some issues with the backend"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:96
@@ -219,7 +219,7 @@ msgid "Fix issue where app can corrupt or lose its data."
 msgstr ""
 
 #: src/browser/resources/ui/edit_lists_window.ui:4
-#: src/browser/resources/ui/main_window.ui:337
+#: src/browser/resources/ui/main_window.ui:336
 msgid "Create/Edit Lists"
 msgstr ""
 
@@ -236,19 +236,19 @@ msgid "App Menu"
 msgstr ""
 
 #: src/browser/resources/ui/main_window.ui:109
-#: src/browser/resources/ui/main_window.ui:248 src/browser/main_window.py:611
+#: src/browser/resources/ui/main_window.ui:247 src/browser/main_window.py:587
 msgid "All Reminders"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:132 src/browser/main_window.py:621
+#: src/browser/resources/ui/main_window.ui:132 src/browser/main_window.py:597
 msgid "Upcoming Reminders"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:155 src/browser/main_window.py:631
+#: src/browser/resources/ui/main_window.ui:155 src/browser/main_window.py:607
 msgid "Past Reminders"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:178 src/browser/main_window.py:641
+#: src/browser/resources/ui/main_window.ui:178 src/browser/main_window.py:617
 msgid "Completed Reminders"
 msgstr ""
 
@@ -256,33 +256,33 @@ msgstr ""
 msgid "Select task list"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:307
+#: src/browser/resources/ui/main_window.ui:306
 msgid "Add a reminder (Ctrl+N)"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:315
+#: src/browser/resources/ui/main_window.ui:314
 msgid "Add a reminder"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:333
+#: src/browser/resources/ui/main_window.ui:332
 #: src/browser/resources/ui/preferences.ui:51
 msgid "Refresh"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:343
+#: src/browser/resources/ui/main_window.ui:342
 #: src/browser/resources/ui/preferences.ui:4
 msgid "Preferences"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:347
+#: src/browser/resources/ui/main_window.ui:346
 msgid "About Reminders"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:354
+#: src/browser/resources/ui/main_window.ui:353
 msgid "Sort"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:361
+#: src/browser/resources/ui/main_window.ui:360
 msgid "Title"
 msgstr ""
 
@@ -559,7 +559,7 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:96 src/browser/main_window.py:384
+#: src/browser/edit_lists_window.py:96 src/browser/main_window.py:360
 msgid "Local"
 msgstr ""
 
@@ -690,12 +690,12 @@ msgstr ""
 msgid "Yesterday"
 msgstr ""
 
-#: src/browser/main_window.py:725
+#: src/browser/main_window.py:701
 #, python-brace-format
 msgid "Searching '{text}'"
 msgstr ""
 
-#: src/browser/main_window.py:732
+#: src/browser/main_window.py:708
 msgid "Start typing to search"
 msgstr ""
 

@@ -37,7 +37,7 @@ def about_window():
                 <li>Redesigned some UI elements</li>
                 <li>Better support for mobile devices</li>
                 <li>Better error dialogs</li>
-                <li>Fix some issues that occur when the service errors</li>
+                <li>Fix some issues with the backend</li>
             </ul>
         ''',
         release_notes_version = info.version,
