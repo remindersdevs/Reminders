@@ -33,25 +33,23 @@ class Calendar(threading.Thread):
         super().__init__(target=self.run_countdown)
         self.start()
 
-        Gio.DBusProxy.new_for_bus(
-            Gio.BusType.SYSTEM,
-            Gio.DBusProxyFlags.NONE,
-            None,
+        self.connection = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
+        self.connection.signal_subscribe(
             'org.freedesktop.login1',
-            '/org/freedesktop/login1',
             'org.freedesktop.login1.Manager',
+            'PrepareForSleep',
+            '/org/freedesktop/login1',
             None,
-            self.bus_callback
-        );
+            Gio.DBusSignalFlags.NONE,
+            self.on_wake_from_suspend,
+            None
+        )
 
-    def bus_callback(self, obj, result):
-        proxy = obj.new_for_bus_finish(result)
-        proxy.connect("g-signal", self.on_signal_received)
+    def on_wake_from_suspend(self, connection, sender, object, interface, signal, parameters, data = None):
+        if parameters.unpack()[0]:
+            return
 
-    def on_signal_received(self, proxy, sender, signal, parameters):
-        if signal == "PrepareForSleep" and parameters[0]:
-            logger.info('Resuming from sleep')
-            self.run_countdown(False)
+        self.run_countdown(False)
 
     def on_countdown_done(self):
         for reminder in self.win.reminder_lookup_dict.values():

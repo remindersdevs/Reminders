@@ -27,26 +27,24 @@ class Countdowns():
     def __init__(self):
         self.dict = {}
 
-        Gio.DBusProxy.new_for_bus(
-            Gio.BusType.SYSTEM,
-            Gio.DBusProxyFlags.NONE,
-            None,
+        self.connection = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
+        self.connection.signal_subscribe(
             'org.freedesktop.login1',
-            '/org/freedesktop/login1',
             'org.freedesktop.login1.Manager',
+            'PrepareForSleep',
+            '/org/freedesktop/login1',
             None,
-            self._bus_callback
-        );
+            Gio.DBusSignalFlags.NONE,
+            self.on_wake_from_suspend,
+            None
+        )
 
-    def _bus_callback(self, obj, result):
-        proxy = obj.new_for_bus_finish(result)
-        proxy.connect("g-signal", self._on_signal_received)
-
-    def _on_signal_received(self, proxy, sender, signal, parameters):
-        if signal == "PrepareForSleep" and parameters[0]:
-            logger.info('Resuming from sleep')
-            for i in self.dict.values():
-                self._start(i, True)
+    def on_wake_from_suspend(self, connection, sender, object, interface, signal, parameters, data = None):
+        if parameters.unpack()[0]:
+            return
+    
+        for reminder_id in self.dict.keys():
+            self._start(reminder_id, True)
 
     def remove_countdown(self, reminder_id):
         if reminder_id in self.dict:
@@ -84,13 +82,11 @@ class Countdowns():
         if dictionary['id'] != 0:
             GLib.Source.remove(dictionary['id'])
             dictionary['id'] = 0
-
-        now = time.time()
+        
         if 'interval' in dictionary.keys():
             wait = dictionary['interval'] * 60000
-            if resuming:
-                dictionary['callback']()
         else:
+            now = time.time()
             wait = int(1000 * (dictionary['timestamp'] - now))
 
         if wait > 0:
