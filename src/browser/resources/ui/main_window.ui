@@ -257,14 +257,20 @@
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="page_sub_label">
-                                        <property name="valign">start</property>
-                                        <property name="halign">start</property>
-                                        <property name="label" bind-source="task_list_picker" bind-property="label" bind-flags="sync-create"/>
-                                        <style>
-                                          <class name="title-4"/>
-                                          <class name="page-sub-heading"/>
-                                        </style>
+                                      <object class="GtkRevealer" id="label_revealer">
+                                        <property name="transition-type">5</property>
+                                        <property name="reveal-child">true</property>
+                                        <child>
+                                          <object class="GtkLabel" id="page_sub_label">
+                                            <property name="valign">start</property>
+                                            <property name="halign">start</property>
+                                            <property name="label" bind-source="task_list_picker" bind-property="label" bind-flags="sync-create"/>
+                                            <style>
+                                              <class name="title-4"/>
+                                              <class name="page-sub-heading"/>
+                                            </style>
+                                          </object>
+                                        </child>
                                       </object>
                                     </child>
                                   </object>

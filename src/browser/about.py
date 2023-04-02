@@ -31,8 +31,8 @@ def about_window():
         issue_url = 'https://github.com/dgsasha/remembrance/issues',
         release_notes = '''
             <ul>
-                <li>Add support for creating and editing task lists</li>
-                <li>Add support for syncing with Microsoft To Do</li>
+                <li>Added support for creating and editing task lists</li>
+                <li>Added support for syncing with Microsoft To Do</li>
                 <li>Reduced memory usage</li>
                 <li>Redesigned some UI elements</li>
                 <li>Better support for mobile devices</li>

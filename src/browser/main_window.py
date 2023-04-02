@@ -54,7 +54,7 @@ class MainWindow(Adw.ApplicationWindow):
     search_revealer = Gtk.Template.Child()
     search_entry = Gtk.Template.Child()
     task_list_picker = Gtk.Template.Child()
-    page_sub_label = Gtk.Template.Child()
+    label_revealer = Gtk.Template.Child()
     spinner = Gtk.Template.Child()
 
     def __init__(self, page: str, app, *args, **kwargs):
@@ -626,7 +626,7 @@ class MainWindow(Adw.ApplicationWindow):
         self.reminders_list.set_placeholder(self.placeholder)
         self.reminders_list.set_sort_func(self.sort_func)
         self.selected.emit('activate')
-        self.page_sub_label.set_visible(True)
+        self.label_revealer.set_reveal_child(True)
 
     def search_filter(self, reminder):
         retval = True
@@ -699,14 +699,14 @@ class MainWindow(Adw.ApplicationWindow):
             self.reminders_list.invalidate_filter()
             self.reminders_list.invalidate_sort()
             self.page_label.set_label(_(f"Searching '{text}'"))
-            self.page_sub_label.set_visible(False)
+            self.label_revealer.set_reveal_child(False)
         else:
             self.searching = False
             self.sort_button.set_sensitive(True)
             self.reminders_list.set_filter_func(self.no_filter)
             self.reminders_list.set_sort_func(self.sort_func)
             self.page_label.set_label(_('Start typing to search'))
-            self.page_sub_label.set_visible(False)
+            self.label_revealer.set_reveal_child(False)
 
     @Gtk.Template.Callback()
     def new_reminder(self, button = None):

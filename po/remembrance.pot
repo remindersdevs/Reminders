@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-01 13:36-0400\n"
+"POT-Creation-Date: 2023-04-02 10:36-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -121,15 +121,15 @@ msgid "(user_id, task_id) ids can be 'all', 'local', or an actual id"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:13
-msgid "Features:"
+msgid "What you can do with Reminders:"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:15
-msgid "Recurring reminders"
+msgid "Set recurring reminders"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:16
-msgid "Scheduled notifications"
+msgid "Schedule notifications"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:17
@@ -165,7 +165,7 @@ msgid "Planner"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:58
-#: src/browser/resources/ui/main_window.ui:355
+#: src/browser/resources/ui/main_window.ui:361
 #: src/browser/resources/ui/reminder_edit_window.ui:59
 msgid "Time"
 msgstr ""
@@ -183,11 +183,11 @@ msgid "Remembrance"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:83
-msgid "Add support for creating and editing task lists"
+msgid "Added support for creating and editing task lists"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:84
-msgid "Add support for syncing with Microsoft To Do"
+msgid "Added support for syncing with Microsoft To Do"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:85
@@ -219,7 +219,7 @@ msgid "Fix issue where app can corrupt or lose its data."
 msgstr ""
 
 #: src/browser/resources/ui/edit_lists_window.ui:4
-#: src/browser/resources/ui/main_window.ui:336
+#: src/browser/resources/ui/main_window.ui:342
 msgid "Create/Edit Lists"
 msgstr ""
 
@@ -256,33 +256,33 @@ msgstr ""
 msgid "Select task list"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:306
+#: src/browser/resources/ui/main_window.ui:312
 msgid "Add a reminder (Ctrl+N)"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:314
+#: src/browser/resources/ui/main_window.ui:320
 msgid "Add a reminder"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:332
+#: src/browser/resources/ui/main_window.ui:338
 #: src/browser/resources/ui/preferences.ui:51
 msgid "Refresh"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:342
+#: src/browser/resources/ui/main_window.ui:348
 #: src/browser/resources/ui/preferences.ui:4
 msgid "Preferences"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:346
+#: src/browser/resources/ui/main_window.ui:352
 msgid "About Reminders"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:353
+#: src/browser/resources/ui/main_window.ui:359
 msgid "Sort"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:360
+#: src/browser/resources/ui/main_window.ui:366
 msgid "Title"
 msgstr ""
 
@@ -747,10 +747,10 @@ msgstr ""
 msgid "Microsoft reminders currently don't support recurrence"
 msgstr ""
 
-#: src/service/backend.py:543
+#: src/service/backend.py:545
 msgid "Mark as completed"
 msgstr ""
 
-#: src/service/backend.py:836
+#: src/service/backend.py:838
 msgid "Local Reminders"
 msgstr ""
