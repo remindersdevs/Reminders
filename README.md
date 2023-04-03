@@ -13,12 +13,12 @@
 
 </div>
 
-# Translators
+## Translators
 You can translate Reminders on [Weblate](https://hosted.weblate.org/engage/reminders/), or through GitHub pull requests.
 
-# Manual installation
+## Manual installation
 
-## Installing dependencies (Flatpak):
+### Installing dependencies (Flatpak):
 ```
 flatpak install flathub org.gnome.Sdk//44
 ```
@@ -28,7 +28,7 @@ flatpak install flathub org.gnome.Platform//44
 You will also need `flatpak-builder`
 
 
-## Building (Flatpak):
+### Building (Flatpak):
 ```
 flatpak-builder --user --install --force-clean build-dir flatpak/io.github.dgsasha.Remembrance.yml
 ```
@@ -36,7 +36,7 @@ flatpak-builder --user --install --force-clean build-dir flatpak/io.github.dgsas
 flatpak run io.github.dgsasha.Remembrance.Devel --restart-service
 ```
 
-## Dependencies (generic):
+### Dependencies (generic):
 - `PyGObject`
 - `Meson`
 - `Libadwaita`
@@ -45,7 +45,7 @@ flatpak run io.github.dgsasha.Remembrance.Devel --restart-service
 - `python3-msal`
 - `python3-requests`
 
-## Building (generic):
+### Building (generic):
 ```
 meson build -Ddevel=true
 ```
@@ -56,13 +56,13 @@ ninja -C build install
 remembrance --restart-service
 ```
 
-# Todo
+## Todo
 - Make a GNOME Shell extension that lets you view your reminders
 - Maybe integrate the search with GNOME Shell
 
 If you want to contribute anything, just open a pull request. Depending on what you are going to contribute, you might want to [email me](mailto:dgsasha04@gmail.com) first. This will let me help you get started and it will also help me make sure that multiple people aren't working on the same feature without knowing it.
 
-# [Reminders DBus Service Documentation](REMEMBRANCE_SERVICE.md)
+## [Reminders DBus Service Documentation](REMEMBRANCE_SERVICE.md)
 
-# Copying
+## Copying
 Reminders is licensed under the terms of the [GNU General Public License, version 3 or later](https://www.gnu.org/licenses/gpl-3.0.txt).
