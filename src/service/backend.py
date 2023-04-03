@@ -257,7 +257,7 @@ class Reminders():
         self.synced_ids[user_id] = ['all']
         self.set_enabled_lists(self.synced_ids)
         self.do_emit('MSSignedIn', GLib.Variant('(ss)', (user_id, email)))
-        self.refresh()
+        self.refresh(False)
         logger.info('Logged into Microsoft account')
 
     def start_countdowns(self):
@@ -290,6 +290,7 @@ class Reminders():
     def _synced_task_list_changed(self):
         self.synced_ids = self.app.settings.get_value('synced-task-lists').unpack()
         self.do_emit('MSSyncedListsChanged', self.get_enabled_lists())
+        self.refresh(False)
 
     def _rfc_to_timestamp(self, rfc):
         return GLib.DateTime.new_from_iso8601(rfc, GLib.TimeZone.new_utc()).to_unix()
@@ -313,7 +314,7 @@ class Reminders():
         }
         self.do_emit('ReminderUpdated', GLib.Variant('(sa{sv})', (app_id, variant)))
 
-    def _sync_ms(self, old_ms, old_lists, old_list_ids):
+    def _sync_ms(self, old_ms, old_lists, old_list_ids, notify_past):
         try:
             lists = self.to_do.get_lists()
         except:
@@ -354,7 +355,7 @@ class Reminders():
                 for task in task_list['tasks']:
                     task_id = task['id']
                     reminder_id = None
-                    for old_reminder_id, old_reminder in self.ms.items():
+                    for old_reminder_id, old_reminder in old_ms.items():
                         if old_reminder['ms-id'] == task_id:
                             reminder_id = old_reminder_id
                             break
@@ -363,18 +364,14 @@ class Reminders():
                         reminder_id = self._do_generate_id()
 
                     timestamp = self._rfc_to_timestamp(task['reminderDateTime']['dateTime']) if 'reminderDateTime' in task else 0
+                    is_future = timestamp > floor(time.time())
 
-                    if reminder_id in self.ms:
+                    if reminder_id in old_ms:
                         reminder = old_ms[reminder_id].copy()
                     else:
-                        is_future = timestamp > floor(time.time())
                         reminder = {}
-                        if old_ms == {}:
-                            reminder['repeat-times'] = 0
-                        else:
-                            reminder['repeat-times'] = 1 if is_future else 0
-
-                        reminder['old-timestamp'] = 0 if is_future else timestamp
+                        reminder['repeat-times'] = 1 if is_future or notify_past else 0
+                        reminder['old-timestamp'] = 0
 
                     reminder['ms-id'] = task_id
                     reminder['title'] = task['title'].strip()
@@ -385,7 +382,7 @@ class Reminders():
                     reminder['repeat-frequency'] = 1
                     reminder['repeat-days'] = 0
                     reminder['repeat-until'] = 0
-                    if timestamp < floor(time.time()):
+                    if not is_future:
                         reminder['old-timestamp'] = timestamp
                     reminder['list'] = list_id
                     reminder['user-id'] = user_id
@@ -783,7 +780,7 @@ class Reminders():
 
         return old_ms
 
-    def _get_reminders(self):
+    def _get_reminders(self, notify_past = True):
         local = {}
         ms = {}
         list_ids = {}
@@ -838,7 +835,7 @@ class Reminders():
             list_names['local']['local'] = _('Local Reminders')
 
         old_ms = self._get_saved_ms_reminders()
-        ms, ms_list_names, list_ids = self._sync_ms(old_ms, ms_list_names, list_ids)
+        ms, ms_list_names, list_ids = self._sync_ms(old_ms, ms_list_names, list_ids, notify_past)
         list_names.update(ms_list_names)
 
         return local, ms, list_names, list_ids
@@ -1056,11 +1053,11 @@ class Reminders():
         self.refresh()
         logger.info('Logged out of Microsoft account')
 
-    def refresh(self):
+    def refresh(self, notify_past = True):
         try:
             self.countdowns.add_timeout(self.refresh_time, self.refresh, -1)
 
-            local, ms, list_names, list_ids = self._get_reminders()
+            local, ms, list_names, list_ids = self._get_reminders(notify_past)
 
             new_ids = []
             removed_ids = []

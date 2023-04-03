@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-03 10:32-0400\n"
+"POT-Creation-Date: 2023-04-03 11:58-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -290,7 +290,7 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: src/browser/resources/ui/ms_user_row.ui:42 src/browser/preferences.py:223
+#: src/browser/resources/ui/ms_user_row.ui:42 src/browser/preferences.py:222
 msgid "Sign Out"
 msgstr ""
 
@@ -466,7 +466,7 @@ msgstr ""
 
 #: src/browser/resources/ui/reminder_edit_window.ui:419
 #: src/browser/edit_lists_window.py:78 src/browser/edit_lists_window.py:187
-#: src/browser/main_window.py:162 src/browser/preferences.py:222
+#: src/browser/main_window.py:162 src/browser/preferences.py:221
 #: src/browser/reminder.py:251
 msgid "Cancel"
 msgstr ""
@@ -699,11 +699,11 @@ msgstr ""
 msgid "Start typing to search"
 msgstr ""
 
-#: src/browser/preferences.py:218
+#: src/browser/preferences.py:217
 msgid "Are you sure you want to sign out?"
 msgstr ""
 
-#: src/browser/preferences.py:219
+#: src/browser/preferences.py:218
 #, python-brace-format
 msgid "This will sign out <b>{self.email}</b>"
 msgstr ""
@@ -747,10 +747,10 @@ msgstr ""
 msgid "Microsoft reminders currently don't support recurrence"
 msgstr ""
 
-#: src/service/backend.py:545
+#: src/service/backend.py:542
 msgid "Mark as completed"
 msgstr ""
 
-#: src/service/backend.py:838
+#: src/service/backend.py:835
 msgid "Local Reminders"
 msgstr ""

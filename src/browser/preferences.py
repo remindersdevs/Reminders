@@ -83,7 +83,6 @@ class PreferencesWindow(Adw.PreferencesWindow):
         if self.synced != synced:
             self.synced = synced
             self.settings.set_value('synced-task-lists', GLib.Variant('a{sas}', self.synced))
-            self.app.refresh_reminders()
         self.set_visible(False)
         return True
 
