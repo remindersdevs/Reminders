@@ -16,7 +16,7 @@
             </style>
             <child>
               <object class="AdwExpanderRow" id="ms_sync_row">
-                <property name="title" translatable="yes">Microsoft To Do</property>
+                <property name="title" translatable="yes">Microsoft To Do (Beta)</property>
                 <child>
                   <object class="AdwActionRow" id="add_account_row">
                     <style>
