@@ -1,4 +1,4 @@
-# Reminders DBus Service Info, version 2.2
+# Reminders DBus Service Info, version 2.3
 name: io.github.dgsasha.Remembrance.Service1
 
 interface: io.github.dgsasha.Remembrance.Service1.Reminders
@@ -170,17 +170,17 @@ Get emails of currently logged in Microsoft accounts
         - Each key is a user id and each value is an array of the list ids that are synced on that account
 
 ### MSSetSyncedLists
-Set the task lists that should be synced
+Set the task lists that should be synced, this also refreshes the reminders
 - Parameters (a{sas})
     - list-ids
         - Type: a{sas}
         - Each key should be a user id and each value should be an array of the list ids that are synced on that account
 
 ### MSLogin
-Open browser window to login to microsoft account
+Open browser window to login to microsoft account, once logged in the reminders will be refreshed
 
 ### MSLogout
-Log out of a microsoft account
+Log out of a microsoft account, once logged out the reminders will be refreshed
 - Parameters (s)
     - user-id
         - Type: s
