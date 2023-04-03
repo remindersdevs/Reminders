@@ -77,6 +77,7 @@ class ReminderEditWindow(Adw.Window):
         self.task_list_row_connection = None
         self.win = win
         self.app = app
+        self.calendar_connections = []
         self.set_transient_for(win)
         self.setup(reminder)
         self.win.connect('notify::time-format', lambda *args: self.time_format_updated())
@@ -95,19 +96,14 @@ class ReminderEditWindow(Adw.Window):
             self.task_list = self.win.selected_list_id if self.win.selected_list_id != 'all' else 'local'
             self.user_id = self.win.selected_user_id if self.win.selected_user_id != 'all' else 'local'
 
-        self.time_set = False
-        self.repeat_days = self.options['repeat-days']
         self.set_time(self.options['timestamp'])
-        self.time_format_updated()
-        self.time_set = True
 
         self.set_task_list_dropdown()
         self.task_list_visibility_changed()
 
+        self.set_repeat_days(self.options['repeat-days'])
         self.set_repeat_type(self.options['repeat-type'])
         self.set_repeat_frequency(self.options['repeat-frequency'])
-        self.repeat_days = 0 # this will get set again
-        self.set_repeat_days(self.options['repeat-days'])
         self.set_repeat_duration(self.options['repeat-until'], self.options['repeat-times'])
         self.repeat_day_changed()
 
@@ -120,7 +116,11 @@ class ReminderEditWindow(Adw.Window):
             self.set_title(_('New Reminder'))
 
         self.repeat_duration_selected_changed()
-        self.repeat_type_selected_changed()
+
+        if self.options['repeat-type'] == info.RepeatType.WEEK:
+            self.week_repeat_row.set_visible(True)
+        else:
+            self.week_repeat_row.set_visible(False)
 
     def get_options(self):
         options = self.options.copy()
@@ -147,7 +147,15 @@ class ReminderEditWindow(Adw.Window):
                 options['repeat-times'] = -1
                 options['repeat-until'] = datetime.datetime(self.calendar.props.year, self.calendar.props.month + 1, self.calendar.props.day).timestamp()
 
-            options['repeat-days'] = self.repeat_days
+            if options['repeat-type'] == info.RepeatType.WEEK:
+                self.week_repeat_row.set_visible(True)
+                repeat_days = self.get_repeat_days()
+                if repeat_days == 0:
+                    repeat_days = 2**(self.time.get_day_of_week() - 1)
+                    self.set_repeat_days(repeat_days)
+                options['repeat-days'] = repeat_days
+            else:
+                options['repeat-days'] = 0
         else:
             now = floor(time.time())
             options['repeat-frequency'] = 1
@@ -160,6 +168,22 @@ class ReminderEditWindow(Adw.Window):
 
         return options
 
+    def get_repeat_days(self):
+        repeat_days = 0
+        for btn, flag in (
+            (self.mon_btn, info.RepeatDays.MON),
+            (self.tue_btn, info.RepeatDays.TUE),
+            (self.wed_btn, info.RepeatDays.WED),
+            (self.thu_btn, info.RepeatDays.THU),
+            (self.fri_btn, info.RepeatDays.FRI),
+            (self.sat_btn, info.RepeatDays.SAT),
+            (self.sun_btn, info.RepeatDays.SUN)
+        ):
+            if btn.get_active():
+                repeat_days += int(flag)
+
+        return repeat_days
+
     def check_changed(self, options):
         return options != self.options
 
@@ -168,14 +192,19 @@ class ReminderEditWindow(Adw.Window):
         self.task_list_visibility_changed()
 
     def update_repeat_day(self):
-        if self.repeat_row.get_enable_expansion():
-            if self.repeat_days == 0 or self.repeat_days in info.RepeatDays.__members__.values():
-                repeat_days = 2**(self.time.get_day_of_week() - 1)
-                if self.repeat_days != repeat_days:
-                    self.repeat_days = 0
-                    self.set_repeat_days(repeat_days)
+        repeat_type = self.repeat_type_button.get_selected() + 1
+        repeat_days = self.get_repeat_days()
+        if self.repeat_row.get_enable_expansion() and repeat_type == info.RepeatType.WEEK:
+            if repeat_days == 0 or repeat_days in info.RepeatDays.__members__.values():
+                new_repeat_days = 2**(self.time.get_day_of_week() - 1)
+                if new_repeat_days != repeat_days:
+                    self.set_repeat_days(new_repeat_days)
 
     def set_time(self, timestamp):
+        for i in self.calendar_connections:
+            self.calendar.disconnect(i)
+        self.calendar_connections = []
+
         self.time_row.set_enable_expansion(timestamp != 0)
         self.time = GLib.DateTime.new_now_local() if timestamp == 0 else GLib.DateTime.new_from_unix_local(timestamp)
         # Remove seconds from the time because it isn't important
@@ -183,8 +212,12 @@ class ReminderEditWindow(Adw.Window):
         self.time = self.time.add_seconds(-(seconds))
 
         self.calendar.select_day(self.time)
-        self.date_button.set_label(self.win.get_date_label(self.time))
+        self.time_format_updated()
         self.minute_adjustment.set_value(self.time.get_minute())
+        self.date_button.set_label(self.win.get_date_label(self.time))
+
+        for i in ('day-selected', 'notify::year', 'notify::month'):
+            self.calendar_connections.append(self.calendar.connect(i, self.day_changed))
 
     def update_date_button_label(self):
         self.date_button.set_label(self.win.get_date_label(self.time))
@@ -213,21 +246,23 @@ class ReminderEditWindow(Adw.Window):
         self.hour_changed()
 
     def time_format_updated(self):
+        hour = self.time.get_hour()
         if self.win.props.time_format == info.TimeFormat.TWELVE_HOUR:
             self.am_pm_button.set_visible(True)
             self.hour_adjustment.set_upper(11)
-            if self.time.get_hour() >= 12:
+            if hour >= 12:
                 self.am_pm_button.set_label(_('PM'))
                 self.pm = True
-                self.hour_adjustment.set_value(self.time.get_hour() - 12)
+                self.hour_adjustment.set_value(hour - 12)
             else:
                 self.am_pm_button.set_label(_('AM'))
                 self.pm = False
-                self.hour_adjustment.set_value(self.time.get_hour())
+                self.hour_adjustment.set_value(hour)
         elif self.win.props.time_format == info.TimeFormat.TWENTYFOUR_HOUR:
-            self.am_pm_button.set_visible(False)
             self.hour_adjustment.set_upper(23)
-            self.hour_adjustment.set_value(self.time.get_hour())
+            self.am_pm_button.set_visible(False)
+            self.pm = False
+            self.hour_adjustment.set_value(hour)
 
     def set_task_list_dropdown(self):
         visible = len(self.win.task_list_ids) > 1
@@ -272,6 +307,7 @@ class ReminderEditWindow(Adw.Window):
             self.repeat_row.set_enable_expansion(True)
         else:
             self.repeat_row.set_enable_expansion(False)
+            self.repeat_type_button.set_selected(0)
             self.repeat_duration_button.set_selected(0)
             self.repeat_times_btn.set_value(5)
 
@@ -289,7 +325,7 @@ class ReminderEditWindow(Adw.Window):
                 self.repeat_duration_button.set_selected(1)
             elif repeat_until > 0:
                 self.repeat_duration_button.set_selected(2)
-                self.calendar.select_day(GLib.DateTime.new_from_unix_local(repeat_until))
+                self.repeat_until_calendar.select_day(GLib.DateTime.new_from_unix_local(repeat_until))
                 self.repeat_times_btn.set_value(5)
 
     def set_repeat_days(self, repeat_days):
@@ -305,7 +341,15 @@ class ReminderEditWindow(Adw.Window):
         ):
             btn.set_active(flag in repeat_days_flag)
 
-        self.day_changed()
+    def day_changed(self, calendar = None, day = None):
+        date = self.calendar.get_date()
+        new_day = date.get_day_of_year()
+        old_day = self.time.get_day_of_year()
+        days = new_day - old_day
+        self.time = self.time.add_days(days)
+        self.hour_changed()
+        self.update_repeat_day()
+        self.date_button.set_label(self.win.get_date_label(self.time))
 
     def do_save(self, data = None):
         try:
@@ -374,23 +418,6 @@ class ReminderEditWindow(Adw.Window):
         self.win.set_busy(False, self)
 
     @Gtk.Template.Callback()
-    def repeat_days_changed(self, button):
-        for btn, flag in (
-            (self.mon_btn, info.RepeatDays.MON),
-            (self.tue_btn, info.RepeatDays.TUE),
-            (self.wed_btn, info.RepeatDays.WED),
-            (self.thu_btn, info.RepeatDays.THU),
-            (self.fri_btn, info.RepeatDays.FRI),
-            (self.sat_btn, info.RepeatDays.SAT),
-            (self.sun_btn, info.RepeatDays.SUN)
-        ):
-            if button == btn:
-                if button.get_active():
-                    self.repeat_days += flag
-                else:
-                    self.repeat_days -= flag
-
-    @Gtk.Template.Callback()
     def repeat_day_changed(self, calendar = None, data = None):
         self.repeat_until_btn.set_label(self.win.get_date_label(self.repeat_until_calendar.get_date()))
 
@@ -411,7 +438,9 @@ class ReminderEditWindow(Adw.Window):
         repeat_type = self.repeat_type_button.get_selected() + 1
         if repeat_type == info.RepeatType.WEEK:
             self.week_repeat_row.set_visible(True)
-            self.update_repeat_day()
+            if self.get_repeat_days() == 0:
+                repeat_days = 2**(self.time.get_day_of_week() - 1)
+                self.set_repeat_days(repeat_days)
         else:
             self.week_repeat_row.set_visible(False)
 
@@ -476,7 +505,6 @@ class ReminderEditWindow(Adw.Window):
     def minute_changed(self, adjustment = None):
         minutes = self.minute_adjustment.get_value() - self.time.get_minute()
         self.time = self.time.add_minutes(minutes)
-        self.update_repeat_day()
 
     @Gtk.Template.Callback()
     def hour_changed(self, adjustment = None):
@@ -490,8 +518,6 @@ class ReminderEditWindow(Adw.Window):
             elif value < 12 and self.pm:
                 self.set_am()
 
-            self.update_calendar()
-
         hours = value - old_value
 
         old_time = self.time
@@ -500,19 +526,6 @@ class ReminderEditWindow(Adw.Window):
             self.hour_adjustment.set_value(self.time.get_hour())
             if self.minute_adjustment.get_value() != self.time.get_minute():
                 self.minute_adjustment.set_value(self.time.get_minute())
-        self.update_repeat_day()
-
-    @Gtk.Template.Callback()
-    def day_changed(self, calendar = None, day = None):
-        date = self.calendar.get_date()
-        new_day = date.get_day_of_year()
-        old_day = self.time.get_day_of_year()
-        days = new_day - old_day
-        self.time = self.time.add_days(days)
-        if self.time_set:
-            self.hour_changed()
-        self.date_button.set_label(self.win.get_date_label(self.time))
-        self.update_repeat_day()
 
     @Gtk.Template.Callback()
     def wrap_minute(self, button):
@@ -528,7 +541,6 @@ class ReminderEditWindow(Adw.Window):
         elif new_value < lower:
             self.hour_button.set_value(upper)
             self.wrap_hour()
-        else:
             self.hour_button.set_value(new_value)
 
     @Gtk.Template.Callback()

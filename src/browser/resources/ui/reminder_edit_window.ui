@@ -84,11 +84,7 @@
                                             <property name="popover">
                                               <object class="GtkPopover" id="calendar_popover">
                                                 <child>
-                                                  <object class="GtkCalendar" id="calendar">
-                                                    <signal name="day-selected" handler="day_changed" swapped="no"/>
-                                                    <signal name="notify::year" handler="day_changed" swapped="no"/>
-                                                    <signal name="notify::month" handler="day_changed" swapped="no"/>
-                                                  </object>
+                                                  <object class="GtkCalendar" id="calendar"/>
                                                 </child>
                                               </object>
                                             </property>
@@ -247,7 +243,6 @@
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">Mon</property>
                                         <property name="tooltip-text" translatable="yes">Monday</property>
-                                        <signal name="toggled" handler="repeat_days_changed" swapped="no"/>
                                         <style>
                                           <class name="flat"/>
                                           <class name="circular"/>
@@ -260,7 +255,6 @@
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">Tue</property>
                                         <property name="tooltip-text" translatable="yes">Tuesday</property>
-                                        <signal name="toggled" handler="repeat_days_changed" swapped="no"/>
                                         <style>
                                           <class name="flat"/>
                                           <class name="circular"/>
@@ -273,7 +267,6 @@
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">Wed</property>
                                         <property name="tooltip-text" translatable="yes">Wednesday</property>
-                                        <signal name="toggled" handler="repeat_days_changed" swapped="no"/>
                                         <style>
                                           <class name="flat"/>
                                           <class name="circular"/>
@@ -286,7 +279,6 @@
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">Thu</property>
                                         <property name="tooltip-text" translatable="yes">Thursday</property>
-                                        <signal name="toggled" handler="repeat_days_changed" swapped="no"/>
                                         <style>
                                           <class name="flat"/>
                                           <class name="circular"/>
@@ -299,7 +291,6 @@
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">Fri</property>
                                         <property name="tooltip-text" translatable="yes">Friday</property>
-                                        <signal name="toggled" handler="repeat_days_changed" swapped="no"/>
                                         <style>
                                           <class name="flat"/>
                                           <class name="circular"/>
@@ -312,7 +303,6 @@
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">Sat</property>
                                         <property name="tooltip-text" translatable="yes">Saturday</property>
-                                        <signal name="toggled" handler="repeat_days_changed" swapped="no"/>
                                         <style>
                                           <class name="flat"/>
                                           <class name="circular"/>
@@ -325,7 +315,6 @@
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">Sun</property>
                                         <property name="tooltip-text" translatable="yes">Sunday</property>
-                                        <signal name="toggled" handler="repeat_days_changed" swapped="no"/>
                                         <style>
                                           <class name="flat"/>
                                           <class name="circular"/>

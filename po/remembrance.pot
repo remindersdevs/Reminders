@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-02 10:36-0400\n"
+"POT-Creation-Date: 2023-04-03 10:32-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -377,129 +377,129 @@ msgid "Set a time"
 msgstr ""
 
 #: src/browser/resources/ui/reminder_edit_window.ui:83
-#: src/browser/resources/ui/reminder_edit_window.ui:387
+#: src/browser/resources/ui/reminder_edit_window.ui:376
 msgid "Select date"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:100
+#: src/browser/resources/ui/reminder_edit_window.ui:96
 msgid "Date"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:115
-#: src/browser/resources/ui/reminder_edit_window.ui:128
+#: src/browser/resources/ui/reminder_edit_window.ui:111
+#: src/browser/resources/ui/reminder_edit_window.ui:124
 msgid "Hour"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:149
-#: src/browser/resources/ui/reminder_edit_window.ui:164
+#: src/browser/resources/ui/reminder_edit_window.ui:145
+#: src/browser/resources/ui/reminder_edit_window.ui:160
 msgid "Minute"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:190
+#: src/browser/resources/ui/reminder_edit_window.ui:186
 msgid "Repeat the reminder"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:205
+#: src/browser/resources/ui/reminder_edit_window.ui:201
 msgid "Repeat every"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:248
+#: src/browser/resources/ui/reminder_edit_window.ui:244
 msgid "Mon"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:249
+#: src/browser/resources/ui/reminder_edit_window.ui:245
 msgid "Monday"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:261
+#: src/browser/resources/ui/reminder_edit_window.ui:256
 msgid "Tue"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:262
+#: src/browser/resources/ui/reminder_edit_window.ui:257
 msgid "Tuesday"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:274
+#: src/browser/resources/ui/reminder_edit_window.ui:268
 msgid "Wed"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:275
+#: src/browser/resources/ui/reminder_edit_window.ui:269
 msgid "Wednesday"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:287
+#: src/browser/resources/ui/reminder_edit_window.ui:280
 msgid "Thu"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:288
+#: src/browser/resources/ui/reminder_edit_window.ui:281
 msgid "Thursday"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:300
+#: src/browser/resources/ui/reminder_edit_window.ui:292
 msgid "Fri"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:301
+#: src/browser/resources/ui/reminder_edit_window.ui:293
 msgid "Friday"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:313
+#: src/browser/resources/ui/reminder_edit_window.ui:304
 msgid "Sat"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:314
+#: src/browser/resources/ui/reminder_edit_window.ui:305
 msgid "Saturday"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:326
+#: src/browser/resources/ui/reminder_edit_window.ui:316
 msgid "Sun"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:327
+#: src/browser/resources/ui/reminder_edit_window.ui:317
 msgid "Sunday"
 msgstr ""
 
 #. Translators: This is a noun, preceded by a number to represent the number of occurrences of something
-#: src/browser/resources/ui/reminder_edit_window.ui:377
+#: src/browser/resources/ui/reminder_edit_window.ui:366
 msgid "time(s)"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:430
+#: src/browser/resources/ui/reminder_edit_window.ui:419
 #: src/browser/edit_lists_window.py:78 src/browser/edit_lists_window.py:187
 #: src/browser/main_window.py:162 src/browser/preferences.py:222
 #: src/browser/reminder.py:251
 msgid "Cancel"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:445
+#: src/browser/resources/ui/reminder_edit_window.ui:434
 msgid "Save"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:460
+#: src/browser/resources/ui/reminder_edit_window.ui:449
 msgid "minute(s)"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:461
+#: src/browser/resources/ui/reminder_edit_window.ui:450
 msgid "hour(s)"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:462
+#: src/browser/resources/ui/reminder_edit_window.ui:451
 msgid "day(s)"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:463
+#: src/browser/resources/ui/reminder_edit_window.ui:452
 msgid "week(s)"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:468
+#: src/browser/resources/ui/reminder_edit_window.ui:457
 msgid "Repeat forever"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:469
+#: src/browser/resources/ui/reminder_edit_window.ui:458
 msgid "Display a total of"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:470
+#: src/browser/resources/ui/reminder_edit_window.ui:459
 msgid "Repeat until"
 msgstr ""
 
@@ -725,25 +725,25 @@ msgstr ""
 msgid "This will remove {reminder} and cannot be undone."
 msgstr ""
 
-#: src/browser/reminder_edit_window.py:118
+#: src/browser/reminder_edit_window.py:114
 msgid "Edit Reminder"
 msgstr ""
 
-#: src/browser/reminder_edit_window.py:120
+#: src/browser/reminder_edit_window.py:116
 msgid "New Reminder"
 msgstr ""
 
-#: src/browser/reminder_edit_window.py:201
-#: src/browser/reminder_edit_window.py:220
+#: src/browser/reminder_edit_window.py:234
+#: src/browser/reminder_edit_window.py:254
 msgid "PM"
 msgstr ""
 
-#: src/browser/reminder_edit_window.py:205
-#: src/browser/reminder_edit_window.py:224
+#: src/browser/reminder_edit_window.py:238
+#: src/browser/reminder_edit_window.py:258
 msgid "AM"
 msgstr ""
 
-#: src/browser/reminder_edit_window.py:430
+#: src/browser/reminder_edit_window.py:459
 msgid "Microsoft reminders currently don't support recurrence"
 msgstr ""
 

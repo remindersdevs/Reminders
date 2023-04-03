@@ -66,7 +66,7 @@ class Calendar(threading.Thread):
     def run_countdown(self, new_day = True):
         try:
             if new_day:
-                self.time = self.time + datetime.timedelta(days=1)
+                self.time += datetime.timedelta(days=1)
                 self.timestamp = self.time.timestamp()
 
             if self.countdown_id != 0:
@@ -74,9 +74,9 @@ class Calendar(threading.Thread):
                 self.countdown_id = 0
 
             now = time.time()
-            self.wait = int(1000 * (self.timestamp - now))
-            if self.timestamp > 0:
-                self.countdown_id = GLib.timeout_add(self.wait, self.on_countdown_done)
+            wait = int(1000 * (self.timestamp - now))
+            if wait > 0:
+                self.countdown_id = GLib.timeout_add(wait, self.on_countdown_done)
             else:
                 self.on_countdown_done()
         except Exception as error:

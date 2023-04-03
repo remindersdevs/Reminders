@@ -642,7 +642,7 @@ class Reminders():
                     week_frequency = frequency - 1
                     break
 
-            timedate += datetime.timedelta(days=(((days[index] - weekday) % 7) + 7 * week_frequency))
+            timedate += datetime.timedelta(days=((((days[index] - weekday) + 7) % 7) + 7 * week_frequency))
             timestamp = timedate.timestamp()
 
             while timestamp < floor(time.time()):
@@ -658,7 +658,7 @@ class Reminders():
                     index = 0
                     week_frequency = frequency - 1
 
-                timedate += datetime.timedelta(days=(((days[index] - weekday) % 7) + 7 * week_frequency))
+                timedate += datetime.timedelta(days=((((days[index] - weekday) + 7) % 7) + 7 * week_frequency))
                 timestamp = timedate.timestamp()
 
 
