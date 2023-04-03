@@ -59,6 +59,7 @@ class RemembranceService(Gio.Application):
 
             self.reminders = Reminders(self)
         except Exception as error:
+            self.quit()
             self.logger.error(error)
             raise error
 
@@ -114,7 +115,7 @@ def main():
     try:
         app = RemembranceService(
             application_id=info.service_id,
-            flags=Gio.ApplicationFlags.ALLOW_REPLACEMENT
+            flags=Gio.ApplicationFlags.DEFAULT_FLAGS
         )
         return app.run(sys.argv)
     except Exception as error:
