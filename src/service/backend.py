@@ -272,7 +272,7 @@ class Reminders():
         for reminder_id in self.ms.keys():
             self._set_countdown(reminder_id)
 
-        self.countdowns.add_timeout(self.refresh_time, self.refresh, -1)
+        self.countdowns.add_timeout(self.refresh_time, self._refresh_cb, 'refresh')
 
     def do_emit(self, signal_name, parameters):
         self.connection.emit_signal(
@@ -283,9 +283,14 @@ class Reminders():
             parameters
         )
 
+    def _refresh_cb(self):
+        self.countdowns.dict['refresh']['id'] = 0
+        self.refresh()
+        return False
+
     def _refresh_time_changed(self):
         self.refresh_time = int(self.app.settings.get_string('refresh-frequency').strip('m'))
-        self.countdowns.add_timeout(self.refresh_time, self.refresh, -1)
+        self.countdowns.add_timeout(self.refresh_time, self._refresh_cb, 'refresh')
 
     def _synced_task_list_changed(self):
         self.synced_ids = self.app.settings.get_value('synced-task-lists').unpack()
@@ -1055,7 +1060,7 @@ class Reminders():
 
     def refresh(self, notify_past = True):
         try:
-            self.countdowns.add_timeout(self.refresh_time, self.refresh, -1)
+            self.countdowns.add_timeout(self.refresh_time, self._refresh_cb, 'refresh')
 
             local, ms, list_names, list_ids = self._get_reminders(notify_past)
 
