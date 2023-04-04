@@ -93,8 +93,8 @@ class ReminderEditWindow(Adw.Window):
         else:
             self.options = DEFAULT_OPTIONS.copy()
             self.id = None
-            self.task_list = self.win.selected_list_id if self.win.selected_list_id != 'all' else 'local'
-            self.user_id = self.win.selected_user_id if self.win.selected_user_id != 'all' else 'local'
+            self.task_list = self.options['list'] = self.win.selected_list_id if self.win.selected_list_id != 'all' else 'local'
+            self.user_id = self.options['user-id'] = self.win.selected_user_id if self.win.selected_user_id != 'all' else 'local'
 
         self.set_time(self.options['timestamp'])
 
