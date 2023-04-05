@@ -77,6 +77,14 @@
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
   <releases>
+    <release version="2.1" date="2023-04-05">
+      <description>
+        <ul>
+          <li>Fix a few minor bugs</li>
+          <li>Update dutch translation</li>
+        </ul>
+      </description>
+    </release>
     <release version="2.0" date="2023-04-03">
       <description>
         <ul>
