@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-04 18:38-0400\n"
+"POT-Creation-Date: 2023-04-05 13:06-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -183,38 +183,46 @@ msgid "Remembrance"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:83
-msgid "Added support for creating and editing task lists"
+msgid "Fix a few minor bugs"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:84
+msgid "Update dutch translation"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:91
+msgid "Added support for creating and editing task lists"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:92
 msgid "Added support for syncing with Microsoft To Do"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:85
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:93
 msgid "Reduced memory usage"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:86
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:94
 msgid "Redesigned some UI elements"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:87
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:95
 msgid "Better support for mobile devices"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:88
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:96
 msgid "Better error dialogs"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:89
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:97
 msgid "Fix some issues with the backend"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:96
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:104
 msgid "Some small UI improvements."
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:103
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:111
 msgid "Fix issue where app can corrupt or lose its data."
 msgstr ""
 
@@ -509,7 +517,7 @@ msgstr ""
 
 #. Translators: Do not translate this, instead put your name and email here.
 #. name <email>
-#: src/browser/about.py:46
+#: src/browser/about.py:41
 msgid "translator-credits"
 msgstr ""
 
@@ -531,8 +539,8 @@ msgstr ""
 
 #: src/browser/application.py:278
 msgid ""
-"You will probably have to log out and log back in before using Reminders, "
-"this is due to a bug in Flatpak."
+"If this is your first time running Reminders, you will probably have to log "
+"out and log back in before using it. This is due to a bug in Flatpak."
 msgstr ""
 
 #: src/browser/application.py:281
