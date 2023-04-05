@@ -275,7 +275,7 @@ class Remembrance(Adw.Application):
         except GLib.GError as error:
             error_text = ''.join(traceback.format_exception(error))
             if 'The name is not activatable' in str(error):
-                error_dialog = ErrorDialog(self, _('Reminders failed to start'), _('You will probably have to log out and log back in before using Reminders, this is due to a bug in Flatpak.'), error_text)
+                error_dialog = ErrorDialog(self, _('Reminders failed to start'), _('If this is your first time running Reminders, you will probably have to log out and log back in before using it. This is due to a bug in Flatpak.'), error_text)
                 raise error
             elif 'failed to execute' in str(error) or not retry: # method failed
                 error_dialog = ErrorDialog(self, _('Something went wrong'), _('Changes were not saved. This bug should be reported.'), error_text)
