@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-07 18:40-0500\n"
-"PO-Revision-Date: 2023-03-08 17:23+0000\n"
+"PO-Revision-Date: 2023-04-04 22:38+0000\n"
 "Last-Translator: Philip Goto <philip.goto@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/reminders/"
 "reminders/nl/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:4
 #: data/browser/io.github.dgsasha.Remembrance.metainfo.xml.in.in:9
@@ -436,7 +436,7 @@ msgstr "Copyright 2023, Sasha Hale"
 #. name <email>
 #: src/browser/about.py:41
 msgid "translator-credits"
-msgstr "Philip Goto <philip.goto@gmail.com>"
+msgstr "Philip Goto https://flipflop97.github.io/"
 
 #: src/browser/application.py:46
 msgid "Print the version of the app"
