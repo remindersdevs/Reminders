@@ -317,8 +317,18 @@ class Remembrance(Adw.Application):
         self.logger.addHandler(handler)
 
     def refresh_reminders(self, action = None, data = None):
-        self.run_service_method('Refresh', None, False, lambda *args: self.win.spinner.stop())
+        self.run_service_method('Refresh', None, False, lambda *args: self.stop_spinners())
+        self.start_spinners()
+
+    def stop_spinners(self):
+        self.win.spinner.stop()
+        if self.preferences is not None:
+            self.preferences.spinner.stop()
+
+    def start_spinners(self):
         self.win.spinner.start()
+        if self.preferences is not None:
+            self.preferences.spinner.start()
 
     def quit_app(self, action, data):
         self.quit()

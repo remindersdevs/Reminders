@@ -240,11 +240,13 @@
                                       <object class="GtkBox">
                                         <property name="orientation">horizontal</property>
                                         <property name="valign">start</property>
-                                        <property name="halign">start</property>
+                                        <property name="hexpand">true</property>
                                         <property name="spacing">5</property>
                                         <child>
                                           <object class="GtkLabel" id="page_label">
                                             <property name="label" translatable="yes">All Reminders</property>
+                                            <property name="halign">start</property>
+                                            <property name="hexpand">true</property>
                                             <style>
                                               <class name="title-1"/>
                                               <class name="page-heading"/>
@@ -252,7 +254,10 @@
                                           </object>
                                         </child>
                                         <child>
-                                          <object class="GtkSpinner" id="spinner"/>
+                                          <object class="GtkSpinner" id="spinner">
+                                            <property name="hexpand">true</property>
+                                            <property name="halign">end</property>
+                                          </object>
                                         </child>
                                       </object>
                                     </child>

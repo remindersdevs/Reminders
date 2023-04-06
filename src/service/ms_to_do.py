@@ -42,7 +42,6 @@ class MSToDo():
         self.app = None
         self.tokens = {}
         self.users = {}
-        self.signed_in = False
         self.reminders = reminders
         self.cache = msal.SerializableTokenCache()
         self.schema = Secret.Schema.new(
@@ -88,12 +87,16 @@ class MSToDo():
                 result = requests.request('GET', f'{GRAPH}/me', headers={'Authorization': f'Bearer {token}'})
                 result.raise_for_status()
                 result = result.json()
+                user_id = result['id']
+                email = result['userPrincipalName']
+                local_id = account['local_account_id']
 
-                self.tokens[result['id']] = token
-                self.users[result['id']] = {
-                    'email': result['userPrincipalName'],
-                    'local-id': account['local_account_id']
+                self.tokens[user_id] = token
+                self.users[user_id] = {
+                    'email': email,
+                    'local-id': local_id
                 }
+            self.store()
         except Exception as error:
             self.users = json.loads(
                 Secret.password_lookup_sync(
@@ -105,7 +108,7 @@ class MSToDo():
             raise error
     
     def store(self):
-        if self.app is not None and self.signed_in:
+        if self.app is not None and len(self.users.keys()) > 0:
             Secret.password_store_sync(
                 self.schema,
                 { 'name': 'microsoft-cache' },
@@ -132,26 +135,26 @@ class MSToDo():
                     None
                 )
             )
-            self.signed_in = True
         except:
             self.logout_all()
 
     def login(self):
         response = self.app.acquire_token_interactive(scopes=SCOPES, timeout=300)
         token = response['access_token']
-        local_account_id = response['id_token_claims']['oid']
+        local_id = response['id_token_claims']['oid']
         try:
             result = requests.request('GET', f'{GRAPH}/me', headers={'Authorization': f'Bearer {token}'})
             result.raise_for_status()
             result = result.json()
+            user_id = result['id']
+            email = result['userPrincipalName']
 
-            self.tokens[result['id']] = token
-            self.users[result['id']] = {
-                'email': result['userPrincipalName'],
-                'local-id': local_account_id
+            self.tokens[user_id] = token
+            self.users[user_id] = {
+                'email': email,
+                'local-id': local_id
             }
             self.store()
-            self.signed_in = True
             return result['id']
         except Exception as error:
             traceback.print_exception(error)
@@ -179,7 +182,6 @@ class MSToDo():
                 { 'name': 'microsoft-users' },
                 None
             )
-            self.signed_in = False
 
         except Exception as error:
             traceback.print_exception(error)
@@ -209,7 +211,6 @@ class MSToDo():
                     { 'name': 'microsoft-users' },
                     None
                 )
-                self.signed_in = False
             else:
                 self.store()
 

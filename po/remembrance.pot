@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-06 12:55-0400\n"
+"POT-Creation-Date: 2023-04-06 16:02-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,7 +39,7 @@ msgid "Remembrance Service"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:21
-#: src/browser/resources/ui/preferences.ui:66
+#: src/browser/resources/ui/preferences.ui:69
 msgid "Time format"
 msgstr ""
 
@@ -57,7 +57,7 @@ msgid "How to sort the reminders"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:31
-#: src/browser/resources/ui/preferences.ui:47
+#: src/browser/resources/ui/preferences.ui:50
 msgid "Auto refresh frequency"
 msgstr ""
 
@@ -94,7 +94,7 @@ msgid "Completed last"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:52
-#: src/browser/resources/ui/preferences.ui:90
+#: src/browser/resources/ui/preferences.ui:93
 msgid "Show completed reminders last"
 msgstr ""
 
@@ -173,7 +173,7 @@ msgid "Planner"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:58
-#: src/browser/resources/ui/main_window.ui:361
+#: src/browser/resources/ui/main_window.ui:366
 #: src/browser/resources/ui/reminder_edit_window.ui:59
 msgid "Time"
 msgstr ""
@@ -235,7 +235,7 @@ msgid "Fix issue where app can corrupt or lose its data."
 msgstr ""
 
 #: src/browser/resources/ui/edit_lists_window.ui:4
-#: src/browser/resources/ui/main_window.ui:342
+#: src/browser/resources/ui/main_window.ui:347
 msgid "Create/Edit Lists"
 msgstr ""
 
@@ -272,33 +272,33 @@ msgstr ""
 msgid "Select task list"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:312
+#: src/browser/resources/ui/main_window.ui:317
 msgid "Add a reminder (Ctrl+N)"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:320
+#: src/browser/resources/ui/main_window.ui:325
 msgid "Add a reminder"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:338
-#: src/browser/resources/ui/preferences.ui:51
+#: src/browser/resources/ui/main_window.ui:343
+#: src/browser/resources/ui/preferences.ui:54
 msgid "Refresh"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:348
+#: src/browser/resources/ui/main_window.ui:353
 #: src/browser/resources/ui/preferences.ui:4
 msgid "Preferences"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:352
+#: src/browser/resources/ui/main_window.ui:357
 msgid "About Reminders"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:359
+#: src/browser/resources/ui/main_window.ui:364
 msgid "Sort"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:366
+#: src/browser/resources/ui/main_window.ui:371
 msgid "Title"
 msgstr ""
 
@@ -306,7 +306,7 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: src/browser/resources/ui/ms_user_row.ui:42 src/browser/preferences.py:224
+#: src/browser/resources/ui/ms_user_row.ui:42 src/browser/preferences.py:228
 msgid "Sign Out"
 msgstr ""
 
@@ -314,64 +314,64 @@ msgstr ""
 msgid "Syncing"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:19
+#: src/browser/resources/ui/preferences.ui:22
 msgid "Microsoft To Do (Beta)"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:31
+#: src/browser/resources/ui/preferences.ui:34
 msgid "Add Account"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:63
+#: src/browser/resources/ui/preferences.ui:66
 #: src/browser/resources/ui/reminder_edit_window.ui:36
 msgid "General"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:72
+#: src/browser/resources/ui/preferences.ui:75
 msgid "Play sound with notification"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:76
+#: src/browser/resources/ui/preferences.ui:79
 msgid "Use the included notification sound"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:77
+#: src/browser/resources/ui/preferences.ui:80
 msgid "Otherwise the bell sound from the enabled sound theme will be used"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:94
+#: src/browser/resources/ui/preferences.ui:97
 msgid "Reverse order of completed reminders"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:95
+#: src/browser/resources/ui/preferences.ui:98
 msgid "This only applies when sorting by time"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:113
+#: src/browser/resources/ui/preferences.ui:116
 msgid "Use locale default"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:114
+#: src/browser/resources/ui/preferences.ui:117
 msgid "12 hour time"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:115
+#: src/browser/resources/ui/preferences.ui:118
 msgid "24 hour time"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:120
+#: src/browser/resources/ui/preferences.ui:123
 msgid "5 mins"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:121
+#: src/browser/resources/ui/preferences.ui:124
 msgid "15 mins"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:122
+#: src/browser/resources/ui/preferences.ui:125
 msgid "30 mins"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:123
+#: src/browser/resources/ui/preferences.ui:126
 msgid "60 mins"
 msgstr ""
 
@@ -490,7 +490,7 @@ msgstr ""
 
 #: src/browser/resources/ui/reminder_edit_window.ui:419
 #: src/browser/edit_lists_window.py:78 src/browser/edit_lists_window.py:187
-#: src/browser/main_window.py:162 src/browser/preferences.py:223
+#: src/browser/main_window.py:162 src/browser/preferences.py:227
 #: src/browser/reminder.py:251
 msgid "Cancel"
 msgstr ""
@@ -723,11 +723,11 @@ msgstr ""
 msgid "Start typing to search"
 msgstr ""
 
-#: src/browser/preferences.py:219
+#: src/browser/preferences.py:223
 msgid "Are you sure you want to sign out?"
 msgstr ""
 
-#: src/browser/preferences.py:220
+#: src/browser/preferences.py:224
 #, python-brace-format
 msgid "This will sign out <b>{self.email}</b>"
 msgstr ""
@@ -767,7 +767,7 @@ msgstr ""
 msgid "AM"
 msgstr ""
 
-#: src/browser/reminder_edit_window.py:459
+#: src/browser/reminder_edit_window.py:460
 msgid "Microsoft reminders currently don't support recurrence"
 msgstr ""
 

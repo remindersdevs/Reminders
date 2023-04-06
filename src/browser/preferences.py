@@ -30,6 +30,7 @@ class PreferencesWindow(Adw.PreferencesWindow):
     add_account_row = Gtk.Template.Child()
     refresh_button = Gtk.Template.Child()
     refresh_time_row = Gtk.Template.Child()
+    spinner = Gtk.Template.Child()
 
     def __init__(self, app, **kwargs):
         super().__init__(**kwargs)
@@ -151,11 +152,14 @@ class MSUserRow(Adw.ExpanderRow):
         self.column = 1
         self.task_lists = {'all': 'All'}
         self.task_list_checks = {}
-        self.email = email
-        self.set_title(email)
+        self.set_email(email)
         self.lists = lists
         self.synced = self.preferences.synced[self.user_id] if self.user_id in self.preferences.synced else []
         self.set_task_lists()
+
+    def set_email(self, email):
+        self.email = email
+        self.set_title(email)
 
     def set_task_lists(self):
         if 'all' in self.synced:

@@ -11,6 +11,9 @@
         <child>
           <object class="AdwPreferencesGroup" id="cloud_syncing">
             <property name="title" translatable="yes">Syncing</property>
+            <property name="header-suffix">
+              <object class="GtkSpinner" id="spinner"/>
+            </property>
             <style>
               <class name="ms-accounts"/>
             </style>
