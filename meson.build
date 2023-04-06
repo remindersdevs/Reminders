@@ -1,6 +1,6 @@
 project(
     'remembrance',
-    version: '2.1',
+    version: '2.2',
     meson_version: '>= 0.59',
     default_options: ['prefix=/usr']
 )
@@ -12,7 +12,7 @@ dependency('gsound')
 
 release_type = get_option('release-type')
 
-service_version = '2.4'
+service_version = '2.5'
 
 app_executable = 'remembrance'
 
