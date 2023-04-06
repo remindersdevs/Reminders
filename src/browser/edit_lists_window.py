@@ -194,6 +194,8 @@ class ListRow(Adw.EntryRow):
     def delete(self):
         try:
             self.group.remove_child(self, self.user_id, self.list_id)
+            if self in self.edit_win.unsaved:
+                self.edit_win.unsaved.remove(self)
         except Exception as error:
             logger.error(error)
 
