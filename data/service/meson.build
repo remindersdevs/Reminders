@@ -39,3 +39,8 @@ configure_file(
     install_dir: get_option('datadir') / 'dbus-1/services',
     configuration: conf,
 )
+
+install_data(
+    'notification.ogg',
+    install_dir: get_option('datadir') / 'sounds' / app_executable,
+)

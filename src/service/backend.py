@@ -205,6 +205,7 @@ class Reminders():
         self.app = app
         self.local = self.ms = self.list_names = self.list_ids = {}
         self._regid = None
+        self.playing_sound = False
         self.synced_ids = self.app.settings.get_value('synced-task-lists').unpack()
         self.to_do = MSToDo(self)
         self.queue = Queue(self)
@@ -542,24 +543,32 @@ class Reminders():
                 if reminder['completed']:
                     return
 
-                notification = Gio.Notification.new(dictionary[reminder_id]['title'])
-                notification.set_body(dictionary[reminder_id]['description'])
-                notification.add_button_with_target(_('Mark as completed'), 'app.reminder-completed', GLib.Variant('s', reminder_id))
-                notification.set_default_action('app.notification-clicked')
+                self.countdowns.add_countdown(reminder['timestamp'], lambda *args: self.do_send_notification(reminder_id, reminder['title'], reminder['description']), reminder_id)
 
-                def do_send_notification():
-                    self.app.send_notification(reminder_id, notification)
-                    if self.app.settings.get_boolean('notification-sound'):
-                        try:
-                            self.sound.play_simple({GSound.ATTR_EVENT_ID: 'bell'})
-                        except Exception as error:
-                            logger.error(f"{error} Couldn't play notification sound")
-                    self._shown(reminder_id)
-                    self.countdowns.dict[reminder_id]['id'] = 0
-                    self._update_repeat(reminder_id)
-                    return False
+    def do_send_notification(self, reminder_id, title, description):
+        notification = Gio.Notification.new(title)
+        notification.set_body(description)
+        notification.add_button_with_target(_('Mark as completed'), 'app.reminder-completed', GLib.Variant('s', reminder_id))
+        notification.set_default_action('app.notification-clicked')
 
-                self.countdowns.add_countdown(reminder['timestamp'], do_send_notification, reminder_id)
+        self.app.send_notification(reminder_id, notification)
+        if self.app.settings.get_boolean('notification-sound') and not self.playing_sound:
+            self.playing_sound = True
+            if self.app.settings.get_boolean('included-notification-sound'):
+                self.sound.play_full({GSound.ATTR_MEDIA_FILENAME: f'{GLib.get_system_data_dirs()[0]}/sounds/{info.app_executable}/notification.ogg'}, None, self._sound_cb)
+            else:
+                self.sound.play_full({GSound.ATTR_EVENT_ID: 'bell'}, None, self._sound_cb)
+        self._shown(reminder_id)
+        self.countdowns.dict[reminder_id]['id'] = 0
+        self._update_repeat(reminder_id)
+        return False
+
+    def _sound_cb(self, context, result):
+        try:
+            self.sound.play_full_finish(result)
+        except Exception as error:
+            logger.error(f"{error} Couldn't play notification sound")
+        self.playing_sound = False
 
     def _update_repeat(self, reminder_id):
         for dictionary in (self.local, self.ms):

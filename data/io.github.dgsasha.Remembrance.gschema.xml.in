@@ -36,6 +36,11 @@
       <summary>Notification Sound</summary>
       <description>Whether or not to play a notification sound</description>
     </key>
+    <key type="b" name="included-notification-sound">
+      <default>true</default>
+      <summary>Use included notification sound</summary>
+      <description>Whether to use the included notification sound</description>
+    </key>
     <key type="b" name="descending-sort">
       <default>false</default>
       <summary>Descending sort</summary>
