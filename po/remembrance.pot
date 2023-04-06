@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-06 16:02-0400\n"
+"POT-Creation-Date: 2023-04-06 17:50-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,7 +48,7 @@ msgid "What format to display the time in"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:26
-#: src/browser/resources/ui/main_window.ui:45
+#: src/browser/resources/ui/main_window.ui:50
 msgid "Sort by"
 msgstr ""
 
@@ -173,7 +173,7 @@ msgid "Planner"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:58
-#: src/browser/resources/ui/main_window.ui:366
+#: src/browser/resources/ui/main_window.ui:375
 #: src/browser/resources/ui/reminder_edit_window.ui:59
 msgid "Time"
 msgstr ""
@@ -191,114 +191,132 @@ msgid "Remembrance"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:83
-msgid "Fix a few minor bugs"
+msgid "Slightly improved UI"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:84
-msgid "Update dutch translation"
+msgid "Added keyboard shortcuts page"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:91
-msgid "Added support for creating and editing task lists"
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:85
+msgid "New notification sound"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:92
-msgid "Added support for syncing with Microsoft To Do"
+msgid "Fix a few minor bugs"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:93
+msgid "Update dutch translation"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:100
+msgid "Added support for creating and editing task lists"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:101
+msgid "Added support for syncing with Microsoft To Do"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:102
 msgid "Reduced memory usage"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:94
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:103
 msgid "Redesigned some UI elements"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:95
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:104
 msgid "Better support for mobile devices"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:96
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:105
 msgid "Better error dialogs"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:97
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:106
 msgid "Fix some issues with the backend"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:104
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:113
 msgid "Some small UI improvements."
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:111
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:120
 msgid "Fix issue where app can corrupt or lose its data."
 msgstr ""
 
 #: src/browser/resources/ui/edit_lists_window.ui:4
-#: src/browser/resources/ui/main_window.ui:347
-msgid "Create/Edit Lists"
+msgid "Edit Lists"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:44
+#: src/browser/resources/ui/main_window.ui:34
+msgid "Show sidebar"
+msgstr ""
+
+#: src/browser/resources/ui/main_window.ui:49
 msgid "Sort direction"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:59
+#: src/browser/resources/ui/main_window.ui:58
+msgid "Refresh reminders"
+msgstr ""
+
+#: src/browser/resources/ui/main_window.ui:72
 msgid "Search"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:68
-msgid "App Menu"
+#: src/browser/resources/ui/main_window.ui:80
+msgid "App menu"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:109
-#: src/browser/resources/ui/main_window.ui:247 src/browser/main_window.py:587
+#: src/browser/resources/ui/main_window.ui:120
+#: src/browser/resources/ui/main_window.ui:258 src/browser/main_window.py:587
 msgid "All Reminders"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:132 src/browser/main_window.py:597
+#: src/browser/resources/ui/main_window.ui:143 src/browser/main_window.py:597
 msgid "Upcoming Reminders"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:155 src/browser/main_window.py:607
+#: src/browser/resources/ui/main_window.ui:166 src/browser/main_window.py:607
 msgid "Past Reminders"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:178 src/browser/main_window.py:617
+#: src/browser/resources/ui/main_window.ui:189 src/browser/main_window.py:617
 msgid "Completed Reminders"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:196
+#: src/browser/resources/ui/main_window.ui:207
 msgid "Select task list"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:317
-msgid "Add a reminder (Ctrl+N)"
-msgstr ""
-
-#: src/browser/resources/ui/main_window.ui:325
+#: src/browser/resources/ui/main_window.ui:328
+#: src/browser/resources/ui/main_window.ui:336
 msgid "Add a reminder"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:343
-#: src/browser/resources/ui/preferences.ui:54
-msgid "Refresh"
+#: src/browser/resources/ui/main_window.ui:354
+msgid "_Edit Lists"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:353
-#: src/browser/resources/ui/preferences.ui:4
-msgid "Preferences"
+#: src/browser/resources/ui/main_window.ui:358
+msgid "_Preferences"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:357
-msgid "About Reminders"
+#: src/browser/resources/ui/main_window.ui:362
+msgid "_Keyboard Shortcuts"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:364
+#: src/browser/resources/ui/main_window.ui:366
+msgid "_About Reminders"
+msgstr ""
+
+#: src/browser/resources/ui/main_window.ui:373
 msgid "Sort"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:371
+#: src/browser/resources/ui/main_window.ui:380
 msgid "Title"
 msgstr ""
 
@@ -308,6 +326,10 @@ msgstr ""
 
 #: src/browser/resources/ui/ms_user_row.ui:42 src/browser/preferences.py:228
 msgid "Sign Out"
+msgstr ""
+
+#: src/browser/resources/ui/preferences.ui:4
+msgid "Preferences"
 msgstr ""
 
 #: src/browser/resources/ui/preferences.ui:13
@@ -320,6 +342,10 @@ msgstr ""
 
 #: src/browser/resources/ui/preferences.ui:34
 msgid "Add Account"
+msgstr ""
+
+#: src/browser/resources/ui/preferences.ui:54
+msgid "Refresh"
 msgstr ""
 
 #: src/browser/resources/ui/preferences.ui:66
@@ -527,43 +553,43 @@ msgstr ""
 msgid "Repeat until"
 msgstr ""
 
-#: src/browser/about.py:28
+#: src/browser/about.py:37
 msgid "Copyright 2023 Sasha Hale"
 msgstr ""
 
 #. Translators: Do not translate this, instead put your name and email here.
 #. name <email>
-#: src/browser/about.py:41
+#: src/browser/about.py:45
 msgid "translator-credits"
 msgstr ""
 
-#: src/browser/application.py:49
+#: src/browser/application.py:50
 msgid "Print the version of the app"
 msgstr ""
 
-#: src/browser/application.py:56
+#: src/browser/application.py:57
 msgid "Restart service before starting app"
 msgstr ""
 
-#: src/browser/application.py:63
+#: src/browser/application.py:64
 msgid "Start on a different page"
 msgstr ""
 
-#: src/browser/application.py:278
+#: src/browser/application.py:281
 msgid "Reminders failed to start"
 msgstr ""
 
-#: src/browser/application.py:278
+#: src/browser/application.py:281
 msgid ""
 "If this is your first time running Reminders, you will probably have to log "
 "out and log back in before using it. This is due to a bug in Flatpak."
 msgstr ""
 
-#: src/browser/application.py:281
+#: src/browser/application.py:284
 msgid "Something went wrong"
 msgstr ""
 
-#: src/browser/application.py:281
+#: src/browser/application.py:284
 msgid "Changes were not saved. This bug should be reported."
 msgstr ""
 

@@ -17,9 +17,18 @@ from remembrance import info
 from gi.repository import Adw, Gtk
 from gettext import gettext as _
 
-def about_window():
-    return Adw.AboutWindow(
+RELEASE_NOTES = '''
+<ul>
+    <li>Slightly improved UI</li>
+    <li>Added keyboard shortcuts page</li>
+    <li>New notification sound</li>
+</ul>
+'''
+
+def about_window(win):
+    win = Adw.AboutWindow(
         modal = True,
+        transient_for=win,
         application_name = info.app_name,
         application_icon = info.app_id,
         license_type = Gtk.License.GPL_3_0,
@@ -29,14 +38,10 @@ def about_window():
         website = 'https://github.com/dgsasha/remembrance',
         developers = ['Sasha Hale https://github.com/dgsasha'],
         issue_url = 'https://github.com/dgsasha/remembrance/issues',
-        release_notes = '''
-            <ul>
-                <li>Fix a few minor bugs</li>
-                <li>Update dutch translation</li>
-            </ul>
-        ''',
+        release_notes = RELEASE_NOTES,
         release_notes_version = info.version,
         # Translators: Do not translate this, instead put your name and email here.
         # name <email>
-        translator_credits = _("translator-credits"),
+        translator_credits = _("translator-credits")
     )
+    win.present()

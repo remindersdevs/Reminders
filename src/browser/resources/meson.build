@@ -6,6 +6,7 @@ resources = files(
     'ui/preferences.ui',
     'ui/reminder.ui',
     'ui/reminder_edit_window.ui',
+    'ui/shortcuts_window.ui',
     'stylesheet.css'
 )
 

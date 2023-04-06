@@ -77,6 +77,15 @@
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
   <releases>
+    <release version="2.2" date="2023-04-07">
+      <description>
+        <ul>
+          <li>Slightly improved UI</li>
+          <li>Added keyboard shortcuts page</li>
+          <li>New notification sound</li>
+        </ul>
+      </description>
+    </release>
     <release version="2.1" date="2023-04-05">
       <description>
         <ul>

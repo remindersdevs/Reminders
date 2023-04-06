@@ -31,6 +31,7 @@
                     <property name="transition-type">3</property>
                     <child>
                       <object class="GtkToggleButton">
+                        <property name="tooltip-text" translatable="yes">Show sidebar</property>
                         <property name="icon-name">sidebar-show-symbolic</property>
                         <property name="margin-end">6</property>
                         <property name="active" bind-source="flap" bind-property="reveal-flap" bind-flags="sync-create|bidirectional"/>
@@ -39,11 +40,24 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwSplitButton" id="sort_button">
-                    <property name="action-name">win.descending-sort</property>
-                    <property name="tooltip-text" translatable="yes">Sort direction</property>
-                    <property name="dropdown-tooltip" translatable="yes">Sort by</property>
-                    <property name="menu-model">sort_menu</property>
+                  <object class="GtkBox">
+                    <property name="orientation">horizontal</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="AdwSplitButton" id="sort_button">
+                        <property name="action-name">win.descending-sort</property>
+                        <property name="tooltip-text" translatable="yes">Sort direction</property>
+                        <property name="dropdown-tooltip" translatable="yes">Sort by</property>
+                        <property name="menu-model">sort_menu</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="refresh_button">
+                        <property name="icon-name">view-refresh-symbolic</property>
+                        <property name="action-name">app.refresh</property>
+                        <property name="tooltip-text" translatable="yes">Refresh reminders</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -55,18 +69,15 @@
                 <child>
                   <object class="GtkToggleButton" id="search_button">
                     <property name="icon_name">edit-find-symbolic</property>
-                    <accessibility>
-                      <property name="label" translatable="yes">Search</property>
-                    </accessibility>
+                    <property name="tooltip-text" translatable="yes">Search</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkMenuButton" id="app_menu_button">
                     <property name="icon-name">open-menu-symbolic</property>
                     <property name="menu-model">menu</property>
-                    <accessibility>
-                      <property name="label" translatable="yes">App Menu</property>
-                    </accessibility>
+                    <property name="primary">true</property>
+                    <property name="tooltip-text" translatable="yes">App menu</property>
                   </object>
                 </child>
               </object>
@@ -314,7 +325,7 @@
                           <object class="GtkButton" id="add_reminder">
                             <property name="icon-name">list-add-symbolic</property>
                             <property name="halign">end</property>
-                            <property name="tooltip-text" translatable="yes">Add a reminder (Ctrl+N)</property>
+                            <property name="tooltip-text" translatable="yes">Add a reminder</property>
                             <style>
                               <class name="suggested-action"/>
                               <class name="circular"/>
@@ -340,21 +351,19 @@
   <menu id="menu">
     <section>
       <item>
-        <attribute name="label" translatable="yes">Refresh</attribute>
-        <attribute name="action">app.refresh</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Create/Edit Lists</attribute>
+        <attribute name="label" translatable="yes">_Edit Lists</attribute>
         <attribute name="action">win.edit-task-lists</attribute>
       </item>
-    </section>
-    <section>
       <item>
-        <attribute name="label" translatable="yes">Preferences</attribute>
+        <attribute name="label" translatable="yes">_Preferences</attribute>
         <attribute name="action">app.preferences</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">About Reminders</attribute>
+        <attribute name="label" translatable="yes">_Keyboard Shortcuts</attribute>
+        <attribute name="action">app.shortcuts</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_About Reminders</attribute>
         <attribute name="action">app.about</attribute>
       </item>
     </section>

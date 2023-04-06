@@ -12,7 +12,8 @@ source_files = files(
   'main_window.py',
   'preferences.py',
   'reminder.py',
-  'reminder_edit_window.py'
+  'reminder_edit_window.py',
+  'shortcuts_window.py'
 )
 
 install_data(

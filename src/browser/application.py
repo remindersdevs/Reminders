@@ -29,6 +29,7 @@ from remembrance.browser.error_dialog import ErrorDialog
 from remembrance.browser.main_window import MainWindow
 from remembrance.browser.about import about_window
 from remembrance.browser.preferences import PreferencesWindow
+from remembrance.browser.shortcuts_window import ShortcutsWindow
 
 # Always update this when new features are added that require the service to restart
 MIN_SERVICE_VERSION = 2.5
@@ -87,6 +88,7 @@ class Remembrance(Adw.Application):
     def do_startup(self):
         Adw.Application.do_startup(self)
         self.configure_logging()
+        self.refreshing = False
 
         if info.portals_enabled:
             import gi
@@ -149,9 +151,10 @@ class Remembrance(Adw.Application):
         self.service.connect('g-signal::Refreshed', self.refreshed_cb)
         self.service.connect('g-signal::ListUpdated', self.list_updated_cb)
         self.service.connect('g-signal::ListRemoved', self.list_removed_cb)
-        self.create_action('quit', self.quit_app)
+        self.create_action('quit', self.quit_app, accels=['<Ctrl>q'])
         self.create_action('refresh', self.refresh_reminders, accels=['<Ctrl>r'])
         self.create_action('preferences', self.show_preferences, accels=['<control>comma'])
+        self.create_action('shortcuts', self.show_shortcuts, accels=['<control>question'])
         self.create_action('about', self.show_about)
         Gtk.StyleContext.add_provider_for_display(self.win.get_display(), self.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         self.win.present()
@@ -296,9 +299,10 @@ class Remembrance(Adw.Application):
         self.add_action(action)
 
     def show_about(self, action, data):
-        win = about_window()
-        win.set_transient_for(self.win)
-        win.present()
+        about_window(self.win)
+
+    def show_shortcuts(self, action, data):
+        ShortcutsWindow(self.win)
 
     def show_preferences(self, action, data):
         if self.preferences is None:
@@ -317,15 +321,18 @@ class Remembrance(Adw.Application):
         self.logger.addHandler(handler)
 
     def refresh_reminders(self, action = None, data = None):
-        self.run_service_method('Refresh', None, False, lambda *args: self.stop_spinners())
-        self.start_spinners()
+        if not self.refreshing:
+            self.start_spinners()
+            self.run_service_method('Refresh', None, False, lambda *args: self.stop_spinners())
 
     def stop_spinners(self):
         self.win.spinner.stop()
         if self.preferences is not None:
             self.preferences.spinner.stop()
+        self.refreshing = False
 
     def start_spinners(self):
+        self.refreshing = True
         self.win.spinner.start()
         if self.preferences is not None:
             self.preferences.spinner.start()
