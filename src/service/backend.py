@@ -453,6 +453,7 @@ class Reminders():
                     reminder_json['reminderDateTime']['timeZone'] = 'UTC'
                 else:
                     reminder_json['isReminderOn'] = False
+                    reminder_json['reminderDateTime'] = None
             if updating:
                 new_task_id = self.to_do.update_task(user_id, self.list_ids[task_list]['ms-id'], self.ms[reminder_id]['ms-id'], reminder_json)
             else:

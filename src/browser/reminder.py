@@ -118,7 +118,7 @@ class Reminder(Adw.ExpanderRow):
                 edit_win.user_id = options['user-id']
                 edit_win.set_task_list_dropdown_selected()
     
-            self.edit_win.options = options.copy()
+            edit_win.options = options.copy()
 
         self.set_options(options)
 
