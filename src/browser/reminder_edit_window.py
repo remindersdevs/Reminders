@@ -415,6 +415,7 @@ class ReminderEditWindow(Adw.Window):
             self.set_visible(False)
         except Exception as error:
             logger.error(error)
+        self.reminder.set_expanded(False)
         self.win.set_busy(False, self)
 
     @Gtk.Template.Callback()

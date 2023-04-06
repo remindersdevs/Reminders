@@ -73,7 +73,7 @@
                 <property name="show-enable-switch">true</property>
                 <child>
                   <object class="AdwActionRow">
-                    <property name="title" translatable="yes">Use included notification sound</property>
+                    <property name="title" translatable="yes">Use the included notification sound</property>
                     <property name="subtitle" translatable="yes">Otherwise the bell sound from the enabled sound theme will be used</property>
                     <property name="activatable-widget">sound_theme_switch</property>
                     <child>
