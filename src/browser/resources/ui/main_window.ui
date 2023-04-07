@@ -40,24 +40,11 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkBox">
-                    <property name="orientation">horizontal</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="AdwSplitButton" id="sort_button">
-                        <property name="action-name">win.descending-sort</property>
-                        <property name="tooltip-text" translatable="yes">Sort direction</property>
-                        <property name="dropdown-tooltip" translatable="yes">Sort by</property>
-                        <property name="menu-model">sort_menu</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="refresh_button">
-                        <property name="icon-name">view-refresh-symbolic</property>
-                        <property name="action-name">app.refresh</property>
-                        <property name="tooltip-text" translatable="yes">Refresh reminders</property>
-                      </object>
-                    </child>
+                  <object class="AdwSplitButton" id="sort_button">
+                    <property name="action-name">win.descending-sort</property>
+                    <property name="tooltip-text" translatable="yes">Sort direction</property>
+                    <property name="dropdown-tooltip" translatable="yes">Sort by</property>
+                    <property name="menu-model">sort_menu</property>
                   </object>
                 </child>
               </object>
@@ -351,9 +338,15 @@
   <menu id="menu">
     <section>
       <item>
+        <attribute name="label" translatable="yes">_Refresh</attribute>
+        <attribute name="action">app.refresh</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">_Edit Lists</attribute>
         <attribute name="action">win.edit-task-lists</attribute>
       </item>
+    </section>
+    <section>
       <item>
         <attribute name="label" translatable="yes">_Preferences</attribute>
         <attribute name="action">app.preferences</attribute>
