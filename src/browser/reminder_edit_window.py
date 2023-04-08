@@ -365,7 +365,7 @@ class ReminderEditWindow(Adw.Window):
         try:
             options = self.get_options()
 
-            if options['timestamp'] > floor(time.time()) and (options['repeat-times'] == 0 or \
+            if (self.id is None or options['timestamp'] > floor(time.time())) and (options['repeat-times'] == 0 or \
             options['repeat-until'] > 0 and datetime.datetime.fromtimestamp(options['timestamp']).date() > datetime.datetime.fromtimestamp(options['repeat-until']).date()):
                 warning_dialog = Adw.MessageDialog(
                     transient_for=self,
