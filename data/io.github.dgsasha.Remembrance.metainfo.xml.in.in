@@ -15,6 +15,7 @@
       <li>Set recurring reminders</li>
       <li>Schedule notifications</li>
       <li>Sort, filter, and search for reminders</li>
+      <li>Mark reminders as important or complete</li>
       <li>Organize reminders using lists</li>
       <li>Optionally sync with Microsoft To Do</li>
     </ul>
