@@ -32,7 +32,7 @@ from remembrance.browser.preferences import PreferencesWindow
 from remembrance.browser.shortcuts_window import ShortcutsWindow
 
 # Always update this when new features are added that require the service to restart
-MIN_SERVICE_VERSION = 2.5
+MIN_SERVICE_VERSION = 3.0
 
 class Remembrance(Adw.Application):
     '''Application for the frontend'''
@@ -145,9 +145,9 @@ class Remembrance(Adw.Application):
         self.settings.bind('height', self.win, 'default-height', Gio.SettingsBindFlags.DEFAULT)
         self.settings.bind('is-maximized', self.win, 'maximized', Gio.SettingsBindFlags.DEFAULT)
         self.service.connect('g-signal::CompletedUpdated', self.reminder_completed_cb)
-        self.service.connect('g-signal::ReminderDeleted', self.reminder_deleted_cb)
+        self.service.connect('g-signal::ReminderRemoved', self.reminder_deleted_cb)
         self.service.connect('g-signal::ReminderUpdated', self.reminder_updated_cb)
-        self.service.connect('g-signal::RepeatUpdated', self.repeat_updated_cb)
+        self.service.connect('g-signal::ReminderShown', self.repeat_updated_cb)
         self.service.connect('g-signal::Refreshed', self.refreshed_cb)
         self.service.connect('g-signal::ListUpdated', self.list_updated_cb)
         self.service.connect('g-signal::ListRemoved', self.list_removed_cb)
@@ -192,9 +192,11 @@ class Remembrance(Adw.Application):
             self.win.edit_lists_window.list_removed(user_id, list_id)
 
     def reminder_completed_cb(self, proxy, sender_name, signal_name, parameters):
-        app_id, reminder_id, completed = parameters.unpack()
+        app_id, reminder_id, completed, updated_timestamp = parameters.unpack()
         if app_id != info.app_id:
-            self.win.reminder_lookup_dict[reminder_id].set_completed(completed)
+            reminder = self.win.reminder_lookup_dict[reminder_id]
+            reminder.options['updated-timestamp'] = updated_timestamp
+            reminder.set_completed(completed)
 
     def repeat_updated_cb(self, proxy, sender_name, signal_name, parameters):
         reminder_id, timestamp, old_timestamp, repeat_times = parameters.unpack()

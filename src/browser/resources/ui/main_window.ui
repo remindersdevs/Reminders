@@ -363,16 +363,26 @@
   </menu>
   <menu id="sort_menu">
     <section>
-      <attribute name="label" translatable="yes">Sort</attribute>
+      <attribute name="label" translatable="yes">Sort By</attribute>
       <item>
-        <attribute name="label" translatable="yes">Time</attribute>
+        <attribute name="label" translatable="yes">_Time</attribute>
         <attribute name="action">win.sort</attribute>
         <attribute name="target">time</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Title</attribute>
+        <attribute name="label" translatable="yes">_Alphabetical</attribute>
         <attribute name="action">win.sort</attribute>
         <attribute name="target">title</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Created</attribute>
+        <attribute name="action">win.sort</attribute>
+        <attribute name="target">created</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Last Updated</attribute>
+        <attribute name="action">win.sort</attribute>
+        <attribute name="target">updated</attribute>
       </item>
     </section>
   </menu>

@@ -47,7 +47,7 @@ class Countdowns():
             self._start(reminder_id)
 
     def remove_countdown(self, reminder_id):
-        if reminder_id in self.dict:
+        if reminder_id in self.dict.keys():
             countdown_id = self.dict[reminder_id]['id']
             if countdown_id != 0:
                 GLib.Source.remove(countdown_id)

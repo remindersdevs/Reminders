@@ -1,6 +1,6 @@
 project(
     'remembrance',
-    version: '2.2',
+    version: '3.0',
     meson_version: '>= 0.59',
     default_options: ['prefix=/usr']
 )
@@ -12,7 +12,7 @@ dependency('gsound')
 
 release_type = get_option('release-type')
 
-service_version = '2.5'
+service_version = '3.0'
 
 app_executable = 'remembrance'
 
@@ -36,9 +36,9 @@ else
 endif
 
 service_executable = 'remembrance-service'
-service_id = app_id + '.Service1'
+service_id = app_id + '.Service2'
 service_interface = service_id + '.Reminders'
-service_object = path + '/Service1'
+service_object = path + '/Service2'
 
 i18n = import('i18n')
 localedir = get_option('localedir')

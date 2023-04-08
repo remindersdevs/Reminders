@@ -1,9 +1,9 @@
-# Reminders DBus Service Info, version 2.5
-name: io.github.dgsasha.Remembrance.Service1
+# Reminders DBus Service Info, version 3.0
+name: io.github.dgsasha.Remembrance.Service2
 
-interface: io.github.dgsasha.Remembrance.Service1.Reminders
+interface: io.github.dgsasha.Remembrance.Service2.Reminders
 
-object: /io/github/dgsasha/Remembrance/Service1
+object: /io/github/dgsasha/Remembrance/Service2
 
 Currently this is only packaged with Reminders and anyone who wants to use it will have to have the full Reminders app installed. The reason this exists is to allow integrating the Reminders app with desktop environments through extensions.
 
@@ -30,21 +30,51 @@ Newer versions of this service should still always be compatible with apps that 
 - SAT = 32
 - SUN = 64
 
+## Reminder Object
+- Type: a{sv}
+- Keys:
+    - 'title': s
+        - This is the title of the reminder
+    - 'description': s
+        - This is a short description of the reminder
+    - 'timestamp': u
+        - This is a Unix timestamp that sets when the notification should be sent. This is in UTC and can be 0 if you don't want to send a notification
+    - 'important': b
+        - Whether or not the reminder is important
+    - 'completed': b
+        - Whether or not the reminder is completed
+    - 'repeat-type': q
+        - [RepeatType](#repeattype)
+    - 'repeat-frequency': q
+        - How often to repeat the reminder, so if 'repeat-type' is 4 and and 'repeat-frequency' is 3, it will repeat every 3 weeks
+    - 'repeat-days': q
+        - What days to repeat on for weekly repeating reminders, can be zero to just use the weekday of the timestamp, or add multiple values together to repeat on multiple days
+        - [RepeatDays](#repeatdays)
+    - 'repeat-times': q
+        - How many times in total the reminder should be shown, this gets decreased by 1 each time the reminder is shown. -1 if you want to repeat forever, or just set it to 1 for a normal non-recurring reminder
+    - 'repeat-until': u
+        - This is a Unix timestamp that represents the last day that the reminder should be repeated on
+    - 'old-timestamp': u
+        - This is a Unix timestamp that represents the last time the reminder was shown, this is set automatically and cannot be changed
+    - 'created-timestamp': u
+        - This is a Unix timestamp that represents the time the reminder was created, this is set automatically and cannot be changed
+    - 'updated-timestamp': u
+        - This is a Unix timestamp that represents the last time the reminder was updated, this is set automatically and cannot be changed
+    - 'list-id': s
+        - This is the id of the list that the reminder is in
+    - 'user-id': s
+        - This is the id of the user that owns the reminder
+
 ## Methods
 
-### AddReminder
+### CreateReminder
 Add a new reminder
 - Parameters (sa{sv})
-    - app-id 
+    - [app-id](#app-id-parameter)
         - Type: s
-        - Explanation [here](#app-id-parameter)
-    - reminder
+    - [reminder](#reminder-object)
         - Type: a{sv}
-        - {'title': s, 'description': s, 'timestamp': u, 'repeat-type': q, 'repeat-frequency': q, 'repeat-days': q, 'repeat-times': n, 'repeat-until': u, 'list': s, 'user-id': s}
-        - 'timestamp' and 'repeat-until' should be a Unix timestamp, set them to 0 to disable them
-        - 'repeat-times' should be -1 if you don't want to limit the repeat times
-        - `list` can be 'local', 'ms-tasks' or a list id
-        - `user-id` can be 'local' or a Microsoft user id
+        - Note that the 'completed' key will be ignored here
 
 - Returns (s)
     - reminder-id
@@ -54,26 +84,17 @@ Add a new reminder
 ### UpdateReminder
 Update an existing reminder
 - Parameters (sa{sv})
-    - app-id 
+    - [app-id](#app-id-parameter)
         - Type: s
-        - Explanation [here](#app-id-parameter)
-    - reminder
+    - [reminder](#reminder-object)
         - Type: a{sv}
-        - {'id': s, 'title': s, 'description': s, 'timestamp': u, 'repeat-type': q, 'repeat-frequency': q, 'repeat-days': q, 'repeat-times': n, 'repeat-until': u, 'list': s, 'user-id': s}
-        - 'id' is the id of the reminder returned by AddReminder or ReturnReminders
-        - 'timestamp' and 'repeat-until' should be a Unix timestamp, set them to 0 to disable them
-        - 'repeat-times' should be -1 if you don't want to limit the repeat times
-        - `list` can be 'local', 'ms-tasks' or a list id
-        - `user-id` can be 'local' or a Microsoft user id
-        - Any key can be left out to use the default instead
-        - You only need to include the keys that are being updated, aside from the 'id' key which is required.
+        - Note that the 'completed' key will be ignored here
 
 ### UpdateCompleted
 Update the completed status of a reminder
 - Parameters (ssb)
-    - app-id 
+    - [app-id](#app-id-parameter)
         - Type: s
-        - Explanation [here](#app-id-parameter)
     - reminder-id
         - Type: s
         - Id of the reminder you want to update
@@ -84,9 +105,8 @@ Update the completed status of a reminder
 ### RemoveReminder
 Remove a reminder
 - Parameters (ss)
-    - app-id 
+    - [app-id](#app-id-parameter)
         - Type: s
-        - Explanation [here](#app-id-parameter)
     - reminder-id
         - Type: s
         - Id of the reminder you want to remove
@@ -94,9 +114,8 @@ Remove a reminder
 ### CreateList
 Create a list
 - Parameters (sss)
-    - app-id 
+    - [app-id](#app-id-parameter)
         - Type: s
-        - Explanation [here](#app-id-parameter)
     - user-id
         - Type: s
         - The user the list should be created for, can be 'local' or a Microsoft user id
@@ -112,9 +131,8 @@ Create a list
 ### RenameList
 Create a list
 - Parameters (ssss)
-    - app-id 
+    - [app-id](#app-id-parameter)
         - Type: s
-        - Explanation [here](#app-id-parameter)
     - user-id
         - Type: s
         - The user where the list is located, can be 'local' or a Microsoft user id
@@ -128,9 +146,8 @@ Create a list
 ### RemoveList
 Create a list
 - Parameters (sss)
-    - app-id 
+    - [app-id](#app-id-parameter)
         - Type: s
-        - Explanation [here](#app-id-parameter)
     - user-id
         - Type: s
         - The user where the list is located, can be 'local' or a Microsoft user id
@@ -143,8 +160,7 @@ Returns all reminders
 - Returns (aa{sv})
     - reminders
         - Type: aa{sv}
-        - An array of dictionaries that represent the reminders
-        - {'id': s, 'title': s, 'description': s, 'timestamp': u, 'completed': b, 'repeat-type': q, 'repeat-frequency': q, 'repeat-days': q, 'repeat-times': n, 'repeat-until': u, 'old-timestamp': u, 'list': s, 'user-id': s}
+        - An array of [reminders](#reminder-object)
 
 ### ReturnLists
 Get all lists
@@ -154,7 +170,7 @@ Get all lists
         - Each key is a list id and each value is the name of the list
 
 ### Refresh
-Read reminders file again and also check for remote updates.
+Read reminders file again and also check for remote updates. Changes will be emitted with their respective signals.
 
 ### MSGetEmails
 Get emails of currently logged in Microsoft accounts
@@ -196,7 +212,7 @@ Quits the service
 
 ## Signals
 
-### RepeatUpdated
+### ReminderShown
 Emitted when a reminder is shown
 - Parameters (s)
     - reminder-id
@@ -225,8 +241,8 @@ Emitted when a reminder's completed status is changed
         - Type: b
         - Whether or not the reminder was set as completed
 
-### ReminderDeleted
-Emitted when a reminder is deleted
+### ReminderRemoved
+Emitted when a reminder is removed
 - Parameters (ss)
     - app-id
         - Type: s
@@ -241,10 +257,9 @@ Emitted when a Reminder is created or updated
     - app-id
         - Type: s
         - The id of the app that initiated the change
-    - reminder
+    - [reminder](#reminder-object)
         - Type: a{sv}
-        - A dictionary with the new contents of the reminder that was updated
-        - {'id': s, 'title': s, 'description': s, 'timestamp': u, 'repeat-type': q, 'repeat-frequency': q, 'repeat-days': q, 'repeat-times': n, 'repeat-until': u, 'list': s, 'user-id': s}
+        - Note that the 'completed' and 'old-timestamp' keys will not be included here
 
 ### ListRemoved
 Emitted when a list is removed
@@ -271,7 +286,7 @@ Emitted when a list is created or updated
     - list-id
         - Type: s
         - The id of the list that was removed
-    - list-id
+    - list-name
         - Type: s
         - The name of the list
 
@@ -297,4 +312,4 @@ Emitted when the dictionary of synced lists is changed
         - Each key is a user id and each value is an array of the list ids that are synced on that account
 
 ## app-id parameter
-This paremeter should be set to the id of your app, although it can be left empty. This will be returned in a signal after the reminder is updated, which will let you ignore the signal if you initiated the update.
+This parameter should be set to the id of your app, although it can be left empty. This will be returned in a signal after the reminder is updated, which will let you ignore the signal if you initiated the update.

@@ -31,14 +31,17 @@ DEFAULT_OPTIONS = {
     'title': '',
     'description': '',
     'timestamp': 0,
+    'important': False,
     'repeat-type': 0,
     'repeat-frequency': 1,
     'repeat-days': 0,
     'repeat-until': 0,
     'repeat-times': 1,
     'old-timestamp': 0,
-    'list': 'local',
-    'user-id': 'local' 
+    'created-timestamp': 0,
+    'updated-timestamp': 0,
+    'list-id': 'local',
+    'user-id': 'local'
 }
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/reminder_edit_window.ui')
@@ -71,6 +74,7 @@ class ReminderEditWindow(Adw.Window):
     repeat_times_box = Gtk.Template.Child()
     repeat_until_calendar = Gtk.Template.Child()
     repeat_duration_button = Gtk.Template.Child()
+    importance_switch = Gtk.Template.Child()
 
     def __init__(self, win, app, reminder = None, **kwargs):
         super().__init__(**kwargs)
@@ -88,15 +92,16 @@ class ReminderEditWindow(Adw.Window):
         if reminder is not None:
             self.options = reminder.options.copy()
             self.id = reminder.id
-            self.task_list = self.options['list']
+            self.task_list = self.options['list-id']
             self.user_id = self.options['user-id']
         else:
             self.options = DEFAULT_OPTIONS.copy()
             self.id = None
-            self.task_list = self.options['list'] = self.win.selected_list_id if self.win.selected_list_id != 'all' else 'local'
+            self.task_list = self.options['list-id'] = self.win.selected_list_id if self.win.selected_list_id != 'all' else 'local'
             self.user_id = self.options['user-id'] = self.win.selected_user_id if self.win.selected_user_id != 'all' else 'local'
 
         self.set_time(self.options['timestamp'])
+        self.set_important(self.options['important'])
 
         self.set_task_list_dropdown()
         self.task_list_visibility_changed()
@@ -122,16 +127,21 @@ class ReminderEditWindow(Adw.Window):
         else:
             self.week_repeat_row.set_visible(False)
 
+    def set_important(self, importance):
+        self.importance_switch.set_active(importance)
+        
     def get_options(self):
         options = self.options.copy()
         options['title'] = self.title_entry.get_text()
         options['description'] = self.description_entry.get_text()
         options['timestamp'] = self.get_timestamp() if self.time_row.get_enable_expansion() else 0
 
-        options['list'] = self.task_list
+        options['list-id'] = self.task_list
         options['user-id'] = self.user_id
 
         options['repeat-type'] = 0 if not self.repeat_row.get_enable_expansion() or not self.repeat_row.get_sensitive() else self.repeat_type_button.get_selected() + 1
+
+        options['important'] = self.importance_switch.get_active()
 
         if options['repeat-type'] != 0:
             self.frequency_btn.update()
@@ -145,7 +155,7 @@ class ReminderEditWindow(Adw.Window):
                 options['repeat-until'] = 0
             elif self.repeat_duration_button.get_selected() == 2:
                 options['repeat-times'] = -1
-                options['repeat-until'] = datetime.datetime(self.calendar.props.year, self.calendar.props.month + 1, self.calendar.props.day).timestamp()
+                options['repeat-until'] = datetime.datetime(self.repeat_until_calendar.props.year, self.repeat_until_calendar.props.month + 1, self.repeat_until_calendar.props.day).timestamp()
 
             if options['repeat-type'] == info.RepeatType.WEEK:
                 self.week_repeat_row.set_visible(True)
@@ -354,10 +364,24 @@ class ReminderEditWindow(Adw.Window):
     def do_save(self, data = None):
         try:
             options = self.get_options()
+
+            if options['timestamp'] > floor(time.time()) and (options['repeat-times'] == 0 or \
+            options['repeat-until'] > 0 and datetime.datetime.fromtimestamp(options['timestamp']).date() > datetime.datetime.fromtimestamp(options['repeat-until']).date()):
+                warning_dialog = Adw.MessageDialog(
+                    transient_for=self,
+                    heading=_('Not saving'),
+                    body=_('This reminder will never be shown, change the repeat options so it is shown at least once.'),
+                )
+                warning_dialog.add_response('okay', _('Okay'))
+                warning_dialog.set_default_response('okay')
+                warning_dialog.present()
+                self.win.set_busy(False, self)
+                return
+
             if self.check_changed(options):
                 if self.id is None:
-                    reminder_id = self.app.run_service_method(
-                        'AddReminder',
+                    results = self.app.run_service_method(
+                        'CreateReminder',
                         GLib.Variant(
                             '(sa{sv})',
                             (
@@ -366,20 +390,21 @@ class ReminderEditWindow(Adw.Window):
                                     'title': GLib.Variant('s', options['title']),
                                     'description': GLib.Variant('s', options['description']),
                                     'timestamp': GLib.Variant('u', options['timestamp']),
+                                    'important': GLib.Variant('u', options['important']),
                                     'repeat-type': GLib.Variant('q', options['repeat-type']),
                                     'repeat-frequency': GLib.Variant('q', options['repeat-frequency']),
                                     'repeat-days': GLib.Variant('q', options['repeat-days']),
                                     'repeat-times': GLib.Variant('n', options['repeat-times']),
                                     'repeat-until': GLib.Variant('u', options['repeat-until']),
-                                    'list': GLib.Variant('s', options['list']),
+                                    'list-id': GLib.Variant('s', options['list-id']),
                                     'user-id': GLib.Variant('s', options['user-id'])
                                 }
                             )
                         )
                     )
-                    self.id = reminder_id.unpack()[0]
+                    self.id, options['created-timestamp'] = results.unpack()
                 else:
-                    self.app.run_service_method(
+                    results = self.app.run_service_method(
                         'UpdateReminder',
                         GLib.Variant(
                             '(sa{sv})',
@@ -390,18 +415,19 @@ class ReminderEditWindow(Adw.Window):
                                     'title': GLib.Variant('s', options['title']),
                                     'description': GLib.Variant('s', options['description']),
                                     'timestamp': GLib.Variant('u', options['timestamp']),
+                                    'important': GLib.Variant('u', options['important']),
                                     'repeat-type': GLib.Variant('q', options['repeat-type']),
                                     'repeat-frequency': GLib.Variant('q', options['repeat-frequency']),
                                     'repeat-days': GLib.Variant('q', options['repeat-days']),
                                     'repeat-times': GLib.Variant('n', options['repeat-times']),
                                     'repeat-until': GLib.Variant('u', options['repeat-until']),
-                                    'old-timestamp': GLib.Variant('u', options['old-timestamp']),
-                                    'list': GLib.Variant('s', options['list']),
+                                    'list-id': GLib.Variant('s', options['list-id']),
                                     'user-id': GLib.Variant('s', options['user-id'])
                                 }
                             )
                         )
                     )
+                    options['updated-timestamp'] = results.unpack()[0]
 
                 self.options = options
 
@@ -542,7 +568,7 @@ class ReminderEditWindow(Adw.Window):
         elif new_value < lower:
             self.hour_button.set_value(upper)
             self.wrap_hour()
-            self.hour_button.set_value(new_value)
+        self.hour_button.set_value(new_value)
 
     @Gtk.Template.Callback()
     def wrap_hour(self, button = None):

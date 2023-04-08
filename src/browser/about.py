@@ -19,9 +19,13 @@ from gettext import gettext as _
 
 RELEASE_NOTES = '''
 <ul>
+    <li>New notification sound</li>
+    <li>Allow sorting reminders by created time or updated time</li>
+    <li>Allow marking reminders as important</li>
     <li>Slightly improved UI</li>
     <li>Added keyboard shortcuts page</li>
-    <li>New notification sound</li>
+    <li>Lots of bugfixes</li>
+    <li>Bump API version</li>
 </ul>
 '''
 

@@ -46,6 +46,18 @@
                           </object>
                         </child>
                         <child>
+                          <object class="AdwActionRow">
+                            <property name="title" translatable="yes">Important</property>
+                            <property name="subtitle" translatable="yes">This will make the reminder display first in the list</property>
+                            <property name="activatable-widget">importance_switch</property>
+                            <child>
+                              <object class="GtkSwitch" id="importance_switch">
+                                <property name="valign">center</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
                           <object class="AdwComboRow" id="task_list_row">
                             <property name="hexpand">true</property>
                             <property name="title" translatable="yes">Location</property>

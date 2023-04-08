@@ -8,6 +8,8 @@
   <enum id="io.github.dgsasha.Remembrance.SortBy">
     <value value="0" nick="time"/>
     <value value="1" nick="title"/>
+    <value value="2" nick="created"/>
+    <value value="3" nick="updated"/>
   </enum>
   <enum id="io.github.dgsasha.Remembrance.RefreshFrequency">
     <value value="0" nick="5m"/>

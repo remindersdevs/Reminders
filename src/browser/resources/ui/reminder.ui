@@ -6,6 +6,11 @@
         <property name="icon-name">object-select-symbolic</property>
       </object>
     </child>
+    <child type="prefix">
+      <object class="GtkImage" id="important_icon">
+        <property name="icon-name">starred-symbolic</property>
+      </object>
+    </child>
     <child type="action">
       <object class="GtkBox" id="label_box">
         <property name="valign">fill</property>

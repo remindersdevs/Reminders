@@ -40,6 +40,7 @@ class Reminder(Adw.ExpanderRow):
     done_button = Gtk.Template.Child()
     edit_button = Gtk.Template.Child()
     done_btn_content = Gtk.Template.Child()
+    important_icon = Gtk.Template.Child()
 
     def __init__(
         self,
@@ -58,8 +59,9 @@ class Reminder(Adw.ExpanderRow):
         self.set_subtitle(options['description'])
         self.past = False
 
-        self.completed_icon_box = self.completed_icon.get_parent().get_parent()
+        self.prefix_box = self.completed_icon.get_parent().get_parent()
         self.set_completed(completed)
+        self.set_important()
 
         actions_box = self.label_box.get_parent()
         suffixes_box = actions_box.get_parent()
@@ -113,11 +115,14 @@ class Reminder(Adw.ExpanderRow):
             if self.options['repeat-times'] != options['repeat-times'] or self.options['repeat-until'] != options['repeat-until']:
                 edit_win.set_repeat_duration(options['repeat-until'], options['repeat-times'])
 
-            if self.options['list'] != options['list'] or self.options['user-id'] != options['user-id']:
-                edit_win.task_list = options['list']
+            if self.options['list-id'] != options['list-id'] or self.options['user-id'] != options['user-id']:
+                edit_win.task_list = options['list-id']
                 edit_win.user_id = options['user-id']
                 edit_win.set_task_list_dropdown_selected()
-    
+
+            if self.options['important'] != options['important']:
+                edit_win.set_important(options['important'])
+
             edit_win.options = options.copy()
 
         self.set_options(options)
@@ -128,6 +133,7 @@ class Reminder(Adw.ExpanderRow):
         self.set_title(self.options['title'])
         self.set_subtitle(self.options['description'])
 
+        self.set_important()
         self.set_labels()
         self.refresh_time()
         self.changed()
@@ -185,19 +191,27 @@ class Reminder(Adw.ExpanderRow):
         self.set_time_label()
         self.set_repeat_label()
 
+    def set_important(self):
+        self.important_icon.set_visible(self.options['important'] and not self.completed_icon.get_visible())
+        self.prefix_box.set_visible(self.completed_icon.get_visible() or self.important_icon.get_visible())
+        self.win.reminders_list.invalidate_sort()
+
     def set_completed(self, completed):
         self.completed = completed
+
+        self.completed_icon.set_visible(completed)
+        self.important_icon.set_visible(self.options['important'] and not self.completed_icon.get_visible())
 
         if completed:
             self.done_btn_content.set_label(_('Incomplete'))
             self.done_btn_content.set_icon_name('window-close-symbolic')
             self.done_button.set_css_classes(['incomplete', 'rounded'])
-            self.completed_icon_box.set_visible(True)
         else:
             self.done_btn_content.set_label(_('Complete'))
             self.done_btn_content.set_icon_name('object-select-symbolic')
             self.done_button.set_css_classes(['complete', 'rounded'])
-            self.completed_icon_box.set_visible(False)
+
+        self.prefix_box.set_visible(self.completed_icon.get_visible() or self.important_icon.get_visible())
 
         self.refresh_time()
         self.win.reminders_list.invalidate_sort()
@@ -222,10 +236,11 @@ class Reminder(Adw.ExpanderRow):
             else:
                 self.set_completed(False)
 
-            self.app.run_service_method(
+            results = self.app.run_service_method(
                 'UpdateCompleted',
                 GLib.Variant('(ssb)', (info.app_id, self.id, self.completed))
             )
+            self.options['updated-timestamp'] = results.unpack()[0]
 
             self.set_expanded(False)
 

@@ -93,10 +93,6 @@ class MainWindow(Adw.ApplicationWindow):
 
         self.activate_action('win.' + page, None)
 
-        self.set_completed_last()
-        self.set_completed_reversed()
-        self.app.settings.connect('changed::completed-last', self.set_completed_last)
-        self.app.settings.connect('changed::completed-reversed', self.set_completed_reversed)
         self.app.settings.connect('changed::selected-task-list', lambda *args: self.update_task_list())
 
         self.app.service.connect('g-signal::MSSignedIn', self.signed_in_cb)
@@ -393,14 +389,6 @@ class MainWindow(Adw.ApplicationWindow):
 
             self.display_reminder(**reminder)
 
-    def set_completed_last(self, key = None, data = None):
-        self.completed_last = self.app.settings.get_boolean('completed-last')
-        self.reminders_list.invalidate_sort()
-
-    def set_completed_reversed(self, key = None, data = None):
-        self.completed_reversed = self.app.settings.get_boolean('completed-reversed')
-        self.reminders_list.invalidate_sort()
-
     def set_sort(self, key = None, data = None):
         self.sort = self.app.settings.get_enum('sort')
         self.reminders_list.invalidate_sort()
@@ -424,13 +412,16 @@ class MainWindow(Adw.ApplicationWindow):
         description = self.get_kwarg(kwargs, 'description')
         timestamp = self.get_kwarg(kwargs, 'timestamp')
         completed = self.get_kwarg(kwargs, 'completed', False)
+        important = self.get_kwarg(kwargs, 'important', False)
         repeat_type = self.get_kwarg(kwargs, 'repeat-type', 0)
         repeat_frequency = self.get_kwarg(kwargs, 'repeat-frequency', 1)
         repeat_days = self.get_kwarg(kwargs, 'repeat-days', 0)
         repeat_times = self.get_kwarg(kwargs, 'repeat-times')
         repeat_until = self.get_kwarg(kwargs, 'repeat-until', 0)
         old_timestamp = self.get_kwarg(kwargs, 'old-timestamp', 0)
-        task_list = self.get_kwarg(kwargs, 'list', 'local')
+        created_timestamp = self.get_kwarg(kwargs, 'created-timestamp', 0)
+        updated_timestamp = self.get_kwarg(kwargs, 'updated-timestamp', 0)
+        task_list = self.get_kwarg(kwargs, 'list-id', 'local')
         user_id = self.get_kwarg(kwargs, 'user-id', 'local')
 
         if reminder_id not in self.reminder_lookup_dict.keys():
@@ -440,14 +431,17 @@ class MainWindow(Adw.ApplicationWindow):
                     'title': title,
                     'description': description,
                     'timestamp': timestamp,
+                    'important': important,
                     'repeat-type': repeat_type,
                     'repeat-frequency': repeat_frequency,
                     'repeat-days': repeat_days,
                     'repeat-until': repeat_until,
                     'repeat-times': repeat_times,
                     'old-timestamp': old_timestamp,
-                    'list': task_list,
-                    'user-id': user_id 
+                    'created-timestamp': created_timestamp,
+                    'updated-timestamp': updated_timestamp,
+                    'list-id': task_list,
+                    'user-id': user_id
                 },
                 reminder_id,
                 completed
@@ -506,14 +500,14 @@ class MainWindow(Adw.ApplicationWindow):
 
     def all_filter(self, reminder):
         reminder.set_past(False)
-        retval = self.task_list_filter(reminder.options['user-id'], reminder.options['list'])
+        retval = self.task_list_filter(reminder.options['user-id'], reminder.options['list-id'])
         reminder.set_sensitive(retval)
         return retval
 
     def upcoming_filter(self, reminder):
         now = floor(time.time())
         if reminder.options['timestamp'] == 0 or (reminder.options['timestamp'] > now and not reminder.completed):
-            retval = self.task_list_filter(reminder.options['user-id'], reminder.options['list'])
+            retval = self.task_list_filter(reminder.options['user-id'], reminder.options['list-id'])
             reminder.set_past(False)
         else:
             retval = False
@@ -523,7 +517,7 @@ class MainWindow(Adw.ApplicationWindow):
     def past_filter(self, reminder):
         now = ceil(time.time())
         if reminder.options['old-timestamp'] != 0 and (reminder.options['old-timestamp'] < now and not reminder.completed):
-            retval = self.task_list_filter(reminder.options['user-id'], reminder.options['list'])
+            retval = self.task_list_filter(reminder.options['user-id'], reminder.options['list-id'])
             reminder.set_past(True)
         else:
             retval = False
@@ -532,7 +526,7 @@ class MainWindow(Adw.ApplicationWindow):
 
     def completed_filter(self, reminder):
         if reminder.completed:
-            retval = self.task_list_filter(reminder.options['user-id'], reminder.options['list'])
+            retval = self.task_list_filter(reminder.options['user-id'], reminder.options['list-id'])
             reminder.set_past(False)
         else:
             retval = False
@@ -543,30 +537,28 @@ class MainWindow(Adw.ApplicationWindow):
         # sort by timestamp from lowest to highest, showing completed reminders last
         # insensitive rows first as a part of fixing https://gitlab.gnome.org/GNOME/gtk/-/issues/5309
         try:
-            if (not row1.get_sensitive() and row2.get_sensitive()):
+            if not row1.get_sensitive() and row2.get_sensitive():
                 return -1
-            if (row1.get_sensitive() and not row2.get_sensitive()):
+            if row1.get_sensitive() and not row2.get_sensitive():
                 return 1
-            if self.completed_last:
-                if (not row1.completed and row2.completed):
+            if not row1.completed and row2.completed:
+                return -1
+            if row1.completed and not row2.completed:
+                return 1
+            if not row1.completed:
+                if row1.options['important'] and not row2.options['important']:
                     return -1
-                if (row1.completed and not row2.completed):
+                if not row1.options['important'] and row2.options['important']:
                     return 1
 
             if self.sort == 0: # time
-                if row1.timestamp == row2.timestamp:
+                if row1.options['timestamp'] == row2.options['timestamp']:
                     return 0
 
-                # if reminders are completed reverse order
-                if self.completed_last and self.completed_reversed and row1.completed:
-                    should_reverse = (not self.descending_sort)
-                else:
-                    should_reverse = self.descending_sort
-
-                if row1.timestamp < row2.timestamp:
-                    return 1 if should_reverse else -1
+                if row1.options['timestamp'] < row2.options['timestamp']:
+                    return 1 if self.descending_sort else -1
                 # if row1.timestamp > row2.timestamp
-                return -1 if should_reverse else 1
+                return -1 if self.descending_sort else 1
 
             elif self.sort == 1: # alphabetical
                 name1 = (row1.get_title() + row1.get_subtitle()).lower()
@@ -577,7 +569,25 @@ class MainWindow(Adw.ApplicationWindow):
                     return 1 if self.descending_sort else -1
                 # if name1 > name2
                 return -1 if self.descending_sort else 1
-        except:
+
+            elif self.sort == 2: # created
+                if row1.options['created-timestamp'] == row2.options['created-timestamp']:
+                    return 0
+
+                if row1.options['created-timestamp'] < row2.options['created-timestamp']:
+                    return 1 if self.descending_sort else -1
+                # if row1.timestamp > row2.timestamp
+                return -1 if self.descending_sort else 1
+
+            elif self.sort == 3: # updated
+                if row1.options['updated-timestamp'] == row2.options['updated-timestamp']:
+                    return 0
+
+                if row1.options['updated-timestamp'] < row2.options['updated-timestamp']:
+                    return 1 if self.descending_sort else -1
+                # if row1.timestamp > row2.timestamp
+                return -1 if self.descending_sort else 1
+        except Exception as error:
             return 0
 
     def all_reminders(self):

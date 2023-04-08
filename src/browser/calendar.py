@@ -27,7 +27,7 @@ logger = logging.getLogger(info.app_executable)
 class Calendar(threading.Thread):
     '''Updates date labels when day changes'''
     def __init__(self, win):
-        self.app = win
+        self.win = win
         self.time = datetime.datetime.combine(datetime.date.today(), datetime.time())
         self.countdown_id = 0
         super().__init__(target=self.run_countdown)
