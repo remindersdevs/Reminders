@@ -399,6 +399,8 @@ class Reminders():
                         reminder = {}
                         reminder['repeat-times'] = 1 if is_future or notify_past else 0
                         reminder['old-timestamp'] = 0
+                        reminder['created-timestamp'] = 0
+                        reminder['updated-timestamp'] = 0
 
                     reminder['ms-id'] = task_id
                     reminder['title'] = task['title'].strip()
