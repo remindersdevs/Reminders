@@ -248,7 +248,7 @@ class Queue():
             for index, reminder_id in enumerate(queue['reminders']['delete']):
                 try:
                     user_id = ms[reminder_id]['user-id']
-                    task_list = list_ids[ms[reminder_id]['list']]['ms-id']
+                    task_list = list_ids[ms[reminder_id]['list-id']]['ms-id']
 
                     self.to_do.remove_task(user_id, task_list, task_id)
 

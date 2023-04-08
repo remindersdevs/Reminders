@@ -152,7 +152,7 @@ class ListRow(Adw.EntryRow):
         self.add_suffix(self.delete_button)
         self.connect('changed', lambda *args: self.check_saved())
         self.check_saved()
-        self.delete_button.set_sensitive(not self.list_id in ('ms-tasks', 'local'))
+        self.delete_button.set_sensitive(not self.list_id == self.user_id)
 
     def update(self):
         self.win.set_busy(True, self.edit_win)
@@ -168,7 +168,7 @@ class ListRow(Adw.EntryRow):
             self.list_id = self.win.update_list(self.user_id, list_name, self.list_id)
             self.list_name = list_name
             self.save_button.set_sensitive(False)
-            self.delete_button.set_sensitive(not self.list_id in ('ms-tasks', 'local'))
+            self.delete_button.set_sensitive(not self.list_id == self.user_id)
             self.group.lists[self.list_id] = self
             self.set_text(self.list_name)
         except Exception as error:

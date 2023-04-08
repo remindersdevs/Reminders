@@ -38,7 +38,7 @@ from threading import Thread
 REMINDERS_FILE = f'{info.data_dir}/reminders.csv'
 MS_REMINDERS_FILE = f'{info.data_dir}/ms_reminders.csv'
 TASK_LISTS_FILE = f'{info.data_dir}/task_lists.json'
-TASK_LIST_IDS_FILE = f'{info.data_dir}/task_list_ids.json'
+TASK_LIST_IDS_FILE = f'{info.data_dir}/task_list_ids.csv'
 
 FIELDNAMES = [
     'id',
@@ -71,7 +71,7 @@ MS_FIELDNAMES = [
     'updated-timestamp',
     'list-id',
     'user-id',
-    'ms-id',
+    'ms-id'
 ]
 
 REMINDER_DEFAULTS = {
@@ -356,15 +356,23 @@ class Reminders():
             for task_list in lists[user_id]:
                 list_id = None
 
-                try:
-                    list_id = list(old_list_ids[user_id].keys())[list(old_list_ids[user_id].values()).index(task_list['id'])]
-                except:
-                    list_id = 'ms-tasks' if task_list['default'] else self._do_generate_id()
+                if task_list['default']:
+                    list_id = user_id
+                else:
+                    try:
+                        for task_list_id, value in old_list_ids.items():
+                            if value['ms-id'] == task_list['id'] and value['user-id'] == user_id:
+                                list_id = task_list_id
+                    except:
+                        pass
 
-                if user_id not in list_ids.keys():
-                    list_ids[user_id] = {}
+                if list_id is None:
+                    list_id = self._do_generate_id()
 
-                list_ids[user_id][list_id] = task_list['id']
+                list_ids[list_id] = {
+                    'ms-id': task_list['id'],
+                    'user-id': user_id
+                }
 
                 list_names[user_id][list_id] = task_list['name']
 
@@ -475,15 +483,15 @@ class Reminders():
                     reminder_json['isReminderOn'] = False
                     reminder_json['reminderDateTime'] = None
             if updating:
-                new_task_id = self.to_do.update_task(user_id, self.list_ids[user_id][task_list], self.ms[reminder_id]['ms-id'], reminder_json)
+                new_task_id = self.to_do.update_task(user_id, self.list_ids[task_list]['ms-id'], self.ms[reminder_id]['ms-id'], reminder_json)
             else:
-                new_task_id = self.to_do.create_task(user_id, self.list_ids[user_id][task_list], reminder_json)
+                new_task_id = self.to_do.create_task(user_id, self.list_ids[task_list]['ms-id'], reminder_json)
 
         if moving:
             if old_task_list != 'local' and old_user_id != 'local':
                 if old_user_id is None:
                     old_user_id = user_id
-                self.to_do.remove_task(old_user_id, self.list_ids[old_user_id][old_task_list], self.ms[reminder_id]['ms-id'])
+                self.to_do.remove_task(old_user_id, self.list_ids[old_task_list]['ms-id'], self.ms[reminder_id]['ms-id'])
 
         return new_task_id
 
@@ -783,8 +791,16 @@ class Reminders():
             json.dump(self.list_names, jsonfile)
 
     def _save_list_ids(self):
-        with open(TASK_LIST_IDS_FILE, 'w', newline='') as jsonfile:
-            json.dump(self.list_ids, jsonfile)
+        with open(TASK_LIST_IDS_FILE, 'w', newline='') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=['list-id', 'ms-id', 'user-id'])
+            writer.writeheader()
+
+            for list_id in self.list_ids.keys():
+                writer.writerow({
+                    'list-id': list_id,
+                    'ms-id': self.list_ids[list_id]['ms-id'],
+                    'user-id': self.list_ids[list_id]['user-id']
+                })
 
     def _get_boolean(self, row, key):
         return (key in row.keys() and row[key] == 'True')
@@ -868,8 +884,14 @@ class Reminders():
                     local[reminder_id]['list-id'] = self._get_str(row, 'list-id')
 
         if os.path.isfile(TASK_LIST_IDS_FILE):
-            with open(TASK_LIST_IDS_FILE, newline='') as jsonfile:
-                list_ids = json.load(jsonfile)
+            with open(TASK_LIST_IDS_FILE, newline='') as csvfile:
+                reader = csv.DictReader(csvfile)
+
+                for row in reader:
+                    list_ids[row['list-id']] = {
+                        'ms-id': row['ms-id'],
+                        'user-id': row['user-id']
+                    }
 
         if os.path.isfile(TASK_LISTS_FILE):
             with open(TASK_LISTS_FILE, newline='') as jsonfile:
@@ -1070,9 +1092,10 @@ class Reminders():
                 except requests.ConnectionError:
                     self.queue.add_list(list_id)
 
-            if user_id not in self.list_ids.keys():
-                self.list_ids[user_id] = {}
-            self.list_ids[user_id][list_id] = '' if ms_id is None else ms_id
+            self.list_ids[list_id] = {
+                'ms-id': '' if ms_id is None else ms_id,
+                'user-id': user_id
+            }
             self._save_list_ids()
 
             self.list_names[user_id][list_id] = list_name
@@ -1085,7 +1108,7 @@ class Reminders():
             if user_id != 'local':
                 try:
                     self.queue.load()
-                    ms_id = self.list_ids[user_id][list_id]
+                    ms_id = self.list_ids[list_id]['ms-id']
                     self.to_do.update_list(user_id, ms_id, new_name, list_id)
                 except requests.ConnectionError:
                     self.queue.update_list(list_id)
@@ -1094,17 +1117,17 @@ class Reminders():
             self.do_emit('ListUpdated', GLib.Variant('(ssss)', (app_id, user_id, list_id, new_name)))
 
     def delete_list(self, app_id, user_id, list_id):
-        if list_id == 'local' or list_id == 'ms-tasks':
-            raise Exception('Tried to remove protected list')
+        if list_id == user_id:
+            raise Exception('Tried to remove default list')
         if user_id in self.list_names and list_id in self.list_names[user_id]:
             if user_id != 'local':
                 try:
                     self.queue.load()
-                    ms_id = self.list_ids[user_id][list_id]
+                    ms_id = self.list_ids[list_id]['ms-id']
                     self.to_do.delete_list(user_id, ms_id, list_id)
                 except requests.ConnectionError:
                     self.queue.remove_list(list_id)
-                self.list_ids[user_id].pop(list_id)
+                self.list_ids.pop(list_id)
                 self._save_list_ids()
             self.list_names[user_id].pop(list_id)
             self._save_lists()

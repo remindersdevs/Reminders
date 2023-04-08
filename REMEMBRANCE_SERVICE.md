@@ -153,7 +153,7 @@ Remove a list
         - The user where the list is located, can be 'local' or a Microsoft user id
     - list-id
         - Type: s
-        - The id of the list you are deleting, cannot be 'local' or 'ms-tasks'
+        - The id of the list you are deleting, list ids that are equal to the user id are default lists and cannot be removed
 
 ### ReturnReminders
 Returns all reminders

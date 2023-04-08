@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-08 16:18-0400\n"
+"POT-Creation-Date: 2023-04-08 16:51-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -841,10 +841,10 @@ msgstr ""
 msgid "Microsoft reminders currently don't support recurrence"
 msgstr ""
 
-#: src/service/backend.py:587
+#: src/service/backend.py:595
 msgid "Mark as completed"
 msgstr ""
 
-#: src/service/backend.py:885
+#: src/service/backend.py:907
 msgid "Local Reminders"
 msgstr ""
