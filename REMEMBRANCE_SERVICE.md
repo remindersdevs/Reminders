@@ -63,10 +63,13 @@ Add a new reminder
         - Type: a{sv}
         - Note that the 'completed' key will be ignored here
 
-- Returns (s)
+- Returns (su)
     - reminder-id
         - Type: s
         - Id that was generated to represent the reminder, keep track of these
+    - created-timestamp
+        - Type: u
+        - The Unix timestamp of when the reminder was created
 
 ### UpdateReminder
 Update an existing reminder
@@ -76,6 +79,11 @@ Update an existing reminder
     - [reminder](#reminder-object)
         - Type: a{sv}
         - Note that the 'completed' key will be ignored here
+
+- Returns (u)
+    - updated-timestamp
+        - Type: u
+        - The Unix timestamp of when the reminder was updated
 
 ### UpdateCompleted
 Update the completed status of a reminder
@@ -88,6 +96,11 @@ Update the completed status of a reminder
     - completed 
         - Type: b
         - Whether or not the reminder should be completed
+
+- Returns (u)
+    - updated-timestamp
+        - Type: u
+        - The Unix timestamp of when the reminder was updated
 
 ### RemoveReminder
 Remove a reminder
@@ -217,7 +230,7 @@ Emitted when a reminder is shown
 
 ### CompletedUpdated
 Emitted when a reminder's completed status is changed
-- Parameters (ssb)
+- Parameters (ssbu)
     - app-id
         - Type: s
         - The id of the app that initiated the change
@@ -227,6 +240,9 @@ Emitted when a reminder's completed status is changed
     - completed
         - Type: b
         - Whether or not the reminder was set as completed
+    - updated-timestamp
+        - Type: u
+        - The Unix timestamp of when the reminder was updated
 
 ### ReminderRemoved
 Emitted when a reminder is removed
