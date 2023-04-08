@@ -1058,6 +1058,7 @@ class Reminders():
     def create_list(self, app_id, user_id, list_name):
         if user_id in self.list_names:
             list_id = self._do_generate_id()
+            ms_id = None
             if user_id != 'local':
                 if user_id not in self.synced_ids:
                     self.synced_ids[user_id] = []
@@ -1067,7 +1068,6 @@ class Reminders():
                     self.queue.load()
                     ms_id = self.to_do.create_list(user_id, list_name, list_id)
                 except requests.ConnectionError:
-                    ms_id = None
                     self.queue.add_list(list_id)
 
             if user_id not in self.list_ids.keys():
