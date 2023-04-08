@@ -541,10 +541,12 @@ class MainWindow(Adw.ApplicationWindow):
                 return -1
             if row1.get_sensitive() and not row2.get_sensitive():
                 return 1
+
             if not row1.completed and row2.completed:
                 return -1
             if row1.completed and not row2.completed:
                 return 1
+
             if not row1.completed:
                 if row1.options['important'] and not row2.options['important']:
                     return -1
@@ -552,41 +554,36 @@ class MainWindow(Adw.ApplicationWindow):
                     return 1
 
             if self.sort == 0: # time
-                if row1.options['timestamp'] == row2.options['timestamp']:
-                    return 0
+                if row1.options['timestamp'] > row2.options['timestamp']:
+                    return -1 if self.descending_sort else 1
 
                 if row1.options['timestamp'] < row2.options['timestamp']:
                     return 1 if self.descending_sort else -1
-                # if row1.timestamp > row2.timestamp
-                return -1 if self.descending_sort else 1
-
-            elif self.sort == 1: # alphabetical
-                name1 = (row1.get_title() + row1.get_subtitle()).lower()
-                name2 = (row2.get_title() + row2.get_subtitle()).lower()
-                if name1 == name2:
-                    return 0
-                if name1 < name2:
-                    return 1 if self.descending_sort else -1
-                # if name1 > name2
-                return -1 if self.descending_sort else 1
 
             elif self.sort == 2: # created
-                if row1.options['created-timestamp'] == row2.options['created-timestamp']:
-                    return 0
+                if row1.options['created-timestamp'] > row2.options['created-timestamp']:
+                    return -1 if self.descending_sort else 1
 
                 if row1.options['created-timestamp'] < row2.options['created-timestamp']:
                     return 1 if self.descending_sort else -1
-                # if row1.timestamp > row2.timestamp
-                return -1 if self.descending_sort else 1
 
             elif self.sort == 3: # updated
-                if row1.options['updated-timestamp'] == row2.options['updated-timestamp']:
-                    return 0
+                if row1.options['updated-timestamp'] > row2.options['updated-timestamp']:
+                    return -1 if self.descending_sort else 1
 
                 if row1.options['updated-timestamp'] < row2.options['updated-timestamp']:
                     return 1 if self.descending_sort else -1
-                # if row1.timestamp > row2.timestamp
-                return -1 if self.descending_sort else 1
+
+            # Alphabetical, also used as fallback
+            name1 = (row1.get_title() + row1.get_subtitle()).lower()
+            name2 = (row2.get_title() + row2.get_subtitle()).lower()
+            if name1 == name2:
+                return 0
+            if name1 < name2:
+                return 1 if self.descending_sort else -1
+            # if name1 > name2
+            return -1 if self.descending_sort else 1
+
         except Exception as error:
             return 0
 
