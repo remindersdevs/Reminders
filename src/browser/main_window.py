@@ -106,7 +106,7 @@ class MainWindow(Adw.ApplicationWindow):
         self.reminders_list.set_sort_func(self.sort_func)
 
         self.reminder_lookup_dict = {}
-        self.calendar = Calendar(self.app)
+        self.calendar = Calendar(self)
 
         self.app.settings.connect('changed::synced-task-lists', lambda *args : self.set_synced_ids())
 
