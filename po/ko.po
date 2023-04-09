@@ -8,110 +8,115 @@ msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-08 16:51-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2023-04-09 16:10+0000\n"
+"Last-Translator: Hyeongwoo Kim <7829hw@gmail.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/reminders/"
+"reminders/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.17-dev\n"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:4
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:9
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:63 src/info.py:8
 msgid "Reminders"
-msgstr ""
+msgstr "리마인더"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:5
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:10
+#, fuzzy
 msgid "Set reminders for yourself"
-msgstr ""
+msgstr "리마인더 설정하기"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:13
 msgid ""
 "Todo;Productivity;Task;Planning;Planner;Time;Management;Reminder;Remembrance;"
 "Reminders;"
-msgstr ""
+msgstr "할 일;생산성;작업;계획;플래너;시간;관리;알림;기억;리마인더;"
 
 #: data/service/io.github.dgsasha.Remembrance.Service1.desktop.in.in:4
 msgid "Remembrance Service"
-msgstr ""
+msgstr "Remembrance 서비스"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:23
 #: src/browser/resources/ui/preferences.ui:69
 msgid "Time format"
-msgstr ""
+msgstr "시간 형식"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:24
 msgid "What format to display the time in"
-msgstr ""
+msgstr "시간을 표시할 형식"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:28
 #: src/browser/resources/ui/main_window.ui:46
 msgid "Sort by"
-msgstr ""
+msgstr "정렬 기준"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:29
 msgid "How to sort the reminders"
-msgstr ""
+msgstr "알림을 정렬하는 방법"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:33
 #: src/browser/resources/ui/preferences.ui:50
 msgid "Auto refresh frequency"
-msgstr ""
+msgstr "자동 새로 고침 빈도"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:34
 msgid "How often the reminders are refreshed (minutes)"
-msgstr ""
+msgstr "리마인더를 새로 고치는 빈도(분)"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:38
 msgid "Notification Sound"
-msgstr ""
+msgstr "알림음"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:39
 msgid "Whether or not to play a notification sound"
-msgstr ""
+msgstr "알림음을 재생할지 여부"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:43
 msgid "Use included notification sound"
-msgstr ""
+msgstr "내장된 알림음 사용"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:44
 msgid "Whether to use the included notification sound"
-msgstr ""
+msgstr "내장된 알림음의 사용 여부"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:48
 msgid "Descending sort"
-msgstr ""
+msgstr "내림차순 정렬"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:49
 msgid "If reminders sort should be descending"
-msgstr ""
+msgstr "리마인더를 내림차순으로 정렬할지 여부"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:53
 msgid "Completed last"
-msgstr ""
+msgstr "최근 완료"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:54
 msgid "Show completed reminders last"
-msgstr ""
+msgstr "완료된 리마인더를 마지막에 표시"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:58
+#, fuzzy
 msgid "Completed reverse"
-msgstr ""
+msgstr "완료된 리마인더의 순서를 반대로 변경하기"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:59
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:73
 msgid "Reverse order of completed reminders when sorted by time"
-msgstr ""
+msgstr "완료된 리마인더를 시간별로 정렬할 때 역순으로 정렬하기"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:72
 msgid "Sync with Microsoft To Do"
-msgstr ""
+msgstr "Microsoft To Do와 동기화"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:77
 msgid "Task lists that should be synced"
-msgstr ""
+msgstr "동기화 될 작업 목록"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:78
 msgid ""
@@ -120,7 +125,7 @@ msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:82
 msgid "Task lists that should be visible"
-msgstr ""
+msgstr "보이게 할 작업 목록"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:83
 msgid "(user_id, task_id) ids can be 'all', 'local', or an actual id"
@@ -128,226 +133,228 @@ msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:13
 msgid "What you can do with Reminders:"
-msgstr ""
+msgstr "리마인더로 수행할 수 있는 작업:"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:15
 msgid "Set recurring reminders"
-msgstr ""
+msgstr "반복 리마인더 설정"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:16
 msgid "Schedule notifications"
-msgstr ""
+msgstr "알림 예약"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:17
 msgid "Sort, filter, and search for reminders"
-msgstr ""
+msgstr "정렬, 필터 및 리마인더 검색"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:18
 msgid "Mark reminders as important or complete"
-msgstr ""
+msgstr "리마인더를 중요 또는 완료로 표시"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:19
 msgid "Organize reminders using lists"
-msgstr ""
+msgstr "목록으로 리마인더 구성하기"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:20
 msgid "Optionally sync with Microsoft To Do"
-msgstr ""
+msgstr "선택적으로 Microsoft To Do와 동기화"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:54
 msgid "Todo"
-msgstr ""
+msgstr "Todo"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:55
 msgid "Productivity"
-msgstr ""
+msgstr "생산성"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:56
 msgid "Task"
-msgstr ""
+msgstr "작업"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:57
 msgid "Planning"
-msgstr ""
+msgstr "계획"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:58
 msgid "Planner"
-msgstr ""
+msgstr "플래너"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:59
 #: src/browser/resources/ui/reminder_edit_window.ui:71
 msgid "Time"
-msgstr ""
+msgstr "시간"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:60
 msgid "Management"
-msgstr ""
+msgstr "관리"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:61
 msgid "Reminder"
-msgstr ""
+msgstr "알림"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:62
 msgid "Remembrance"
-msgstr ""
+msgstr "기억"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:84
 msgid "New notification sound"
-msgstr ""
+msgstr "새 알림음"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:85
+#, fuzzy
 msgid "Allow sorting reminders by created time and last updated time"
-msgstr ""
+msgstr "생성된 시간 및 마지막 업데이트 시간별로 미리 알림 정렬 허용"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:86
 msgid "Allow marking reminders as important"
-msgstr ""
+msgstr "미리 알림을 중요로 표시 허용"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:87
 msgid "Slightly improved UI"
-msgstr ""
+msgstr "약간 개선된 UI"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:88
 msgid "Added keyboard shortcuts page"
-msgstr ""
+msgstr "추가된 키보드 단축키 페이지"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:89
 msgid "Lots of bugfixes"
-msgstr ""
+msgstr "수많은 버그 수정"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:90
 msgid "Bump API version"
-msgstr ""
+msgstr "API 버전 상승"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:97
 msgid "Fix a few minor bugs"
-msgstr ""
+msgstr "몇 가지 사소한 버그 수정"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:98
 msgid "Update dutch translation"
-msgstr ""
+msgstr "네덜란드어 번역 업데이트"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:105
 msgid "Added support for creating and editing task lists"
-msgstr ""
+msgstr "작업 목록 생성 및 편집에 대한 지원 추가"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:106
 msgid "Added support for syncing with Microsoft To Do"
-msgstr ""
+msgstr "Microsoft To Do와 동기화 지원 추가"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:107
 msgid "Reduced memory usage"
-msgstr ""
+msgstr "메모리 사용량 감소"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:108
 msgid "Redesigned some UI elements"
-msgstr ""
+msgstr "일부 UI 요소 재설계"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:109
 msgid "Better support for mobile devices"
-msgstr ""
+msgstr "모바일 장치에 대한 지원 개선"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:110
 msgid "Better error dialogs"
-msgstr ""
+msgstr "오류 대화 상자 개선"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:111
 msgid "Fix some issues with the backend"
-msgstr ""
+msgstr "백엔드와 관련된 몇 가지 문제 해결"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:118
 msgid "Some small UI improvements."
-msgstr ""
+msgstr "몇 가지 사소한 UI 개선."
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:125
 msgid "Fix issue where app can corrupt or lose its data."
-msgstr ""
+msgstr "앱이 손상되거나 데이터를 잃을 수 있는 문제 수정."
 
 #: src/browser/resources/ui/edit_lists_window.ui:4
 msgid "Edit Lists"
-msgstr ""
+msgstr "목록 편집"
 
 #: src/browser/resources/ui/main_window.ui:34
 msgid "Show sidebar"
-msgstr ""
+msgstr "사이드바 표시"
 
 #: src/browser/resources/ui/main_window.ui:45
 msgid "Sort direction"
-msgstr ""
+msgstr "정렬 방향"
 
 #: src/browser/resources/ui/main_window.ui:59
 msgid "Search"
-msgstr ""
+msgstr "검색"
 
 #: src/browser/resources/ui/main_window.ui:67
 msgid "App menu"
-msgstr ""
+msgstr "앱 메뉴"
 
 #: src/browser/resources/ui/main_window.ui:107
 #: src/browser/resources/ui/main_window.ui:245 src/browser/main_window.py:594
 msgid "All Reminders"
-msgstr ""
+msgstr "모든 리마인더"
 
 #: src/browser/resources/ui/main_window.ui:130 src/browser/main_window.py:604
 msgid "Upcoming Reminders"
-msgstr ""
+msgstr "예정된 리마인더"
 
 #: src/browser/resources/ui/main_window.ui:153 src/browser/main_window.py:614
 msgid "Past Reminders"
-msgstr ""
+msgstr "지난 리마인더"
 
 #: src/browser/resources/ui/main_window.ui:176 src/browser/main_window.py:624
 msgid "Completed Reminders"
-msgstr ""
+msgstr "완료된 리마인더"
 
 #: src/browser/resources/ui/main_window.ui:194
 msgid "Select task list"
-msgstr ""
+msgstr "작업 목록 선택"
 
 #: src/browser/resources/ui/main_window.ui:315
 #: src/browser/resources/ui/main_window.ui:323
 msgid "Add a reminder"
-msgstr ""
+msgstr "리마인더 추가"
 
 #: src/browser/resources/ui/main_window.ui:341
 msgid "_Refresh"
-msgstr ""
+msgstr "_새로고침"
 
 #: src/browser/resources/ui/main_window.ui:345
 msgid "_Edit Lists"
-msgstr ""
+msgstr "_목록 편집"
 
 #: src/browser/resources/ui/main_window.ui:351
 msgid "_Preferences"
-msgstr ""
+msgstr "_환경설정"
 
 #: src/browser/resources/ui/main_window.ui:355
 msgid "_Keyboard Shortcuts"
-msgstr ""
+msgstr "_키보드 단축키"
 
 #: src/browser/resources/ui/main_window.ui:359
 msgid "_About Reminders"
-msgstr ""
+msgstr "_Reminders에 대하여"
 
 #: src/browser/resources/ui/main_window.ui:366
 msgid "Sort By"
-msgstr ""
+msgstr "정렬 기준"
 
 #: src/browser/resources/ui/main_window.ui:368
 msgid "_Time"
-msgstr ""
+msgstr "_시간"
 
 #: src/browser/resources/ui/main_window.ui:373
 msgid "_Alphabetical"
-msgstr ""
+msgstr "_알파벳순"
 
 #: src/browser/resources/ui/main_window.ui:378
+#, fuzzy
 msgid "_Created"
-msgstr ""
+msgstr "_생성"
 
 #: src/browser/resources/ui/main_window.ui:383
 msgid "_Last Updated"
-msgstr ""
+msgstr "_최근 업데이트"
 
 #: src/browser/resources/ui/ms_user_row.ui:19
 msgid "All"
