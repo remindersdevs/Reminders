@@ -363,9 +363,13 @@ class ReminderEditWindow(Adw.Window):
     def day_changed(self, calendar = None, day = None):
         date = self.calendar.get_date()
         new_day = date.get_day_of_year()
+        new_year = date.get_year()
         old_day = self.time.get_day_of_year()
+        old_year = self.time.get_year()
         days = new_day - old_day
+        years = new_year - old_year
         self.time = self.time.add_days(days)
+        self.time = self.time.add_years(years)
         self.hour_changed()
         self.update_repeat_day()
         self.date_button.set_label(self.win.get_date_label(self.time))

@@ -71,7 +71,7 @@
                         <property name="title" translatable="yes">Time</property>
                         <child>
                           <object class="AdwExpanderRow" id="time_row">
-                            <property name="title" translatable="yes">Set a time</property>
+                            <property name="title" translatable="yes">Send a notification</property>
                             <property name="show-enable-switch">true</property>
                             <signal name="notify::enable-expansion" handler="time_switched" swapped="no"/>
                             <child>
