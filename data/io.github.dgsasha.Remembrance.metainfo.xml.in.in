@@ -17,6 +17,7 @@
       <li>Sort, filter, and search for reminders</li>
       <li>Mark reminders as important or complete</li>
       <li>Organize reminders using lists</li>
+      <li>Optionally play a sound when notifications are sent</li>
       <li>Optionally sync with Microsoft To Do</li>
     </ul>
   </description>
