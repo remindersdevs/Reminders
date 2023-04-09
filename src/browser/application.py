@@ -32,7 +32,7 @@ from remembrance.browser.preferences import PreferencesWindow
 from remembrance.browser.shortcuts_window import ShortcutsWindow
 
 # Always update this when new features are added that require the service to restart
-MIN_SERVICE_VERSION = 3.0
+MIN_SERVICE_VERSION = 3.1
 
 class Remembrance(Adw.Application):
     '''Application for the frontend'''

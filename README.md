@@ -57,6 +57,7 @@ remembrance --restart-service
 ```
 
 ## Todo
+- Add support for setting due dates without sending a notification, going to have to think more about how to implement this
 - Add a debug mode
 - Make a GNOME Shell extension that lets you view your reminders
 - Maybe integrate the search with GNOME Shell

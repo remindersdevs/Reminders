@@ -19,7 +19,7 @@ from gettext import gettext as _
 
 RELEASE_NOTES = '''
 <ul>
-    <li>Fix issue when saving Microsoft To Do Reminders</li>
+    <li>Fix issue when setting reminders in another year</li>
 </ul>
 '''
 
