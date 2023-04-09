@@ -24,6 +24,7 @@ RELEASE_NOTES = '''
     <li>Allow marking reminders as important</li>
     <li>Slightly improved UI</li>
     <li>Added keyboard shortcuts page</li>
+    <li>Added more keyboard shortcuts</li>
     <li>Lots of bugfixes</li>
     <li>Bump API version</li>
 </ul>
@@ -48,4 +49,5 @@ def about_window(win):
         # name <email>
         translator_credits = _("translator-credits")
     )
+    win.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: win.close())))
     win.present()

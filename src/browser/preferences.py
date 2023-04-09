@@ -54,6 +54,7 @@ class PreferencesWindow(Adw.PreferencesWindow):
         for user_id, email in self.app.win.emails.items():
             self.on_signed_in(user_id, email)
         self.synced_lists_updated()
+        self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: self.close())))
 
     def synced_lists_updated(self, only_user_id = None):
         self.synced = self.settings.get_value('synced-task-lists').unpack()

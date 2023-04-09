@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-08 16:51-0400\n"
+"POT-Creation-Date: 2023-04-09 12:10-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -213,54 +213,58 @@ msgid "Added keyboard shortcuts page"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:89
-msgid "Lots of bugfixes"
+msgid "Added more keyboard shortcuts"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:90
+msgid "Lots of bugfixes"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:91
 msgid "Bump API version"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:97
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:98
 msgid "Fix a few minor bugs"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:98
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:99
 msgid "Update dutch translation"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:105
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:106
 msgid "Added support for creating and editing task lists"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:106
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:107
 msgid "Added support for syncing with Microsoft To Do"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:107
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:108
 msgid "Reduced memory usage"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:108
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:109
 msgid "Redesigned some UI elements"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:109
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:110
 msgid "Better support for mobile devices"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:110
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:111
 msgid "Better error dialogs"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:111
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:112
 msgid "Fix some issues with the backend"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:118
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:119
 msgid "Some small UI improvements."
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:125
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:126
 msgid "Fix issue where app can corrupt or lose its data."
 msgstr ""
 
@@ -354,7 +358,7 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: src/browser/resources/ui/ms_user_row.ui:42 src/browser/preferences.py:224
+#: src/browser/resources/ui/ms_user_row.ui:42 src/browser/preferences.py:225
 msgid "Sign Out"
 msgstr ""
 
@@ -423,7 +427,7 @@ msgstr ""
 msgid "60 mins"
 msgstr ""
 
-#: src/browser/resources/ui/reminder.ui:77 src/browser/edit_lists_window.py:188
+#: src/browser/resources/ui/reminder.ui:77 src/browser/edit_lists_window.py:189
 #: src/browser/reminder.py:267
 msgid "Remove"
 msgstr ""
@@ -545,8 +549,8 @@ msgid "time(s)"
 msgstr ""
 
 #: src/browser/resources/ui/reminder_edit_window.ui:431
-#: src/browser/edit_lists_window.py:78 src/browser/edit_lists_window.py:187
-#: src/browser/main_window.py:158 src/browser/preferences.py:223
+#: src/browser/edit_lists_window.py:79 src/browser/edit_lists_window.py:188
+#: src/browser/main_window.py:158 src/browser/preferences.py:224
 #: src/browser/reminder.py:266
 msgid "Cancel"
 msgstr ""
@@ -583,13 +587,13 @@ msgstr ""
 msgid "Repeat until"
 msgstr ""
 
-#: src/browser/about.py:41
+#: src/browser/about.py:42
 msgid "Copyright 2023 Sasha Hale"
 msgstr ""
 
 #. Translators: Do not translate this, instead put your name and email here.
 #. name <email>
-#: src/browser/about.py:49
+#: src/browser/about.py:50
 msgid "translator-credits"
 msgstr ""
 
@@ -623,35 +627,35 @@ msgstr ""
 msgid "Changes were not saved. This bug should be reported."
 msgstr ""
 
-#: src/browser/edit_lists_window.py:23 src/browser/edit_lists_window.py:102
+#: src/browser/edit_lists_window.py:23 src/browser/edit_lists_window.py:103
 msgid "New List"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:75 src/browser/main_window.py:155
+#: src/browser/edit_lists_window.py:76 src/browser/main_window.py:155
 msgid "You have unsaved changes"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:76 src/browser/main_window.py:156
+#: src/browser/edit_lists_window.py:77 src/browser/main_window.py:156
 msgid "Are you sure you want to close the window?"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:79 src/browser/main_window.py:159
+#: src/browser/edit_lists_window.py:80 src/browser/main_window.py:159
 msgid "Yes"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:96 src/browser/main_window.py:356
+#: src/browser/edit_lists_window.py:97 src/browser/main_window.py:356
 msgid "Local"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:137
+#: src/browser/edit_lists_window.py:138
 msgid "What should the list be called?"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:183
+#: src/browser/edit_lists_window.py:184
 msgid "Remove list?"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:184
+#: src/browser/edit_lists_window.py:185
 #, python-brace-format
 msgid "This will remove {list_name} and cannot be undone."
 msgstr ""
@@ -779,11 +783,11 @@ msgstr ""
 msgid "Start typing to search"
 msgstr ""
 
-#: src/browser/preferences.py:219
+#: src/browser/preferences.py:220
 msgid "Are you sure you want to sign out?"
 msgstr ""
 
-#: src/browser/preferences.py:220
+#: src/browser/preferences.py:221
 #, python-brace-format
 msgid "This will sign out <b>{self.email}</b>"
 msgstr ""
@@ -805,46 +809,46 @@ msgstr ""
 msgid "This will remove {reminder} and cannot be undone."
 msgstr ""
 
-#: src/browser/reminder_edit_window.py:119
+#: src/browser/reminder_edit_window.py:121
 msgid "Edit Reminder"
 msgstr ""
 
-#: src/browser/reminder_edit_window.py:121
+#: src/browser/reminder_edit_window.py:123
 msgid "New Reminder"
 msgstr ""
 
-#: src/browser/reminder_edit_window.py:244
-#: src/browser/reminder_edit_window.py:264
+#: src/browser/reminder_edit_window.py:253
+#: src/browser/reminder_edit_window.py:273
 msgid "PM"
 msgstr ""
 
-#: src/browser/reminder_edit_window.py:248
-#: src/browser/reminder_edit_window.py:268
+#: src/browser/reminder_edit_window.py:257
+#: src/browser/reminder_edit_window.py:277
 msgid "AM"
 msgstr ""
 
-#: src/browser/reminder_edit_window.py:372
+#: src/browser/reminder_edit_window.py:381
 msgid "Not saving"
 msgstr ""
 
-#: src/browser/reminder_edit_window.py:373
+#: src/browser/reminder_edit_window.py:382
 msgid ""
 "This reminder will never be shown, change the repeat options so it is shown "
 "at least once."
 msgstr ""
 
-#: src/browser/reminder_edit_window.py:375
+#: src/browser/reminder_edit_window.py:384
 msgid "Okay"
 msgstr ""
 
-#: src/browser/reminder_edit_window.py:486
+#: src/browser/reminder_edit_window.py:495
 msgid "Microsoft reminders currently don't support recurrence"
 msgstr ""
 
-#: src/service/backend.py:595
+#: src/service/backend.py:597
 msgid "Mark as completed"
 msgstr ""
 
-#: src/service/backend.py:907
+#: src/service/backend.py:909
 msgid "Local Reminders"
 msgstr ""

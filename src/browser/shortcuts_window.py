@@ -21,6 +21,7 @@ class ShortcutsWindow(Gtk.ShortcutsWindow):
 
     def __init__(self, win, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: self.close())))
         self.set_transient_for(win)
         self.present()
 

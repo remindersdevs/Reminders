@@ -85,6 +85,8 @@ class ReminderEditWindow(Adw.Window):
         self.set_transient_for(win)
         self.setup(reminder)
         self.win.connect('notify::time-format', lambda *args: self.time_format_updated())
+        self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>s'), Gtk.CallbackAction.new(lambda *args: self.on_save())))
+        self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: self.close())))
 
     def setup(self, reminder):
         self.reminder = reminder
@@ -126,6 +128,13 @@ class ReminderEditWindow(Adw.Window):
             self.week_repeat_row.set_visible(True)
         else:
             self.week_repeat_row.set_visible(False)
+
+    def create_action(self, name, callback, variant = None, accels = None):
+        action = Gio.SimpleAction.new(name, variant)
+        action.connect('activate', callback)
+        if accels is not None:
+            self.app.set_accels_for_action('win.' + name, accels)
+        self.add_action(action)
 
     def set_important(self, importance):
         self.importance_switch.set_active(importance)
@@ -591,8 +600,9 @@ class ReminderEditWindow(Adw.Window):
 
     @Gtk.Template.Callback()
     def on_save(self, button = None):
-        if self.entry_check_empty():
-            return
+        if self.get_visible():
+            if self.entry_check_empty():
+                return
 
-        self.win.set_busy(True, self)
-        GLib.idle_add(self.do_save)
+            self.win.set_busy(True, self)
+            GLib.idle_add(self.do_save)

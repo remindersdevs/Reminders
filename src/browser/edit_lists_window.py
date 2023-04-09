@@ -36,6 +36,7 @@ class EditListsWindow(Adw.Window):
         self.users = {}
         self.win = win
         self.unsaved = []
+        self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: self.close())))
 
         for user_id, value in self.win.task_list_names.items():
             if user_id in self.win.emails.keys() or user_id == 'local':

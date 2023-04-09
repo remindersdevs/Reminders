@@ -42,3 +42,4 @@ class ErrorDialog(Adw.Window):
             self.set_application(app)
 
         self.present()
+        self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: self.close())))

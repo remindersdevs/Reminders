@@ -7,11 +7,11 @@ object: /io/github/dgsasha/Remembrance/Service2
 
 Currently this is only packaged with Reminders and anyone who wants to use it will have to have the full Reminders app installed. The reason this exists is to allow integrating the Reminders app with desktop environments through extensions.
 
-At some point I might seperate this from Remembrance and offer it as a standalone library, but until then you probably shouldn't use it if you are making your own reminder app.
+At some point I might seperate this from Reminders and offer it as a standalone library, but until then you probably shouldn't use it if you are making your own reminder app.
 
 This service will have some breaking changes made to it at times, so make sure you use the GetVersion method to check that the right version is installed.
 
-Newer versions of this service should still always be compatible with apps that expect an older version. If this ever changes, the bus name will be updated
+Newer versions of this service should still always be compatible with apps that expect an older version. If this ever changes, the bus name will be updated.
 
 ## Enums
 ### RepeatType
@@ -163,11 +163,11 @@ Returns all reminders
         - An array of [reminders](#reminder-object)
 
 ### ReturnLists
-Get all lists
-- Returns (a{ss})
+Get all lists. This will also return lists that arent being synced.
+- Returns (a{sa{ss}})
     - lists
-        - Type: a{ss}
-        - Each key is a list id and each value is the name of the list
+        - Type: a{sa{ss}}
+        - Each key is a user id and each value is another dictionary where each key is a list id and each value is the name of the list
 
 ### Refresh
 Read reminders file again and also check for remote updates. Changes will be emitted with their respective signals.
