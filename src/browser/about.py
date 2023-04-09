@@ -19,14 +19,7 @@ from gettext import gettext as _
 
 RELEASE_NOTES = '''
 <ul>
-    <li>New notification sound</li>
-    <li>Allow sorting reminders by created time and last updated time</li>
-    <li>Allow marking reminders as important</li>
-    <li>Slightly improved UI</li>
-    <li>Added keyboard shortcuts page</li>
-    <li>Added more keyboard shortcuts</li>
-    <li>Lots of bugfixes</li>
-    <li>Bump API version</li>
+    <li>Fix issue when saving Microsoft To Do Reminders</li>
 </ul>
 '''
 
