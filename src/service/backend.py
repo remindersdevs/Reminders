@@ -572,8 +572,8 @@ class Reminders():
                 if reminder['timestamp'] == 0:
                     return
 
-                timestamp = self.local[reminder_id]['timestamp']
-                repeat_until = self.local[reminder_id]['repeat-until']
+                timestamp = dictionary[reminder_id]['timestamp']
+                repeat_until = dictionary[reminder_id]['repeat-until']
 
                 if reminder['repeat-times'] == 0 or \
                 repeat_until > 0 and datetime.datetime.fromtimestamp(timestamp).date() > datetime.datetime.fromtimestamp(repeat_until).date():
