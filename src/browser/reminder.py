@@ -100,8 +100,8 @@ class Reminder(Adw.ExpanderRow):
             if self.options['description'] != options['description']:
                 edit_win.description_entry.set_text(options['description'])
 
-            if self.options['timestamp'] != options['timestamp']:
-                edit_win.set_time(options['timestamp'])
+            if self.options['timestamp'] != options['timestamp'] or self.options['due-date'] != options['due-date']:
+                edit_win.set_time(options['timestamp'], options['due-date'])
 
             if self.options['repeat-type'] != options['repeat-type']:
                 edit_win.set_repeat_type(options['repeat-type'])
@@ -159,15 +159,27 @@ class Reminder(Adw.ExpanderRow):
             timestamp = self.options['timestamp']
             now = floor(time.time())
             self.past_due_icon.set_visible(timestamp <= now)
+        elif self.options['due-date'] != 0 and not self.completed:
+            timestamp = self.options['due-date']
+            self.past_due_icon.set_visible(datetime.datetime.fromtimestamp(self.options['due-date']).astimezone(tz=datetime.timezone.utc).date() < datetime.date.today())
         else:
             self.past_due_icon.set_visible(False)
 
     def set_time_label(self):
-        timestamp = self.options['old-timestamp'] if self.past else self.options['timestamp']
+        timestamp = 0
+        if self.past:
+            timestamp = self.options['old-timestamp']
+        elif self.options['timestamp'] != 0:
+            timestamp = self.options['timestamp']
+
         if timestamp != 0:
             self.time_label.set_visible(True)
             self.separator.set_visible(True)
             self.time_label.set_label(self.win.get_datetime_label(timestamp))
+        elif self.options['due-date'] != 0:
+            self.time_label.set_visible(True)
+            self.separator.set_visible(True)
+            self.time_label.set_label(self.win.get_date_label(GLib.DateTime.new_from_unix_utc(self.options['due-date'])))
         else:
             self.time_label.set_visible(False)
             self.separator.set_visible(False)

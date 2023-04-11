@@ -44,6 +44,7 @@ FIELDNAMES = [
     'id',
     'title',
     'description',
+    'due-date',
     'timestamp',
     'completed',
     'important',
@@ -62,6 +63,7 @@ MS_FIELDNAMES = [
     'id',
     'title',
     'description',
+    'due-date',
     'timestamp',
     'completed',
     'important',
@@ -77,6 +79,7 @@ MS_FIELDNAMES = [
 REMINDER_DEFAULTS = {
     'title': '',
     'description': '',
+    'due-date': 0,
     'timestamp': 0,
     'completed': False,
     'important': False,
@@ -406,16 +409,21 @@ class Reminders():
                     reminder['title'] = task['title'].strip()
                     reminder['description'] = task['body']['content'].strip() if task['body']['contentType'] == 'text' else ''
                     reminder['completed'] = True if 'status' in task and task['status'] == 'completed' else False
+                    reminder['important'] = task['importance'] == 'high'
                     reminder['timestamp'] = timestamp
+                    if timestamp == 0:
+                        reminder['due-date'] = self._rfc_to_timestamp(task['dueDateTime']['dateTime']) if 'dueDateTime' in task else 0
+                    else:
+                        notif_date = datetime.date.fromtimestamp(reminder['timestamp'])
+                        reminder['due-date'] = int(datetime.datetime(notif_date.year, notif_date.month, notif_date.day, tzinfo=datetime.timezone.utc).timestamp())
                     reminder['repeat-type'] = 0
                     reminder['repeat-frequency'] = 1
                     reminder['repeat-days'] = 0
                     reminder['repeat-until'] = 0
-                    if not is_future:
-                        reminder['old-timestamp'] = timestamp
                     reminder['list-id'] = list_id
                     reminder['user-id'] = user_id
-                    reminder['important'] = task['importance'] == 'high'
+                    if not is_future:
+                        reminder['old-timestamp'] = timestamp
                     if reminder['created-timestamp'] == 0:
                         reminder['created-timestamp'] = self._rfc_to_timestamp(task['createdDateTime'])
                     if reminder['updated-timestamp'] == 0:
@@ -475,6 +483,13 @@ class Reminders():
                 reminder_json['body']['contentType'] = 'text'
 
                 reminder_json['importance'] = 'high' if reminder['important'] else 'normal'
+
+                if reminder['due-date'] != 0:
+                    reminder_json['dueDateTime'] = {}
+                    reminder_json['dueDateTime']['dateTime'] = self._timestamp_to_rfc(reminder['due-date'])
+                    reminder_json['dueDateTime']['timeZone'] = 'UTC'
+                else:
+                    reminder_json['dueDateTime'] = None
 
                 if reminder['timestamp'] != 0:
                     reminder_json['isReminderOn'] = True
@@ -576,7 +591,7 @@ class Reminders():
                 repeat_until = dictionary[reminder_id]['repeat-until']
 
                 if reminder['repeat-times'] == 0 or \
-                repeat_until > 0 and datetime.datetime.fromtimestamp(timestamp).date() > datetime.datetime.fromtimestamp(repeat_until).date():
+                repeat_until > 0 and datetime.date.fromtimestamp(timestamp) > datetime.date.fromtimestamp(repeat_until):
                     if reminder['old-timestamp'] != timestamp:
                         reminder['old-timestamp'] = timestamp
                         self.do_emit('ReminderShown', GLib.Variant('(suun)', (reminder_id, timestamp, reminder['old-timestamp'], reminder['repeat-times'])))
@@ -636,7 +651,7 @@ class Reminders():
         old_timestamp = self.local[reminder_id]['old-timestamp']
         repeat_until = self.local[reminder_id]['repeat-until']
         reminder_datetime = datetime.datetime.fromtimestamp(timestamp)
-        repeat_until_date = datetime.datetime.fromtimestamp(repeat_until).date()
+        repeat_until_date = datetime.date.fromtimestamp(repeat_until)
 
         if repeat_until > 0 and reminder_datetime.date() > repeat_until_date:
             return
@@ -752,6 +767,7 @@ class Reminders():
                         'id': reminder,
                         'title': self.local[reminder]['title'],
                         'description': self.local[reminder]['description'],
+                        'due-date': self.local[reminder]['due-date'],
                         'timestamp': self.local[reminder]['timestamp'],
                         'completed': self.local[reminder]['completed'],
                         'important': self.local[reminder]['important'],
@@ -776,6 +792,7 @@ class Reminders():
                         'id': reminder,
                         'title': self.ms[reminder]['title'],
                         'description': self.ms[reminder]['description'],
+                        'due-date': self.ms[reminder]['due-date'],
                         'timestamp': self.ms[reminder]['timestamp'],
                         'completed': self.ms[reminder]['completed'],
                         'important': self.ms[reminder]['important'],
@@ -840,6 +857,7 @@ class Reminders():
                         old_ms[reminder_id] = REMINDER_DEFAULTS.copy()
                         old_ms[reminder_id]['title'] = self._get_str(row, 'title')
                         old_ms[reminder_id]['description'] = self._get_str(row, 'description')
+                        old_ms[reminder_id]['due-date'] = self._get_int(row, 'due-date')
                         old_ms[reminder_id]['timestamp'] = timestamp
                         old_ms[reminder_id]['completed'] = self._get_boolean(row, 'completed')
                         old_ms[reminder_id]['important'] = self._get_boolean(row, 'important')
@@ -871,19 +889,21 @@ class Reminders():
                     local[reminder_id] = REMINDER_DEFAULTS.copy()
                     local[reminder_id]['title'] = self._get_str(row, 'title')
                     local[reminder_id]['description'] = self._get_str(row, 'description')
+                    local[reminder_id]['due-date'] = self._get_int(row, 'due-date')
                     local[reminder_id]['timestamp'] = timestamp
                     local[reminder_id]['completed'] = self._get_boolean(row, 'completed')
                     local[reminder_id]['important'] = self._get_boolean(row, 'important')
                     local[reminder_id]['repeat-type'] = repeat_type
-                    if repeat_type != 0:
-                        local[reminder_id]['repeat-frequency'] = self._get_int(row, 'repeat-frequency')
-                        local[reminder_id]['repeat-days'] = self._get_int(row, 'repeat-days')
-                        local[reminder_id]['repeat-until'] = self._get_int(row, 'repeat-until')
                     local[reminder_id]['repeat-times'] = self._get_int(row, 'repeat-times')
                     local[reminder_id]['old-timestamp'] = timestamp if timestamp < floor(time.time()) else self._get_int(row, 'old-timestamp')
                     local[reminder_id]['created-timestamp'] = self._get_int(row, 'created-timestamp')
                     local[reminder_id]['updated-timestamp'] = self._get_int(row, 'updated-timestamp')
                     local[reminder_id]['list-id'] = self._get_str(row, 'list-id')
+
+                    if repeat_type != 0:
+                        local[reminder_id]['repeat-frequency'] = self._get_int(row, 'repeat-frequency')
+                        local[reminder_id]['repeat-days'] = self._get_int(row, 'repeat-days')
+                        local[reminder_id]['repeat-until'] = self._get_int(row, 'repeat-until')
 
         if os.path.isfile(TASK_LIST_IDS_FILE):
             with open(TASK_LIST_IDS_FILE, newline='') as csvfile:
@@ -917,13 +937,13 @@ class Reminders():
     # Below methods can be accessed by other apps over dbus
     def set_completed(self, app_id: str, reminder_id: str, completed: bool):
         task_list = 'local'
-        timestamp = floor(time.time())
+        now = floor(time.time())
         for dictionary in (self.local, self.ms):
             if reminder_id in dictionary.keys():
                 user_id = dictionary[reminder_id]['user-id']
                 task_list = dictionary[reminder_id]['list-id']
                 dictionary[reminder_id]['completed'] = completed
-                dictionary[reminder_id]['updated-timestamp'] = timestamp
+                dictionary[reminder_id]['updated-timestamp'] = now
                 self._save_reminders(dictionary)
                 try:
                     self.queue.load()
@@ -935,10 +955,10 @@ class Reminders():
                 else:
                     self._set_countdown(reminder_id)
 
-                self.do_emit('CompletedUpdated', GLib.Variant('(ssbu)', (app_id, reminder_id, completed, timestamp)))
+                self.do_emit('CompletedUpdated', GLib.Variant('(ssbu)', (app_id, reminder_id, completed, now)))
                 break
 
-        return GLib.Variant('(u)', (timestamp,))
+        return GLib.Variant('(u)', (now,))
 
     def remove_reminder(self, app_id: str, reminder_id: str):
         self.app.withdraw_notification(reminder_id)
@@ -969,15 +989,24 @@ class Reminders():
         for i in ('title', 'description', 'list-id', 'user-id'):
             if i in kwargs.keys():
                 reminder_dict[i] = str(kwargs[i])
-        for i in ('timestamp', 'repeat-type', 'repeat-frequency', 'repeat-days', 'repeat-times', 'repeat-until'):
+        for i in ('timestamp', 'due-date', 'repeat-type', 'repeat-frequency', 'repeat-days', 'repeat-times', 'repeat-until'):
             if i in kwargs.keys():
                 reminder_dict[i] = int(kwargs[i])
         if 'important' in kwargs.keys():
             reminder_dict['important'] = bool(kwargs['important'])
 
-        timestamp = floor(time.time())
-        reminder_dict['created-timestamp'] = timestamp
-        reminder_dict['updated-timestamp'] = timestamp
+        if reminder_dict['timestamp'] != 0:
+            notif_date = datetime.date.fromtimestamp(reminder_dict['timestamp'])
+            due_date = datetime.datetime.fromtimestamp(reminder_dict['due-date']).astimezone(tz=datetime.timezone.utc).date()
+            if notif_date != due_date:
+                # due date has to be the same day as the reminder date
+                # this honestly doesn't make sense and probably should be changed in the future
+                # but right now it is necessary because of how the UI of the Reminders app is set up
+                reminder_dict['due-date'] = int(datetime.datetime(notif_date.year, notif_date.month, notif_date.day, tzinfo=datetime.timezone.utc).timestamp())
+
+        now = floor(time.time())
+        reminder_dict['created-timestamp'] = now
+        reminder_dict['updated-timestamp'] = now
 
         dictionary = self.local if reminder_dict['user-id'] == 'local' else self.ms
 
@@ -995,7 +1024,7 @@ class Reminders():
         self._reminder_updated(app_id, reminder_id, reminder_dict)
         self._save_reminders()
 
-        return GLib.Variant('(su)', (reminder_id, timestamp))
+        return GLib.Variant('(su)', (reminder_id, now))
 
     def update_reminder(self, app_id: str, **kwargs):
         reminder_id = str(kwargs['id'])
@@ -1007,14 +1036,23 @@ class Reminders():
         for i in ('title', 'description', 'list-id', 'user-id'):
             if i in kwargs.keys():
                 reminder_dict[i] = str(kwargs[i])
-        for i in ('timestamp', 'repeat-type', 'repeat-frequency', 'repeat-days', 'repeat-times', 'repeat-until'):
+        for i in ('timestamp', 'due-date', 'repeat-type', 'repeat-frequency', 'repeat-days', 'repeat-times', 'repeat-until'):
             if i in kwargs.keys():
                 reminder_dict[i] = int(kwargs[i])
         if 'important' in kwargs.keys():
             reminder_dict['important'] = bool(kwargs['important'])
 
-        timestamp = floor(time.time())
-        reminder_dict['updated-timestamp'] = timestamp
+        now = floor(time.time())
+        reminder_dict['updated-timestamp'] = now
+
+        if reminder_dict['timestamp'] != 0:
+            notif_date = datetime.date.fromtimestamp(reminder_dict['timestamp'])
+            due_date = datetime.datetime.fromtimestamp(reminder_dict['due-date']).astimezone(tz=datetime.timezone.utc).date()
+            if notif_date != due_date:
+                # due date has to be the same day as the reminder date
+                # this honestly doesn't make sense and probably should be changed in the future
+                # but right now it is necessary because of how the UI of the Reminders app is set up
+                reminder_dict['due-date'] = int(datetime.datetime(notif_date.year, notif_date.month, notif_date.day, tzinfo=datetime.timezone.utc).timestamp())
 
         dictionary = self.local if reminder_dict['user-id'] == 'local' else self.ms
         old_task_list = old_dict[reminder_id]['list-id'] if old_dict[reminder_id]['list-id'] != reminder_dict['list-id'] else None
@@ -1039,7 +1077,7 @@ class Reminders():
         self._reminder_updated(app_id, reminder_id, reminder_dict)
         self._save_reminders(dictionary if dictionary == old_dict else None)
 
-        return GLib.Variant('(u)', (timestamp,))
+        return GLib.Variant('(u)', (now,))
 
     def return_reminders(self, dictionary = None, ids = None, return_variant = True):
         array = []
@@ -1055,6 +1093,7 @@ class Reminders():
                     'id': GLib.Variant('s', reminder),
                     'title': GLib.Variant('s', dictionary[reminder]['title']),
                     'description': GLib.Variant('s', dictionary[reminder]['description']),
+                    'due-date': GLib.Variant('u', dictionary[reminder]['due-date']),
                     'timestamp': GLib.Variant('u', dictionary[reminder]['timestamp']),
                     'completed': GLib.Variant('b', dictionary[reminder]['completed']),
                     'important': GLib.Variant('b', dictionary[reminder]['important']),

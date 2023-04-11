@@ -10,7 +10,7 @@
       <object class="AdwPreferencesPage">
         <child>
           <object class="AdwPreferencesGroup" id="cloud_syncing">
-            <property name="title" translatable="yes">Syncing</property>
+            <property name="title" translatable="yes">Syncing (Beta)</property>
             <property name="header-suffix">
               <object class="GtkSpinner" id="spinner"/>
             </property>
@@ -19,7 +19,7 @@
             </style>
             <child>
               <object class="AdwExpanderRow" id="ms_sync_row">
-                <property name="title" translatable="yes">Microsoft To Do (Beta)</property>
+                <property name="title" translatable="yes">Microsoft To Do</property>
                 <child>
                   <object class="AdwActionRow" id="add_account_row">
                     <style>

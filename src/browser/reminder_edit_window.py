@@ -30,6 +30,7 @@ logger = logging.getLogger(info.app_executable)
 DEFAULT_OPTIONS = {
     'title': '',
     'description': '',
+    'due-date': 0,
     'timestamp': 0,
     'important': False,
     'repeat-type': 0,
@@ -52,8 +53,9 @@ class ReminderEditWindow(Adw.Window):
     description_entry = Gtk.Template.Child()
     task_list_row = Gtk.Template.Child()
     time_row = Gtk.Template.Child()
-    date_button = Gtk.Template.Child()
+    date_label = Gtk.Template.Child()
     calendar = Gtk.Template.Child()
+    notif_btn = Gtk.Template.Child()
     hour_button = Gtk.Template.Child()
     hour_adjustment = Gtk.Template.Child()
     minute_adjustment = Gtk.Template.Child()
@@ -71,6 +73,7 @@ class ReminderEditWindow(Adw.Window):
     sun_btn = Gtk.Template.Child()
     repeat_times_btn = Gtk.Template.Child()
     repeat_until_btn = Gtk.Template.Child()
+    repeat_until_label = Gtk.Template.Child()
     repeat_times_box = Gtk.Template.Child()
     repeat_until_calendar = Gtk.Template.Child()
     repeat_duration_button = Gtk.Template.Child()
@@ -102,7 +105,7 @@ class ReminderEditWindow(Adw.Window):
             self.task_list = self.options['list-id'] = self.win.selected_list_id if self.win.selected_list_id != 'all' else 'local'
             self.user_id = self.options['user-id'] = self.win.selected_user_id if self.win.selected_user_id != 'all' else 'local'
 
-        self.set_time(self.options['timestamp'])
+        self.set_time(self.options['timestamp'], self.options['due-date'])
         self.set_important(self.options['important'])
 
         self.set_task_list_dropdown()
@@ -138,12 +141,18 @@ class ReminderEditWindow(Adw.Window):
 
     def set_important(self, importance):
         self.importance_switch.set_active(importance)
-        
+
     def get_options(self):
         options = self.options.copy()
         options['title'] = self.title_entry.get_text()
         options['description'] = self.description_entry.get_text()
-        options['timestamp'] = self.get_timestamp() if self.time_row.get_enable_expansion() else 0
+
+        if self.time_row.get_enable_expansion():
+            options['due-date'] = int(datetime.datetime(self.calendar.props.year, self.calendar.props.month + 1, self.calendar.props.day, tzinfo=datetime.timezone.utc).timestamp())
+            options['timestamp'] = self.get_timestamp() if self.notif_btn.get_active() else 0
+        else:
+            options['due-date'] = 0
+            options['timestamp'] = 0
 
         options['list-id'] = self.task_list
         options['user-id'] = self.user_id
@@ -164,7 +173,7 @@ class ReminderEditWindow(Adw.Window):
                 options['repeat-until'] = 0
             elif self.repeat_duration_button.get_selected() == 2:
                 options['repeat-times'] = -1
-                options['repeat-until'] = datetime.datetime(self.repeat_until_calendar.props.year, self.repeat_until_calendar.props.month + 1, self.repeat_until_calendar.props.day).timestamp()
+                options['repeat-until'] = int(datetime.datetime(self.repeat_until_calendar.props.year, self.repeat_until_calendar.props.month + 1, self.repeat_until_calendar.props.day).timestamp())
 
             if options['repeat-type'] == info.RepeatType.WEEK:
                 self.week_repeat_row.set_visible(True)
@@ -219,13 +228,23 @@ class ReminderEditWindow(Adw.Window):
                 if new_repeat_days != repeat_days:
                     self.set_repeat_days(new_repeat_days)
 
-    def set_time(self, timestamp):
+    def set_time(self, timestamp, due_date):
         for i in self.calendar_connections:
             self.calendar.disconnect(i)
         self.calendar_connections = []
 
-        self.time_row.set_enable_expansion(timestamp != 0)
-        self.time = GLib.DateTime.new_now_local() if timestamp == 0 else GLib.DateTime.new_from_unix_local(timestamp)
+        self.time_row.set_enable_expansion(timestamp != 0 or due_date != 0)
+        self.notif_btn.set_active(timestamp != 0 or due_date == 0)
+        if due_date == 0 and timestamp == 0:
+            self.time = GLib.DateTime.new_now_local()
+        elif timestamp == 0:
+            now = GLib.DateTime.new_now_utc()
+            self.time = GLib.DateTime.new_from_unix_utc(due_date)
+            self.time = self.time.add_hours(now.get_hour() - self.time.get_hour())
+            self.time = self.time.add_minutes(now.get_minute() - self.time.get_minute())
+        else:
+            self.time = GLib.DateTime.new_from_unix_local(timestamp)
+
         # Remove seconds from the time because it isn't important
         seconds = self.time.get_seconds()
         self.time = self.time.add_seconds(-(seconds))
@@ -233,21 +252,21 @@ class ReminderEditWindow(Adw.Window):
         self.calendar.select_day(self.time)
         self.time_format_updated()
         self.minute_adjustment.set_value(self.time.get_minute())
-        self.date_button.set_label(self.win.get_date_label(self.time))
+        self.date_label.set_label(self.win.get_date_label(self.time, True))
 
         for i in ('day-selected', 'notify::year', 'notify::month'):
             self.calendar_connections.append(self.calendar.connect(i, self.day_changed))
 
     def update_date_button_label(self):
-        self.date_button.set_label(self.win.get_date_label(self.time))
-        self.repeat_until_btn.set_label(self.win.get_date_label(self.repeat_until_calendar.get_date()))
+        self.date_label.set_label(self.win.get_date_label(self.time, True))
+        self.repeat_until_label.set_label(self.win.get_date_label(self.repeat_until_calendar.get_date(), True))
 
     def get_timestamp(self):
         return self.time.to_unix()
 
     def update_calendar(self):
         self.calendar.select_day(self.time)
-        self.date_button.set_label(self.win.get_date_label(self.time))
+        self.date_label.set_label(self.win.get_date_label(self.time, True))
 
     def set_pm(self):
         self.am_pm_button.set_label(_('PM'))
@@ -372,14 +391,14 @@ class ReminderEditWindow(Adw.Window):
         self.time = self.time.add_years(years)
         self.hour_changed()
         self.update_repeat_day()
-        self.date_button.set_label(self.win.get_date_label(self.time))
+        self.date_label.set_label(self.win.get_date_label(self.time, True))
 
     def do_save(self, data = None):
         try:
             options = self.get_options()
 
             if (self.id is None or options['timestamp'] > floor(time.time())) and (options['repeat-times'] == 0 or \
-            options['repeat-until'] > 0 and datetime.datetime.fromtimestamp(options['timestamp']).date() > datetime.datetime.fromtimestamp(options['repeat-until']).date()):
+            options['repeat-until'] > 0 and datetime.date.fromtimestamp(options['timestamp']) > datetime.date.fromtimestamp(options['repeat-until'])):
                 warning_dialog = Adw.MessageDialog(
                     transient_for=self,
                     heading=_('Not saving'),
@@ -402,6 +421,7 @@ class ReminderEditWindow(Adw.Window):
                                 {
                                     'title': GLib.Variant('s', options['title']),
                                     'description': GLib.Variant('s', options['description']),
+                                    'due-date': GLib.Variant('u', options['due-date']),
                                     'timestamp': GLib.Variant('u', options['timestamp']),
                                     'important': GLib.Variant('u', options['important']),
                                     'repeat-type': GLib.Variant('q', options['repeat-type']),
@@ -427,6 +447,7 @@ class ReminderEditWindow(Adw.Window):
                                     'id': GLib.Variant('s', self.id),
                                     'title': GLib.Variant('s', options['title']),
                                     'description': GLib.Variant('s', options['description']),
+                                    'due-date': GLib.Variant('u', options['due-date']),
                                     'timestamp': GLib.Variant('u', options['timestamp']),
                                     'important': GLib.Variant('u', options['important']),
                                     'repeat-type': GLib.Variant('q', options['repeat-type']),
@@ -459,7 +480,7 @@ class ReminderEditWindow(Adw.Window):
 
     @Gtk.Template.Callback()
     def repeat_day_changed(self, calendar = None, data = None):
-        self.repeat_until_btn.set_label(self.win.get_date_label(self.repeat_until_calendar.get_date()))
+        self.repeat_until_label.set_label(self.win.get_date_label(self.repeat_until_calendar.get_date(), True))
 
     @Gtk.Template.Callback()
     def repeat_duration_selected_changed(self, button = None, data = None):
@@ -498,7 +519,7 @@ class ReminderEditWindow(Adw.Window):
             self.repeat_row.set_sensitive(False)
             self.repeat_row.set_tooltip_text(_("Microsoft reminders currently don't support recurrence"))
         else:
-            if self.time_row.get_enable_expansion():
+            if self.time_row.get_enable_expansion() and self.notif_btn.get_active():
                 self.repeat_row.set_sensitive(True)
             else:
                 self.repeat_row.set_sensitive(False)
@@ -509,7 +530,7 @@ class ReminderEditWindow(Adw.Window):
     def time_switched(self, switch, data = None):
         if self.task_list_row.get_visible() and self.user_id != 'local':
             return
-        if self.time_row.get_enable_expansion():
+        if self.time_row.get_enable_expansion() and self.notif_btn.get_active():
             self.repeat_row.set_sensitive(True)
         else:
             self.repeat_row.set_sensitive(False)

@@ -253,7 +253,7 @@ class MainWindow(Adw.ApplicationWindow):
 
         return f'{self.get_date_label(time)} {self.get_time_label(time)}'
 
-    def get_date_label(self, time):
+    def get_date_label(self, time, short_date = False):
         reminder_day = time.get_day_of_year()
         reminder_week = time.get_week_of_year()
         reminder_year = time.get_year()
@@ -262,19 +262,22 @@ class MainWindow(Adw.ApplicationWindow):
         week = now.get_week_of_year()
         year = now.get_year()
 
-        if reminder_day == today:
-            date = _('Today')
-        elif reminder_day == today + 1:
-            date = _('Tomorrow')
-        elif reminder_day == today - 1:
-            date = _('Yesterday')
-        elif reminder_week == week:
-            date = time.format('%A')
-        elif reminder_year == year:
-            date = time.format('%d %B')
-        else:
-            date = time.format('%d %B %Y')
-        return date
+        if reminder_year == year:
+            if reminder_day == today:
+                return _('Today')
+            if reminder_day == today + 1:
+                return _('Tomorrow')
+            if reminder_day == today - 1:
+                return _('Yesterday')
+            if reminder_week == week:
+                return time.format('%A')
+            if not short_date:
+                return time.format('%d %B')
+
+        if short_date:
+            return time.format('%x')
+
+        return time.format('%d %B %Y')
 
     def get_time_label(self, time):
         if self.props.time_format == info.TimeFormat.TWELVE_HOUR:
@@ -410,6 +413,7 @@ class MainWindow(Adw.ApplicationWindow):
         reminder_id = self.get_kwarg(kwargs, 'id')
         title = self.get_kwarg(kwargs, 'title')
         description = self.get_kwarg(kwargs, 'description')
+        due_date = self.get_kwarg(kwargs, 'due-date')
         timestamp = self.get_kwarg(kwargs, 'timestamp')
         completed = self.get_kwarg(kwargs, 'completed', False)
         important = self.get_kwarg(kwargs, 'important', False)
@@ -430,6 +434,7 @@ class MainWindow(Adw.ApplicationWindow):
                 {
                     'title': title,
                     'description': description,
+                    'due-date': due_date,
                     'timestamp': timestamp,
                     'important': important,
                     'repeat-type': repeat_type,
@@ -516,7 +521,8 @@ class MainWindow(Adw.ApplicationWindow):
 
     def past_filter(self, reminder):
         now = ceil(time.time())
-        if reminder.options['old-timestamp'] != 0 and (reminder.options['old-timestamp'] < now and not reminder.completed):
+        if (reminder.options['old-timestamp'] != 0 and (reminder.options['old-timestamp'] < now and not reminder.completed)) or \
+        (reminder.options['due-date'] != 0 and datetime.datetime.fromtimestamp(reminder.options['due-date']).astimezone(tz=datetime.timezone.utc).date() < datetime.date.today()):
             retval = self.task_list_filter(reminder.options['user-id'], reminder.options['list-id'])
             reminder.set_past(True)
         else:
@@ -558,6 +564,12 @@ class MainWindow(Adw.ApplicationWindow):
                     return -1 if self.descending_sort else 1
 
                 if row1.options['timestamp'] < row2.options['timestamp']:
+                    return 1 if self.descending_sort else -1
+
+                if row1.options['due-date'] > row2.options['due-date']:
+                    return -1 if self.descending_sort else 1
+
+                if row1.options['due-date'] < row2.options['due-date']:
                     return 1 if self.descending_sort else -1
 
             elif self.sort == 2: # created

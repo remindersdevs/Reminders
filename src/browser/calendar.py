@@ -54,6 +54,7 @@ class Calendar(threading.Thread):
     def on_countdown_done(self):
         for reminder in self.win.reminder_lookup_dict.values():
             reminder.set_time_label()
+            reminder.refresh_time()
         if self.win.reminder_edit_win is not None:
             self.win.reminder_edit_win.update_date_button_label()
         self.countdown_id = 0
