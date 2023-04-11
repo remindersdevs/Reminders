@@ -92,7 +92,6 @@
                                         <property name="hexpand-set">true</property>
                                         <child>
                                           <object class="GtkMenuButton" id="date_button">
-                                            <property name="always-show-arrow">true</property>
                                             <property name="valign">center</property>
                                             <property name="tooltip-text" translatable="yes">Select date</property>
                                             <child>
@@ -415,7 +414,6 @@
                                       <object class="GtkMenuButton" id="repeat_until_btn">
                                         <property name="valign">center</property>
                                         <property name="halign">end</property>
-                                        <property name="always-show-arrow">true</property>
                                         <child>
                                           <object class="GtkLabel" id="repeat_until_label">
                                             <property name="ellipsize">end</property>
