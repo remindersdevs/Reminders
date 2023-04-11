@@ -19,7 +19,8 @@ from gettext import gettext as _
 
 RELEASE_NOTES = '''
 <ul>
-    <li>Fix issue when setting reminders in another year</li>
+    <li>Add support for setting due dates without sending notifications</li>
+    <li>Slightly improve error handling</li>
 </ul>
 '''
 

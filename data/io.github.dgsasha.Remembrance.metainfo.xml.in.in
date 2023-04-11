@@ -83,6 +83,7 @@
       <description>
         <ul>
           <li>Add support for setting due dates without sending notifications</li>
+          <li>Slightly improve error handling</li>
         </ul>
       </description>
     </release>
