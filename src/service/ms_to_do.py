@@ -45,7 +45,7 @@ class MSToDo():
         self.reminders = reminders
         self.cache = msal.SerializableTokenCache()
         self.schema = Secret.Schema.new(
-            'io.github.dgsasha.Remembrance.Service1',
+            info.app_id,
             Secret.SchemaFlags.NONE,
             { 'name': Secret.SchemaAttributeType.STRING }
         )
@@ -72,7 +72,7 @@ class MSToDo():
                 results = self.do_request(method, url, user_id, data, False)
                 return results
             else:
-                logger.error(error)
+                traceback.print_exception(error)
                 raise error
 
     def get_tokens(self):
@@ -82,22 +82,30 @@ class MSToDo():
             self.tokens = {}
             self.users = {}
             accounts = self.app.get_accounts()
-            for account in accounts:
-                token = self.app.acquire_token_silent(SCOPES, account)['access_token']
-                result = requests.request('GET', f'{GRAPH}/me', headers={'Authorization': f'Bearer {token}'})
-                result.raise_for_status()
-                result = result.json()
-                user_id = result['id']
-                email = result['userPrincipalName']
-                local_id = account['local_account_id']
 
-                self.tokens[user_id] = token
-                self.users[user_id] = {
-                    'email': email,
-                    'local-id': local_id
-                }
+            for account in accounts:
+                try:
+                    token = self.app.acquire_token_silent(SCOPES, account)['access_token']
+                    result = requests.request('GET', f'{GRAPH}/me', headers={'Authorization': f'Bearer {token}'})
+                    result.raise_for_status()
+                    result = result.json()
+                    user_id = result['id']
+                    email = result['userPrincipalName']
+                    local_id = account['local_account_id']
+
+                    self.tokens[user_id] = token
+                    self.users[user_id] = {
+                        'email': email,
+                        'local-id': local_id
+                    }
+                except requests.ConnectionError as error:
+                    raise error
+                except Exception as error:
+                    traceback.print_exception(error)
+
             self.store()
-        except Exception as error:
+
+        except requests.ConnectionError as error:
             self.users = json.loads(
                 Secret.password_lookup_sync(
                     self.schema,
@@ -106,7 +114,10 @@ class MSToDo():
                 )
             )
             raise error
-    
+        except Exception as error:
+            traceback.print_exception(error)
+            self.logout_all()
+
     def store(self):
         if self.app is not None and len(self.users.keys()) > 0:
             Secret.password_store_sync(
@@ -139,10 +150,12 @@ class MSToDo():
             self.logout_all()
 
     def login(self):
-        response = self.app.acquire_token_interactive(scopes=SCOPES, timeout=300)
-        token = response['access_token']
-        local_id = response['id_token_claims']['oid']
         try:
+            if self.app is None:
+                self.app = msal.PublicClientApplication(info.client_id, token_cache=self.cache)
+            response = self.app.acquire_token_interactive(scopes=SCOPES, timeout=300)
+            token = response['access_token']
+            local_id = response['id_token_claims']['oid']
             result = requests.request('GET', f'{GRAPH}/me', headers={'Authorization': f'Bearer {token}'})
             result.raise_for_status()
             result = result.json()
@@ -163,11 +176,11 @@ class MSToDo():
     def logout_all(self):
         try:
             try:
-                for user_id in self.users.keys():
-                    accounts = self.app.get_accounts()
-                    for account in accounts:
-                        if account['local_account_id'] == self.users[user_id]['local-id']:
-                            self.app.remove_account(account)
+                if self.app is None:
+                    self.app = msal.PublicClientApplication(info.client_id, token_cache=self.cache)
+                accounts = self.app.get_accounts()
+                for account in accounts:
+                    self.app.remove_account(account)
             except:
                 pass
             self.tokens = {}
@@ -190,6 +203,8 @@ class MSToDo():
     def logout(self, user_id):
         try:
             try:
+                if self.app is None:
+                    self.app = msal.PublicClientApplication(info.client_id, token_cache=self.cache)
                 accounts = self.app.get_accounts()
                 for account in accounts:
                     if account['local_account_id'] == self.users[user_id]['local-id']:

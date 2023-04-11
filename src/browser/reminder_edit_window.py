@@ -473,9 +473,10 @@ class ReminderEditWindow(Adw.Window):
                     self.win.reminder_lookup_dict[self.id] = self.reminder
 
             self.set_visible(False)
+            self.reminder.set_expanded(False)
         except Exception as error:
             logger.error(error)
-        self.reminder.set_expanded(False)
+
         self.win.set_busy(False, self)
 
     @Gtk.Template.Callback()
