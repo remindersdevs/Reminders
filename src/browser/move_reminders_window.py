@@ -73,7 +73,7 @@ class MoveRemindersWindow(Adw.Window):
                     options['updated-timestamp'] = results.unpack()[0]
                     reminder.options.update(options)
                     reminder.changed()
-            self.reminders_list.invalidate_sort()
+            self.win.reminders_list.invalidate_sort()
             self.close()
         except Exception as error:
             logger.error(error)
