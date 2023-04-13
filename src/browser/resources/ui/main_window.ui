@@ -192,6 +192,12 @@
                     <child>
                       <object class="GtkMenuButton" id="task_list_picker">
                         <property name="tooltip-text" translatable="yes">Select task list</property>
+                        <property name="always-show-arrow">true</property>
+                        <child>
+                          <object class="GtkLabel" id="task_list_label">
+                            <property name="ellipsize">end</property>
+                          </object>
+                        </child>
                         <style>
                           <class name="flat"/>
                         </style>
@@ -267,7 +273,7 @@
                                           <object class="GtkLabel" id="page_sub_label">
                                             <property name="valign">start</property>
                                             <property name="halign">start</property>
-                                            <property name="label" bind-source="task_list_picker" bind-property="label" bind-flags="sync-create"/>
+                                            <property name="label" bind-source="task_list_label" bind-property="label" bind-flags="sync-create"/>
                                             <style>
                                               <class name="title-4"/>
                                               <class name="page-sub-heading"/>
@@ -300,28 +306,210 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkBox">
-                        <property name="valign">end</property>
-                        <property name="orientation">horizontal</property>
+                      <object class="GtkScrolledWindow">
+                        <property name="hexpand">true</property>
+                        <style>
+                          <class name="bottom-area"/>
+                        </style>
                         <child>
                           <object class="GtkBox">
+                            <property name="orientation">horizontal</property>
                             <property name="hexpand">true</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="add_reminder">
-                            <property name="icon-name">list-add-symbolic</property>
-                            <property name="halign">end</property>
-                            <property name="tooltip-text" translatable="yes">Add a reminder</property>
                             <style>
-                              <class name="suggested-action"/>
-                              <class name="circular"/>
-                              <class name="add-reminder"/>
+                              <class name="bottom-box"/>
                             </style>
-                            <signal name="clicked" handler="new_reminder" swapped="no" />
-                            <accessibility>
-                              <property name="label" translatable="yes">Add a reminder</property>
-                            </accessibility>
+                            <child>
+                              <object class="GtkRevealer" id="multiple_select_revealer">
+                                <property name="transition-type">slide-right</property>
+                                <property name="reveal-child">false</property>
+                                <property name="hexpand">true</property>
+                                <property name="child">
+                                  <object class="GtkBox">
+                                    <property name="hexpand">true</property>
+                                    <style>
+                                      <class name="select-options"/>
+                                    </style>
+                                    <child>
+                                      <object class="GtkButton" id="cancel_btn">
+                                        <property name="hexpand">true</property>
+                                        <property name="label" translatable="yes">Cancel</property>
+                                        <signal name="clicked" handler="on_cancel" swapped="no"/>
+                                        <style>
+                                          <class name="flat"/>
+                                        </style>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkSeparator">
+                                        <property name="orientation">vertical</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkRevealer" id="complete_revealer">
+                                        <property name="transition-type">slide-right</property>
+                                        <property name="reveal-child">False</property>
+                                        <property name="child">
+                                          <object class="GtkBox">
+                                            <child>
+                                              <object class="GtkButton" id="complete_btn">
+                                                <property name="label" translatable="yes">Complete</property>
+                                                <property name="hexpand">true</property>
+                                                <signal name="clicked" handler="selected_complete" swapped="no"/>
+                                                <style>
+                                                  <class name="flat"/>
+                                                  <class name="complete"/>
+                                                </style>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkSeparator">
+                                                <property name="orientation">vertical</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkRevealer" id="incomplete_revealer">
+                                        <property name="transition-type">slide-right</property>
+                                        <property name="reveal-child">False</property>
+                                        <property name="child">
+                                          <object class="GtkBox">
+                                            <child>
+                                              <object class="GtkButton" id="incomplete_btn">
+                                                <property name="label" translatable="yes">Incomplete</property>
+                                                <property name="hexpand">true</property>
+                                                <signal name="clicked" handler="selected_incomplete" swapped="no"/>
+                                                <style>
+                                                  <class name="flat"/>
+                                                  <class name="incomplete"/>
+                                                </style>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkSeparator">
+                                                <property name="orientation">vertical</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkRevealer" id="important_revealer">
+                                        <property name="transition-type">slide-right</property>
+                                        <property name="reveal-child">False</property>
+                                        <property name="child">
+                                          <object class="GtkBox">
+                                            <child>
+                                              <object class="GtkButton" id="important_btn">
+                                                <property name="label" translatable="yes">Important</property>
+                                                <property name="hexpand">true</property>
+                                                <signal name="clicked" handler="selected_important" swapped="no"/>
+                                                <style>
+                                                  <class name="flat"/>
+                                                  <class name="suggested"/>
+                                                </style>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkSeparator">
+                                                <property name="orientation">vertical</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkRevealer" id="unimportant_revealer">
+                                        <property name="transition-type">slide-right</property>
+                                        <property name="reveal-child">False</property>
+                                        <property name="child">
+                                          <object class="GtkBox">
+                                            <child>
+                                              <object class="GtkButton" id="unimportant_btn">
+                                                <property name="label" translatable="yes">Unimportant</property>
+                                                <property name="hexpand">true</property>
+                                                <signal name="clicked" handler="selected_unimportant" swapped="no"/>
+                                                <style>
+                                                  <class name="flat"/>
+                                                  <class name="incomplete"/>
+                                                </style>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkSeparator">
+                                                <property name="orientation">vertical</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkRevealer" id="move_revealer">
+                                        <property name="transition-type">slide-right</property>
+                                        <property name="reveal-child">False</property>
+                                        <property name="child">
+                                          <object class="GtkBox">
+                                            <child>
+                                              <object class="GtkButton" id="move_btn">
+                                                <property name="label" translatable="yes">Move</property>
+                                                <property name="hexpand">true</property>
+                                                <signal name="clicked" handler="move_selected" swapped="no"/>
+                                                <style>
+                                                  <class name="flat"/>
+                                                </style>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkSeparator">
+                                                <property name="orientation">vertical</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="remove_btn">
+                                        <property name="hexpand">true</property>
+                                        <property name="label" translatable="yes">Remove</property>
+                                        <signal name="clicked" handler="selected_remove" swapped="no"/>
+                                        <style>
+                                          <class name="flat"/>
+                                          <class name="destructive"/>
+                                        </style>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkRevealer" id="add_reminder_revealer">
+                                <property name="halign">end</property>
+                                <property name="transition-type">slide-left</property>
+                                <property name="reveal-child">true</property>
+                                <property name="child">
+                                  <object class="GtkButton" id="add_reminder">
+                                    <property name="icon-name">list-add-symbolic</property>
+                                    <property name="tooltip-text" translatable="yes">Add a reminder</property>
+                                    <style>
+                                      <class name="suggested-action"/>
+                                      <class name="circular"/>
+                                      <class name="add-reminder"/>
+                                    </style>
+                                    <signal name="clicked" handler="new_reminder" swapped="no" />
+                                    <accessibility>
+                                      <property name="label" translatable="yes">Add a reminder</property>
+                                    </accessibility>
+                                  </object>
+                                </property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>

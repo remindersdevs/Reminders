@@ -17,7 +17,7 @@ import time
 import datetime
 import logging
 
-from gi.repository import Gtk, Adw, GLib
+from gi.repository import Gtk, Adw, GLib, GObject, Gdk
 from gettext import gettext as _
 from math import floor
 
@@ -58,10 +58,13 @@ class Reminder(Adw.ExpanderRow):
         self.set_title(options['title'])
         self.set_subtitle(options['description'])
         self.past = False
+        self.selected = False
 
         self.prefix_box = self.completed_icon.get_parent().get_parent()
         self.set_completed(completed)
         self.set_important()
+
+        self.set_enable_expansion(self.win.reminders_list.get_property('selection-mode') == Gtk.SelectionMode.MULTIPLE)
 
         actions_box = self.label_box.get_parent()
         suffixes_box = actions_box.get_parent()
@@ -72,9 +75,51 @@ class Reminder(Adw.ExpanderRow):
         actions_box.set_halign(Gtk.Align.END)
         self.set_labels()
 
-        self.refresh_time()
+        clicked_gesture = Gtk.GestureClick()
+        clicked_gesture.connect('pressed', self.pressed)
+        clicked_gesture.connect('released', self.released)
+
+        self.add_controller(clicked_gesture)
+
+        long_press_gesture = Gtk.GestureLongPress.new()
+        long_press_gesture.connect('pressed', self.long_pressed)
+        self.add_controller(long_press_gesture)
 
         self.win.connect('notify::time-format', lambda *args: self.set_time_label())
+
+    def pressed(self, gesture, n_pressed, x, y):
+        if gesture.get_current_event_state() & Gdk.ModifierType.CONTROL_MASK:
+            self.win.set_selecting(True)
+
+        if self.win.reminders_list.get_property('selection-mode') == Gtk.SelectionMode.MULTIPLE:
+            if not self in self.win.reminders_list.get_selected_rows():
+                self.set_selectable(True)
+                self.win.reminders_list.select_row(self)
+            else:
+                self.selected = True
+
+    def long_pressed(self, gesture, x, y):
+        if self.win.reminders_list.get_property('selection-mode') != Gtk.SelectionMode.NONE:
+            return
+
+        self.win.set_selecting(True)
+
+        if self.win.reminders_list.get_property('selection-mode') == Gtk.SelectionMode.MULTIPLE:
+            if not self in self.win.reminders_list.get_selected_rows():
+                self.set_selectable(True)
+                self.win.reminders_list.select_row(self)
+            else:
+                self.selected = True
+
+    def released(self, gesture, n_pressed, x, y):
+        if gesture.get_current_event_state() & Gdk.ModifierType.CONTROL_MASK:
+            self.win.set_selecting(True)
+
+        if self.win.reminders_list.get_property('selection-mode') == Gtk.SelectionMode.MULTIPLE:
+            if self.selected:
+                self.win.reminders_list.unselect_row(self)
+                self.set_selectable(False)
+                self.selected = False
 
     def set_past(self, past):
         if self.past != past:
@@ -126,9 +171,10 @@ class Reminder(Adw.ExpanderRow):
             edit_win.options = options.copy()
 
         self.set_options(options)
+        self.win.selected_changed()
 
     def set_options(self, options):
-        self.options = options.copy()
+        self.options.update(options)
 
         self.set_title(self.options['title'])
         self.set_subtitle(self.options['description'])
@@ -206,7 +252,6 @@ class Reminder(Adw.ExpanderRow):
     def set_important(self):
         self.important_icon.set_visible(self.options['important'] and not self.completed_icon.get_visible())
         self.prefix_box.set_visible(self.completed_icon.get_visible() or self.important_icon.get_visible())
-        self.win.reminders_list.invalidate_sort()
 
     def set_completed(self, completed):
         self.completed = completed
@@ -226,7 +271,7 @@ class Reminder(Adw.ExpanderRow):
         self.prefix_box.set_visible(self.completed_icon.get_visible() or self.important_icon.get_visible())
 
         self.refresh_time()
-        self.win.reminders_list.invalidate_sort()
+        self.changed()
 
     def remove(self):
         try:
@@ -256,7 +301,7 @@ class Reminder(Adw.ExpanderRow):
 
             self.set_expanded(False)
 
-            self.changed()
+            self.win.reminders_list.invalidate_sort()
         except Exception as error:
             logger.error(error)
         self.win.set_busy(False)

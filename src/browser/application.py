@@ -171,7 +171,10 @@ class Remembrance(Adw.Application):
             GLib.Variant('(ssb)', (info.app_id, reminder_id, True))
         )
         try:
-            self.win.reminder_lookup_dict[reminder_id].set_completed(True)
+            reminder = self.win.reminder_lookup_dict[reminder_id]
+            reminder.set_completed(True)
+            self.win.reminders_list.invalidate_sort()
+            self.win.selected_changed()
         except AttributeError:
             pass
 
@@ -197,6 +200,8 @@ class Remembrance(Adw.Application):
             reminder = self.win.reminder_lookup_dict[reminder_id]
             reminder.options['updated-timestamp'] = updated_timestamp
             reminder.set_completed(completed)
+            self.win.reminders_list.invalidate_sort()
+            self.win.selected_changed()
 
     def repeat_updated_cb(self, proxy, sender_name, signal_name, parameters):
         reminder_id, timestamp, old_timestamp, repeat_times = parameters.unpack()

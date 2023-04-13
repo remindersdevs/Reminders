@@ -10,6 +10,7 @@ source_files = files(
   'edit_lists_window.py',
   'error_dialog.py',
   'main_window.py',
+  'move_reminders_window.py',
   'preferences.py',
   'reminder.py',
   'reminder_edit_window.py',

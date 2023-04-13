@@ -16,6 +16,7 @@
 import datetime
 import time
 import gi
+import logging
 
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
@@ -30,6 +31,9 @@ from remembrance.browser.reminder import Reminder
 from remembrance.browser.calendar import Calendar
 from remembrance.browser.edit_lists_window import EditListsWindow
 from remembrance.browser.reminder_edit_window import ReminderEditWindow
+from remembrance.browser.move_reminders_window import MoveRemindersWindow
+
+logger = logging.getLogger(info.app_executable)
 
 ALL_LABEL = _('All Lists')
 
@@ -54,8 +58,16 @@ class MainWindow(Adw.ApplicationWindow):
     search_revealer = Gtk.Template.Child()
     search_entry = Gtk.Template.Child()
     task_list_picker = Gtk.Template.Child()
+    task_list_label = Gtk.Template.Child()
     label_revealer = Gtk.Template.Child()
     spinner = Gtk.Template.Child()
+    add_reminder_revealer = Gtk.Template.Child()
+    multiple_select_revealer = Gtk.Template.Child()
+    incomplete_revealer = Gtk.Template.Child()
+    complete_revealer = Gtk.Template.Child()
+    unimportant_revealer = Gtk.Template.Child()
+    important_revealer = Gtk.Template.Child()
+    move_revealer = Gtk.Template.Child()
 
     def __init__(self, page: str, app, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -118,6 +130,8 @@ class MainWindow(Adw.ApplicationWindow):
         reminders = self.app.run_service_method('ReturnReminders', None).unpack()[0]
         self.unpack_reminders(reminders)
 
+        self.reminders_list.connect('selected-rows-changed', self.selected_changed)
+
         self.app.settings.connect('changed::time-format', lambda *args: self.set_time_format())
         self.set_application(self.app)
 
@@ -128,6 +142,51 @@ class MainWindow(Adw.ApplicationWindow):
     @time_format.setter
     def time_format(self, value):
         self._time_format = value
+
+    def set_selecting(self, selecting):
+        if selecting:
+            if self.reminders_list.get_property('selection-mode') != Gtk.SelectionMode.MULTIPLE:
+                self.reminders_list.set_property('selection-mode', Gtk.SelectionMode.MULTIPLE)
+                for reminder in self.reminder_lookup_dict.values():
+                    reminder.set_enable_expansion(False)
+                self.add_reminder_revealer.set_reveal_child(False)
+                self.multiple_select_revealer.set_reveal_child(True)
+        else:
+            if self.reminders_list.get_property('selection-mode') != Gtk.SelectionMode.NONE:
+                self.reminders_list.set_property('selection-mode', Gtk.SelectionMode.NONE)
+                for reminder in self.reminder_lookup_dict.values():
+                    reminder.set_enable_expansion(True)
+                    reminder.set_expanded(False)
+                    reminder.set_selectable(False)
+                self.multiple_select_revealer.set_reveal_child(False)
+                self.add_reminder_revealer.set_reveal_child(True)
+
+    def selected_changed(self, list_box = None):
+        selected = self.reminders_list.get_selected_rows()
+        if len(selected) == 0:
+            self.set_selecting(False)
+            return
+
+        self.incomplete_revealer.set_reveal_child(False)
+        self.complete_revealer.set_reveal_child(False)
+        self.unimportant_revealer.set_reveal_child(False)
+        self.important_revealer.set_reveal_child(False)
+
+        for reminder in selected:
+            if reminder.completed:
+                self.incomplete_revealer.set_reveal_child(True)
+            else:
+                self.complete_revealer.set_reveal_child(True)
+
+            if reminder.options['important']:
+                self.unimportant_revealer.set_reveal_child(True)
+            else:
+                self.important_revealer.set_reveal_child(True)
+
+        self.incomplete_revealer.set_hexpand(self.incomplete_revealer.props.reveal_child)
+        self.complete_revealer.set_hexpand(self.complete_revealer.props.reveal_child)
+        self.unimportant_revealer.set_hexpand(self.unimportant_revealer.props.reveal_child)
+        self.important_revealer.set_hexpand(self.important_revealer.props.reveal_child)
 
     def set_busy(self, busy, win = None):
         if win is None:
@@ -312,10 +371,10 @@ class MainWindow(Adw.ApplicationWindow):
     def update_task_list(self):
         self.selected_user_id, self.selected_list_id = self.app.settings.get_value('selected-task-list').unpack()
         if self.selected_list_id == 'all':
-            self.task_list_picker.set_label(ALL_LABEL)
+            self.task_list_label.set_label(ALL_LABEL)
         else:
             try:
-                self.task_list_picker.set_label(self.all_task_list_names[self.selected_user_id][self.selected_list_id])
+                self.task_list_label.set_label(self.all_task_list_names[self.selected_user_id][self.selected_list_id])
             except:
                 self.app.settings.set_value('selected-task-list', GLib.Variant('(ss)', ('all', 'all')))
                 return
@@ -384,6 +443,8 @@ class MainWindow(Adw.ApplicationWindow):
 
         if self.reminder_edit_win is not None:
             self.reminder_edit_win.set_task_list_dropdown()
+
+        self.move_revealer.set_reveal_child(len(self.task_list_ids) > 1)
 
     def unpack_reminders(self, reminders):
         for reminder in reminders:
@@ -691,6 +752,63 @@ class MainWindow(Adw.ApplicationWindow):
         self.reminders_list.set_filter_func(self.search_filter)
         self.reminders_list.set_sort_func(self.search_sort_func)
 
+    def selected_remove_reminders(self):
+        try:
+            for reminder in self.reminders_list.get_selected_rows():
+                self.app.run_service_method(
+                    'RemoveReminder',
+                    GLib.Variant(
+                        '(ss)', (info.app_id, reminder.id)
+                    )
+                )
+                self.reminders_list.remove(reminder)
+                self.reminder_lookup_dict.pop(reminder_id)
+            self.set_selecting(False)
+        except Exception as error:
+            logger.error(error)
+
+    def selected_change_important(self, important):
+        try:
+            for reminder in self.reminders_list.get_selected_rows():
+                if reminder.options['important'] != important:
+                    results = self.app.run_service_method(
+                        'UpdateReminder',
+                        GLib.Variant(
+                            '(sa{sv})',
+                            (
+                                info.app_id,
+                                {
+                                    'id': GLib.Variant('s', reminder.id),
+                                    'important': GLib.Variant('b', important)
+                                }
+                            )
+                        )
+                    )
+                    reminder.options['updated-timestamp'] = results.unpack()[0]
+                    reminder.options['important'] = important
+                    reminder.set_important()
+            self.reminders_list.invalidate_sort()
+            self.selected_changed()
+        except Exception as error:
+            logger.error(error)
+
+    def selected_change_completed(self, completed):
+        try:
+            for reminder in self.reminders_list.get_selected_rows():
+                if reminder.completed != completed:
+                    results = self.app.run_service_method(
+                        'UpdateCompleted',
+                        GLib.Variant(
+                            '(ssb)', (info.app_id, reminder.id, completed)
+                        )
+                    )
+                    reminder.options['updated-timestamp'] = results.unpack()[0]
+                    reminder.set_completed(completed)
+            self.reminders_list.invalidate_sort()
+            self.selected_changed()
+        except Exception as error:
+            logger.error(error)
+
     @Gtk.Template.Callback()
     def show_flap_button(self, flap = None, data = None):
         if self.search_revealer.get_reveal_child():
@@ -733,3 +851,82 @@ class MainWindow(Adw.ApplicationWindow):
         self.selected = self.all_row
         self.selected.emit('activate')
         self.new_edit_win()
+
+    @Gtk.Template.Callback()
+    def on_cancel(self, btn):
+        self.set_selecting(False)
+
+    @Gtk.Template.Callback()
+    def selected_complete(self, btn):
+        confirm_dialog = Adw.MessageDialog(
+            transient_for=self,
+            heading=_('Are you sure you want to mark the selected reminder(s) as incomplete?')
+        )
+        confirm_dialog.add_response('cancel', _('Cancel'))
+        confirm_dialog.add_response('yes', _('Yes'))
+        confirm_dialog.set_response_appearance('yes', Adw.ResponseAppearance.DESTRUCTIVE)
+        confirm_dialog.set_default_response('cancel')
+        confirm_dialog.set_close_response('cancel')
+        confirm_dialog.connect('response::yes', lambda *args: self.selected_change_completed(True))
+        confirm_dialog.present()
+
+    @Gtk.Template.Callback()
+    def selected_incomplete(self, btn):
+        confirm_dialog = Adw.MessageDialog(
+            transient_for=self,
+            heading=_('Are you sure you want to mark the selected reminder(s) as incomplete?')
+        )
+        confirm_dialog.add_response('cancel', _('Cancel'))
+        confirm_dialog.add_response('yes', _('Yes'))
+        confirm_dialog.set_response_appearance('yes', Adw.ResponseAppearance.DESTRUCTIVE)
+        confirm_dialog.set_default_response('cancel')
+        confirm_dialog.set_close_response('cancel')
+        confirm_dialog.connect('response::yes', lambda *args: self.selected_change_completed(False))
+        confirm_dialog.present()
+
+    @Gtk.Template.Callback()
+    def move_selected(self, btn):
+        MoveRemindersWindow(self, self.reminders_list.get_selected_rows())
+
+    @Gtk.Template.Callback()
+    def selected_important(self, btn):
+        confirm_dialog = Adw.MessageDialog(
+            transient_for=self,
+            heading=_('Are you sure you want to mark the selected reminder(s) as important?')
+        )
+        confirm_dialog.add_response('cancel', _('Cancel'))
+        confirm_dialog.add_response('yes', _('Yes'))
+        confirm_dialog.set_response_appearance('yes', Adw.ResponseAppearance.DESTRUCTIVE)
+        confirm_dialog.set_default_response('cancel')
+        confirm_dialog.set_close_response('cancel')
+        confirm_dialog.connect('response::yes', lambda *args: self.selected_change_important(True))
+        confirm_dialog.present()
+
+    @Gtk.Template.Callback()
+    def selected_unimportant(self, btn):
+        confirm_dialog = Adw.MessageDialog(
+            transient_for=self,
+            heading=_('Are you sure you want to mark the selected reminder(s) as unimportant?')
+        )
+        confirm_dialog.add_response('cancel', _('Cancel'))
+        confirm_dialog.add_response('yes', _('Yes'))
+        confirm_dialog.set_response_appearance('yes', Adw.ResponseAppearance.DESTRUCTIVE)
+        confirm_dialog.set_default_response('cancel')
+        confirm_dialog.set_close_response('cancel')
+        confirm_dialog.connect('response::yes', lambda *args: self.selected_change_important(False))
+        confirm_dialog.present()
+
+    @Gtk.Template.Callback()
+    def selected_remove(self, btn):
+        confirm_dialog = Adw.MessageDialog(
+            transient_for=self,
+            heading=_('Are you sure you want to remove the selected reminder(s)?'),
+            body=_('This cannot be undone.')
+        )
+        confirm_dialog.add_response('cancel', _('Cancel'))
+        confirm_dialog.add_response('yes', _('Yes'))
+        confirm_dialog.set_response_appearance('yes', Adw.ResponseAppearance.DESTRUCTIVE)
+        confirm_dialog.set_default_response('cancel')
+        confirm_dialog.set_close_response('cancel')
+        confirm_dialog.connect('response::yes', lambda *args: self.selected_remove_reminders())
+        confirm_dialog.present()

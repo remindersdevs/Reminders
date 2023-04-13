@@ -14,6 +14,11 @@
     margin-bottom: 20px;
 }
 
+.reminders-list row.activatable:selected,
+lists row.activatable:selected {
+    background-color: alpha(@accent_bg_color, .25);
+}
+
 .day-button:checked {
     color: @accent_bg_color;
 }
@@ -46,6 +51,35 @@ spinbutton button {
     margin: 10px;
 }
 
+.bottom-area {
+    min-height: 68px;
+}
+
+.select-options button {
+    padding: 0 24px;
+    border-radius: 0;
+    box-shadow: none;
+    margin-top: -1px;
+    margin-right: -1px;
+    margin-left: -1px;
+}
+
+.select-options button.suggested {
+    color: @accent_bg_color;
+}
+
+.select-options button.complete {
+    color: @success_bg_color;
+}
+
+.select-options button.incomplete {
+    color: @warning_bg_color;
+}
+
+.select-options button.destructive {
+    color: @destructive_bg_color;
+}
+
 row.time {
     padding: 5px 15px;
 }
@@ -58,7 +92,7 @@ row.time {
     margin-left: 5px;
 }
 
-.save-row {
+.edit-row {
     padding: 10px;
 }
 
@@ -140,39 +174,39 @@ box.main {
 
 button.rounded {border-radius: 17px;}
 
-button.remove {
+button.rounded.remove {
     background-color: alpha(@destructive_bg_color, 0.3);
 }
 
-button.complete {
+button.rounded.complete {
     background-color: alpha(@success_bg_color, 0.3);
 }
 
-button.incomplete {
+button.rounded.incomplete {
     background-color: alpha(@warning_bg_color, 0.3);
 }
 
-button.remove:hover {
+button.rounded.remove:hover {
     background-color: alpha(@destructive_bg_color, 0.4);
 }
 
-button.complete:hover {
+button.rounded.complete:hover {
     background-color: alpha(@success_bg_color, 0.4);
 }
 
-button.incomplete:hover {
+button.rounded.incomplete:hover {
     background-color: alpha(@warning_bg_color, 0.4);
 }
 
-button.remove:active {
+button.rounded.remove:active {
     background-color: alpha(@destructive_bg_color, 0.55);
 }
 
-button.complete:active {
+button.rounded.complete:active {
     background-color: alpha(@success_bg_color, 0.55);
 }
 
-button.incomplete:active {
+button.rounded.incomplete:active {
     background-color: alpha(@warning_bg_color, 0.55);
 }
 

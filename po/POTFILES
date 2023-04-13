@@ -6,14 +6,17 @@ data/io.github.dgsasha.Remembrance.gschema.xml.in
 data/io.github.dgsasha.Remembrance.metainfo.xml.in.in
 src/browser/resources/ui/edit_lists_window.ui
 src/browser/resources/ui/main_window.ui
+src/browser/resources/ui/move_reminders_window.ui
 src/browser/resources/ui/ms_user_row.ui
 src/browser/resources/ui/preferences.ui
 src/browser/resources/ui/reminder.ui
 src/browser/resources/ui/reminder_edit_window.ui
+src/browser/resources/ui/shortcuts_window.ui
 src/browser/about.py
 src/browser/application.py
 src/browser/edit_lists_window.py
 src/browser/main_window.py
+src/browser/move_reminders_window.py
 src/browser/preferences.py
 src/browser/reminder.py
 src/browser/reminder_edit_window.py

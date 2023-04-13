@@ -85,6 +85,12 @@
                 <property name="title" translatable="yes">Refresh reminders</property>
               </object>
             </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="accelerator">&lt;ctrl&gt;</property>
+                <property name="title" translatable="yes">Hold to select multiple reminders</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>

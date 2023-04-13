@@ -4,6 +4,7 @@
     <file>ui/edit_lists_window.ui</file>
     <file>ui/error_dialog.ui</file>
     <file>ui/main_window.ui</file>
+    <file>ui/move_reminders_window.ui</file>
     <file>ui/ms_user_row.ui</file>
     <file>ui/preferences.ui</file>
     <file>ui/reminder.ui</file>

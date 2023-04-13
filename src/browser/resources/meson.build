@@ -2,6 +2,7 @@ resources = files(
     'ui/edit_lists_window.ui',
     'ui/error_dialog.ui',
     'ui/main_window.ui',
+    'ui/move_reminders_window.ui',
     'ui/ms_user_row.ui',
     'ui/preferences.ui',
     'ui/reminder.ui',

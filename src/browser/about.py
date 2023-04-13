@@ -20,6 +20,7 @@ from gettext import gettext as _
 RELEASE_NOTES = '''
 <ul>
     <li>Add support for setting due dates without sending notifications</li>
+    <li>Add support for selecting and editing multiple reminders with Ctrl + Clicking or pressing and holding a reminder</li>
     <li>Slightly improve error handling</li>
 </ul>
 '''

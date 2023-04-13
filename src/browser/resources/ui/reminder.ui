@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="reminder" parent="AdwExpanderRow">
+    <property name="selectable">false</property>
     <child type="prefix">
       <object class="GtkImage" id="completed_icon">
         <property name="icon-name">object-select-symbolic</property>
@@ -61,7 +62,7 @@
         <property name="activatable">false</property>
         <property name="hexpand">true</property>
         <style>
-          <class name="save-row"/>
+          <class name="edit-row"/>
         </style>
         <child>
           <object class="GtkBox">
