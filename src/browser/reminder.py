@@ -55,14 +55,14 @@ class Reminder(Adw.ExpanderRow):
         self.app = win.app
         self.id = reminder_id
         self.options = options
-        self.set_title(options['title'])
-        self.set_subtitle(options['description'])
         self.past = False
         self.selected = False
+        self.no_strikethrough = False
 
         self.prefix_box = self.completed_icon.get_parent().get_parent()
         self.set_completed(completed)
         self.set_important()
+        self.set_text()
 
         self.set_enable_expansion(self.win.reminders_list.get_property('selection-mode') != Gtk.SelectionMode.MULTIPLE)
 
@@ -93,6 +93,13 @@ class Reminder(Adw.ExpanderRow):
         header.add_controller(long_press_gesture)
 
         self.win.connect('notify::time-format', lambda *args: self.set_time_label())
+
+    def set_text(self):
+        self.set_title(f'<span strikethrough=\'{"true" if self.completed and not self.no_strikethrough else "false"}\'>{self.options["title"]}</span>')
+        if len(self.options['description']) > 0:
+            self.set_subtitle(f'<span strikethrough=\'{"true" if self.completed and not self.no_strikethrough else "false"}\'>{self.options["description"]}</span>')
+        else:
+            self.set_subtitle('')
 
     def pressed(self, gesture, n_pressed, x, y):
         if gesture.get_current_event_state() & Gdk.ModifierType.CONTROL_MASK:
@@ -136,6 +143,11 @@ class Reminder(Adw.ExpanderRow):
             self.past = past
             self.set_time_label()
             self.refresh_time()
+
+    def set_no_strikethrough(self, no_strikethrough):
+        if self.no_strikethrough != no_strikethrough:
+            self.no_strikethrough = no_strikethrough
+            self.set_text()
 
     def set_timestamp(self, timestamp, old_timestamp = None):
         if old_timestamp is not None and old_timestamp != self.options['old-timestamp']:
@@ -186,9 +198,7 @@ class Reminder(Adw.ExpanderRow):
     def set_options(self, options):
         self.options.update(options)
 
-        self.set_title(self.options['title'])
-        self.set_subtitle(self.options['description'])
-
+        self.set_text()
         self.set_important()
         self.set_labels()
         self.refresh_time()
@@ -280,6 +290,8 @@ class Reminder(Adw.ExpanderRow):
 
         self.prefix_box.set_visible(self.completed_icon.get_visible() or self.important_icon.get_visible())
 
+        if not self.no_strikethrough:
+            self.set_text()
         self.refresh_time()
         self.changed()
 

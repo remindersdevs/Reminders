@@ -578,10 +578,13 @@ class MainWindow(Adw.ApplicationWindow):
 
     def no_filter(self, reminder):
         reminder.set_sensitive(True)
+        reminder.set_past(False)
+        reminder.set_no_strikethrough(True)
         return True
 
     def all_filter(self, reminder):
         reminder.set_past(False)
+        reminder.set_no_strikethrough(False)
         retval = self.task_list_filter(reminder.options['user-id'], reminder.options['list-id'])
         reminder.set_sensitive(retval)
         if not retval:
@@ -591,9 +594,10 @@ class MainWindow(Adw.ApplicationWindow):
 
     def upcoming_filter(self, reminder):
         now = floor(time.time())
-        if reminder.options['timestamp'] == 0 or (reminder.options['timestamp'] > now and not reminder.completed):
+        if (reminder.options['timestamp'] == 0 or reminder.options['timestamp'] > now) and not reminder.completed:
             retval = self.task_list_filter(reminder.options['user-id'], reminder.options['list-id'])
             reminder.set_past(False)
+            reminder.set_no_strikethrough(False)
         else:
             retval = False
         reminder.set_sensitive(retval)
@@ -604,10 +608,11 @@ class MainWindow(Adw.ApplicationWindow):
 
     def past_filter(self, reminder):
         now = ceil(time.time())
-        if (reminder.options['old-timestamp'] != 0 and (reminder.options['old-timestamp'] < now and not reminder.completed)) or \
-        (reminder.options['due-date'] != 0 and datetime.datetime.fromtimestamp(reminder.options['due-date']).astimezone(tz=datetime.timezone.utc).date() < datetime.date.today()):
+        if not reminder.completed and ((reminder.options['old-timestamp'] != 0 and reminder.options['old-timestamp'] < now) or \
+        (reminder.options['due-date'] != 0 and datetime.datetime.fromtimestamp(reminder.options['due-date']).astimezone(tz=datetime.timezone.utc).date() < datetime.date.today())):
             retval = self.task_list_filter(reminder.options['user-id'], reminder.options['list-id'])
             reminder.set_past(True)
+            reminder.set_no_strikethrough(False)
         else:
             retval = False
         reminder.set_sensitive(retval)
@@ -620,6 +625,7 @@ class MainWindow(Adw.ApplicationWindow):
         if reminder.completed:
             retval = self.task_list_filter(reminder.options['user-id'], reminder.options['list-id'])
             reminder.set_past(False)
+            reminder.set_no_strikethrough(True)
         else:
             retval = False
         reminder.set_sensitive(retval)
@@ -676,8 +682,8 @@ class MainWindow(Adw.ApplicationWindow):
                     return 1 if self.descending_sort else -1
 
             # Alphabetical, also used as fallback
-            name1 = (row1.get_title() + row1.get_subtitle()).lower()
-            name2 = (row2.get_title() + row2.get_subtitle()).lower()
+            name1 = (row1.options['title'] + row1.options['description']).lower()
+            name2 = (row2.options['title'] + row2.options['description']).lower()
             if name1 == name2:
                 return 0
             if name1 < name2:
@@ -740,7 +746,7 @@ class MainWindow(Adw.ApplicationWindow):
         retval = True
         text = self.search_entry.get_text().lower()
         words = text.split()
-        reminder_text = reminder.get_title().lower() + ' ' + reminder.get_subtitle().lower()
+        reminder_text = reminder.options['title'].lower() + ' ' + reminder.options['description'].lower()
 
         for word in words:
             if word not in reminder_text:
@@ -748,6 +754,7 @@ class MainWindow(Adw.ApplicationWindow):
 
         if retval:
             reminder.set_past(False)
+            reminder.set_no_strikethrough(True)
 
         reminder.set_sensitive(retval)
         if not retval:
@@ -762,8 +769,8 @@ class MainWindow(Adw.ApplicationWindow):
         if (row1.get_sensitive() and not row2.get_sensitive()):
             return 1
         text = self.search_entry.get_text().lower()
-        row1_text = row1.get_title().lower() + ' ' + row1.get_subtitle().lower()
-        row2_text = row2.get_title().lower() + ' ' + row2.get_subtitle().lower()
+        row1_text = row1.options['title'].lower() + ' ' + row1.options['description'].lower()
+        row2_text = row2.options['title'].lower() + ' ' + row2.options['description'].lower()
 
         row1_ratio = SequenceMatcher(a=text, b=row1_text).ratio()
         row2_ratio = SequenceMatcher(a=text, b=row2_text).ratio()
