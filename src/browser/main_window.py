@@ -597,7 +597,6 @@ class MainWindow(Adw.ApplicationWindow):
         if (reminder.options['timestamp'] == 0 or reminder.options['timestamp'] > now) and not reminder.completed:
             retval = self.task_list_filter(reminder.options['user-id'], reminder.options['list-id'])
             reminder.set_past(False)
-            reminder.set_no_strikethrough(False)
         else:
             retval = False
         reminder.set_sensitive(retval)
@@ -612,7 +611,6 @@ class MainWindow(Adw.ApplicationWindow):
         (reminder.options['due-date'] != 0 and datetime.datetime.fromtimestamp(reminder.options['due-date']).astimezone(tz=datetime.timezone.utc).date() < datetime.date.today())):
             retval = self.task_list_filter(reminder.options['user-id'], reminder.options['list-id'])
             reminder.set_past(True)
-            reminder.set_no_strikethrough(False)
         else:
             retval = False
         reminder.set_sensitive(retval)

@@ -147,7 +147,8 @@ class Reminder(Adw.ExpanderRow):
     def set_no_strikethrough(self, no_strikethrough):
         if self.no_strikethrough != no_strikethrough:
             self.no_strikethrough = no_strikethrough
-            self.set_text()
+            if self.completed:
+                self.set_text()
 
     def set_timestamp(self, timestamp, old_timestamp = None):
         if old_timestamp is not None and old_timestamp != self.options['old-timestamp']:
