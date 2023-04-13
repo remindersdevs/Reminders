@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-13 15:12-0400\n"
+"POT-Creation-Date: 2023-04-13 15:24-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -340,10 +340,10 @@ msgstr ""
 #: src/browser/resources/ui/move_reminders_window.ui:62
 #: src/browser/resources/ui/reminder_edit_window.ui:465
 #: src/browser/edit_lists_window.py:79 src/browser/edit_lists_window.py:188
-#: src/browser/main_window.py:232 src/browser/main_window.py:881
-#: src/browser/main_window.py:895 src/browser/main_window.py:913
-#: src/browser/main_window.py:927 src/browser/main_window.py:942
-#: src/browser/move_reminders_window.py:92 src/browser/preferences.py:224
+#: src/browser/main_window.py:232 src/browser/main_window.py:884
+#: src/browser/main_window.py:898 src/browser/main_window.py:916
+#: src/browser/main_window.py:930 src/browser/main_window.py:945
+#: src/browser/move_reminders_window.py:93 src/browser/preferences.py:224
 #: src/browser/reminder.py:323
 msgid "Cancel"
 msgstr ""
@@ -770,9 +770,9 @@ msgid "Are you sure you want to close the window?"
 msgstr ""
 
 #: src/browser/edit_lists_window.py:80 src/browser/main_window.py:233
-#: src/browser/main_window.py:882 src/browser/main_window.py:896
-#: src/browser/main_window.py:914 src/browser/main_window.py:928
-#: src/browser/main_window.py:943 src/browser/move_reminders_window.py:93
+#: src/browser/main_window.py:885 src/browser/main_window.py:899
+#: src/browser/main_window.py:917 src/browser/main_window.py:931
+#: src/browser/main_window.py:946 src/browser/move_reminders_window.py:94
 msgid "Yes"
 msgstr ""
 
@@ -908,36 +908,36 @@ msgstr ""
 msgid "Yesterday"
 msgstr ""
 
-#: src/browser/main_window.py:854
+#: src/browser/main_window.py:857
 #, python-brace-format
 msgid "Searching '{text}'"
 msgstr ""
 
-#: src/browser/main_window.py:861
+#: src/browser/main_window.py:864
 msgid "Start typing to search"
 msgstr ""
 
-#: src/browser/main_window.py:879 src/browser/main_window.py:893
+#: src/browser/main_window.py:882 src/browser/main_window.py:896
 msgid "Are you sure you want to mark the selected reminder(s) as incomplete?"
 msgstr ""
 
-#: src/browser/main_window.py:911
+#: src/browser/main_window.py:914
 msgid "Are you sure you want to mark the selected reminder(s) as important?"
 msgstr ""
 
-#: src/browser/main_window.py:925
+#: src/browser/main_window.py:928
 msgid "Are you sure you want to mark the selected reminder(s) as unimportant?"
 msgstr ""
 
-#: src/browser/main_window.py:939
+#: src/browser/main_window.py:942
 msgid "Are you sure you want to remove the selected reminder(s)?"
 msgstr ""
 
-#: src/browser/main_window.py:940
+#: src/browser/main_window.py:943
 msgid "This cannot be undone."
 msgstr ""
 
-#: src/browser/move_reminders_window.py:90
+#: src/browser/move_reminders_window.py:91
 msgid "Are you sure you want to move the selected reminders?"
 msgstr ""
 

@@ -779,9 +779,10 @@ class MainWindow(Adw.ApplicationWindow):
                     )
                     self.reminders_list.remove(reminder)
                     self.reminder_lookup_dict.pop(reminder_id)
-            self.set_selecting(False)
         except Exception as error:
             logger.error(error)
+
+        self.set_selecting(False)
 
     def selected_change_important(self, important):
         try:
@@ -803,10 +804,11 @@ class MainWindow(Adw.ApplicationWindow):
                     reminder.options['updated-timestamp'] = results.unpack()[0]
                     reminder.options['important'] = important
                     reminder.set_important()
-            self.reminders_list.invalidate_sort()
-            self.selected_changed()
         except Exception as error:
             logger.error(error)
+
+        self.reminders_list.invalidate_sort()
+        self.selected_changed()
 
     def selected_change_completed(self, completed):
         try:
@@ -820,10 +822,11 @@ class MainWindow(Adw.ApplicationWindow):
                     )
                     reminder.options['updated-timestamp'] = results.unpack()[0]
                     reminder.set_completed(completed)
-            self.reminders_list.invalidate_sort()
-            self.selected_changed()
         except Exception as error:
             logger.error(error)
+
+        self.reminders_list.invalidate_sort()
+        self.selected_changed()
 
     @Gtk.Template.Callback()
     def show_flap_button(self, flap = None, data = None):
