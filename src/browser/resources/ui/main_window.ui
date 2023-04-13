@@ -439,7 +439,6 @@
                                                 <signal name="clicked" handler="selected_unimportant" swapped="no"/>
                                                 <style>
                                                   <class name="flat"/>
-                                                  <class name="incomplete"/>
                                                 </style>
                                               </object>
                                             </child>

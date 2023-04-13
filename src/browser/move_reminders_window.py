@@ -88,7 +88,7 @@ class MoveRemindersWindow(Adw.Window):
 
         confirm_dialog = Adw.MessageDialog(
             transient_for=self,
-            heading=_('Are you sure you want to move the selected reminders?')
+            heading=_('Are you sure you want to move the currently selected reminder(s)?')
         )
         confirm_dialog.add_response('cancel', _('Cancel'))
         confirm_dialog.add_response('yes', _('Yes'))

@@ -879,7 +879,7 @@ class MainWindow(Adw.ApplicationWindow):
     def selected_complete(self, btn):
         confirm_dialog = Adw.MessageDialog(
             transient_for=self,
-            heading=_('Are you sure you want to mark the selected reminder(s) as incomplete?')
+            heading=_('Are you sure you want to mark the currently selected reminder(s) as complete?')
         )
         confirm_dialog.add_response('cancel', _('Cancel'))
         confirm_dialog.add_response('yes', _('Yes'))
@@ -893,7 +893,7 @@ class MainWindow(Adw.ApplicationWindow):
     def selected_incomplete(self, btn):
         confirm_dialog = Adw.MessageDialog(
             transient_for=self,
-            heading=_('Are you sure you want to mark the selected reminder(s) as incomplete?')
+            heading=_('Are you sure you want to mark the currently selected reminder(s) as incomplete?')
         )
         confirm_dialog.add_response('cancel', _('Cancel'))
         confirm_dialog.add_response('yes', _('Yes'))
@@ -911,7 +911,7 @@ class MainWindow(Adw.ApplicationWindow):
     def selected_important(self, btn):
         confirm_dialog = Adw.MessageDialog(
             transient_for=self,
-            heading=_('Are you sure you want to mark the selected reminder(s) as important?')
+            heading=_('Are you sure you want to mark the currently selected reminder(s) as important?')
         )
         confirm_dialog.add_response('cancel', _('Cancel'))
         confirm_dialog.add_response('yes', _('Yes'))
@@ -925,7 +925,7 @@ class MainWindow(Adw.ApplicationWindow):
     def selected_unimportant(self, btn):
         confirm_dialog = Adw.MessageDialog(
             transient_for=self,
-            heading=_('Are you sure you want to mark the selected reminder(s) as unimportant?')
+            heading=_('Are you sure you want to mark the currently selected reminder(s) as unimportant?')
         )
         confirm_dialog.add_response('cancel', _('Cancel'))
         confirm_dialog.add_response('yes', _('Yes'))
@@ -939,7 +939,7 @@ class MainWindow(Adw.ApplicationWindow):
     def selected_remove(self, btn):
         confirm_dialog = Adw.MessageDialog(
             transient_for=self,
-            heading=_('Are you sure you want to remove the selected reminder(s)?'),
+            heading=_('Are you sure you want to remove the currently selected reminder(s)?'),
             body=_('This cannot be undone.')
         )
         confirm_dialog.add_response('cancel', _('Cancel'))
