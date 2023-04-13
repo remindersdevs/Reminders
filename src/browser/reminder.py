@@ -64,7 +64,7 @@ class Reminder(Adw.ExpanderRow):
         self.set_completed(completed)
         self.set_important()
 
-        self.set_enable_expansion(self.win.reminders_list.get_property('selection-mode') == Gtk.SelectionMode.MULTIPLE)
+        self.set_enable_expansion(self.win.reminders_list.get_property('selection-mode') != Gtk.SelectionMode.MULTIPLE)
 
         actions_box = self.label_box.get_parent()
         suffixes_box = actions_box.get_parent()
