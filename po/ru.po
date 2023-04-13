@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 20:54-0500\n"
-"PO-Revision-Date: 2023-04-13 16:53+0000\n"
+"PO-Revision-Date: 2023-04-13 21:17+0000\n"
 "Last-Translator: Alexei Porenko <nyuuzyou@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/reminders/"
 "reminders/ru/>\n"
@@ -300,7 +300,7 @@ msgstr "Повторить напоминание"
 
 #: src/browser/resources/ui/repeat_dialog.ui:53
 msgid "Repeat every"
-msgstr "Повторять каждый(ые)"
+msgstr "Повторять каждые"
 
 #: src/browser/resources/ui/repeat_dialog.ui:96
 msgid "Mon"
@@ -373,19 +373,19 @@ msgstr "Выбрать дату"
 
 #: src/browser/resources/ui/repeat_dialog.ui:271
 msgid "minute(s)"
-msgstr "минуту(ы)"
+msgstr "минуты"
 
 #: src/browser/resources/ui/repeat_dialog.ui:272
 msgid "hour(s)"
-msgstr "час(ов)"
+msgstr "часа"
 
 #: src/browser/resources/ui/repeat_dialog.ui:273
 msgid "day(s)"
-msgstr "день(ы)"
+msgstr "дня"
 
 #: src/browser/resources/ui/repeat_dialog.ui:274
 msgid "week(s)"
-msgstr "неделю(ли)"
+msgstr "недели"
 
 #: src/browser/resources/ui/repeat_dialog.ui:279
 msgid "forever"
