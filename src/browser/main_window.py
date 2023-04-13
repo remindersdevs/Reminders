@@ -156,19 +156,19 @@ class MainWindow(Adw.ApplicationWindow):
         if selecting:
             if self.reminders_list.get_property('selection-mode') != Gtk.SelectionMode.MULTIPLE:
                 self.reminders_list.set_property('selection-mode', Gtk.SelectionMode.MULTIPLE)
-                for reminder in self.reminder_lookup_dict.values():
-                    reminder.set_enable_expansion(False)
                 self.add_reminder_revealer.set_reveal_child(False)
                 self.multiple_select_revealer.set_reveal_child(True)
+                for reminder in self.reminder_lookup_dict.values():
+                    reminder.set_enable_expansion(False)
         else:
             if self.reminders_list.get_property('selection-mode') != Gtk.SelectionMode.NONE:
                 self.reminders_list.set_property('selection-mode', Gtk.SelectionMode.NONE)
-                for reminder in self.reminder_lookup_dict.values():
-                    reminder.set_enable_expansion(True)
-                    reminder.set_expanded(False)
-                    reminder.set_selectable(False)
                 self.multiple_select_revealer.set_reveal_child(False)
                 self.add_reminder_revealer.set_reveal_child(True)
+                for reminder in self.reminder_lookup_dict.values():
+                    reminder.set_enable_expansion(True)
+                    reminder.set_selectable(False)
+                    reminder.set_expanded(False)
 
     def select_all(self):
         self.set_selecting(True)

@@ -75,15 +75,22 @@ class Reminder(Adw.ExpanderRow):
         actions_box.set_halign(Gtk.Align.END)
         self.set_labels()
 
+        # This is kinda silly but I really only want the rows to be able to be selected by clicking on the header
+        # Otherwise bad things happen
+        header = suffixes_box.get_parent().get_parent().get_parent()
         clicked_gesture = Gtk.GestureClick()
         clicked_gesture.connect('pressed', self.pressed)
         clicked_gesture.connect('released', self.released)
 
-        self.add_controller(clicked_gesture)
+        header.add_controller(clicked_gesture)
+
+        reminder_clicked = Gtk.GestureClick()
+        reminder_clicked.connect('released', self.reminder_released)
+        self.add_controller(reminder_clicked)
 
         long_press_gesture = Gtk.GestureLongPress.new()
         long_press_gesture.connect('pressed', self.long_pressed)
-        self.add_controller(long_press_gesture)
+        header.add_controller(long_press_gesture)
 
         self.win.connect('notify::time-format', lambda *args: self.set_time_label())
 
@@ -95,6 +102,7 @@ class Reminder(Adw.ExpanderRow):
             if not self in self.win.reminders_list.get_selected_rows():
                 self.set_selectable(True)
                 self.win.reminders_list.select_row(self)
+                self.selected = False
             else:
                 self.selected = True
 
@@ -108,6 +116,7 @@ class Reminder(Adw.ExpanderRow):
             if not self in self.win.reminders_list.get_selected_rows():
                 self.set_selectable(True)
                 self.win.reminders_list.select_row(self)
+                self.selected = False
             else:
                 self.selected = True
 
@@ -115,6 +124,7 @@ class Reminder(Adw.ExpanderRow):
         if gesture.get_current_event_state() & Gdk.ModifierType.CONTROL_MASK:
             self.win.set_selecting(True)
 
+    def reminder_released(self, gesture, n_pressed, x, y):
         if self.win.reminders_list.get_property('selection-mode') == Gtk.SelectionMode.MULTIPLE:
             if self.selected:
                 self.win.reminders_list.unselect_row(self)
