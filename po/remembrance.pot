@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-13 17:15-0400\n"
+"POT-Creation-Date: 2023-04-13 17:33-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -316,19 +316,19 @@ msgid "App menu"
 msgstr ""
 
 #: src/browser/resources/ui/main_window.ui:107
-#: src/browser/resources/ui/main_window.ui:251 src/browser/main_window.py:682
+#: src/browser/resources/ui/main_window.ui:251 src/browser/main_window.py:695
 msgid "All Reminders"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:130 src/browser/main_window.py:692
+#: src/browser/resources/ui/main_window.ui:130 src/browser/main_window.py:705
 msgid "Upcoming Reminders"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:153 src/browser/main_window.py:702
+#: src/browser/resources/ui/main_window.ui:153 src/browser/main_window.py:715
 msgid "Past Reminders"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:176 src/browser/main_window.py:712
+#: src/browser/resources/ui/main_window.ui:176 src/browser/main_window.py:725
 msgid "Completed Reminders"
 msgstr ""
 
@@ -340,9 +340,9 @@ msgstr ""
 #: src/browser/resources/ui/move_reminders_window.ui:62
 #: src/browser/resources/ui/reminder_edit_window.ui:465
 #: src/browser/edit_lists_window.py:79 src/browser/edit_lists_window.py:188
-#: src/browser/main_window.py:232 src/browser/main_window.py:884
-#: src/browser/main_window.py:898 src/browser/main_window.py:916
-#: src/browser/main_window.py:930 src/browser/main_window.py:945
+#: src/browser/main_window.py:233 src/browser/main_window.py:900
+#: src/browser/main_window.py:914 src/browser/main_window.py:932
+#: src/browser/main_window.py:946 src/browser/main_window.py:961
 #: src/browser/move_reminders_window.py:93 src/browser/preferences.py:224
 #: src/browser/reminder.py:333
 msgid "Cancel"
@@ -761,22 +761,22 @@ msgstr ""
 msgid "New List"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:76 src/browser/main_window.py:229
+#: src/browser/edit_lists_window.py:76 src/browser/main_window.py:230
 msgid "You have unsaved changes"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:77 src/browser/main_window.py:230
+#: src/browser/edit_lists_window.py:77 src/browser/main_window.py:231
 msgid "Are you sure you want to close the window?"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:80 src/browser/main_window.py:233
-#: src/browser/main_window.py:885 src/browser/main_window.py:899
-#: src/browser/main_window.py:917 src/browser/main_window.py:931
-#: src/browser/main_window.py:946 src/browser/move_reminders_window.py:94
+#: src/browser/edit_lists_window.py:80 src/browser/main_window.py:234
+#: src/browser/main_window.py:901 src/browser/main_window.py:915
+#: src/browser/main_window.py:933 src/browser/main_window.py:947
+#: src/browser/main_window.py:962 src/browser/move_reminders_window.py:94
 msgid "Yes"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:97 src/browser/main_window.py:433
+#: src/browser/edit_lists_window.py:97 src/browser/main_window.py:434
 #: src/browser/move_reminders_window.py:44
 msgid "Local"
 msgstr ""
@@ -806,145 +806,145 @@ msgstr ""
 msgid "No reminders match your search"
 msgstr ""
 
-#: src/browser/main_window.py:248
+#: src/browser/main_window.py:249
 msgid "Does not repeat"
 msgstr ""
 
-#: src/browser/main_window.py:251
+#: src/browser/main_window.py:252
 msgid "minute"
 msgstr ""
 
-#: src/browser/main_window.py:253
+#: src/browser/main_window.py:254
 msgid "minutes"
 msgstr ""
 
-#: src/browser/main_window.py:256
+#: src/browser/main_window.py:257
 msgid "hour"
 msgstr ""
 
-#: src/browser/main_window.py:258
+#: src/browser/main_window.py:259
 msgid "hours"
 msgstr ""
 
-#: src/browser/main_window.py:261
+#: src/browser/main_window.py:262
 msgid "day"
 msgstr ""
 
-#: src/browser/main_window.py:263
+#: src/browser/main_window.py:264
 msgid "days"
 msgstr ""
 
 #. Translators: This is an abbreviation for Monday
-#: src/browser/main_window.py:268
+#: src/browser/main_window.py:269
 msgid "M"
 msgstr ""
 
 #. Translators: This is an abbreviation for Tuesday
-#: src/browser/main_window.py:270
+#: src/browser/main_window.py:271
 msgid "Tu"
 msgstr ""
 
 #. Translators: This is an abbreviation for Wednesday
-#: src/browser/main_window.py:272
+#: src/browser/main_window.py:273
 msgid "W"
 msgstr ""
 
 #. Translators: This is an abbreviation for Thursday
-#: src/browser/main_window.py:274
+#: src/browser/main_window.py:275
 msgid "Th"
 msgstr ""
 
 #. Translators: This is an abbreviation for Friday
-#: src/browser/main_window.py:276
+#: src/browser/main_window.py:277
 msgid "F"
 msgstr ""
 
 #. Translators: This is an abbreviation for Saturday
-#: src/browser/main_window.py:278
+#: src/browser/main_window.py:279
 msgid "Sa"
 msgstr ""
 
 #. Translators: This is an abbreviation for Sunday
-#: src/browser/main_window.py:280
+#: src/browser/main_window.py:281
 msgid "Su"
 msgstr ""
 
-#: src/browser/main_window.py:286
+#: src/browser/main_window.py:287
 msgid "week"
 msgstr ""
 
-#: src/browser/main_window.py:288
+#: src/browser/main_window.py:289
 msgid "weeks"
 msgstr ""
 
-#: src/browser/main_window.py:294
+#: src/browser/main_window.py:295
 msgid "until"
 msgstr ""
 
 #. Translators: This is a noun, preceded by a number to represent the number of occurrences of something
-#: src/browser/main_window.py:297
+#: src/browser/main_window.py:298
 msgid "time"
 msgstr ""
 
 #. Translators: This is a noun, preceded by a number to represent the number of occurrences of something
-#: src/browser/main_window.py:300
+#: src/browser/main_window.py:301
 msgid "times"
 msgstr ""
 
 #. Translators: This is a adjective, followed by a number to represent how often something occurs
-#: src/browser/main_window.py:305
+#: src/browser/main_window.py:306
 msgid "Every"
 msgstr ""
 
-#: src/browser/main_window.py:341
+#: src/browser/main_window.py:342
 msgid "Today"
 msgstr ""
 
-#: src/browser/main_window.py:343
+#: src/browser/main_window.py:344
 msgid "Tomorrow"
 msgstr ""
 
-#: src/browser/main_window.py:345
+#: src/browser/main_window.py:346
 msgid "Yesterday"
 msgstr ""
 
-#: src/browser/main_window.py:857
+#: src/browser/main_window.py:873
 #, python-brace-format
 msgid "Searching '{text}'"
 msgstr ""
 
-#: src/browser/main_window.py:864
+#: src/browser/main_window.py:880
 msgid "Start typing to search"
 msgstr ""
 
-#: src/browser/main_window.py:882
+#: src/browser/main_window.py:898
 msgid ""
 "Are you sure you want to mark the currently selected reminder(s) as complete?"
 msgstr ""
 
-#: src/browser/main_window.py:896
+#: src/browser/main_window.py:912
 msgid ""
 "Are you sure you want to mark the currently selected reminder(s) as "
 "incomplete?"
 msgstr ""
 
-#: src/browser/main_window.py:914
+#: src/browser/main_window.py:930
 msgid ""
 "Are you sure you want to mark the currently selected reminder(s) as "
 "important?"
 msgstr ""
 
-#: src/browser/main_window.py:928
+#: src/browser/main_window.py:944
 msgid ""
 "Are you sure you want to mark the currently selected reminder(s) as "
 "unimportant?"
 msgstr ""
 
-#: src/browser/main_window.py:942
+#: src/browser/main_window.py:958
 msgid "Are you sure you want to remove the currently selected reminder(s)?"
 msgstr ""
 
-#: src/browser/main_window.py:943
+#: src/browser/main_window.py:959
 msgid "This cannot be undone."
 msgstr ""
 

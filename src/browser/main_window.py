@@ -174,7 +174,8 @@ class MainWindow(Adw.ApplicationWindow):
         self.set_selecting(True)
         for reminder in self.reminder_lookup_dict.values():
             reminder.set_selectable(True)
-        self.reminders_list.select_all()
+            if reminder.get_sensitive():
+                self.reminders_list.select_row(reminder)
 
     def selected_changed(self, list_box = None):
         selected = self.reminders_list.get_selected_rows()
@@ -583,6 +584,9 @@ class MainWindow(Adw.ApplicationWindow):
         reminder.set_past(False)
         retval = self.task_list_filter(reminder.options['user-id'], reminder.options['list-id'])
         reminder.set_sensitive(retval)
+        if not retval:
+            self.reminders_list.unselect_row(reminder)
+            reminder.set_selectable(False)
         return retval
 
     def upcoming_filter(self, reminder):
@@ -593,6 +597,9 @@ class MainWindow(Adw.ApplicationWindow):
         else:
             retval = False
         reminder.set_sensitive(retval)
+        if not retval:
+            self.reminders_list.unselect_row(reminder)
+            reminder.set_selectable(False)
         return retval
 
     def past_filter(self, reminder):
@@ -604,6 +611,9 @@ class MainWindow(Adw.ApplicationWindow):
         else:
             retval = False
         reminder.set_sensitive(retval)
+        if not retval:
+            self.reminders_list.unselect_row(reminder)
+            reminder.set_selectable(False)
         return retval
 
     def completed_filter(self, reminder):
@@ -613,6 +623,9 @@ class MainWindow(Adw.ApplicationWindow):
         else:
             retval = False
         reminder.set_sensitive(retval)
+        if not retval:
+            self.reminders_list.unselect_row(reminder)
+            reminder.set_selectable(False)
         return retval
 
     def sort_func(self, row1, row2):
@@ -737,6 +750,9 @@ class MainWindow(Adw.ApplicationWindow):
             reminder.set_past(False)
 
         reminder.set_sensitive(retval)
+        if not retval:
+            self.reminders_list.unselect_row(reminder)
+            reminder.set_selectable(False)
 
         return retval
 
