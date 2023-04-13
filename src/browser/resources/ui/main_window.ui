@@ -330,18 +330,22 @@
                                       <class name="select-options"/>
                                     </style>
                                     <child>
-                                      <object class="GtkButton" id="cancel_btn">
-                                        <property name="hexpand">true</property>
-                                        <property name="label" translatable="yes">Cancel</property>
-                                        <signal name="clicked" handler="on_cancel" swapped="no"/>
-                                        <style>
-                                          <class name="flat"/>
-                                        </style>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkSeparator">
-                                        <property name="orientation">vertical</property>
+                                      <object class="GtkBox">
+                                        <child>
+                                          <object class="GtkButton" id="cancel_btn">
+                                            <property name="hexpand">true</property>
+                                            <property name="label" translatable="yes">Cancel</property>
+                                            <signal name="clicked" handler="on_cancel" swapped="no"/>
+                                            <style>
+                                              <class name="flat"/>
+                                            </style>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkSeparator">
+                                            <property name="orientation">vertical</property>
+                                          </object>
+                                        </child>
                                       </object>
                                     </child>
                                     <child>
@@ -474,14 +478,18 @@
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkButton" id="remove_btn">
-                                        <property name="hexpand">true</property>
-                                        <property name="label" translatable="yes">Remove</property>
-                                        <signal name="clicked" handler="selected_remove" swapped="no"/>
-                                        <style>
-                                          <class name="flat"/>
-                                          <class name="destructive"/>
-                                        </style>
+                                      <object class="GtkBox">
+                                        <child>
+                                          <object class="GtkButton" id="remove_btn">
+                                            <property name="hexpand">true</property>
+                                            <property name="label" translatable="yes">Remove</property>
+                                            <signal name="clicked" handler="selected_remove" swapped="no"/>
+                                            <style>
+                                              <class name="flat"/>
+                                              <class name="destructive"/>
+                                            </style>
+                                          </object>
+                                        </child>
                                       </object>
                                     </child>
                                   </object>

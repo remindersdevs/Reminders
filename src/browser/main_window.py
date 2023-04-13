@@ -96,6 +96,7 @@ class MainWindow(Adw.ApplicationWindow):
         self.create_action('search', lambda *args: self.search_revealer.set_reveal_child(True), accels=['<Ctrl>f'])
         self.create_action('edit-task-lists', lambda *args: self.edit_lists(), accels=['<Ctrl>l'])
         self.create_action('new-reminder', lambda *args: self.new_reminder(), accels=['<Ctrl>n'])
+        self.create_action('select-all', lambda *args: self.select_all(), accels=['<Ctrl>a'])
         self.search_entry.connect('stop-search', lambda *args: self.search_revealer.set_reveal_child(False))
         self.settings_create_action('sort')
         self.settings_create_action('descending-sort')
@@ -132,6 +133,10 @@ class MainWindow(Adw.ApplicationWindow):
 
         self.reminders_list.connect('selected-rows-changed', self.selected_changed)
 
+        key_pressed = Gtk.EventControllerKey()
+        key_pressed.connect('key-released', self.key_released)
+        self.add_controller(key_pressed)
+
         self.app.settings.connect('changed::time-format', lambda *args: self.set_time_format())
         self.set_application(self.app)
 
@@ -142,6 +147,10 @@ class MainWindow(Adw.ApplicationWindow):
     @time_format.setter
     def time_format(self, value):
         self._time_format = value
+
+    def key_released(self, event, keyval, keycode, state):
+        if keyval == Gdk.KEY_Escape:
+            self.set_selecting(False)
 
     def set_selecting(self, selecting):
         if selecting:
@@ -160,6 +169,12 @@ class MainWindow(Adw.ApplicationWindow):
                     reminder.set_selectable(False)
                 self.multiple_select_revealer.set_reveal_child(False)
                 self.add_reminder_revealer.set_reveal_child(True)
+
+    def select_all(self):
+        self.set_selecting(True)
+        for reminder in self.reminder_lookup_dict.values():
+            reminder.set_selectable(True)
+        self.reminders_list.select_all()
 
     def selected_changed(self, list_box = None):
         selected = self.reminders_list.get_selected_rows()
@@ -755,14 +770,15 @@ class MainWindow(Adw.ApplicationWindow):
     def selected_remove_reminders(self):
         try:
             for reminder in self.reminders_list.get_selected_rows():
-                self.app.run_service_method(
-                    'RemoveReminder',
-                    GLib.Variant(
-                        '(ss)', (info.app_id, reminder.id)
+                if reminder.get_sensitive():
+                    self.app.run_service_method(
+                        'RemoveReminder',
+                        GLib.Variant(
+                            '(ss)', (info.app_id, reminder.id)
+                        )
                     )
-                )
-                self.reminders_list.remove(reminder)
-                self.reminder_lookup_dict.pop(reminder_id)
+                    self.reminders_list.remove(reminder)
+                    self.reminder_lookup_dict.pop(reminder_id)
             self.set_selecting(False)
         except Exception as error:
             logger.error(error)
@@ -770,7 +786,7 @@ class MainWindow(Adw.ApplicationWindow):
     def selected_change_important(self, important):
         try:
             for reminder in self.reminders_list.get_selected_rows():
-                if reminder.options['important'] != important:
+                if reminder.get_sensitive() and reminder.options['important'] != important:
                     results = self.app.run_service_method(
                         'UpdateReminder',
                         GLib.Variant(
@@ -795,7 +811,7 @@ class MainWindow(Adw.ApplicationWindow):
     def selected_change_completed(self, completed):
         try:
             for reminder in self.reminders_list.get_selected_rows():
-                if reminder.completed != completed:
+                if reminder.get_sensitive() and reminder.completed != completed:
                     results = self.app.run_service_method(
                         'UpdateCompleted',
                         GLib.Variant(

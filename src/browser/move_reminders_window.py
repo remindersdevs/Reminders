@@ -55,7 +55,7 @@ class MoveRemindersWindow(Adw.Window):
             options = {}
             options['user-id'], options['list-id'] = self.rows[selected]
             for reminder in self.reminders:
-                if reminder.options['list-id'] != options['list-id'] or reminder.options['user-id'] != options['user-id']:
+                if reminder.get_sensitive() and reminder.options['list-id'] != options['list-id'] or reminder.options['user-id'] != options['user-id']:
                     results = self.win.app.run_service_method(
                         'UpdateReminder',
                         GLib.Variant(
