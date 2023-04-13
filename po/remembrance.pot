@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-13 17:33-0400\n"
+"POT-Creation-Date: 2023-04-13 17:50-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -202,8 +202,8 @@ msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:86
 msgid ""
-"Add support for selecting and editing multiple reminders with Ctrl + "
-"Clicking or pressing and holding a reminder"
+"Add support for selecting and editing multiple reminders (Start selecting "
+"with Ctrl + LMB or by pressing and holding a reminder)"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:87
