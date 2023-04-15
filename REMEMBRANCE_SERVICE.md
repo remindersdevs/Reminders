@@ -1,4 +1,4 @@
-# Reminders DBus Service Info, version 3.3
+# Reminders DBus Service Info, version 3.5
 name: io.github.dgsasha.Remembrance.Service2
 
 interface: io.github.dgsasha.Remembrance.Service2.Reminders
@@ -314,6 +314,13 @@ Emitted when the dictionary of synced lists is changed
     - list-ids
         - Type: a{sas}
         - Each key is a user id and each value is an array of the list ids that are synced on that account
+
+## MSError
+Emitted when making a remote change failed
+- Returns (s)
+    - error
+        - Type: s
+        - This is a stack trace of the error
 
 ## app-id parameter
 This parameter should be set to the id of your app, although it can be left empty. This will be returned in a signal after the reminder is updated, which will let you ignore the signal if you initiated the update.

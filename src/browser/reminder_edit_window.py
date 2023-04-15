@@ -477,8 +477,6 @@ class ReminderEditWindow(Adw.Window):
         except Exception as error:
             logger.error(error)
 
-        self.win.set_busy(False, self)
-
     @Gtk.Template.Callback()
     def repeat_day_changed(self, calendar = None, data = None):
         self.repeat_until_label.set_label(self.win.get_date_label(self.repeat_until_calendar.get_date(), True))
@@ -630,5 +628,4 @@ class ReminderEditWindow(Adw.Window):
             if self.entry_check_empty():
                 return
 
-            self.win.set_busy(True, self)
-            GLib.idle_add(self.do_save)
+            self.do_save()

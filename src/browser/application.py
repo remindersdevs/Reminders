@@ -32,7 +32,7 @@ from remembrance.browser.preferences import PreferencesWindow
 from remembrance.browser.shortcuts_window import ShortcutsWindow
 
 # Always update this when new features are added that require the service to restart
-MIN_SERVICE_VERSION = 3.3
+MIN_SERVICE_VERSION = 3.5
 
 class Remembrance(Adw.Application):
     '''Application for the frontend'''
@@ -144,6 +144,7 @@ class Remembrance(Adw.Application):
         self.settings.bind('width', self.win, 'default-width', Gio.SettingsBindFlags.DEFAULT)
         self.settings.bind('height', self.win, 'default-height', Gio.SettingsBindFlags.DEFAULT)
         self.settings.bind('is-maximized', self.win, 'maximized', Gio.SettingsBindFlags.DEFAULT)
+        self.service.connect('g-signal::MSError', self.error_cb)
         self.service.connect('g-signal::CompletedUpdated', self.reminder_completed_cb)
         self.service.connect('g-signal::ReminderRemoved', self.reminder_deleted_cb)
         self.service.connect('g-signal::ReminderUpdated', self.reminder_updated_cb)
@@ -158,6 +159,11 @@ class Remembrance(Adw.Application):
         self.create_action('about', self.show_about)
         Gtk.StyleContext.add_provider_for_display(self.win.get_display(), self.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         self.win.present()
+
+    def error_cb(self, proxy, sender_name, signal_name, parameters):
+        error = parameters.unpack()[0]
+        error_dialog = ErrorDialog(self, _('Something went wrong'), _('Changes were not saved. This bug should be reported.'), error)
+        self.refresh_reminders()
 
     def notification_clicked_cb(self, action, variant, data = None):
         self.page = 'past'

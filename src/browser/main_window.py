@@ -451,7 +451,7 @@ class MainWindow(Adw.ApplicationWindow):
 
         for user_id in self.task_list_names.keys():
             for list_id, name in self.task_list_names[user_id].items():
-                if name not in duplicated:
+                if name not in duplicated or user_id not in self.emails.keys():
                     self.string_list.append(f'{name}')
                 else:
                     self.string_list.append(f'{name} ({self.emails[user_id]})')

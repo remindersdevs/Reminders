@@ -79,7 +79,16 @@
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
   <releases>
-      <release version="3.4" date="2023-04-13">
+    <release version="3.5" date="2023-04-15">
+      <description>
+        <ul>
+          <li>Don't freeze UI when updating MS reminders</li>
+          <li>Fix issues with deleting lists</li>
+          <li>Fix issues when queueing remote changes while internet is disconnected</li>
+        </ul>
+      </description>
+    </release>
+    <release version="3.4" date="2023-04-13">
       <description>
         <ul>
           <li>Stop showing completed reminders on upcoming page</li>

@@ -163,9 +163,16 @@ class ListRow(Adw.EntryRow):
         try:
             list_name = self.get_text()
             count = 0
-            while list_name in self.win.all_task_list_names[self.user_id].values():
-                count += 1
-                list_name = f'{self.get_text()} ({count})'
+            while True:
+                duplicate = False
+                for lists in self.win.all_task_list_names.values():
+                    if list_name in lists.values():
+                        count += 1
+                        list_name = f'{self.get_text()} ({count})'
+                        duplicate = True
+                        break
+                if not duplicate:
+                    break
             self.list_id = self.win.update_list(self.user_id, list_name, self.list_id)
             self.list_name = list_name
             self.save_button.set_sensitive(False)
@@ -180,7 +187,7 @@ class ListRow(Adw.EntryRow):
     def show_delete_dialog(self):
         list_name = f'<b>{self.get_text()}</b>'
         confirm_dialog = Adw.MessageDialog(
-            transient_for=self.win,
+            transient_for=self.edit_win,
             heading=_('Remove list?'),
             body=_(f'This will remove {list_name} and cannot be undone.'),
             body_use_markup=True

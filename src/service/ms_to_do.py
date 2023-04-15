@@ -280,7 +280,7 @@ class MSToDo():
             traceback.print_exception(error)
             raise error
 
-    def create_list(self, user_id, list_name, list_id):
+    def create_list(self, user_id, list_name):
         content = {'displayName': list_name}
         try:
             if user_id not in self.tokens.keys():
@@ -297,7 +297,7 @@ class MSToDo():
             traceback.print_exception(error)
             raise error
 
-    def update_list(self, user_id, ms_id, list_name, list_id):
+    def update_list(self, user_id, ms_id, list_name):
         content = {'displayName': list_name}
         try:
             if user_id not in self.tokens.keys():
@@ -313,7 +313,7 @@ class MSToDo():
             traceback.print_exception(error)
             raise error
 
-    def delete_list(self, user_id, ms_id, list_id):
+    def delete_list(self, user_id, ms_id):
         try:
             if user_id not in self.tokens.keys():
                 self.get_tokens()

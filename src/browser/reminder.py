@@ -327,12 +327,10 @@ class Reminder(Adw.ExpanderRow):
             self.win.reminders_list.invalidate_sort()
         except Exception as error:
             logger.error(error)
-        self.win.set_busy(False)
 
     @Gtk.Template.Callback()
     def update_completed(self, button = None):
-        self.win.set_busy(True)
-        GLib.idle_add(self.do_update_completed)
+        self.do_update_completed()
 
     @Gtk.Template.Callback()
     def on_remove(self, button):

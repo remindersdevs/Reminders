@@ -210,6 +210,9 @@ XML = f'''<node name="/">
     <signal name='MSSignedOut'>
         <arg name='user-id' direction='out' type='s'/>
     </signal>
+    <signal name='MSError'>
+        <arg name='error' direction='out' type='s'/>
+    </signal>
 </interface>
 </node>'''
 
@@ -258,6 +261,9 @@ class Reminders():
             'RemoveList': self.delete_list
         }
         self._register()
+
+    def emit_error(self, error):
+        self.do_emit('MSError', GLib.Variant('(s)', ("".join(traceback.format_exception(error)),)))
 
     def update_reminder_ids(self, local, ms, list_ids):
         if local != self.local:
@@ -354,10 +360,19 @@ class Reminders():
         list_names = {}
         list_ids = {}
 
+        updated_reminder_ids = self.queue.get_updated_reminder_ids()
+        removed_reminder_ids = self.queue.get_removed_reminder_ids()
+
+        updated_list_ids = self.queue.get_updated_list_ids()
+        removed_list_ids = self.queue.get_removed_list_ids()
+
         for user_id in lists.keys():
             list_names[user_id] = {}
             for task_list in lists[user_id]:
                 list_id = None
+
+                if task_list['id'] in removed_list_ids:
+                    continue
 
                 if task_list['default']:
                     list_id = user_id
@@ -377,13 +392,16 @@ class Reminders():
                     'user-id': user_id
                 }
 
-                list_names[user_id][list_id] = task_list['name']
+                list_names[user_id][list_id] = task_list['name'] 
 
                 if user_id not in self.synced_ids or ('all' not in self.synced_ids[user_id] and list_id not in self.synced_ids[user_id]):
                     continue
 
                 for task in task_list['tasks']:
                     task_id = task['id']
+                    if task_id in removed_reminder_ids:
+                        continue
+
                     reminder_id = None
                     for old_reminder_id, old_reminder in old_ms.items():
                         if old_reminder['ms-id'] == task_id:
@@ -397,6 +415,8 @@ class Reminders():
                     is_future = timestamp > floor(time.time())
 
                     if reminder_id in old_ms:
+                        if reminder_id in updated_reminder_ids:
+                            continue
                         reminder = old_ms[reminder_id].copy()
                     else:
                         reminder = {}
@@ -431,16 +451,12 @@ class Reminders():
 
                     ms_reminders[reminder_id] = reminder
 
-        for reminder_id in self.queue.get_updated_reminder_ids():
-            if reminder_id in old_ms:
-                ms_reminders[reminder_id] = old_ms[reminder_id]
+        for reminder_id in updated_reminder_ids:
+            if reminder_id in old_ms.keys():
+                ms_reminders[reminder_id] = old_ms[reminder_id].copy()
 
-        for reminder_id in self.queue.get_removed_reminder_ids():
-            if reminder_id in ms_reminders:
-                ms_reminders.pop(reminder_id)
-
-        for list_id in self.queue.get_updated_list_ids():
-            if list_id in old_list_ids:
+        for list_id in updated_list_ids:
+            if list_id in old_list_ids.keys():
                 user_id = old_list_ids[list_id]['user-id']
                 if user_id in old_lists and list_id in old_lists[user_id]:
                     list_ids[list_id] = old_list_ids[list_id]
@@ -448,14 +464,108 @@ class Reminders():
                         list_names[user_id] = {}
                     list_names[user_id][list_id] = old_lists[user_id][list_id]
 
-        for list_id in self.queue.get_removed_list_ids():
-            if list_id in list_ids:
-                user_id = list_ids[list_id]['user-id']
-                if user_id in list_names and list_id in list_names[user_id]:
-                    list_names[user_id].pop(list_id)
-                list_ids.pop(list_id)
-
         return ms_reminders, list_names, list_ids
+
+    def _ms_create_reminder(self, reminder_id, reminder_dict, dictionary):
+        try:
+            try:
+                self.queue.load()
+                ms_id = self._to_ms_task(reminder_id, reminder_dict, updating=False)
+            except requests.ConnectionError:
+                ms_id = None
+                self.queue.add_reminder(reminder_id)
+
+            if ms_id is not None:
+                reminder_dict['ms-id'] = ms_id
+                dictionary[reminder_id] = reminder_dict
+                self._save_reminders()
+        except Exception as error:
+            traceback.print_exception(error)
+            self.emit_error(error)
+
+    def _ms_update_reminder(self, reminder_id, reminder_dict, old_user_id, old_task_list, dictionary):
+        try:
+            try:
+                self.queue.load()
+                ms_id = self._to_ms_task(reminder_id, reminder_dict, old_user_id, old_task_list)
+            except requests.ConnectionError:
+                ms_id = None
+                args = [old_user_id, old_task_list]
+                self.queue.update_reminder(reminder_id, args)
+
+            if ms_id is not None:
+                reminder_dict['ms-id'] = ms_id
+                dictionary[reminder_id] = reminder_dict
+                self._save_reminders(dictionary)
+        except Exception as error:
+            traceback.print_exception(error)
+            self.emit_error(error)
+
+    def _ms_update_completed(self, reminder_id, reminder_dict):
+        try:
+            try:
+                self.queue.load()
+                self._to_ms_task(reminder_id, reminder_dict, only_completed=True)
+            except requests.ConnectionError:
+                self.queue.update_completed(reminder_id)
+        except Exception as error:
+            traceback.print_exception(error)
+            self.emit_error(error)
+
+    def _ms_remove_reminder(self, reminder_id, task_id, user_id, task_list):
+        try:
+            try:
+                self.queue.load()
+                self.to_do.remove_task(user_id, task_list, task_id)
+            except requests.ConnectionError as error:
+                self.queue.remove_reminder(reminder_id, user_id, task_list, task_id)
+        except Exception as error:
+            traceback.print_exception(error)
+            self.emit_error(error)
+
+    def _ms_create_list(self, user_id, list_name, list_id):
+        try:
+            ms_id = None
+            try:
+                self.queue.load()
+                ms_id = self.to_do.create_list(user_id, list_name)
+            except requests.ConnectionError:
+                self.queue.add_list(list_id)
+
+            self.list_ids[list_id] = {
+                'ms-id': '' if ms_id is None else ms_id,
+                'user-id': user_id
+            }
+            self._save_list_ids()
+        except Exception as error:
+            traceback.print_exception(error)
+            self.emit_error(error)
+
+    def _ms_rename_list(self, user_id, new_name, list_id):
+        try:
+            try:
+                self.queue.load()
+                ms_id = self.list_ids[list_id]['ms-id']
+                self.to_do.update_list(user_id, ms_id, new_name)
+            except requests.ConnectionError:
+                self.queue.update_list(list_id)
+        except Exception as error:
+            traceback.print_exception(error)
+            self.emit_error(error)
+
+    def _ms_delete_list(self, user_id, list_id):
+        try:
+            try:
+                self.queue.load()
+                ms_id = self.list_ids[list_id]['ms-id']
+                self.to_do.delete_list(user_id, ms_id)
+            except requests.ConnectionError:
+                self.queue.remove_list(list_id, user_id, ms_id)
+            self.list_ids.pop(list_id)
+            self._save_list_ids()
+        except Exception as error:
+            traceback.print_exception(error)
+            self.emit_error(error)
 
     def _to_ms_task(self, reminder_id, reminder = None, old_user_id = None, old_task_list = None, updating = None, only_completed = False):
         if reminder is None:
@@ -877,11 +987,31 @@ class Reminders():
         list_ids = {}
         ms_list_names = {}
         list_names = {}
+
+        try:
+            if os.path.isfile(TASK_LISTS_FILE):
+                with open(TASK_LISTS_FILE, newline='') as jsonfile:
+                    all_list_names = json.load(jsonfile)
+                    ms_list_names = all_list_names.copy()
+                    if 'local' in ms_list_names.keys():
+                        ms_list_names.pop('local')
+                    list_names['local'] = all_list_names['local'] if 'local' in all_list_names.keys() else {}
+        except:
+            pass
+
+        if 'local' not in list_names.keys():
+            list_names['local'] = {}
+        if 'local' not in list_names['local'].keys():
+            list_names['local']['local'] = _('Local Reminders')
+
         if os.path.isfile(REMINDERS_FILE):
             with open(REMINDERS_FILE, newline='') as csvfile:
                 reader = csv.DictReader(csvfile)
 
                 for row in reader:
+                    list_id = self._get_str(row, 'list-id')
+                    if list_id not in list_names['local'].keys():
+                        continue
                     reminder_id = row['id']
                     timestamp = self._get_int(row, 'timestamp')
                     repeat_type = self._get_int(row, 'repeat-type')
@@ -898,7 +1028,7 @@ class Reminders():
                     local[reminder_id]['old-timestamp'] = timestamp if timestamp < floor(time.time()) else self._get_int(row, 'old-timestamp')
                     local[reminder_id]['created-timestamp'] = self._get_int(row, 'created-timestamp')
                     local[reminder_id]['updated-timestamp'] = self._get_int(row, 'updated-timestamp')
-                    local[reminder_id]['list-id'] = self._get_str(row, 'list-id')
+                    local[reminder_id]['list-id'] = list_id
 
                     if repeat_type != 0:
                         local[reminder_id]['repeat-frequency'] = self._get_int(row, 'repeat-frequency')
@@ -914,19 +1044,6 @@ class Reminders():
                         'ms-id': row['ms-id'],
                         'user-id': row['user-id']
                     }
-
-        if os.path.isfile(TASK_LISTS_FILE):
-            with open(TASK_LISTS_FILE, newline='') as jsonfile:
-                all_list_names = json.load(jsonfile)
-                ms_list_names = all_list_names.copy()
-                if 'local' in ms_list_names.keys():
-                    ms_list_names.pop('local')
-                list_names['local'] = all_list_names['local'] if 'local' in all_list_names.keys() else {}
-
-        if 'local' not in list_names.keys():
-            list_names['local'] = {}
-        if 'local' not in list_names['local'].keys():
-            list_names['local']['local'] = _('Local Reminders')
 
         old_ms = self._get_saved_ms_reminders()
         ms, ms_list_names, list_ids = self._sync_ms(old_ms, ms_list_names, list_ids, notify_past)
@@ -945,12 +1062,11 @@ class Reminders():
                 dictionary[reminder_id]['completed'] = completed
                 dictionary[reminder_id]['updated-timestamp'] = now
                 self._save_reminders(dictionary)
-                try:
-                    self.queue.load()
-                    self._to_ms_task(reminder_id, dictionary[reminder_id], only_completed=True)
-                except requests.ConnectionError:
-                    self.queue.update_completed(reminder_id)
+
+                GLib.idle_add(lambda *args: self._ms_update_completed(reminder_id, dictionary[reminder_id]))
+
                 if completed:
+                    self.app.withdraw_notification(reminder_id)
                     self._remove_countdown(reminder_id)
                 else:
                     self._set_countdown(reminder_id)
@@ -968,13 +1084,9 @@ class Reminders():
             if reminder_id in dictionary:
                 if dictionary == self.ms:
                     task_id = self.ms[reminder_id]['ms-id']
-                    user_id = dictionary[reminder_id]['user-id']
-                    task_list = dictionary[reminder_id]['list-id']
-                    try:
-                        self.queue.load()
-                        self.to_do.remove_task(user_id, task_list, task_id)
-                    except requests.ConnectionError as error:
-                        self.queue.remove_reminder(reminder_id)
+                    user_id = self.ms[reminder_id]['user-id']
+                    task_list = self.ms[reminder_id]['list-id']
+                    GLib.idle_add(lambda *args: self._ms_remove_reminder(reminder_id, task_id, user_id, task_list))
                 dictionary.pop(reminder_id)
                 self._save_reminders(dictionary)
                 break
@@ -1010,19 +1122,12 @@ class Reminders():
 
         dictionary = self.local if reminder_dict['user-id'] == 'local' else self.ms
 
-        try:
-            self.queue.load()
-            ms_id = self._to_ms_task(reminder_id, reminder_dict)
-        except requests.ConnectionError:
-            ms_id = None
-            self.queue.add_reminder(reminder_id)
-
-        reminder_dict['ms-id'] = ms_id if ms_id is not None else ''
+        GLib.idle_add(lambda *args: self._ms_create_reminder(reminder_id, reminder_dict, dictionary))
 
         dictionary[reminder_id] = reminder_dict
         self._set_countdown(reminder_id)
         self._reminder_updated(app_id, reminder_id, reminder_dict)
-        self._save_reminders()
+        self._save_reminders(dictionary)
 
         return GLib.Variant('(su)', (reminder_id, now))
 
@@ -1058,15 +1163,7 @@ class Reminders():
         old_task_list = old_dict[reminder_id]['list-id'] if old_dict[reminder_id]['list-id'] != reminder_dict['list-id'] else None
         old_user_id = old_dict[reminder_id]['user-id'] if old_dict[reminder_id]['user-id'] != reminder_dict['user-id'] else None
 
-        try:
-            self.queue.load()
-            ms_id = self._to_ms_task(reminder_id, reminder_dict, old_user_id, old_task_list)
-        except requests.ConnectionError:
-            ms_id = None
-            args = [old_user_id, old_task_list]
-            self.queue.update_reminder(reminder_id, args)
-
-        reminder_dict['ms-id'] = ms_id if ms_id is not None else ''
+        GLib.idle_add(lambda *args: self._ms_update_reminder(reminder_id, reminder_dict, old_user_id, old_task_list, dictionary))
 
         if dictionary != old_dict:
             old_dict.pop(reminder_id)
@@ -1121,23 +1218,12 @@ class Reminders():
     def create_list(self, app_id, user_id, list_name):
         if user_id in self.list_names:
             list_id = self._do_generate_id()
-            ms_id = None
             if user_id != 'local':
                 if user_id not in self.synced_ids:
                     self.synced_ids[user_id] = []
                 self.synced_ids[user_id].append(list_id)
                 self.set_enabled_lists(self.synced_ids)
-                try:
-                    self.queue.load()
-                    ms_id = self.to_do.create_list(user_id, list_name, list_id)
-                except requests.ConnectionError:
-                    self.queue.add_list(list_id)
-
-            self.list_ids[list_id] = {
-                'ms-id': '' if ms_id is None else ms_id,
-                'user-id': user_id
-            }
-            self._save_list_ids()
+                GLib.idle_add(lambda *args: self._ms_create_list(user_id, list_name, list_id))
 
             self.list_names[user_id][list_id] = list_name
             self._save_lists()
@@ -1147,12 +1233,7 @@ class Reminders():
     def rename_list(self, app_id, user_id, list_id, new_name):
         if user_id in self.list_names and list_id in self.list_names[user_id]:
             if user_id != 'local':
-                try:
-                    self.queue.load()
-                    ms_id = self.list_ids[list_id]['ms-id']
-                    self.to_do.update_list(user_id, ms_id, new_name, list_id)
-                except requests.ConnectionError:
-                    self.queue.update_list(list_id)
+                GLib.idle_add(lambda *args: self._ms_rename_list(user_id, new_name, list_id))
             self.list_names[user_id][list_id] = new_name
             self._save_lists()
             self.do_emit('ListUpdated', GLib.Variant('(ssss)', (app_id, user_id, list_id, new_name)))
@@ -1162,17 +1243,11 @@ class Reminders():
             raise Exception('Tried to remove default list')
         if user_id in self.list_names and list_id in self.list_names[user_id]:
             if user_id != 'local':
-                try:
-                    self.queue.load()
-                    ms_id = self.list_ids[list_id]['ms-id']
-                    self.to_do.delete_list(user_id, ms_id, list_id)
-                except requests.ConnectionError:
-                    self.queue.remove_list(list_id)
-                self.list_ids.pop(list_id)
-                self._save_list_ids()
+                GLib.idle_add(lambda *args: self._ms_delete_list(user_id, list_id))
             self.list_names[user_id].pop(list_id)
             self._save_lists()
             self.do_emit('ListRemoved', GLib.Variant('(sss)', (app_id, user_id, list_id)))
+            GLib.idle_add(self.refresh)
 
     def login_todo(self):
         user_id = self.to_do.login()

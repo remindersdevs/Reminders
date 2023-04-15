@@ -19,8 +19,9 @@ from gettext import gettext as _
 
 RELEASE_NOTES = '''
 <ul>
-    <li>Stop showing completed reminders on upcoming page</li>
-    <li>Cross out completed reminders on all reminders page</li>
+    <li>Don't freeze UI when updating MS reminders</li>
+    <li>Fix issues with deleting lists</li>
+    <li>Fix issues when queueing remote changes while internet is disconnected</li>
 </ul>
 '''
 
