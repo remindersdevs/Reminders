@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="move_reminders_window" parent="AdwWindow">
-    <property name="title" translatable="yes">Move Reminders</property>
+    <property name="title" translatable="yes">Move Selected Reminder(s)</property>
     <property name="default-width">450</property>
     <property name="width-request">360</property>
     <property name="default-height">500</property>

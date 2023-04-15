@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-15 16:17-0400\n"
+"POT-Creation-Date: 2023-04-15 16:23-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -446,7 +446,7 @@ msgid "_Last Updated"
 msgstr ""
 
 #: src/browser/resources/ui/move_reminders_window.ui:4
-msgid "Move Reminders"
+msgid "Move Selected Reminder(s)"
 msgstr ""
 
 #: src/browser/resources/ui/ms_user_row.ui:19
