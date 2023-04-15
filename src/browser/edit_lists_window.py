@@ -156,10 +156,6 @@ class ListRow(Adw.EntryRow):
         self.delete_button.set_sensitive(not self.list_id == self.user_id)
 
     def update(self):
-        self.win.set_busy(True, self.edit_win)
-        GLib.idle_add(self.do_update)
-
-    def do_update(self):
         try:
             list_name = self.get_text()
             count = 0
@@ -181,8 +177,6 @@ class ListRow(Adw.EntryRow):
             self.set_text(self.list_name)
         except Exception as error:
             logger.error(error)
-
-        self.win.set_busy(False, self.edit_win)
 
     def show_delete_dialog(self):
         list_name = f'<b>{self.get_text()}</b>'

@@ -18,6 +18,8 @@ import json
 import requests
 import traceback
 
+from copy import deepcopy
+
 from remembrance import info
 QUEUE_FILE = f'{info.data_dir}/queue.json'
 
@@ -196,37 +198,39 @@ class Queue():
                 raise error
 
     def load(self):
-        queue = self.queue.copy()
-        list_ids = self.reminders.list_ids.copy()
+        queue = deepcopy(self.queue)
+        list_ids = deepcopy(self.reminders.list_ids)
         ms = self.reminders.ms.copy()
         local = self.reminders.local.copy()
         list_names = self.reminders.list_names
 
         try:
             try:
-                for index, list_id in enumerate(queue['lists']['create']):
+                for list_id in queue['lists']['create']:
                     try:
-                        user_id = list_ids[list_id]['user-id']
-                        list_name = list_names[user_id][list_id]
+                        if list_id in list_ids:
+                            user_id = list_ids[list_id]['user-id']
+                            if list_id in list_names[user_id]:
+                                list_name = list_names[user_id][list_id]
 
-                        new_ms_id = self.to_do.create_list(user_id, list_name)
+                                new_ms_id = self.to_do.create_list(user_id, list_name)
 
-                        if new_ms_id is not None:
-                            list_ids[list_id]['ms-id'] = new_ms_id
+                                if new_ms_id is not None:
+                                    list_ids[list_id]['ms-id'] = new_ms_id
 
                     except requests.ConnectionError as error:
                         raise error
                     except Exception as error:
                         traceback.print_exception(error)
 
-                    self.queue['lists']['create'].pop(index)
+                    self.queue['lists']['create'].remove(list_id)
             except requests.ConnectionError as error:
                 raise error
             except:
                 self.queue['lists']['create'] = []
 
             try:
-                for index, reminder_id in enumerate(queue['reminders']['create']):
+                for reminder_id in queue['reminders']['create']:
                     try:
                         if reminder_id in ms:
                             new_task_id = self.reminders._to_ms_task(reminder_id, ms[reminder_id], updating=False)
@@ -238,14 +242,14 @@ class Queue():
                     except Exception as error:
                         traceback.print_exception(error)
 
-                    self.queue['reminders']['create'].pop(index)
+                    self.queue['reminders']['create'].remove(reminder_id)
             except requests.ConnectionError as error:
                 raise error
             except:
                 self.queue['reminders']['create'] = []
 
             try:
-                for index, reminder_id in enumerate(queue['reminders']['complete']):
+                for reminder_id in queue['reminders']['complete']:
                     try:
                         if reminder_id in ms:
                             self.reminders._to_ms_task(reminder_id, ms[reminder_id], updating=True, only_completed=True)
@@ -255,7 +259,7 @@ class Queue():
                     except Exception as error:
                         traceback.print_exception(error)
 
-                    self.queue['reminders']['complete'].pop(index)
+                    self.queue['reminders']['complete'].remove(reminder_id)
             except requests.ConnectionError as error:
                 raise error
             except:
@@ -282,27 +286,28 @@ class Queue():
                 self.queue['reminders']['update'] = {}
 
             try:
-                for index, list_id in enumerate(queue['lists']['update']):
+                for list_id in queue['lists']['update']:
                     try:
-                        user_id = list_ids[list_id]['user-id']
-                        ms_id = list_ids[list_id]['ms-id']
-                        list_name = list_names[user_id][list_id]
-
-                        self.to_do.update_list(user_id, ms_id, list_name)
+                        if list_id in list_ids:
+                            ms_id = list_ids[list_id]['ms-id']
+                            user_id = list_ids[list_id]['user-id']
+                            if list_id in list_names[user_id]:
+                                list_name = list_names[user_id][list_id]
+                                self.to_do.update_list(user_id, ms_id, list_name)
 
                     except requests.ConnectionError as error:
                         raise error
                     except Exception as error:
                         traceback.print_exception(error)
 
-                    self.queue['lists']['update'].pop(index)
+                    self.queue['lists']['update'].remove(list_id)
             except requests.ConnectionError as error:
                 raise error
             except:
                 self.queue['lists']['update'] = []
 
             try:
-                for index, value in enumerate(queue['reminders']['delete']):
+                for value in queue['reminders']['delete']:
                     try:
                         user_id = value[0]
                         task_list = value[1]
@@ -315,14 +320,14 @@ class Queue():
                     except Exception as error:
                         traceback.print_exception(error)
 
-                    self.queue['reminders']['delete'].pop(index)
+                    self.queue['reminders']['delete'].remove(value)
             except requests.ConnectionError as error:
                 raise error
             except:
                 self.queue['reminders']['delete'] = []
 
             try:
-                for index, value in enumerate(queue['lists']['delete']):
+                for value in queue['lists']['delete']:
                     try:
                         user_id = value[0]
                         ms_id = value[1]
@@ -334,15 +339,17 @@ class Queue():
                     except Exception as error:
                         traceback.print_exception(error)
 
-                    self.queue['lists']['delete'].pop(index)
+                    self.queue['lists']['delete'].remove(value)
             except requests.ConnectionError as error:
                 raise error
             except:
                 self.queue['lists']['delete'] = []
         except requests.ConnectionError as error:
             self.reminders.update_reminder_ids(local, ms, list_ids)
-            self.write()
+            if queue != self.queue:
+                self.write()
             raise error
 
         self.reminders.update_reminder_ids(local, ms, list_ids)
-        self.write()
+        if queue != self.queue:
+            self.write()

@@ -19,6 +19,7 @@ from gettext import gettext as _
 
 RELEASE_NOTES = '''
 <ul>
+    <li>Performance improvements</li>
     <li>Don't freeze UI when updating MS reminders</li>
     <li>Fix issues with deleting lists</li>
     <li>Fix issues when queueing remote changes while internet is disconnected</li>

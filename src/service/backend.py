@@ -234,7 +234,7 @@ class Reminders():
         self.sound.init()
         self.countdowns = Countdowns()
         self.refresh_time = int(self.app.settings.get_string('refresh-frequency').strip('m'))
-        self.app.settings.connect('changed::synced-task-lists', lambda *args: self._synced_task_list_changed())
+        self.synced_changed = self.app.settings.connect('changed::synced-task-lists', lambda *args: self._synced_task_list_changed())
         self.app.settings.connect('changed::refresh-frequency', lambda *args: self._refresh_time_changed())
         try:
             self.queue.load()
@@ -279,7 +279,7 @@ class Reminders():
     def emit_login(self, user_id):
         email = self.to_do.users[user_id]['email']
         self.synced_ids[user_id] = ['all']
-        self.set_enabled_lists(self.synced_ids)
+        self.set_enabled_lists(self.synced_ids, False)
         self.do_emit('MSSignedIn', GLib.Variant('(ss)', (user_id, email)))
         self.refresh(False)
         logger.info('Logged into Microsoft account')
@@ -554,9 +554,9 @@ class Reminders():
 
     def _ms_delete_list(self, user_id, list_id):
         try:
+            ms_id = self.list_ids[list_id]['ms-id']
             try:
                 self.queue.load()
-                ms_id = self.list_ids[list_id]['ms-id']
                 self.to_do.delete_list(user_id, ms_id)
             except requests.ConnectionError:
                 self.queue.remove_list(list_id, user_id, ms_id)
@@ -1220,7 +1220,7 @@ class Reminders():
                 if user_id not in self.synced_ids:
                     self.synced_ids[user_id] = []
                 self.synced_ids[user_id].append(list_id)
-                self.set_enabled_lists(self.synced_ids)
+                self.set_enabled_lists(self.synced_ids, False)
                 GLib.idle_add(lambda *args: self._ms_create_list(user_id, list_name, list_id))
 
             self.list_names[user_id][list_id] = list_name
@@ -1256,7 +1256,7 @@ class Reminders():
         self.to_do.logout(user_id)
         if user_id in self.synced_ids:
             self.synced_ids.pop(user_id)
-            self.set_enabled_lists(self.synced_ids)
+            self.set_enabled_lists(self.synced_ids, False)
         self.do_emit('MSSignedOut', GLib.Variant('(s)', (user_id,)))
         self.refresh()
         logger.info('Logged out of Microsoft account')
@@ -1325,9 +1325,16 @@ class Reminders():
     def return_lists(self):
         return GLib.Variant('(a{sa{ss}})', (self.list_names,))
 
-    def set_enabled_lists(self, lists: dict):
+    def set_enabled_lists(self, lists: dict, refresh = True):
         variant = GLib.Variant('a{sas}', lists)
+
+        if not refresh:
+            self.app.settings.disconnect(self.synced_changed)
+
         self.app.settings.set_value('synced-task-lists', variant)
+
+        if not refresh:
+            self.synced_changed = self.app.settings.connect('changed::synced-task-lists', lambda *args: self._synced_task_list_changed())
 
     def get_enabled_lists(self):
         lists = self.app.settings.get_value('synced-task-lists').unpack()

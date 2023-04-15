@@ -82,6 +82,7 @@
     <release version="3.5" date="2023-04-15">
       <description>
         <ul>
+          <li>Performance improvements</li>
           <li>Don't freeze UI when updating MS reminders</li>
           <li>Fix issues with deleting lists</li>
           <li>Fix issues when queueing remote changes while internet is disconnected</li>
