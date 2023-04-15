@@ -296,7 +296,7 @@ class Remembrance(Adw.Application):
             elif 'failed to execute' in str(error) or not retry: # method failed
                 error_dialog = ErrorDialog(self, _('Something went wrong'), _('Changes were not saved. This bug should be reported.'), error_text)
                 raise error
-            elif retry: # service was probably disconnected 
+            elif retry: # service was probably disconnected
                 self.connect_to_service()
                 retval = self.run_service_method(method, parameters, sync, callback, False)
         return retval

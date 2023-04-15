@@ -19,12 +19,10 @@ import requests
 import msal
 import atexit
 import gi
-import os
-import csv
 import traceback
 
 gi.require_version('Secret', '1')
-from gi.repository import Secret, GLib
+from gi.repository import Secret
 
 from remembrance import info
 

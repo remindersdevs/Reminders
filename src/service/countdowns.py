@@ -42,7 +42,7 @@ class Countdowns():
     def on_wake_from_suspend(self, connection, sender, object, interface, signal, parameters, data = None):
         if parameters.unpack()[0]:
             return
-    
+
         for reminder_id in self.dict.keys():
             self._start(reminder_id)
 
@@ -56,7 +56,7 @@ class Countdowns():
     def add_timeout(self, interval, callback, timeout_id):
         if timeout_id in self.dict.keys() and self.dict[timeout_id]['id'] != 0:
             GLib.Source.remove(self.dict[timeout_id]['id'])
-    
+
         dictionary = {
             'interval': interval,
             'callback': callback,
@@ -68,7 +68,7 @@ class Countdowns():
     def add_countdown(self, timestamp, callback, reminder_id):
         if reminder_id in self.dict.keys() and self.dict[reminder_id]['id'] != 0:
             GLib.Source.remove(self.dict[reminder_id]['id'])
-    
+
         dictionary = {
             'timestamp': timestamp,
             'callback': callback,
@@ -82,7 +82,7 @@ class Countdowns():
         if dictionary['id'] != 0:
             GLib.Source.remove(dictionary['id'])
             dictionary['id'] = 0
-        
+
         if 'interval' in dictionary.keys():
             wait = dictionary['interval'] * 60000
         else:
@@ -90,7 +90,7 @@ class Countdowns():
             wait = int(1000 * (dictionary['timestamp'] - now))
 
         if wait > 0:
-            try: 
+            try:
                 self.dict[reminder_id]['id'] = GLib.timeout_add(wait, dictionary['callback'])
             except Exception as error:
                 logger.error(f'{error}: Failed to set timeout for {reminder_id}')

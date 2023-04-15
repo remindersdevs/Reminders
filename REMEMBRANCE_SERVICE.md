@@ -94,7 +94,7 @@ Update the completed status of a reminder
     - reminder-id
         - Type: s
         - Id of the reminder you want to update
-    - completed 
+    - completed
         - Type: b
         - Whether or not the reminder should be completed
 

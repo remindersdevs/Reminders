@@ -351,7 +351,7 @@ class Reminders():
         try:
             lists = self.to_do.get_lists()
         except:
-            return old_ms, old_lists, old_list_ids            
+            return old_ms, old_lists, old_list_ids
 
         if lists is None:
             return {}, {}, {}
@@ -392,7 +392,7 @@ class Reminders():
                     'user-id': user_id
                 }
 
-                list_names[user_id][list_id] = task_list['name'] 
+                list_names[user_id][list_id] = task_list['name']
 
                 if user_id not in self.synced_ids or ('all' not in self.synced_ids[user_id] and list_id not in self.synced_ids[user_id]):
                     continue
@@ -490,8 +490,7 @@ class Reminders():
                 ms_id = self._to_ms_task(reminder_id, reminder_dict, old_user_id, old_task_list)
             except requests.ConnectionError:
                 ms_id = None
-                args = [old_user_id, old_task_list]
-                self.queue.update_reminder(reminder_id, args)
+                self.queue.update_reminder(reminder_id, old_user_id, old_task_list)
 
             if ms_id is not None:
                 reminder_dict['ms-id'] = ms_id
@@ -682,7 +681,7 @@ class Reminders():
         for user_id in self.list_names.keys():
             if new_id in self.list_names[user_id].keys():
                 new_id = self._generate_id()
-    
+
         return new_id
 
     def _remove_countdown(self, reminder_id):
@@ -705,7 +704,7 @@ class Reminders():
                     if reminder['old-timestamp'] != timestamp:
                         reminder['old-timestamp'] = timestamp
                         self.do_emit('ReminderShown', GLib.Variant('(suun)', (reminder_id, timestamp, reminder['old-timestamp'], reminder['repeat-times'])))
-                    return      
+                    return
 
                 if reminder['completed']:
                     return
@@ -845,7 +844,6 @@ class Reminders():
 
                 reminder_datetime += datetime.timedelta(days=((((days[index] - weekday) + 7) % 7) + 7 * week_frequency))
                 timestamp = reminder_datetime.timestamp()
-
 
         if repeat_until > 0 and reminder_datetime.date() > repeat_until_date:
             return
@@ -1283,7 +1281,7 @@ class Reminders():
                 for list_id, list_name in value.items():
                     if user_id not in self.list_names or list_id not in self.list_names[user_id] or self.list_names[user_id][list_id] != list_names[user_id][list_id]:
                         self.do_emit('ListUpdated', GLib.Variant('(ssss)', (info.service_id, user_id, list_id, list_name)))
-                        
+
             for user_id, value in self.list_names.items():
                 for list_id in value.keys():
                     if user_id not in list_names or list_id not in list_names[user_id]:

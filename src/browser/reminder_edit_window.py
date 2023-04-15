@@ -18,7 +18,7 @@ import ctypes
 import datetime
 import logging
 
-from gi.repository import Gtk, Adw, GLib, Gdk, Gio
+from gi.repository import Gtk, Adw, GLib, Gio
 from gettext import gettext as _
 from math import floor
 

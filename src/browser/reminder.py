@@ -17,7 +17,7 @@ import time
 import datetime
 import logging
 
-from gi.repository import Gtk, Adw, GLib, GObject, Gdk
+from gi.repository import Gtk, Adw, GLib, Gdk
 from gettext import gettext as _
 from math import floor
 
