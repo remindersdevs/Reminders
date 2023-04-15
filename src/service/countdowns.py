@@ -44,7 +44,7 @@ class Countdowns():
             return
 
         for reminder_id in self.dict.keys():
-            self._start(reminder_id)
+            self._start(reminder_id, resuming=True)
 
     def remove_countdown(self, reminder_id):
         if reminder_id in self.dict.keys():
@@ -77,14 +77,15 @@ class Countdowns():
         self.dict[reminder_id] = dictionary
         self._start(reminder_id)
 
-    def _start(self, reminder_id):
+    def _start(self, reminder_id, resuming = False):
         dictionary = self.dict[reminder_id]
         if dictionary['id'] != 0:
             GLib.Source.remove(dictionary['id'])
             dictionary['id'] = 0
 
         if 'interval' in dictionary.keys():
-            wait = dictionary['interval'] * 60000
+            # wait 10 seconds after waking from suspend, this hopefully will give enough time for internet to reconnect
+            wait = 10000 if resuming else dictionary['interval'] * 60000
         else:
             now = time.time()
             wait = int(1000 * (dictionary['timestamp'] - now))
