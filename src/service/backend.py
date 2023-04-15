@@ -517,7 +517,7 @@ class Reminders():
                 self.queue.load()
                 self.to_do.remove_task(user_id, task_list, task_id)
             except requests.ConnectionError as error:
-                self.queue.remove_reminder(reminder_id, user_id, task_list, task_id)
+                self.queue.remove_reminder(reminder_id, task_id, user_id, task_list)
         except Exception as error:
             traceback.print_exception(error)
             self.emit_error(error)
@@ -559,7 +559,7 @@ class Reminders():
                 self.queue.load()
                 self.to_do.delete_list(user_id, ms_id)
             except requests.ConnectionError:
-                self.queue.remove_list(list_id, user_id, ms_id)
+                self.queue.remove_list(list_id, ms_id, user_id)
             self.list_ids.pop(list_id)
             self._save_list_ids()
         except Exception as error:

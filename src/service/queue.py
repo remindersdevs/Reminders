@@ -72,7 +72,7 @@ class Queue():
         try:
             retval = []
             for value in self.queue['reminders']['delete']:
-                retval.append(value[2])
+                retval.append(value[0])
         except:
             self.queue['reminders']['delete'] = []
             retval = []
@@ -91,7 +91,7 @@ class Queue():
         try:
             retval = []
             for value in self.queue['lists']['delete']:
-                retval.append(value[1])
+                retval.append(value[0])
         except:
             self.queue['lists']['delete'] = []
             retval = []
@@ -136,12 +136,12 @@ class Queue():
             else:
                 raise error
 
-    def remove_reminder(self, reminder_id, user_id, task_list, task_id, retry = True):
+    def remove_reminder(self, reminder_id, task_id, user_id, task_list, retry = True):
         try:
             if reminder_id in self.queue['reminders']['update']:
                 self.queue['reminders']['update'].pop(reminder_id)
 
-            value = [user_id, task_list, task_id]
+            value = [task_id, user_id, task_list]
 
             if reminder_id not in self.queue['reminders']['create'] and value not in self.queue['reminders']['delete']:
                 self.queue['reminders']['delete'].append(value)
@@ -151,7 +151,7 @@ class Queue():
         except Exception as error:
             if retry:
                 self.reset()
-                self.remove_reminder(reminder_id, user_id, task_list, task_id, False)
+                self.remove_reminder(reminder_id, task_id, user_id, task_list, False)
             else:
                 raise error
 
@@ -179,12 +179,12 @@ class Queue():
             else:
                 raise error
 
-    def remove_list(self, list_id, user_id, ms_id, retry = True):
+    def remove_list(self, list_id, ms_id, user_id, retry = True):
         try:
             if list_id in self.queue['lists']['update']:
                 self.queue['lists']['update'].pop(list_id)
 
-            value = [user_id, ms_id]
+            value = [ms_id, user_id]
 
             if list_id not in self.queue['lists']['create'] and value not in self.queue['lists']['delete']:
                 self.queue['lists']['delete'].append(value)
@@ -193,7 +193,7 @@ class Queue():
         except Exception as error:
             if retry:
                 self.reset()
-                self.remove_list(list_id, user_id, ms_id, False)
+                self.remove_list(list_id, ms_id, user_id, False)
             else:
                 raise error
 
@@ -309,9 +309,9 @@ class Queue():
             try:
                 for value in queue['reminders']['delete']:
                     try:
-                        user_id = value[0]
-                        task_list = value[1]
-                        task_id = value[2]
+                        task_id = value[0]
+                        user_id = value[1]
+                        task_list = value[2]
 
                         self.to_do.remove_task(user_id, task_list, task_id)
 
@@ -329,8 +329,8 @@ class Queue():
             try:
                 for value in queue['lists']['delete']:
                     try:
-                        user_id = value[0]
-                        ms_id = value[1]
+                        ms_id = value[0]
+                        user_id = value[1]
 
                         self.to_do.delete_list(user_id, ms_id)
 
