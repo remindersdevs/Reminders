@@ -798,8 +798,8 @@ class MainWindow(Adw.ApplicationWindow):
                             '(ss)', (info.app_id, reminder.id)
                         )
                     )
+                    self.reminder_lookup_dict.pop(reminder.id)
                     self.reminders_list.remove(reminder)
-                    self.reminder_lookup_dict.pop(reminder_id)
         except Exception as error:
             logger.error(error)
 
