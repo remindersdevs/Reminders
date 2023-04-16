@@ -82,7 +82,7 @@
     <release version="3.7" date="2023-04-15">
       <description>
         <ul>
-          <li>Fix issue when deleting list</li>
+          <li>Fix issue when deleting lists</li>
         </ul>
       </description>
     </release>
