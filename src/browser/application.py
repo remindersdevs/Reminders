@@ -32,7 +32,7 @@ from remembrance.browser.preferences import PreferencesWindow
 from remembrance.browser.shortcuts_window import ShortcutsWindow
 
 # Always update this when new features are added that require the service to restart
-MIN_SERVICE_VERSION = 3.5
+MIN_SERVICE_VERSION = 3.8
 
 class Remembrance(Adw.Application):
     '''Application for the frontend'''
@@ -42,6 +42,7 @@ class Remembrance(Adw.Application):
         self.sandboxed = False
         self.preferences = None
         self.win = None
+        self.error_dialog = None
         self.page = 'all'
         self.add_main_option(
             'version', ord('v'),
@@ -162,7 +163,9 @@ class Remembrance(Adw.Application):
 
     def error_cb(self, proxy, sender_name, signal_name, parameters):
         error = parameters.unpack()[0]
-        error_dialog = ErrorDialog(self, _('Something went wrong'), _('Changes were not saved. This bug should be reported.'), error)
+        if self.error_dialog is not None:
+            self.error_dialog.destroy()
+        self.error_dialog = ErrorDialog(self, _('Something went wrong'), _('Changes were not saved. This bug should be reported.'), error)
         self.refresh_reminders()
 
     def notification_clicked_cb(self, action, variant, data = None):
@@ -291,10 +294,14 @@ class Remembrance(Adw.Application):
         except GLib.GError as error:
             error_text = ''.join(traceback.format_exception(error))
             if 'The name is not activatable' in str(error):
-                error_dialog = ErrorDialog(self, _('Reminders failed to start'), _('If this is your first time running Reminders, you will probably have to log out and log back in before using it. This is due to a bug in Flatpak.'), error_text)
+                if self.error_dialog is not None:
+                    self.error_dialog.destroy()
+                self.error_dialog = ErrorDialog(self, _('Reminders failed to start'), _('If this is your first time running Reminders, you will probably have to log out and log back in before using it. This is due to a bug in Flatpak.'), error_text)
                 raise error
             elif 'failed to execute' in str(error) or not retry: # method failed
-                error_dialog = ErrorDialog(self, _('Something went wrong'), _('Changes were not saved. This bug should be reported.'), error_text)
+                if self.error_dialog is not None:
+                    self.error_dialog.destroy()
+                self.error_dialog = ErrorDialog(self, _('Something went wrong'), _('Changes were not saved. This bug should be reported.'), error_text)
                 raise error
             elif retry: # service was probably disconnected
                 self.connect_to_service()

@@ -73,6 +73,8 @@ class Queue():
             retval = []
             for value in self.queue['reminders']['delete']:
                 retval.append(value[0])
+            for value in self.queue['reminders']['update'].values():
+                retval.append(value[0])
         except:
             self.queue['reminders']['delete'] = []
             retval = []
@@ -109,18 +111,18 @@ class Queue():
             else:
                 raise error
 
-    def update_reminder(self, reminder_id, old_user_id, old_task_list, retry = True):
+    def update_reminder(self, reminder_id, old_task_id, old_user_id, old_list_id, updating, retry = True):
         try:
             if reminder_id not in self.queue['reminders']['create']:
                 if reminder_id in self.queue['reminders']['complete']:
                     self.queue['reminders']['complete'].pop(reminder_id)
                 if reminder_id not in self.queue['reminders']['update']:
-                    self.queue['reminders']['update'][reminder_id] = [old_user_id, old_task_list]
+                    self.queue['reminders']['update'][reminder_id] = [old_task_id, old_user_id, old_list_id, updating]
                 self.write()
         except Exception as error:
             if retry:
                 self.reset()
-                self.update_reminder(reminder_id, old_user_id, old_task_list, False)
+                self.update_reminder(reminder_id, old_task_id, old_user_id, old_list_id, updating, False)
             else:
                 raise error
 
@@ -270,7 +272,11 @@ class Queue():
                     try:
                         for dictionary in (ms, local):
                             if reminder_id in dictionary.keys():
-                                new_task_id = self.reminders._to_ms_task(reminder_id, dictionary[reminder_id], args[0],  args[1], updating=False)
+                                old_task_id = args[0]
+                                old_user_id = args[1]
+                                old_list_id = args[2]
+                                updating = args[3]
+                                new_task_id = self.reminders._to_ms_task(reminder_id, dictionary[reminder_id], old_user_id, old_list_id, old_task_id, updating)
                                 if new_task_id is not None:
                                     dictionary[reminder_id]['ms-id'] = new_task_id
 

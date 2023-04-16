@@ -79,6 +79,14 @@
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
   <releases>
+    <release version="3.8" date="2023-04-15">
+      <description>
+        <ul>
+          <li>Fix issue when moving reminders between lists</li>
+          <li>Fix issue with error dialogs</li>
+        </ul>
+      </description>
+    </release>
     <release version="3.7" date="2023-04-15">
       <description>
         <ul>

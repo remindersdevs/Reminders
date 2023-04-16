@@ -19,7 +19,8 @@ from gettext import gettext as _
 
 RELEASE_NOTES = '''
 <ul>
-    <li>Fix issue when deleting lists</li>
+    <li>Fix issue when moving reminders between lists</li>
+    <li>Fix issue with error dialogs</li>
 </ul>
 '''
 

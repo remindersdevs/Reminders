@@ -13,10 +13,12 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import time
 import logging
 
 from gi.repository import Gtk, Adw, GLib
 from gettext import gettext as _
+from math import floor
 
 from remembrance import info
 
@@ -52,10 +54,18 @@ class MoveRemindersWindow(Adw.Window):
     def do_save(self):
         try:
             selected = self.lists.get_selected_rows()[0]
-            options = {}
-            options['user-id'], options['list-id'] = self.rows[selected]
             for reminder in self.reminders:
+                options = reminder.options.copy()
+                options['user-id'], options['list-id'] = self.rows[selected]
                 if reminder.get_sensitive() and reminder.options['list-id'] != options['list-id'] or reminder.options['user-id'] != options['user-id']:
+                    if options['user-id'] != 'local':
+                        options['repeat-type'] = 0
+                        options['repeat-frequency'] = 1
+                        options['repeat-days'] = 0
+                        options['repeat-until'] = 1
+                        if options['repeat-times'] not in (1, 0):
+                            options['repeat-times'] = 1 if options['timestamp'] > floor(time.time()) else 0
+
                     results = self.win.app.run_service_method(
                         'UpdateReminder',
                         GLib.Variant(
@@ -64,15 +74,22 @@ class MoveRemindersWindow(Adw.Window):
                                 info.app_id,
                                 {
                                     'id': GLib.Variant('s', reminder.id),
+                                    'repeat-type': GLib.Variant('q', options['repeat-type']),
+                                    'repeat-frequency': GLib.Variant('q', options['repeat-frequency']),
+                                    'repeat-days': GLib.Variant('q', options['repeat-days']),
+                                    'repeat-times': GLib.Variant('n', options['repeat-times']),
+                                    'repeat-until': GLib.Variant('u', options['repeat-until']),
                                     'list-id': GLib.Variant('s', options['list-id']),
                                     'user-id': GLib.Variant('s', options['user-id'])
                                 }
                             )
                         )
                     )
+
                     options['updated-timestamp'] = results.unpack()[0]
                     reminder.options.update(options)
                     reminder.changed()
+                    reminder.set_repeat_label()
             self.close()
         except Exception as error:
             logger.error(error)
