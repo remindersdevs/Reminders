@@ -60,7 +60,7 @@ class RemembranceService(Gio.Application):
             self.reminders = Reminders(self)
         except Exception as error:
             self.quit()
-            self.logger.error(error)
+            traceback.print_exception(error)
             raise error
 
     def do_startup(self):
