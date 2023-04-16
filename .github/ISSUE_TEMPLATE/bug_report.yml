@@ -1,0 +1,80 @@
+name: Bug Report
+description: Help improve Reminders by filing a bug report
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+
+  - type: markdown
+    attributes:
+      value: |
+        ## System information
+
+        Make sure you have tested the Flatpak release of Reminders through Flathub before opening a bug report. If the bug is not present in the Flatpak open the report with the package maintainer.
+
+  - type: dropdown
+    id: package
+    attributes:
+      label: Package
+      description: |
+        Where did you install Reminders from?
+      options:
+        - Flathub
+        - Flathub Beta
+    validations:
+      required: true
+
+  - type: input
+    id: distro
+    attributes:
+      label: Distribution
+      description: What distribution are you currently using?
+      placeholder: Fedora 37, Ubuntu 22.04, Arch Linux...
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Bug information
+
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Describe the bug
+      description: Also please explain what behavior was expected.
+      placeholder: A clear and concise description of what the bug is.
+    validations:
+      required: true
+
+  - type: textarea
+    id: to-reproduce
+    attributes:
+      label: To Reproduce
+      description: Steps to reproduce the behavior
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: log
+    attributes:
+      label: Logs
+      description: |
+        If you saw an error dialog, click view error and copy the text here. Otherwise you can run something like `sudo journalctl | grep remembrance | grep -i error` in the terminal to see the errors and copy that here.
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Add any other context about the problem here.
+    validations:
+      required: false
