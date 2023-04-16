@@ -176,7 +176,7 @@ box.main {
     background-color: alpha(currentColor, 0.16);
 }
 
-button.rounded {border-radius: 17px;}
+button.rounded {border-radius: 99px;}
 
 button.rounded.remove {
     background-color: alpha(@destructive_bg_color, 0.3);

@@ -72,9 +72,9 @@ class MainWindow(Adw.ApplicationWindow):
     def __init__(self, page: str, app, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.placeholder = Adw.ActionRow(
-            title=_('Press the plus button below to add a reminder')
+            title=_('Nothing to see here!'),
+            subtitle=_('Press the plus button below to add a reminder')
         )
-
         self.search_placeholder = Adw.ActionRow(
             title=_('No reminders match your search')
         )

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-16 09:33-0400\n"
+"POT-Creation-Date: 2023-04-16 13:16-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -835,6 +835,10 @@ msgid "All Lists"
 msgstr ""
 
 #: src/browser/main_window.py:75
+msgid "Nothing to see here!"
+msgstr ""
+
+#: src/browser/main_window.py:76
 msgid "Press the plus button below to add a reminder"
 msgstr ""
 
