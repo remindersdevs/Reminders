@@ -19,7 +19,7 @@ from gettext import gettext as _
 
 RELEASE_NOTES = '''
 <ul>
-    <li>Fix issue when removing selected reminders</li>
+    <li>Fix issue when deleting list</li>
 </ul>
 '''
 

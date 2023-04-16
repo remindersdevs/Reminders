@@ -181,7 +181,7 @@ class MSUserRow(Adw.ExpanderRow):
 
     def task_list_deleted(self, list_id):
         if list_id in self.lists.keys():
-            self.lists.pop[list_id]
+            self.lists.pop(list_id)
         self.set_task_lists()
 
     def add_check(self, list_id, label):
@@ -196,12 +196,13 @@ class MSUserRow(Adw.ExpanderRow):
         check = Gtk.CheckButton()
         check.set_child(label)
         check.set_hexpand(True)
-        if list_id in self.synced:
-            check.set_active(True)
+
         self.task_list_checks[list_id] = check
         self.task_list_grid.attach_next_to(check, None, pos, 1, 1)
         all_checked = self.all_check.get_active()
         check.set_sensitive(not all_checked)
+        if not all_checked and list_id in self.synced:
+            check.set_active(True)
 
     def update_synced(self):
         if self.all_check.get_active():
