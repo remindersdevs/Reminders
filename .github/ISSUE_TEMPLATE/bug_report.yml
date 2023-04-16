@@ -5,9 +5,6 @@ labels: ["bug"]
 body:
   - type: markdown
     attributes:
-
-  - type: markdown
-    attributes:
       value: |
         ## System information
 
