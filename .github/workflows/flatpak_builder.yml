@@ -1,0 +1,19 @@
+on:
+  push:
+    branches: [main]
+  pull_request:
+name: CI
+jobs:
+  flatpak:
+    name: "Flatpak"
+    runs-on: ubuntu-latest
+    container:
+      image: bilelmoussaoui/flatpak-github-actions:gnome-44
+      options: --privileged
+    steps:
+    - uses: actions/checkout@v3
+    - uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@v6.1
+      with:
+        bundle: remembrance.flatpak
+        manifest-path: flatpak/io.github.dgsasaha.Remembrance.yml
+        cache-key: flatpak-builder-${{ github.sha }}
