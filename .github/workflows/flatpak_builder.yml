@@ -15,5 +15,5 @@ jobs:
     - uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@v6.1
       with:
         bundle: remembrance.flatpak
-        manifest-path: flatpak/io.github.dgsasaha.Remembrance.yml
+        manifest-path: flatpak/io.github.dgsasha.Remembrance.yml
         cache-key: flatpak-builder-${{ github.sha }}
