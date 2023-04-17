@@ -63,7 +63,7 @@ body:
     attributes:
       label: Logs
       description: |
-        If you saw an error dialog, click view error and copy the text here. Otherwise you can run something like `sudo journalctl | grep remembrance | grep -i error` in the terminal to see the errors and copy that here.
+        If you saw an error dialog, click view error and copy the text here. Otherwise you can run something like `sudo journalctl --boot | grep remembrance | grep -i error` in the terminal to see the errors and copy that here.
       render: shell
     validations:
       required: false

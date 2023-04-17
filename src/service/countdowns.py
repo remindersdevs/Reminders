@@ -84,8 +84,8 @@ class Countdowns():
             dictionary['id'] = 0
 
         if 'interval' in dictionary.keys():
-            # wait 10 seconds after waking from suspend, this hopefully will give enough time for internet to reconnect
-            wait = 10000 if resuming else dictionary['interval'] * 60000
+            # wait 30 seconds after waking from suspend, this hopefully will give enough time for internet to reconnect
+            wait = 30000 if resuming else dictionary['interval'] * 60000
         else:
             now = time.time()
             wait = int(1000 * (dictionary['timestamp'] - now))

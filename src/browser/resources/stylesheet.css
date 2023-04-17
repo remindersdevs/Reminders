@@ -14,6 +14,10 @@
     margin-bottom: 20px;
 }
 
+.sidebar-separator {
+    margin: 0 6px;
+}
+
 .reminders-list row.activatable:selected,
 lists row.activatable:selected {
     background-color: alpha(@accent_bg_color, .25);

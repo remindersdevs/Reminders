@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="task_list_row" parent="GtkListBoxRow">
+    <property name="action-name">win.selected-task-list</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">horizontal</property>
+        <property name="spacing">8</property>
+        <child>
+          <object class="GtkImage" id="icon">
+            <property name="halign">start</property>
+            <property name="icon-name">view-list-symbolic</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label">
+            <property name="halign">start</property>
+            <property name="ellipsize">end</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

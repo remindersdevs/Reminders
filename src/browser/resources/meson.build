@@ -8,6 +8,7 @@ resources = files(
     'ui/reminder.ui',
     'ui/reminder_edit_window.ui',
     'ui/shortcuts_window.ui',
+    'ui/task_list_row.ui',
     'stylesheet.css'
 )
 

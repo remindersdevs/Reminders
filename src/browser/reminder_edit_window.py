@@ -185,7 +185,6 @@ class ReminderEditWindow(Adw.Window):
             else:
                 options['repeat-days'] = 0
         else:
-            now = floor(time.time())
             options['repeat-frequency'] = 1
             options['repeat-days'] = 0
             options['repeat-until'] = 0

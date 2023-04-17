@@ -62,7 +62,7 @@ class MoveRemindersWindow(Adw.Window):
                         options['repeat-type'] = 0
                         options['repeat-frequency'] = 1
                         options['repeat-days'] = 0
-                        options['repeat-until'] = 1
+                        options['repeat-until'] = 0
                         if options['repeat-times'] not in (1, 0):
                             options['repeat-times'] = 1 if options['timestamp'] > floor(time.time()) else 0
 

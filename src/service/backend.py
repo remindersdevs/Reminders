@@ -290,11 +290,11 @@ class Reminders():
 
     def start_local_countdowns(self):
         for reminder_id in self.local.keys():
-            self._set_countdown(reminder_id)
+            self._set_countdown(reminder_id, self.local)
 
     def start_ms_countdowns(self):
         for reminder_id in self.ms.keys():
-            self._set_countdown(reminder_id)
+            self._set_countdown(reminder_id, self.ms)
 
         self.countdowns.add_timeout(self.refresh_time, self._refresh_cb, 'refresh')
 
@@ -687,37 +687,35 @@ class Reminders():
     def _remove_countdown(self, reminder_id):
         self.countdowns.remove_countdown(reminder_id)
 
-    def _set_countdown(self, reminder_id):
+    def _set_countdown(self, reminder_id, dictionary):
         self.countdowns.remove_countdown(reminder_id)
 
-        for dictionary in (self.local, self.ms):
-            if reminder_id in dictionary:
-                reminder = dictionary[reminder_id]
-                if reminder['timestamp'] == 0:
-                    return
+        reminder = dictionary[reminder_id]
+        if reminder['timestamp'] == 0:
+            return
 
-                timestamp = dictionary[reminder_id]['timestamp']
-                repeat_until = dictionary[reminder_id]['repeat-until']
+        timestamp = reminder['timestamp']
+        repeat_until = reminder['repeat-until']
 
-                if reminder['repeat-times'] == 0 or \
-                repeat_until > 0 and datetime.date.fromtimestamp(timestamp) > datetime.date.fromtimestamp(repeat_until):
-                    if reminder['old-timestamp'] != timestamp:
-                        reminder['old-timestamp'] = timestamp
-                        self.do_emit('ReminderShown', GLib.Variant('(suun)', (reminder_id, timestamp, reminder['old-timestamp'], reminder['repeat-times'])))
-                    return
+        if reminder['repeat-times'] == 0 or \
+        repeat_until > 0 and datetime.date.fromtimestamp(timestamp) > datetime.date.fromtimestamp(repeat_until):
+            if reminder['old-timestamp'] != timestamp:
+                reminder['old-timestamp'] = timestamp
+                self.do_emit('ReminderShown', GLib.Variant('(suun)', (reminder_id, timestamp, reminder['old-timestamp'], reminder['repeat-times'])))
+            return
 
-                if reminder['completed']:
-                    return
+        if reminder['completed']:
+            return
 
-                def do_show_notification():
-                    self.show_notification(reminder_id, reminder['title'], reminder['description'])
-                    return False
+        def do_show_notification():
+            self.show_notification(reminder_id, dictionary)
+            return False
 
-                self.countdowns.add_countdown(reminder['timestamp'], do_show_notification, reminder_id)
+        self.countdowns.add_countdown(reminder['timestamp'], do_show_notification, reminder_id)
 
-    def show_notification(self, reminder_id, title, description):
-        notification = Gio.Notification.new(title)
-        notification.set_body(description)
+    def show_notification(self, reminder_id, dictionary):
+        notification = Gio.Notification.new(dictionary[reminder_id]['title'])
+        notification.set_body(dictionary[reminder_id]['description'])
         notification.add_button_with_target(_('Mark as completed'), 'app.reminder-completed', GLib.Variant('s', reminder_id))
         notification.set_default_action('app.notification-clicked')
 
@@ -730,7 +728,7 @@ class Reminders():
                 self.sound.play_full({GSound.ATTR_EVENT_ID: 'bell'}, None, self._sound_cb)
         self._shown(reminder_id)
         self.countdowns.dict[reminder_id]['id'] = 0
-        self._update_repeat(reminder_id)
+        self._update_repeat(reminder_id, dictionary)
 
     def _sound_cb(self, context, result):
         try:
@@ -739,15 +737,13 @@ class Reminders():
             logger.error(f"{error} Couldn't play notification sound")
         self.playing_sound = False
 
-    def _update_repeat(self, reminder_id):
-        for dictionary in (self.local, self.ms):
-            if reminder_id in dictionary:
-                dictionary[reminder_id]['old-timestamp'] = dictionary[reminder_id]['timestamp']
-                # ms reminders shouldn't repeat
-                if dictionary == self.local:
-                    if self.local[reminder_id]['repeat-type'] != 0:
-                        self._repeat(reminder_id)
-                retval = GLib.Variant('(suun)', (reminder_id, dictionary[reminder_id]['timestamp'], dictionary[reminder_id]['old-timestamp'], dictionary[reminder_id]['repeat-times']))
+    def _update_repeat(self, reminder_id, dictionary):
+        dictionary[reminder_id]['old-timestamp'] = dictionary[reminder_id]['timestamp']
+        # ms reminders shouldn't repeat
+        if dictionary == self.local:
+            if dictionary[reminder_id]['repeat-type'] != 0:
+                self._repeat(reminder_id)
+        retval = GLib.Variant('(suun)', (reminder_id, dictionary[reminder_id]['timestamp'], dictionary[reminder_id]['old-timestamp'], dictionary[reminder_id]['repeat-times']))
 
         self.do_emit('ReminderShown', retval)
 
@@ -855,7 +851,7 @@ class Reminders():
         self._save_reminders(self.local)
 
         if repeat_times != 0:
-            self._set_countdown(reminder_id)
+            self._set_countdown(reminder_id, self.local)
 
     def _shown(self, reminder_id):
         for dictionary in (self.local, self.ms):
@@ -1051,12 +1047,9 @@ class Reminders():
 
     # Below methods can be accessed by other apps over dbus
     def set_completed(self, app_id: str, reminder_id: str, completed: bool):
-        task_list = 'local'
         now = floor(time.time())
         for dictionary in (self.local, self.ms):
             if reminder_id in dictionary.keys():
-                user_id = dictionary[reminder_id]['user-id']
-                task_list = dictionary[reminder_id]['list-id']
                 dictionary[reminder_id]['completed'] = completed
                 dictionary[reminder_id]['updated-timestamp'] = now
                 self._save_reminders(dictionary)
@@ -1067,7 +1060,7 @@ class Reminders():
                     self.app.withdraw_notification(reminder_id)
                     self._remove_countdown(reminder_id)
                 else:
-                    self._set_countdown(reminder_id)
+                    self._set_countdown(reminder_id, dictionary)
 
                 self.do_emit('CompletedUpdated', GLib.Variant('(ssbu)', (app_id, reminder_id, completed, now)))
                 break
@@ -1114,15 +1107,22 @@ class Reminders():
                 # but right now it is necessary because of how the UI of the Reminders app is set up
                 reminder_dict['due-date'] = int(datetime.datetime(notif_date.year, notif_date.month, notif_date.day, tzinfo=datetime.timezone.utc).timestamp())
 
+        if reminder_dict['user-id'] != 'local':
+            reminder_dict['repeat-type'] = 0
+            reminder_dict['repeat-frequency'] = 1
+            reminder_dict['repeat-days'] = 0
+            reminder_dict['repeat-until'] = 0
+            if reminder_dict['repeat-times'] not in (1, 0):
+                reminder_dict['repeat-times'] = 1 if reminder_dict['timestamp'] > floor(time.time()) else 0
+
         now = floor(time.time())
         reminder_dict['created-timestamp'] = now
         reminder_dict['updated-timestamp'] = now
 
         dictionary = self.local if reminder_dict['user-id'] == 'local' else self.ms
 
-
         dictionary[reminder_id] = reminder_dict
-        self._set_countdown(reminder_id)
+        self._set_countdown(reminder_id, dictionary)
         self._reminder_updated(app_id, reminder_id, reminder_dict)
         self._save_reminders(dictionary)
 
@@ -1150,7 +1150,7 @@ class Reminders():
             reminder_dict['repeat-type'] = 0
             reminder_dict['repeat-frequency'] = 1
             reminder_dict['repeat-days'] = 0
-            reminder_dict['repeat-until'] = 1
+            reminder_dict['repeat-until'] = 0
             if reminder_dict['repeat-times'] not in (1, 0):
                 reminder_dict['repeat-times'] = 1 if reminder_dict['timestamp'] > floor(time.time()) else 0
 
@@ -1186,7 +1186,7 @@ class Reminders():
 
         dictionary[reminder_id] = reminder_dict
 
-        self._set_countdown(reminder_id)
+        self._set_countdown(reminder_id, dictionary)
         self._reminder_updated(app_id, reminder_id, reminder_dict)
         self._save_reminders(dictionary if dictionary == old_dict else None)
 
@@ -1334,8 +1334,10 @@ class Reminders():
                 self.do_emit('Refreshed', GLib.Variant('(aa{sv}as)', (new_reminders, removed_ids)))
 
                 for reminder_id in new_ids:
-                    self._set_countdown(reminder_id)
-
+                    if reminder_id in self.ms:
+                        self._set_countdown(reminder_id, self.ms)
+                    if reminder_id in self.local:
+                        self._set_countdown(reminder_id, self.local)
                 for reminder_id in removed_ids:
                     self._remove_countdown(reminder_id)
 

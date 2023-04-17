@@ -10,6 +10,7 @@
     <file>ui/reminder.ui</file>
     <file>ui/reminder_edit_window.ui</file>
     <file>ui/shortcuts_window.ui</file>
+    <file>ui/task_list_row.ui</file>
     <file>stylesheet.css</file>
   </gresource>
 </gresources>

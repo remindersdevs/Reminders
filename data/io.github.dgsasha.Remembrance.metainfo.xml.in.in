@@ -82,7 +82,8 @@
     <release version="3.8" date="2023-04-15">
       <description>
         <ul>
-          <li>Fix issue when moving reminders between lists</li>
+          <li>UI Improvements to sidebar</li>
+          <li>Fix issues when moving reminders between lists</li>
           <li>Fix issue with error dialogs</li>
         </ul>
       </description>
