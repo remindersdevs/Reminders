@@ -92,7 +92,7 @@ class MoveRemindersWindow(Adw.Window):
                     reminder.set_repeat_label()
             self.close()
         except Exception as error:
-            logger.error(error)
+            logger.exception(error)
 
         self.win.reminders_list.invalidate_sort()
 

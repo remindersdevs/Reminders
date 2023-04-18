@@ -176,7 +176,7 @@ class ListRow(Adw.EntryRow):
             self.group.lists[self.list_id] = self
             self.set_text(self.list_name)
         except Exception as error:
-            logger.error(error)
+            logger.exception(error)
 
     def show_delete_dialog(self):
         list_name = f'<b>{self.get_text()}</b>'
@@ -199,7 +199,7 @@ class ListRow(Adw.EntryRow):
             if self in self.edit_win.unsaved:
                 self.edit_win.unsaved.remove(self)
         except Exception as error:
-            logger.error(error)
+            logger.exception(error)
 
     def check_saved(self):
         unsaved = len(self.get_text()) != 0 and self.get_text() != self.list_name

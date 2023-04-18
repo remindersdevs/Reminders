@@ -474,7 +474,7 @@ class ReminderEditWindow(Adw.Window):
             self.set_visible(False)
             self.reminder.set_expanded(False)
         except Exception as error:
-            logger.error(error)
+            logger.exception(error)
 
     @Gtk.Template.Callback()
     def repeat_day_changed(self, calendar = None, data = None):

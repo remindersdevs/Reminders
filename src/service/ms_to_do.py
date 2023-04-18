@@ -19,7 +19,6 @@ import requests
 import msal
 import atexit
 import gi
-import traceback
 
 gi.require_version('Secret', '1')
 from gi.repository import Secret
@@ -70,7 +69,7 @@ class MSToDo():
                 results = self.do_request(method, url, user_id, data, False)
                 return results
             else:
-                traceback.print_exception(error)
+                logger.exception(error)
                 raise error
 
     def get_tokens(self):
@@ -99,7 +98,7 @@ class MSToDo():
                 except requests.ConnectionError as error:
                     raise error
                 except Exception as error:
-                    traceback.print_exception(error)
+                    logger.exception(error)
 
             self.store()
 
@@ -113,7 +112,7 @@ class MSToDo():
             )
             raise error
         except Exception as error:
-            traceback.print_exception(error)
+            logger.exception(error)
             self.logout_all()
 
     def store(self):
@@ -168,7 +167,7 @@ class MSToDo():
             self.store()
             return result['id']
         except Exception as error:
-            traceback.print_exception(error)
+            logger.exception(error)
             raise error
 
     def logout_all(self):
@@ -195,7 +194,7 @@ class MSToDo():
             )
 
         except Exception as error:
-            traceback.print_exception(error)
+            logger.exception(error)
             raise error
 
     def logout(self, user_id):
@@ -228,7 +227,7 @@ class MSToDo():
                 self.store()
 
         except Exception as error:
-            traceback.print_exception(error)
+            logger.exception(error)
             raise error
 
     def create_task(self, user_id, task_list, task):
@@ -244,7 +243,7 @@ class MSToDo():
                 self.tokens.pop(user_id)
             raise error
         except Exception as error:
-            traceback.print_exception(error)
+            logger.exception(error)
             raise error
 
     def update_task(self, user_id, task_list, task_id, task):
@@ -260,7 +259,7 @@ class MSToDo():
                 self.tokens.pop(user_id)
             raise error
         except Exception as error:
-            traceback.print_exception(error)
+            logger.exception(error)
             raise error
 
     def remove_task(self, user_id, task_list, task_id):
@@ -275,7 +274,7 @@ class MSToDo():
                 self.tokens.pop(user_id)
             raise error
         except Exception as error:
-            traceback.print_exception(error)
+            logger.exception(error)
             raise error
 
     def create_list(self, user_id, list_name):
@@ -292,7 +291,7 @@ class MSToDo():
                 self.tokens.pop(user_id)
             raise error
         except Exception as error:
-            traceback.print_exception(error)
+            logger.exception(error)
             raise error
 
     def update_list(self, user_id, ms_id, list_name):
@@ -308,7 +307,7 @@ class MSToDo():
                 self.tokens.pop(user_id)
             raise error
         except Exception as error:
-            traceback.print_exception(error)
+            logger.exception(error)
             raise error
 
     def delete_list(self, user_id, ms_id):
@@ -323,7 +322,7 @@ class MSToDo():
                 self.tokens.pop(user_id)
             raise error
         except Exception as error:
-            traceback.print_exception(error)
+            logger.exception(error)
             raise error
 
     def get_lists(self):
@@ -352,7 +351,7 @@ class MSToDo():
                         'tasks': tasks
                     })
             except Exception as error:
-                traceback.print_exception(error)
+                logger.exception(error)
                 self.tokens.pop(user_id)
                 raise error
 

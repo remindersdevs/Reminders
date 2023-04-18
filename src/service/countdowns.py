@@ -94,6 +94,6 @@ class Countdowns():
             try:
                 self.dict[reminder_id]['id'] = GLib.timeout_add(wait, dictionary['callback'])
             except Exception as error:
-                logger.error(f'{error}: Failed to set timeout for {reminder_id}')
+                logger.exception(f'{error}: Failed to set timeout for {reminder_id}')
         else:
             dictionary['callback']()

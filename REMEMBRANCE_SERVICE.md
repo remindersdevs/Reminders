@@ -34,24 +34,25 @@ What days to repeat on for weekly repeating reminders, can be zero to just use t
 
 ## Reminder Object
 Type: a{sv}
-| Key | VariantType | Description |
-| --- | --- | --- |
-| 'title' | s | This is the title of the reminder. |
-| 'description' | s | This is a short description of the reminder. |
-| 'due-date' | u | This is a Unix timestamp for the day that the reminder is due. This should be at 00:00 of the desired day in UTC, and can be 0 if you don't want to set a due date. |
-| 'timestamp' | u | This is a Unix timestamp that sets when the notification will be sent. This has to be on the same day as the due date, and if it isn't the due date will be changed. This can be 0 if you don't want to send a notification. |
-| 'important' | b | Whether or not the reminder is important. |
-| 'completed' | b | Whether or not the reminder is completed. |
-| 'repeat-type' | q | This is the enun [RepeatType](#repeattype). Has no efffect on Microsoft Tasks. |
-| 'repeat-frequency' | q |  How often to repeat the reminder, so if 'repeat-type' is 4 and and 'repeat-frequency' is 3, it will repeat every 3 weeks. Has no efffect on Microsoft Tasks. |
-| 'repeat-days' | q | This is the enum [RepeatDays](#repeatdays). Has no efffect on Microsoft Tasks. |
-| 'repeat-times'| q | How many times in total the reminder should be shown, this gets decreased by 1 each time the reminder is shown. -1 if you want to repeat forever, or just set it to 1 for a normal non-recurring reminder. |
-| 'repeat-until' | u | This is a Unix timestamp that represents the last day that the reminder should be repeated on. Has no efffect on Microsoft Tasks. |
-| 'old-timestamp' | u | This is a Unix timestamp that represents the last time the reminder was shown, this is set automatically and cannot be changed. |
-| 'created-timestamp' | u | This is a Unix timestamp that represents the time the reminder was created, this is set automatically and cannot be changed. |
-| 'updated-timestamp' | u | This is a Unix timestamp that represents the last time the reminder was updated, this is set automatically and cannot be changed. |
-| 'list-id' | s | This is the id of the list that the reminder is in. |
-| 'user-id' | s | This is the id of the user that owns the reminder. |
+| Key | VariantType | Description | Default |
+| --- | --- | --- | --- |
+| 'id' | s | This is the id of the reminder. | This cannot be left blank, no default. |
+| 'title' | s | This is the title of the reminder. | '' |
+| 'description' | s | This is a short description of the reminder. | '' |
+| 'due-date' | u | This is a Unix timestamp for the day that the reminder is due. This should be at 00:00 of the desired day in UTC, and can be 0 if you don't want to set a due date. | 0 |
+| 'timestamp' | u | This is a Unix timestamp that sets when the notification will be sent. This has to be on the same day as the due date, and if it isn't the due date will be changed. This can be 0 if you don't want to send a notification. | 0 |
+| 'important' | b | Whether or not the reminder is important. | False |
+| 'completed' | b | Whether or not the reminder is completed. | False |
+| 'repeat-type' | q | This is the enun [RepeatType](#repeattype). Has no efffect on Microsoft Tasks. | 0 |
+| 'repeat-frequency' | q |  How often to repeat the reminder, so if 'repeat-type' is 4 and and 'repeat-frequency' is 3, it will repeat every 3 weeks. Has no efffect on Microsoft Tasks. | 1 |
+| 'repeat-days' | q | This is the enum [RepeatDays](#repeatdays). Has no efffect on Microsoft Tasks. | 0 |
+| 'repeat-times'| q | How many times in total the reminder should be shown, this gets decreased by 1 each time the reminder is shown. -1 if you want to repeat forever, or just set it to 1 for a normal non-recurring reminder. | 1 |
+| 'repeat-until' | u | This is a Unix timestamp that represents the last day that the reminder should be repeated on. Has no efffect on Microsoft Tasks. | 0 |
+| 'old-timestamp' | u | This is a Unix timestamp that represents the last time the reminder was shown, this is set automatically and cannot be changed. | 0 |
+| 'created-timestamp' | u | This is a Unix timestamp that represents the time the reminder was created, this is set automatically and cannot be changed. | 0 |
+| 'updated-timestamp' | u | This is a Unix timestamp that represents the last time the reminder was updated, this is set automatically and cannot be changed. | 0 |
+| 'list-id' | s | This is the id of the list that the reminder is in. | 'local' |
+| 'user-id' | s | This is the id of the user that owns the reminder. | 'local' |
 
 ## Methods
 
@@ -63,6 +64,7 @@ Add a new reminder
     - [reminder](#reminder-object)
         - Type: a{sv}
         - Note that the 'completed' key will be ignored here
+        - You can leave any of these values blank, in that case the default value will be used
 
 - Returns (su)
     - reminder-id
@@ -80,6 +82,7 @@ Update an existing reminder
     - [reminder](#reminder-object)
         - Type: a{sv}
         - Note that the 'completed' key will be ignored here
+        - You can leave any of these values blank, in that case the previous value will be used
 
 - Returns (u)
     - updated-timestamp
@@ -286,13 +289,13 @@ Emitted when a list is created or updated
         - The id of the app that initiated the change
     - user-id
         - Type: s
-        - The user id of the list that was removed
+        - The user id of the list that was updated
     - list-id
         - Type: s
-        - The id of the list that was removed
+        - The id of the list that was updated
     - list-name
         - Type: s
-        - The name of the list
+        - The name of the list that was updated
 
 ### MSSignedIn
 Emitted when the user signs in to a Microsoft account from the browser

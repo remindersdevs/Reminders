@@ -13,6 +13,15 @@
 
 </div>
 
+## Features
+- Set recurring reminders
+- Schedule notifications
+- Sort, filter, and search for reminders
+- Mark reminders as important or complete
+- Organize reminders using lists
+- Optionally play a sound when notifications are sent
+- Optionally sync with Microsoft To Do
+
 ## Translators
 You can translate Reminders on [Weblate](https://hosted.weblate.org/engage/reminders/), or through GitHub pull requests.
 
@@ -57,7 +66,6 @@ remembrance --restart-service
 ```
 
 ## Todo
-- Add support for syncing with Google tasks, sadly reminders wont be able to be synced though
 - Add a debug mode
 - Make a GNOME Shell extension that lets you view your reminders
 - Maybe integrate the search with GNOME Shell

@@ -945,7 +945,7 @@ class MainWindow(Adw.ApplicationWindow):
                     self.reminder_lookup_dict.pop(reminder.id)
                     self.reminders_list.remove(reminder)
         except Exception as error:
-            logger.error(error)
+            logger.exception(error)
 
         self.set_selecting(False)
 
@@ -970,7 +970,7 @@ class MainWindow(Adw.ApplicationWindow):
                     reminder.options['important'] = important
                     reminder.set_important()
         except Exception as error:
-            logger.error(error)
+            logger.exception(error)
 
         self.reminders_list.invalidate_sort()
         self.selected_changed()
@@ -988,7 +988,7 @@ class MainWindow(Adw.ApplicationWindow):
                     reminder.options['updated-timestamp'] = results.unpack()[0]
                     reminder.set_completed(completed)
         except Exception as error:
-            logger.error(error)
+            logger.exception(error)
 
         self.reminders_list.invalidate_sort()
         self.selected_changed()

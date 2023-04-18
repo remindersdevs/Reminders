@@ -121,9 +121,9 @@ class Remembrance(Adw.Application):
                     )
                     self.connect_to_service()
                 except Exception as error:
-                    self.logger.error(f"{error}: Couldn't quit {info.service_executable}")
+                    self.logger.exception(f"{error}: Couldn't quit {info.service_executable}")
             else:
-                self.logger.error(f'{info.service_executable} version is too low')
+                self.logger.exception(f'{info.service_executable} version is too low')
                 sys.exit(1)
 
     def do_activate(self):

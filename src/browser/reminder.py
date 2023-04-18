@@ -307,7 +307,7 @@ class Reminder(Adw.ExpanderRow):
                     self.win.reminder_lookup_dict.pop(self.id)
             self.win.reminders_list.remove(self)
         except Exception as error:
-            logger.error(error)
+            logger.exception(error)
 
     def do_update_completed(self):
         try:
@@ -326,7 +326,7 @@ class Reminder(Adw.ExpanderRow):
 
             self.win.reminders_list.invalidate_sort()
         except Exception as error:
-            logger.error(error)
+            logger.exception(error)
 
     @Gtk.Template.Callback()
     def update_completed(self, button = None):

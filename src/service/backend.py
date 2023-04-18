@@ -263,6 +263,7 @@ class Reminders():
         self._register()
 
     def emit_error(self, error):
+        logger.exception(error)
         self.do_emit('MSError', GLib.Variant('(s)', ("".join(traceback.format_exception(error)),)))
 
     def update_reminder_ids(self, local, ms, list_ids):
@@ -480,7 +481,6 @@ class Reminders():
                 dictionary[reminder_id] = reminder_dict
                 self._save_reminders()
         except Exception as error:
-            traceback.print_exception(error)
             self.emit_error(error)
 
     def _ms_update_reminder(self, reminder_id, reminder_dict, old_user_id, old_list_id, old_task_id, updating, dictionary):
@@ -497,7 +497,6 @@ class Reminders():
                 dictionary[reminder_id] = reminder_dict
                 self._save_reminders(dictionary)
         except Exception as error:
-            traceback.print_exception(error)
             self.emit_error(error)
 
     def _ms_update_completed(self, reminder_id, reminder_dict):
@@ -508,7 +507,6 @@ class Reminders():
             except requests.ConnectionError:
                 self.queue.update_completed(reminder_id)
         except Exception as error:
-            traceback.print_exception(error)
             self.emit_error(error)
 
     def _ms_remove_reminder(self, reminder_id, task_id, user_id, task_list):
@@ -519,7 +517,6 @@ class Reminders():
             except requests.ConnectionError as error:
                 self.queue.remove_reminder(reminder_id, task_id, user_id, task_list)
         except Exception as error:
-            traceback.print_exception(error)
             self.emit_error(error)
 
     def _ms_create_list(self, user_id, list_name, list_id):
@@ -537,7 +534,6 @@ class Reminders():
             }
             self._save_list_ids()
         except Exception as error:
-            traceback.print_exception(error)
             self.emit_error(error)
 
     def _ms_rename_list(self, user_id, new_name, list_id):
@@ -549,7 +545,6 @@ class Reminders():
             except requests.ConnectionError:
                 self.queue.update_list(list_id)
         except Exception as error:
-            traceback.print_exception(error)
             self.emit_error(error)
 
     def _ms_delete_list(self, user_id, list_id):
@@ -563,7 +558,6 @@ class Reminders():
             self.list_ids.pop(list_id)
             self._save_list_ids()
         except Exception as error:
-            traceback.print_exception(error)
             self.emit_error(error)
 
     def _to_ms_task(self, reminder_id, reminder = None, old_user_id = None, old_list_id = None, old_task_id = None, updating = None, only_completed = False):
@@ -734,7 +728,7 @@ class Reminders():
         try:
             self.sound.play_full_finish(result)
         except Exception as error:
-            logger.error(f"{error} Couldn't play notification sound")
+            logger.exception(f"{error} Couldn't play notification sound")
         self.playing_sound = False
 
     def _update_repeat(self, reminder_id, dictionary):
@@ -1342,7 +1336,7 @@ class Reminders():
                     self._remove_countdown(reminder_id)
 
         except Exception as error:
-            traceback.print_exception(error)
+            logger.exception(error)
 
     def return_lists(self):
         return GLib.Variant('(a{sa{ss}})', (self.list_names,))

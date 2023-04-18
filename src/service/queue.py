@@ -223,7 +223,7 @@ class Queue():
                     except requests.ConnectionError as error:
                         raise error
                     except Exception as error:
-                        traceback.print_exception(error)
+                        logger.exception(error)
 
                     self.queue['lists']['create'].remove(list_id)
             except requests.ConnectionError as error:
@@ -242,7 +242,7 @@ class Queue():
                     except requests.ConnectionError as error:
                         raise error
                     except Exception as error:
-                        traceback.print_exception(error)
+                        logger.exception(error)
 
                     self.queue['reminders']['create'].remove(reminder_id)
             except requests.ConnectionError as error:
@@ -259,7 +259,7 @@ class Queue():
                     except requests.ConnectionError as error:
                         raise error
                     except Exception as error:
-                        traceback.print_exception(error)
+                        logger.exception(error)
 
                     self.queue['reminders']['complete'].remove(reminder_id)
             except requests.ConnectionError as error:
@@ -283,7 +283,7 @@ class Queue():
                     except requests.ConnectionError as error:
                         raise error
                     except Exception as error:
-                        traceback.print_exception(error)
+                        logger.exception(error)
 
                     self.queue['reminders']['update'].pop(reminder_id)
             except requests.ConnectionError as error:
@@ -304,7 +304,7 @@ class Queue():
                     except requests.ConnectionError as error:
                         raise error
                     except Exception as error:
-                        traceback.print_exception(error)
+                        logger.exception(error)
 
                     self.queue['lists']['update'].remove(list_id)
             except requests.ConnectionError as error:
@@ -324,7 +324,7 @@ class Queue():
                     except requests.ConnectionError as error:
                         raise error
                     except Exception as error:
-                        traceback.print_exception(error)
+                        logger.exception(error)
 
                     self.queue['reminders']['delete'].remove(value)
             except requests.ConnectionError as error:
@@ -343,7 +343,7 @@ class Queue():
                     except requests.ConnectionError as error:
                         raise error
                     except Exception as error:
-                        traceback.print_exception(error)
+                        logger.exception(error)
 
                     self.queue['lists']['delete'].remove(value)
             except requests.ConnectionError as error:

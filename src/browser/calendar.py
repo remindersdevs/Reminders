@@ -81,4 +81,4 @@ class Calendar(threading.Thread):
             else:
                 self.on_countdown_done()
         except Exception as error:
-            logger.error(f'{error}: Failed to set timeout to refresh date labels')
+            logger.exception(f'{error}: Failed to set timeout to refresh date labels')

@@ -133,7 +133,7 @@ class PreferencesWindow(Adw.PreferencesWindow):
         try:
             self.app.win.sign_in()
         except Exception as error:
-            self.app.logger.error(error)
+            self.app.logger.exception(error)
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/ms_user_row.ui')
 class MSUserRow(Adw.ExpanderRow):
@@ -229,7 +229,7 @@ class MSUserRow(Adw.ExpanderRow):
             confirm_dialog.connect('response::logout', lambda *args: self.preferences.app.win.sign_out(self.user_id))
             confirm_dialog.present()
         except Exception as error:
-            self.preferences.app.logger.error(error)
+            self.preferences.app.logger.exception(error)
 
     @Gtk.Template.Callback()
     def all_lists_selected(self, button = None, data = None):
