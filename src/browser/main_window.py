@@ -453,11 +453,14 @@ class MainWindow(Adw.ApplicationWindow):
             for list_user_id, dictionary in self.task_list_names.items():
                 if user_id == list_user_id:
                     continue
-                if list_name in dictionary.values():
-                    self.duplicated.append(list_name)
-                    duplicated = True
-                    break
-
+                for task_list_id, task_list_name in dictionary.items():
+                    if list_name == task_list_name:
+                        if list_user_id in self.task_list_rows and task_list_id in self.task_list_rows[list_user_id]:
+                            label = f"{task_list_name} ({_('Local') if list_user_id == 'local' else self.emails[list_user_id]})"
+                            self.task_list_rows[list_user_id][task_list_id].label.set_label(label)
+                        if not duplicated:
+                            self.duplicated.append(list_name)
+                            duplicated = True
         if duplicated:
             label = f"{list_name} ({_('Local') if user_id == 'local' else self.emails[user_id]})"
         else:
@@ -489,20 +492,29 @@ class MainWindow(Adw.ApplicationWindow):
         self.update_task_list()
 
     def remove_task_list_row(self, user_id, list_id):
+        old_duplicated = self.duplicated.copy()
         self.duplicated = []
         values = []
         for dictionary in self.task_list_names.values():
-            for i in dictionary.values():
-                if i in values:
-                    self.duplicated.append(i)
+            for task_list_name in dictionary.values():
+                if task_list_name in values:
+                    self.duplicated.append(task_list_name)
                 else:
-                    values.append(i)
+                    values.append(task_list_name)
 
         row = self.task_list_rows[user_id][list_id]
         self.task_lists_list.remove(row)
         self.task_list_rows[user_id].pop(list_id)
         if len(self.task_list_rows[user_id]) == 0:
             self.task_list_rows.pop(user_id)
+
+        for name in old_duplicated:
+            if name not in self.duplicated:
+                for list_user_id, dictionary in self.task_list_names.items():
+                    for task_list_id, task_list_name in dictionary.items():
+                        if task_list_name == name:
+                            self.task_list_rows[list_user_id][task_list_id].label.set_label(name)
+                            return
 
     def list_removed(self, user_id, list_id):
         for dictionary in self.all_task_list_names, self.task_list_names:
