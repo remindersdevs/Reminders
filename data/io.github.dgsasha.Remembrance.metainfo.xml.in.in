@@ -79,6 +79,14 @@
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
   <releases>
+    <release version="3.10" date="2023-04-18">
+      <description>
+        <ul>
+          <li>Remove warning about cloud syncing being in beta</li>
+          <li>Fix issue where you could make reminder recurring when it shouldn't be</li>
+        </ul>
+      </description>
+    </release>
     <release version="3.9" date="2023-04-18">
       <description>
         <ul>
@@ -165,41 +173,6 @@
           <li>Added more keyboard shortcuts</li>
           <li>Lots of bugfixes</li>
           <li>Bump API version</li>
-        </ul>
-      </description>
-    </release>
-    <release version="2.1" date="2023-04-05">
-      <description>
-        <ul>
-          <li>Fix a few minor bugs</li>
-          <li>Update dutch translation</li>
-        </ul>
-      </description>
-    </release>
-    <release version="2.0" date="2023-04-03">
-      <description>
-        <ul>
-          <li>Added support for creating and editing task lists</li>
-          <li>Added support for syncing with Microsoft To Do</li>
-          <li>Reduced memory usage</li>
-          <li>Redesigned some UI elements</li>
-          <li>Better support for mobile devices</li>
-          <li>Better error dialogs</li>
-          <li>Fix some issues with the backend</li>
-        </ul>
-      </description>
-    </release>
-    <release version="1.5" date="2023-03-10">
-      <description>
-        <ul>
-          <li>Some small UI improvements.</li>
-        </ul>
-      </description>
-    </release>
-    <release version="1.4" date="2023-03-10">
-      <description>
-        <ul>
-          <li>Fix issue where app can corrupt or lose its data.</li>
         </ul>
       </description>
     </release>

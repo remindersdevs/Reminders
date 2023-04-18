@@ -211,7 +211,7 @@
                                               </object>
                                             </property>
                                             <property name="active" bind-source="time_box" bind-property="sensitive" bind-flags="sync-create|bidirectional"/>
-                                            <signal name="notify::toggled" handler="time_switched" swapped="no"/>
+                                            <signal name="toggled" handler="time_switched" swapped="no"/>
                                           </object>
                                         </child>
                                       </object>

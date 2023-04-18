@@ -19,10 +19,8 @@ from gettext import gettext as _
 
 RELEASE_NOTES = '''
 <ul>
-    <li>Change delete icon</li>
-    <li>Fix some ui bugs</li>
-    <li>Some tiny performance improvements</li>
-    <li>Improve logging</li>
+    <li>Remove warning about cloud syncing being in beta</li>
+    <li>Fix issue where you could make reminder recurring when it shouldn't be</li>
 </ul>
 '''
 
