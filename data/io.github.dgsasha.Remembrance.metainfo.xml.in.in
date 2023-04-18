@@ -66,10 +66,10 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/dgsasha/remembrance/c72016eaad38647bd18efdfd24cb239d690228ad/screenshot-dark.png</image>
+      <image>https://raw.githubusercontent.com/dgsasha/remembrance/3b0da9e0c952669c8e31e9c1c585605557f264aa/screenshot-dark.png</image>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/dgsasha/remembrance/c72016eaad38647bd18efdfd24cb239d690228ad/screenshot-light.png</image>
+      <image>https://raw.githubusercontent.com/dgsasha/remembrance/3b0da9e0c952669c8e31e9c1c585605557f264aa/screenshot-light.png</image>
     </screenshot>
   </screenshots>
 
@@ -79,6 +79,14 @@
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
   <releases>
+    <release version="3.9" date="2023-04-18">
+      <description>
+        <ul>
+          <li>Change delete icon</li>
+          <li>Improve logging</li>
+        </ul>
+      </description>
+    </release>
     <release version="3.8" date="2023-04-18">
       <description>
         <ul>

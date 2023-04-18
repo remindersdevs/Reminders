@@ -336,7 +336,7 @@ class Remembrance(Adw.Application):
         handler.setLevel(logging.INFO)
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(funcName)s - %(message)s')
         handler.setFormatter(formatter)
-        self.logger = logging.getLogger(info.app_name)
+        self.logger = logging.getLogger(info.app_executable)
         self.logger.setLevel(logging.INFO)
         self.logger.addHandler(handler)
 
