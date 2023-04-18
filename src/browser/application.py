@@ -32,7 +32,7 @@ from remembrance.browser.preferences import PreferencesWindow
 from remembrance.browser.shortcuts_window import ShortcutsWindow
 
 # Always update this when new features are added that require the service to restart
-MIN_SERVICE_VERSION = 3.8
+MIN_SERVICE_VERSION = 3.9
 
 class Remembrance(Adw.Application):
     '''Application for the frontend'''
@@ -216,6 +216,8 @@ class Remembrance(Adw.Application):
         reminder_id, timestamp, old_timestamp, repeat_times = parameters.unpack()
         reminder = self.win.reminder_lookup_dict[reminder_id]
         reminder.update_repeat(timestamp, old_timestamp, repeat_times)
+        self.win.reminders_list.invalidate_sort()
+        self.win.selected_changed()
 
     def refreshed_cb(self, proxy, sender_name, signal_name, parameters):
         new_reminders, deleted_reminders = parameters.unpack()
@@ -231,6 +233,9 @@ class Remembrance(Adw.Application):
         for reminder_id in deleted_reminders:
             self.delete_reminder(reminder_id)
 
+        self.win.reminders_list.invalidate_sort()
+        self.win.selected_changed()
+
     def reminder_updated_cb(self, proxy, sender_name, signal_name, parameters):
         app_id, reminder = parameters.unpack()
         if app_id != info.app_id:
@@ -239,6 +244,9 @@ class Remembrance(Adw.Application):
                 self.win.reminder_lookup_dict[reminder_id].update(reminder)
             else:
                 self.win.display_reminder(**reminder)
+
+        self.win.reminders_list.invalidate_sort()
+        self.win.selected_changed()
 
     def delete_reminder(self, reminder_id):
         try:

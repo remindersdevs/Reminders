@@ -1,6 +1,6 @@
 project(
     'remembrance',
-    version: '3.8',
+    version: '3.9',
     meson_version: '>= 0.59',
     default_options: ['prefix=/usr']
 )
@@ -11,8 +11,6 @@ dependency('libadwaita-1')
 dependency('gsound')
 
 release_type = get_option('release-type')
-
-service_version = '3.8'
 
 app_executable = 'remembrance'
 

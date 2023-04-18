@@ -473,6 +473,7 @@ class ReminderEditWindow(Adw.Window):
 
             self.set_visible(False)
             self.reminder.set_expanded(False)
+            self.win.reminders_list.invalidate_sort()
         except Exception as error:
             logger.exception(error)
 

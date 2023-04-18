@@ -105,6 +105,9 @@ class MainWindow(Adw.ApplicationWindow):
         self.selected_user_id, self.selected_list_id = self.app.settings.get_value('selected-task-list').unpack()
         self.set_time_format()
 
+        self.reminders_list.set_placeholder(self.placeholder)
+        self.reminders_list.set_sort_func(self.sort_func)
+
         self.create_action('all', lambda *args: self.all_reminders())
         self.create_action('upcoming', lambda *args: self.upcoming_reminders())
         self.create_action('past', lambda *args: self.past_reminders())
@@ -122,17 +125,12 @@ class MainWindow(Adw.ApplicationWindow):
 
         self.activate_action('win.' + page, None)
 
-        self.app.settings.connect('changed::selected-task-list', lambda *args: self.update_task_list())
-
         self.app.service.connect('g-signal::MSSignedIn', self.signed_in_cb)
         self.app.service.connect('g-signal::MSSignedOut', self.signed_out_cb)
 
         self.descending_sort = self.app.settings.get_boolean('descending-sort')
         self.sort = self.app.settings.get_enum('sort')
         self.sort_button.set_icon_name('view-sort-descending-symbolic' if self.descending_sort else 'view-sort-ascending-symbolic')
-
-        self.reminders_list.set_placeholder(self.placeholder)
-        self.reminders_list.set_sort_func(self.sort_func)
 
         self.reminder_lookup_dict = {}
         self.calendar = Calendar(self)
@@ -157,6 +155,8 @@ class MainWindow(Adw.ApplicationWindow):
         self.task_lists_list.set_sort_func(self.task_lists_sort_func)
         self.app.settings.connect('changed::time-format', lambda *args: self.set_time_format())
         self.set_application(self.app)
+
+        self.reminders_list.invalidate_sort()
 
     @GObject.Property(type=int)
     def time_format(self):
@@ -414,14 +414,13 @@ class MainWindow(Adw.ApplicationWindow):
                         if len(self.task_list_names[user_id]) == 0:
                             self.task_list_names.pop(user_id)
 
-        for user_id, list_id, list_name in new_task_lists:
-            self.update_task_list_row(user_id, list_id, list_name)
-        for user_id, list_id in removed_task_lists:
-            self.remove_task_list_row(user_id, list_id)
+        if len(new_task_lists) > 0 or len(removed_task_lists) > 0:
+            for user_id, list_id, list_name in new_task_lists:
+                self.update_task_list_row(user_id, list_id, list_name)
+            for user_id, list_id in removed_task_lists:
+                self.remove_task_list_row(user_id, list_id)
 
-        self.set_reminder_task_list_dropdown()
-
-        self.update_task_list()
+            self.set_reminder_task_list_dropdown()
 
     def signed_out_cb(self, proxy, sender_name, signal_name, parameters):
         user_id = parameters.unpack()[0]
@@ -440,7 +439,7 @@ class MainWindow(Adw.ApplicationWindow):
                 row.activate()
             self.page_sub_label.set_label(row.label.get_label())
         except Exception as error:
-            logger.info(error)
+            logger.exception(error)
             self.app.settings.set_value('selected-task-list', GLib.Variant('(ss)', ('all', 'all')))
             return
 
@@ -489,8 +488,6 @@ class MainWindow(Adw.ApplicationWindow):
 
         self.set_reminder_task_list_dropdown()
 
-        self.update_task_list()
-
     def remove_task_list_row(self, user_id, list_id):
         old_duplicated = self.duplicated.copy()
         self.duplicated = []
@@ -528,8 +525,6 @@ class MainWindow(Adw.ApplicationWindow):
         self.remove_task_list_row(user_id, list_id)
 
         self.set_reminder_task_list_dropdown()
-
-        self.update_task_list()
 
     def set_task_lists(self):
         self.task_list_names = {}
@@ -570,7 +565,16 @@ class MainWindow(Adw.ApplicationWindow):
 
         self.set_reminder_task_list_dropdown()
 
-        self.update_task_list()
+        try:
+            row = self.task_list_rows[self.selected_user_id][self.selected_list_id]
+            row.activate()
+            self.page_sub_label.set_label(row.label.get_label())
+        except:
+            self.app.settings.connect('changed::selected-task-list', lambda *args: self.update_task_list())
+            self.task_list_rows['all']['all'].activate()
+            return
+
+        self.app.settings.connect('changed::selected-task-list', lambda *args: self.update_task_list())
 
     def set_reminder_task_list_dropdown(self):
         self.string_list = Gtk.StringList()
@@ -697,7 +701,9 @@ class MainWindow(Adw.ApplicationWindow):
         action = self.app.settings.create_action(name)
         self.add_action(action)
 
-    def task_list_filter(self, user_id, task_list):
+    def task_list_filter(self, reminder):
+        user_id = reminder.options['user-id']
+        task_list = reminder.options['list-id']
         if self.selected_list_id == 'all':
             return True
         else:
@@ -712,7 +718,7 @@ class MainWindow(Adw.ApplicationWindow):
     def all_filter(self, reminder):
         reminder.set_past(False)
         reminder.set_no_strikethrough(False)
-        retval = self.task_list_filter(reminder.options['user-id'], reminder.options['list-id'])
+        retval = self.task_list_filter(reminder)
         reminder.set_sensitive(retval)
         if not retval:
             self.reminders_list.unselect_row(reminder)
@@ -722,7 +728,7 @@ class MainWindow(Adw.ApplicationWindow):
     def upcoming_filter(self, reminder):
         now = floor(time.time())
         if (reminder.options['timestamp'] == 0 or reminder.options['timestamp'] > now) and not reminder.completed:
-            retval = self.task_list_filter(reminder.options['user-id'], reminder.options['list-id'])
+            retval = self.task_list_filter(reminder)
             reminder.set_past(False)
         else:
             retval = False
@@ -736,7 +742,7 @@ class MainWindow(Adw.ApplicationWindow):
         now = ceil(time.time())
         if not reminder.completed and ((reminder.options['old-timestamp'] != 0 and reminder.options['old-timestamp'] < now) or \
         (reminder.options['due-date'] != 0 and datetime.datetime.fromtimestamp(reminder.options['due-date']).astimezone(tz=datetime.timezone.utc).date() < datetime.date.today())):
-            retval = self.task_list_filter(reminder.options['user-id'], reminder.options['list-id'])
+            retval = self.task_list_filter(reminder)
             reminder.set_past(True)
         else:
             retval = False
@@ -748,7 +754,7 @@ class MainWindow(Adw.ApplicationWindow):
 
     def completed_filter(self, reminder):
         if reminder.completed:
-            retval = self.task_list_filter(reminder.options['user-id'], reminder.options['list-id'])
+            retval = self.task_list_filter(reminder)
             reminder.set_past(False)
             reminder.set_no_strikethrough(True)
         else:

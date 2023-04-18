@@ -19,9 +19,10 @@ from gettext import gettext as _
 
 RELEASE_NOTES = '''
 <ul>
-    <li>UI Improvements to sidebar</li>
-    <li>Fix issues when moving reminders between lists</li>
-    <li>Fix issue with error dialogs</li>
+    <li>Change delete icon</li>
+    <li>Fix some ui bugs</li>
+    <li>Some tiny performance improvements</li>
+    <li>Improve logging</li>
 </ul>
 '''
 

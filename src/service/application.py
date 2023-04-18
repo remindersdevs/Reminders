@@ -60,7 +60,7 @@ class RemembranceService(Gio.Application):
             self.reminders = Reminders(self)
         except Exception as error:
             self.quit()
-            traceback.print_exception(error)
+            self.logger.exception(error)
             raise error
 
     def do_startup(self):
@@ -87,7 +87,7 @@ class RemembranceService(Gio.Application):
             None
         )
 
-        proxy.call_sync(
+        browser.call_sync(
             'Activate',
             GLib.Variant('(sava{sv})', ('notification-clicked', None, None)),
             Gio.DBusCallFlags.NONE,

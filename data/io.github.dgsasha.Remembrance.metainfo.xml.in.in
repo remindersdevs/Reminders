@@ -83,6 +83,8 @@
       <description>
         <ul>
           <li>Change delete icon</li>
+          <li>Fix some ui bugs</li>
+          <li>Some tiny performance improvements</li>
           <li>Improve logging</li>
         </ul>
       </description>

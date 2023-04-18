@@ -11,8 +11,6 @@ info_conf.set('SERVICE_EXECUTABLE', service_executable)
 info_conf.set('SERVICE_OBJECT', service_object)
 info_conf.set('SERVICE_PATH', get_option('prefix') / get_option('libexecdir') / service_executable)
 
-info_conf.set('SERVICE_VERSION', service_version)
-
 info_conf.set('PORTALS_ENABLED', get_option('enable-portals') ? 'True' : 'False')
 
 info_conf.set('CLIENT_ID', get_option('client-id'))

@@ -17,7 +17,7 @@ service_interface = '@SERVICE_INTERFACE@'
 service_object = '@SERVICE_OBJECT@'
 service_path = '@SERVICE_PATH@'
 
-service_version = float('@SERVICE_VERSION@')
+service_version = float('@VERSION@')
 
 portals_enabled = literal_eval('@PORTALS_ENABLED@')
 

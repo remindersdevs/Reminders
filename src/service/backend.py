@@ -1233,8 +1233,9 @@ class Reminders():
             if user_id != 'local':
                 if user_id not in self.synced_ids:
                     self.synced_ids[user_id] = []
-                self.synced_ids[user_id].append(list_id)
-                self.set_enabled_lists(self.synced_ids, False)
+                if 'all' not in self.synced_ids[user_id]:
+                    self.synced_ids[user_id].append(list_id)
+                    self.set_enabled_lists(self.synced_ids, False)
                 GLib.idle_add(lambda *args: self._ms_create_list(user_id, list_name, list_id))
 
             self.list_names[user_id][list_id] = list_name

@@ -1,4 +1,4 @@
-# Reminders DBus Service Info, version 3.8
+# Reminders DBus Service Info, version 3.9
 name: io.github.dgsasha.Remembrance.Service2
 
 interface: io.github.dgsasha.Remembrance.Service2.Reminders

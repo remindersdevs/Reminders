@@ -194,7 +194,6 @@ class Reminder(Adw.ExpanderRow):
             edit_win.options = options.copy()
 
         self.set_options(options)
-        self.win.selected_changed()
 
     def set_options(self, options):
         self.options.update(options)
@@ -204,12 +203,10 @@ class Reminder(Adw.ExpanderRow):
         self.set_labels()
         self.refresh_time()
         self.changed()
-        self.win.reminders_list.invalidate_sort()
 
     def update_repeat(self, timestamp, old_timestamp, repeat_times):
         self.set_repeat_times(repeat_times)
         self.set_timestamp(timestamp, old_timestamp)
-        self.win.reminders_list.invalidate_sort()
 
     def set_repeat_times(self, times):
         if self.options['repeat-times'] != times:
