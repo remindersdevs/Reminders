@@ -74,7 +74,7 @@
                 <property name="valign">center</property>
                 <property name="child">
                   <object class="AdwButtonContent">
-                    <property name="icon-name">edit-delete-symbolic</property>
+                    <property name="icon-name">user-trash-symbolic</property>
                     <property name="label" translatable="yes">Remove</property>
                   </object>
                 </property>

@@ -145,7 +145,7 @@ class ListRow(Adw.EntryRow):
         self.save_button.add_css_class('suggested-action')
         self.save_button.connect('clicked', lambda *args: self.update())
         self.add_suffix(self.save_button)
-        self.delete_button = Gtk.Button.new_from_icon_name('edit-delete-symbolic')
+        self.delete_button = Gtk.Button.new_from_icon_name('user-trash-symbolic')
         self.delete_button.set_valign(Gtk.Align.CENTER)
         self.delete_button.add_css_class('circular')
         self.delete_button.add_css_class('destructive-action')

@@ -66,7 +66,7 @@ remembrance --restart-service
 ```
 
 ## Todo
-- Add a debug mode
+- Add a debug mode and make it easier to get logs
 - Make a GNOME Shell extension that lets you view your reminders
 - Maybe integrate the search with GNOME Shell
 
