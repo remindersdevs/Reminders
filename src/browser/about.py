@@ -19,8 +19,7 @@ from gettext import gettext as _
 
 RELEASE_NOTES = '''
 <ul>
-    <li>Remove warning about cloud syncing being in beta</li>
-    <li>Fix issue where you could make reminder recurring when it shouldn't be</li>
+    <li>Fix versioning by bumping to 4.0</li>
 </ul>
 '''
 

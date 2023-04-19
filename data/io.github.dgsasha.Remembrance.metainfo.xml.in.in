@@ -79,6 +79,13 @@
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
   <releases>
+    <release version="4.0" date="2023-04-18">
+      <description>
+        <ul>
+          <li>Fix versioning by bumping to 4.0</li>
+        </ul>
+      </description>
+    </release>
     <release version="3.10" date="2023-04-18">
       <description>
         <ul>
