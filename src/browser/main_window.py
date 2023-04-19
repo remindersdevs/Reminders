@@ -365,16 +365,16 @@ class MainWindow(Adw.ApplicationWindow):
             if reminder_week == week:
                 return time.format('%A')
             if not short_date:
-                return time.format('%d %B')
+                return time.format("<span allow_breaks='false'>%d %B</span>")
 
         if short_date:
             return time.format('%x')
 
-        return time.format('%d %B %Y')
+        return time.format("<span allow_breaks='false'>%d %B</span> %Y")
 
     def get_time_label(self, time):
         if self.props.time_format == info.TimeFormat.TWELVE_HOUR:
-            time = time.format("%I:%M %p")
+            time = time.format("<span allow_breaks='false'>%I:%M %p</span>")
         else:
             time = time.format('%H:%M')
         return time

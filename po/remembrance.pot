@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-18 20:45-0400\n"
+"POT-Creation-Date: 2023-04-18 21:05-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -400,7 +400,7 @@ msgid "Move"
 msgstr ""
 
 #: src/browser/resources/ui/main_window.ui:519
-#: src/browser/resources/ui/reminder.ui:78 src/browser/edit_lists_window.py:190
+#: src/browser/resources/ui/reminder.ui:79 src/browser/edit_lists_window.py:190
 #: src/browser/reminder.py:342
 msgid "Remove"
 msgstr ""
@@ -524,7 +524,7 @@ msgstr ""
 msgid "60 mins"
 msgstr ""
 
-#: src/browser/resources/ui/reminder.ui:109
+#: src/browser/resources/ui/reminder.ui:110
 msgid "Edit"
 msgstr ""
 
