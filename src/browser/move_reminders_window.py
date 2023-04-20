@@ -59,12 +59,12 @@ class MoveRemindersWindow(Adw.Window):
                 options['user-id'], options['list-id'] = self.rows[selected]
                 if reminder.get_sensitive() and reminder.options['list-id'] != options['list-id'] or reminder.options['user-id'] != options['user-id']:
                     if options['user-id'] != 'local':
-                        options['repeat-type'] = 0
-                        options['repeat-frequency'] = 1
-                        options['repeat-days'] = 0
+                        if options['repeat-type'] in (1, 2):
+                            options['repeat-type'] = 0
+                            options['repeat-frequency'] = 1
+                            options['repeat-days'] = 0
                         options['repeat-until'] = 0
-                        if options['repeat-times'] not in (1, 0):
-                            options['repeat-times'] = 1 if options['timestamp'] > floor(time.time()) else 0
+                        options['repeat-times'] = -1
 
                     results = self.win.app.run_service_method(
                         'UpdateReminder',

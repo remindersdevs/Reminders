@@ -35,6 +35,8 @@ class RepeatType(IntEnum):
     HOUR = 2
     DAY = 3
     WEEK = 4
+    MONTH = 5
+    YEAR = 6
 
 class RepeatDays(IntFlag):
     MON = auto()

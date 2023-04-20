@@ -16,12 +16,14 @@
 import os
 import json
 import requests
-import traceback
+import logging
 
 from copy import deepcopy
 
 from remembrance import info
 QUEUE_FILE = f'{info.data_dir}/queue.json'
+
+logger = logging.getLogger(info.service_executable)
 
 class Queue():
     def __init__(self, reminders):
@@ -114,8 +116,6 @@ class Queue():
     def update_reminder(self, reminder_id, old_task_id, old_user_id, old_list_id, updating, retry = True):
         try:
             if reminder_id not in self.queue['reminders']['create']:
-                if reminder_id in self.queue['reminders']['complete']:
-                    self.queue['reminders']['complete'].pop(reminder_id)
                 if reminder_id not in self.queue['reminders']['update']:
                     self.queue['reminders']['update'][reminder_id] = [old_task_id, old_user_id, old_list_id, updating]
                 self.write()
@@ -128,7 +128,7 @@ class Queue():
 
     def update_completed(self, reminder_id, retry = True):
         try:
-            if reminder_id not in self.queue['reminders']['create'] and reminder_id not in self.queue['reminders']['update'] and reminder_id not in self.queue['reminders']['complete']:
+            if reminder_id not in self.queue['reminders']['complete']:
                 self.queue['reminders']['complete'].append(reminder_id)
                 self.write()
         except Exception as error:
@@ -201,9 +201,9 @@ class Queue():
 
     def load(self):
         queue = deepcopy(self.queue)
-        list_ids = deepcopy(self.reminders.list_ids)
-        ms = self.reminders.ms.copy()
-        local = self.reminders.local.copy()
+        list_ids = self.reminders.list_ids
+        ms = self.reminders.ms
+        local = self.reminders.local
         list_names = self.reminders.list_names
 
         try:
@@ -254,7 +254,7 @@ class Queue():
                 for reminder_id in queue['reminders']['complete']:
                     try:
                         if reminder_id in ms:
-                            self.reminders._to_ms_task(reminder_id, ms[reminder_id], updating=True, only_completed=True)
+                            self.reminders._ms_set_completed(reminder_id, ms[reminder_id])
 
                     except requests.ConnectionError as error:
                         raise error
@@ -351,11 +351,13 @@ class Queue():
             except:
                 self.queue['lists']['delete'] = []
         except requests.ConnectionError as error:
-            self.reminders.update_reminder_ids(local, ms, list_ids)
             if queue != self.queue:
                 self.write()
+            self.reminders._save_reminders()
+            self.reminders._save_list_ids()
             raise error
 
-        self.reminders.update_reminder_ids(local, ms, list_ids)
         if queue != self.queue:
             self.write()
+        self.reminders._save_reminders()
+        self.reminders._save_list_ids()

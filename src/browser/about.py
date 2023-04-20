@@ -19,7 +19,11 @@ from gettext import gettext as _
 
 RELEASE_NOTES = '''
 <ul>
-    <li>Fix versioning by bumping to 4.0</li>
+    <li>Fix date/time text wrapping awkwardly</li>
+    <li>Significantly improve how recurring reminders function</li>
+    <li>Allow syncing recurring reminders with Microsoft To Do</li>
+    <li>Allow creating monthly and yearly repeating reminders</li>
+    <li>Bump API version</li>
 </ul>
 '''
 

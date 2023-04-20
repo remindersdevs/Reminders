@@ -50,12 +50,11 @@ class Reminder(Adw.ExpanderRow):
         completed = False,
         **kwargs
     ):
-        super().__init__(**kwargs)
         self.win = win
         self.app = win.app
+        super().__init__(**kwargs)
         self.id = reminder_id
         self.options = options
-        self.past = False
         self.selected = False
         self.no_strikethrough = False
 
@@ -138,26 +137,11 @@ class Reminder(Adw.ExpanderRow):
                 self.set_selectable(False)
                 self.selected = False
 
-    def set_past(self, past):
-        if self.past != past:
-            self.past = past
-            self.set_time_label()
-            self.refresh_time()
-
     def set_no_strikethrough(self, no_strikethrough):
         if self.no_strikethrough != no_strikethrough:
             self.no_strikethrough = no_strikethrough
             if self.completed:
                 self.set_text()
-
-    def set_timestamp(self, timestamp, old_timestamp = None):
-        if old_timestamp is not None and old_timestamp != self.options['old-timestamp']:
-            self.options['old-timestamp'] = old_timestamp
-        if timestamp != self.options['timestamp']:
-            self.options['timestamp'] = timestamp
-        self.set_time_label()
-        self.refresh_time()
-        self.changed()
 
     def update(self, options):
         edit_win = self.win.reminder_edit_win
@@ -204,10 +188,6 @@ class Reminder(Adw.ExpanderRow):
         self.refresh_time()
         self.changed()
 
-    def update_repeat(self, timestamp, old_timestamp, repeat_times):
-        self.set_repeat_times(repeat_times)
-        self.set_timestamp(timestamp, old_timestamp)
-
     def set_repeat_times(self, times):
         if self.options['repeat-times'] != times:
             self.options['repeat-times'] = times
@@ -217,9 +197,7 @@ class Reminder(Adw.ExpanderRow):
             edit_win.set_repeat_times(times)
 
     def refresh_time(self):
-        if self.past:
-            self.past_due_icon.set_visible(True)
-        elif self.options['timestamp'] != 0 and not self.completed:
+        if self.options['timestamp'] != 0 and not self.completed:
             timestamp = self.options['timestamp']
             now = floor(time.time())
             self.past_due_icon.set_visible(timestamp <= now)
@@ -231,9 +209,7 @@ class Reminder(Adw.ExpanderRow):
 
     def set_time_label(self):
         timestamp = 0
-        if self.past:
-            timestamp = self.options['old-timestamp']
-        elif self.options['timestamp'] != 0:
+        if self.options['timestamp'] != 0:
             timestamp = self.options['timestamp']
 
         if timestamp != 0:
@@ -319,11 +295,18 @@ class Reminder(Adw.ExpanderRow):
             )
             self.options['updated-timestamp'] = results.unpack()[0]
 
-            self.set_expanded(False)
-
             self.win.reminders_list.invalidate_sort()
         except Exception as error:
             logger.exception(error)
+
+    @Gtk.Template.Callback()
+    def expanded_cb(self, row, pspec):
+        if self.get_expanded():
+            if self.win.expanded is not None:
+                self.win.expanded.set_expanded(False)
+            self.win.expanded = self
+        elif self.win.expanded == self:
+                self.win.expanded = None
 
     @Gtk.Template.Callback()
     def update_completed(self, button = None):

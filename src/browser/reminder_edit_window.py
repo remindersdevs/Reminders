@@ -20,7 +20,6 @@ import logging
 
 from gi.repository import Gtk, Adw, GLib, Gio
 from gettext import gettext as _
-from math import floor
 
 from remembrance import info
 from remembrance.browser.reminder import Reminder
@@ -37,7 +36,7 @@ DEFAULT_OPTIONS = {
     'repeat-frequency': 1,
     'repeat-days': 0,
     'repeat-until': 0,
-    'repeat-times': 1,
+    'repeat-times': -1,
     'old-timestamp': 0,
     'created-timestamp': 0,
     'updated-timestamp': 0,
@@ -61,6 +60,7 @@ class ReminderEditWindow(Adw.Window):
     minute_adjustment = Gtk.Template.Child()
     am_pm_button = Gtk.Template.Child()
     repeat_type_button = Gtk.Template.Child()
+    ms_repeat_type_button = Gtk.Template.Child()
     repeat_row = Gtk.Template.Child()
     week_repeat_row = Gtk.Template.Child()
     frequency_btn = Gtk.Template.Child()
@@ -78,6 +78,7 @@ class ReminderEditWindow(Adw.Window):
     repeat_until_calendar = Gtk.Template.Child()
     repeat_duration_button = Gtk.Template.Child()
     importance_switch = Gtk.Template.Child()
+    repeat_times_row = Gtk.Template.Child()
 
     def __init__(self, win, app, reminder = None, **kwargs):
         super().__init__(**kwargs)
@@ -157,23 +158,32 @@ class ReminderEditWindow(Adw.Window):
         options['list-id'] = self.task_list
         options['user-id'] = self.user_id
 
-        options['repeat-type'] = 0 if not self.repeat_row.get_enable_expansion() or not self.repeat_row.get_sensitive() else self.repeat_type_button.get_selected() + 1
+        if not self.repeat_row.get_enable_expansion() or not self.repeat_row.get_sensitive():
+            options['repeat-type'] = 0
+        elif self.repeat_type_button.get_visible():
+            options['repeat-type'] = self.repeat_type_button.get_selected() + 1
+        elif self.ms_repeat_type_button.get_visible():
+            options['repeat-type'] = self.ms_repeat_type_button.get_selected() + 3
 
         options['important'] = self.importance_switch.get_active()
 
         if options['repeat-type'] != 0:
             self.frequency_btn.update()
             options['repeat-frequency'] = int(self.frequency_btn.get_value())
-            self.repeat_times_btn.update()
-            if self.repeat_duration_button.get_selected() == 0:
+            if self.repeat_times_row.get_sensitive:
+                self.repeat_times_btn.update()
+                if self.repeat_duration_button.get_selected() == 0:
+                    options['repeat-times'] = -1
+                    options['repeat-until'] = 0
+                elif self.repeat_duration_button.get_selected() == 1:
+                    options['repeat-times'] = int(self.repeat_times_btn.get_value())
+                    options['repeat-until'] = 0
+                elif self.repeat_duration_button.get_selected() == 2:
+                    options['repeat-times'] = -1
+                    options['repeat-until'] = int(datetime.datetime(self.repeat_until_calendar.props.year, self.repeat_until_calendar.props.month + 1, self.repeat_until_calendar.props.day, tzinfo=datetime.timezone.utc).timestamp())
+            else:
                 options['repeat-times'] = -1
                 options['repeat-until'] = 0
-            elif self.repeat_duration_button.get_selected() == 1:
-                options['repeat-times'] = int(self.repeat_times_btn.get_value())
-                options['repeat-until'] = 0
-            elif self.repeat_duration_button.get_selected() == 2:
-                options['repeat-times'] = -1
-                options['repeat-until'] = int(datetime.datetime(self.repeat_until_calendar.props.year, self.repeat_until_calendar.props.month + 1, self.repeat_until_calendar.props.day).timestamp())
 
             if options['repeat-type'] == info.RepeatType.WEEK:
                 self.week_repeat_row.set_visible(True)
@@ -188,10 +198,7 @@ class ReminderEditWindow(Adw.Window):
             options['repeat-frequency'] = 1
             options['repeat-days'] = 0
             options['repeat-until'] = 0
-            if options['timestamp'] > floor(time.time()):
-                options['repeat-times'] = 1
-            elif self.reminder is not None and self.reminder.options['repeat-type'] != 0:
-                options['repeat-times'] = 0
+            options['repeat-times'] = -1
 
         return options
 
@@ -219,7 +226,10 @@ class ReminderEditWindow(Adw.Window):
         self.task_list_visibility_changed()
 
     def update_repeat_day(self):
-        repeat_type = self.repeat_type_button.get_selected() + 1
+        if self.repeat_type_button.get_visible():
+            repeat_type = self.repeat_type_button.get_selected() + 1
+        elif self.ms_repeat_type_button.get_visible():
+            repeat_type = self.ms_repeat_type_button.get_selected() + 3
         repeat_days = self.get_repeat_days()
         if self.repeat_row.get_enable_expansion() and repeat_type == info.RepeatType.WEEK:
             if repeat_days == 0 or repeat_days in info.RepeatDays.__members__.values():
@@ -341,10 +351,15 @@ class ReminderEditWindow(Adw.Window):
     def set_repeat_type(self, repeat_type):
         if repeat_type != 0 and self.repeat_row.get_sensitive():
             self.repeat_type_button.set_selected(repeat_type - 1)
+            ms_selected = repeat_type - 3
+            if ms_selected > 0:
+                self.ms_repeat_type_button.set_selected(ms_selected)
+
             self.repeat_row.set_enable_expansion(True)
         else:
             self.repeat_row.set_enable_expansion(False)
             self.repeat_type_button.set_selected(0)
+            self.ms_repeat_type_button.set_selected(0)
             self.repeat_duration_button.set_selected(0)
             self.repeat_times_btn.set_value(5)
 
@@ -364,6 +379,9 @@ class ReminderEditWindow(Adw.Window):
                 self.repeat_duration_button.set_selected(2)
                 self.repeat_until_calendar.select_day(GLib.DateTime.new_from_unix_local(repeat_until))
                 self.repeat_times_btn.set_value(5)
+
+        if repeat_until == 0:
+            self.repeat_until_calendar.select_day(GLib.DateTime.new_now_local().add_days(5))
 
     def set_repeat_days(self, repeat_days):
         repeat_days_flag = info.RepeatDays(repeat_days)
@@ -395,19 +413,6 @@ class ReminderEditWindow(Adw.Window):
     def do_save(self, data = None):
         try:
             options = self.get_options()
-
-            if (self.id is None or options['timestamp'] > floor(time.time())) and (options['repeat-times'] == 0 or \
-            options['repeat-until'] > 0 and datetime.date.fromtimestamp(options['timestamp']) > datetime.date.fromtimestamp(options['repeat-until'])):
-                warning_dialog = Adw.MessageDialog(
-                    transient_for=self,
-                    heading=_('Not saving'),
-                    body=_('This reminder will never be shown, change the repeat options so it is shown at least once.'),
-                )
-                warning_dialog.add_response('okay', _('Okay'))
-                warning_dialog.set_default_response('okay')
-                warning_dialog.present()
-                self.win.set_busy(False, self)
-                return
 
             if self.check_changed(options):
                 if self.id is None:
@@ -471,11 +476,42 @@ class ReminderEditWindow(Adw.Window):
                     self.win.reminders_list.append(self.reminder)
                     self.win.reminder_lookup_dict[self.id] = self.reminder
 
+                self.win.reminders_list.invalidate_sort()
+
             self.set_visible(False)
-            self.reminder.set_expanded(False)
-            self.win.reminders_list.invalidate_sort()
         except Exception as error:
             logger.exception(error)
+
+    def set_ms(self, is_ms):
+        self.repeat_type_button.set_visible(not is_ms)
+        self.ms_repeat_type_button.set_visible(is_ms)
+
+        self.repeat_times_row.set_sensitive(not is_ms)
+        self.repeat_row.set_sensitive(True)
+
+        if is_ms:
+            repeat_type = self.repeat_type_button.get_selected() + 1
+            repeat_type -= 3
+            if repeat_type > 0:
+                self.ms_repeat_type_button.set_selected(repeat_type)
+        else:
+            repeat_type = self.ms_repeat_type_button.get_selected() + 3
+            self.repeat_type_button.set_selected(repeat_type - 1)
+
+    def set_notify(self, notify):
+        self.repeat_type_button.set_visible(notify)
+        self.ms_repeat_type_button.set_visible(not notify)
+        self.repeat_times_row.set_sensitive(notify)
+        self.repeat_times_row.set_sensitive(True)
+        self.repeat_row.set_sensitive(True)
+        if not notify:
+            repeat_type = self.repeat_type_button.get_selected() + 1
+            repeat_type -= 3
+            if repeat_type > 0:
+                self.repeat_type_button.set_selected(repeat_type)
+        else:
+            repeat_type = self.ms_repeat_type_button.get_selected() + 3
+            self.repeat_type_button.set_selected(repeat_type - 1)
 
     @Gtk.Template.Callback()
     def repeat_day_changed(self, calendar = None, data = None):
@@ -494,8 +530,12 @@ class ReminderEditWindow(Adw.Window):
             self.repeat_until_btn.set_visible(True)
 
     @Gtk.Template.Callback()
-    def repeat_type_selected_changed(self, button = None, data = None):
-        repeat_type = self.repeat_type_button.get_selected() + 1
+    def repeat_type_selected_changed(self, button, data = None):
+        if button == self.repeat_type_button:
+            repeat_type = self.repeat_type_button.get_selected() + 1
+        elif button == self.ms_repeat_type_button:
+            repeat_type = self.ms_repeat_type_button.get_selected() + 3
+
         if repeat_type == info.RepeatType.WEEK:
             self.week_repeat_row.set_visible(True)
             if self.get_repeat_days() == 0:
@@ -513,24 +553,22 @@ class ReminderEditWindow(Adw.Window):
     def task_list_visibility_changed(self, row = None, param = None):
         if not self.task_list_row.get_visible():
             self.task_list = self.user_id = 'local'
-        if self.task_list_row.get_visible() and self.user_id != 'local':
-            self.repeat_row.set_enable_expansion(False)
-            self.repeat_row.set_sensitive(False)
-            self.repeat_row.set_tooltip_text(_("Microsoft reminders currently don't support recurrence"))
-        else:
-            if self.time_row.get_enable_expansion() and self.notif_btn.get_active():
-                self.repeat_row.set_sensitive(True)
+        if self.time_row.get_enable_expansion():
+            if self.task_list_row.get_visible() and self.user_id != 'local':
+                self.set_ms(True)
             else:
-                self.repeat_row.set_sensitive(False)
-                self.repeat_row.set_expanded(False)
-            self.repeat_row.set_tooltip_text(None)
+                self.set_notify(self.notif_btn.get_active())
+        else:
+            self.repeat_row.set_sensitive(False)
+            self.repeat_row.set_expanded(False)
 
     @Gtk.Template.Callback()
     def time_switched(self, switch, data = None):
-        if self.task_list_row.get_visible() and self.user_id != 'local':
-            return
-        if self.time_row.get_enable_expansion() and self.notif_btn.get_active():
-            self.repeat_row.set_sensitive(True)
+        if self.time_row.get_enable_expansion():
+            if self.task_list_row.get_visible() and self.user_id != 'local':
+                self.set_ms(True)
+            else:
+                self.set_notify(self.notif_btn.get_active())
         else:
             self.repeat_row.set_sensitive(False)
             self.repeat_row.set_expanded(False)
@@ -580,7 +618,6 @@ class ReminderEditWindow(Adw.Window):
 
         hours = value - old_value
 
-        old_time = self.time
         self.time = self.time.add_hours(hours)
         if value != self.time.get_hour():
             self.hour_adjustment.set_value(self.time.get_hour())

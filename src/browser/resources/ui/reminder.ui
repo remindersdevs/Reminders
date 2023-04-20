@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="reminder" parent="AdwExpanderRow">
+    <signal name="notify::expanded" handler="expanded_cb" swapped="no"/>
     <property name="selectable">false</property>
     <child type="prefix">
       <object class="GtkImage" id="completed_icon">

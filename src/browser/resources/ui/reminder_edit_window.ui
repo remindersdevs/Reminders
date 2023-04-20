@@ -225,6 +225,7 @@
                         <child>
                           <object class="AdwExpanderRow" id="repeat_row">
                             <property name="title" translatable="yes">Repeat the reminder</property>
+                            <property name="subtitle" translatable="yes">The reminder will be updated when you complete it</property>
                             <property name="show-enable-switch">true</property>
                             <child>
                               <object class="GtkListBoxRow">
@@ -260,6 +261,14 @@
                                       <object class="GtkDropDown" id="repeat_type_button">
                                         <property name="valign">center</property>
                                         <property name="model">repeat_list</property>
+                                        <signal name="notify::selected" handler="repeat_type_selected_changed" swapped="no"/>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkDropDown" id="ms_repeat_type_button">
+                                        <property name="valign">center</property>
+                                        <property name="visible">false</property>
+                                        <property name="model">ms_repeat_list</property>
                                         <signal name="notify::selected" handler="repeat_type_selected_changed" swapped="no"/>
                                       </object>
                                     </child>
@@ -496,6 +505,16 @@
       <item translatable="yes">hour(s)</item>
       <item translatable="yes">day(s)</item>
       <item translatable="yes">week(s)</item>
+      <item translatable="yes">months(s)</item>
+      <item translatable="yes">years(s)</item>
+    </items>
+  </object>
+  <object class="GtkStringList" id="ms_repeat_list">
+    <items>
+      <item translatable="yes">day(s)</item>
+      <item translatable="yes">week(s)</item>
+      <item translatable="yes">months(s)</item>
+      <item translatable="yes">years(s)</item>
     </items>
   </object>
   <object class="GtkStringList" id="repeat_duration_list">

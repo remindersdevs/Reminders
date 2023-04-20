@@ -1,6 +1,6 @@
 project(
     'remembrance',
-    version: '4.0',
+    version: '4.1',
     meson_version: '>= 0.59',
     default_options: ['prefix=/usr']
 )
@@ -34,9 +34,9 @@ else
 endif
 
 service_executable = 'remembrance-service'
-service_id = app_id + '.Service2'
+service_id = app_id + '.Service3'
 service_interface = service_id + '.Reminders'
-service_object = path + '/Service2'
+service_object = path + '/Service3'
 
 i18n = import('i18n')
 localedir = get_option('localedir')

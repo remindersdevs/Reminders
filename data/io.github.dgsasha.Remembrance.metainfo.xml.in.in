@@ -79,6 +79,17 @@
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
   <releases>
+    <release version="4.1" date="2023-04-20">
+      <description>
+        <ul>
+          <li>Fix date/time text wrapping awkwardly</li>
+          <li>Significantly improve how recurring reminders function</li>
+          <li>Allow syncing recurring reminders with Microsoft To Do</li>
+          <li>Allow creating monthly and yearly repeating reminders</li>
+          <li>Bump API version</li>
+        </ul>
+      </description>
+    </release>
     <release version="4.0" date="2023-04-18">
       <description>
         <ul>

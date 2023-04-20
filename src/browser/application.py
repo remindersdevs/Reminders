@@ -213,11 +213,9 @@ class Remembrance(Adw.Application):
             self.win.selected_changed()
 
     def repeat_updated_cb(self, proxy, sender_name, signal_name, parameters):
-        reminder_id, timestamp, old_timestamp, repeat_times = parameters.unpack()
+        reminder_id = parameters.unpack()
         reminder = self.win.reminder_lookup_dict[reminder_id]
-        reminder.update_repeat(timestamp, old_timestamp, repeat_times)
-        self.win.reminders_list.invalidate_sort()
-        self.win.selected_changed()
+        reminder.refresh_time()
 
     def refreshed_cb(self, proxy, sender_name, signal_name, parameters):
         new_reminders, deleted_reminders = parameters.unpack()

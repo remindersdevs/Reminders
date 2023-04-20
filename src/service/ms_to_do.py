@@ -237,7 +237,7 @@ class MSToDo():
 
             if user_id in self.tokens.keys():
                 results = self.do_request('POST', f'me/todo/lists/{task_list}/tasks', user_id, data=task).json()
-                return results['id']
+                return results
         except requests.ConnectionError as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
@@ -253,7 +253,7 @@ class MSToDo():
 
             if user_id in self.tokens.keys():
                 results = self.do_request('PATCH', f'me/todo/lists/{task_list}/tasks/{task_id}', user_id, data=task).json()
-                return results['id']
+                return results
         except requests.ConnectionError as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
@@ -356,3 +356,20 @@ class MSToDo():
                 raise error
 
         return task_lists
+
+    def get_tasks(self, list_id, user_id):
+        try:
+            if user_id not in self.tokens.keys():
+                self.get_tokens()
+
+            if user_id in self.tokens.keys():
+                tasks = self.do_request('GET', f'me/todo/lists/{list_id}/tasks', user_id).json()['value']
+
+            return tasks
+        except requests.ConnectionError as error:
+            if user_id in self.tokens.keys():
+                self.tokens.pop(user_id)
+            raise error
+        except Exception as error:
+            logger.exception(error)
+            raise error

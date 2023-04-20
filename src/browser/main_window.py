@@ -99,6 +99,7 @@ class MainWindow(Adw.ApplicationWindow):
         self.dropdown_connection = None
         self.reminder_edit_win = None
         self.edit_lists_window = None
+        self.expanded = None
         self.spinning_cursor = Gdk.Cursor.new_from_name('wait')
 
         self.app = app
@@ -169,6 +170,9 @@ class MainWindow(Adw.ApplicationWindow):
     def key_released(self, event, keyval, keycode, state):
         if keyval == Gdk.KEY_Escape:
             self.set_selecting(False)
+        if keyval == Gdk.KEY_Delete:
+            if self.reminders_list.get_property('selection-mode') != Gtk.SelectionMode.NONE:
+                self.selected_remove()
 
     def set_selecting(self, selecting):
         if selecting:
@@ -307,7 +311,16 @@ class MainWindow(Adw.ApplicationWindow):
                 type_name = str(repeat_frequency) + ' ' + _('weeks')
 
             suffix = f" ({','.join(days)})"
-
+        elif repeat_type == info.RepeatType.MONTH:
+            if repeat_frequency == 1:
+                type_name = _('month')
+            else:
+                type_name = repeat_frequency + ' ' + _('months')
+        elif repeat_type == info.RepeatType.YEAR:
+            if repeat_frequency == 1:
+                type_name = _('year')
+            else:
+                type_name = repeat_frequency + ' ' + _('years')
         if repeat_until > 0:
             date = GLib.DateTime.new_from_unix_local(repeat_until).format('%x')
             suffix += ' ' + _('until') + ' ' + date
@@ -630,7 +643,6 @@ class MainWindow(Adw.ApplicationWindow):
         repeat_days = self.get_kwarg(kwargs, 'repeat-days', 0)
         repeat_times = self.get_kwarg(kwargs, 'repeat-times')
         repeat_until = self.get_kwarg(kwargs, 'repeat-until', 0)
-        old_timestamp = self.get_kwarg(kwargs, 'old-timestamp', 0)
         created_timestamp = self.get_kwarg(kwargs, 'created-timestamp', 0)
         updated_timestamp = self.get_kwarg(kwargs, 'updated-timestamp', 0)
         task_list = self.get_kwarg(kwargs, 'list-id', 'local')
@@ -650,7 +662,6 @@ class MainWindow(Adw.ApplicationWindow):
                     'repeat-days': repeat_days,
                     'repeat-until': repeat_until,
                     'repeat-times': repeat_times,
-                    'old-timestamp': old_timestamp,
                     'created-timestamp': created_timestamp,
                     'updated-timestamp': updated_timestamp,
                     'list-id': task_list,
@@ -711,12 +722,10 @@ class MainWindow(Adw.ApplicationWindow):
 
     def no_filter(self, reminder):
         reminder.set_sensitive(True)
-        reminder.set_past(False)
         reminder.set_no_strikethrough(True)
         return True
 
     def all_filter(self, reminder):
-        reminder.set_past(False)
         reminder.set_no_strikethrough(False)
         retval = self.task_list_filter(reminder)
         reminder.set_sensitive(retval)
@@ -729,7 +738,6 @@ class MainWindow(Adw.ApplicationWindow):
         now = floor(time.time())
         if (reminder.options['timestamp'] == 0 or reminder.options['timestamp'] > now) and not reminder.completed:
             retval = self.task_list_filter(reminder)
-            reminder.set_past(False)
         else:
             retval = False
         reminder.set_sensitive(retval)
@@ -740,10 +748,9 @@ class MainWindow(Adw.ApplicationWindow):
 
     def past_filter(self, reminder):
         now = ceil(time.time())
-        if not reminder.completed and ((reminder.options['old-timestamp'] != 0 and reminder.options['old-timestamp'] < now) or \
+        if not reminder.completed and ((reminder.options['timestamp'] != 0 and reminder.options['timestamp'] < now) or \
         (reminder.options['due-date'] != 0 and datetime.datetime.fromtimestamp(reminder.options['due-date']).astimezone(tz=datetime.timezone.utc).date() < datetime.date.today())):
             retval = self.task_list_filter(reminder)
-            reminder.set_past(True)
         else:
             retval = False
         reminder.set_sensitive(retval)
@@ -755,7 +762,6 @@ class MainWindow(Adw.ApplicationWindow):
     def completed_filter(self, reminder):
         if reminder.completed:
             retval = self.task_list_filter(reminder)
-            reminder.set_past(False)
             reminder.set_no_strikethrough(True)
         else:
             retval = False
@@ -901,7 +907,6 @@ class MainWindow(Adw.ApplicationWindow):
                 retval = False
 
         if retval:
-            reminder.set_past(False)
             reminder.set_no_strikethrough(True)
 
         reminder.set_sensitive(retval)
@@ -1050,7 +1055,8 @@ class MainWindow(Adw.ApplicationWindow):
     def selected_complete(self, btn):
         confirm_dialog = Adw.MessageDialog(
             transient_for=self,
-            heading=_('Are you sure you want to mark the currently selected reminder(s) as complete?')
+            heading=_('Mark reminders as complete?'),
+            body=_('Are you sure you want to mark the currently selected reminder(s) as complete?')
         )
         confirm_dialog.add_response('cancel', _('Cancel'))
         confirm_dialog.add_response('yes', _('Yes'))
@@ -1064,7 +1070,8 @@ class MainWindow(Adw.ApplicationWindow):
     def selected_incomplete(self, btn):
         confirm_dialog = Adw.MessageDialog(
             transient_for=self,
-            heading=_('Are you sure you want to mark the currently selected reminder(s) as incomplete?')
+            heading=_('Mark reminders as incomplete?'),
+            body=_('Are you sure you want to mark the currently selected reminder(s) as incomplete?')
         )
         confirm_dialog.add_response('cancel', _('Cancel'))
         confirm_dialog.add_response('yes', _('Yes'))
@@ -1082,7 +1089,8 @@ class MainWindow(Adw.ApplicationWindow):
     def selected_important(self, btn):
         confirm_dialog = Adw.MessageDialog(
             transient_for=self,
-            heading=_('Are you sure you want to mark the currently selected reminder(s) as important?')
+            heading=_('Mark reminders as important?'),
+            body=_('Are you sure you want to mark the currently selected reminder(s) as important?')
         )
         confirm_dialog.add_response('cancel', _('Cancel'))
         confirm_dialog.add_response('yes', _('Yes'))
@@ -1096,7 +1104,8 @@ class MainWindow(Adw.ApplicationWindow):
     def selected_unimportant(self, btn):
         confirm_dialog = Adw.MessageDialog(
             transient_for=self,
-            heading=_('Are you sure you want to mark the currently selected reminder(s) as unimportant?')
+            heading=_('Mark reminders as unimportant?'),
+            body=_('Are you sure you want to mark the currently selected reminder(s) as unimportant?')
         )
         confirm_dialog.add_response('cancel', _('Cancel'))
         confirm_dialog.add_response('yes', _('Yes'))
@@ -1107,11 +1116,11 @@ class MainWindow(Adw.ApplicationWindow):
         confirm_dialog.present()
 
     @Gtk.Template.Callback()
-    def selected_remove(self, btn):
+    def selected_remove(self, btn = None):
         confirm_dialog = Adw.MessageDialog(
             transient_for=self,
-            heading=_('Are you sure you want to remove the currently selected reminder(s)?'),
-            body=_('This cannot be undone.')
+            heading=_('Remove reminders?'),
+            body=_('Are you sure you want to remove the currently selected reminder(s)? This cannot be undone.')
         )
         confirm_dialog.add_response('cancel', _('Cancel'))
         confirm_dialog.add_response('yes', _('Yes'))
