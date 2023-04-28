@@ -21,6 +21,8 @@
 - Organize reminders using lists
 - Optionally play a sound when notifications are sent
 - Optionally sync with Microsoft To Do
+- Optionally sync with CalDAV servers
+- Import and export ical/ics files
 
 ## Translators
 You can translate Reminders on [Weblate](https://hosted.weblate.org/engage/reminders/), or through GitHub pull requests.

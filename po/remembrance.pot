@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-28 12:21-0400\n"
+"POT-Creation-Date: 2023-04-28 12:31-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:4
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:9
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:65 src/info.py:8
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:66 src/info.py:8
 msgid "Reminders"
 msgstr ""
 
@@ -150,229 +150,233 @@ msgstr ""
 msgid "Optionally sync with CalDAV servers"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:56
-msgid "Todo"
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:23
+msgid "Import and export ical/ics files"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:57
-msgid "Productivity"
+msgid "Todo"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:58
-msgid "Task"
+msgid "Productivity"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:59
-msgid "Planning"
+msgid "Task"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:60
-msgid "Planner"
+msgid "Planning"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:61
+msgid "Planner"
+msgstr ""
+
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:62
 #: src/browser/resources/ui/reminder_edit_window.ui:71
 msgid "Time"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:62
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:63
 msgid "Management"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:63
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:64
 msgid "Reminder"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:64
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:65
 msgid "Remembrance"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:86
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:87
 msgid "Added support for making the week start on sunday"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:87
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:88
 msgid ""
 "Added indicators that show how many incomplete reminders are in each list/"
 "group"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:88
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:89
 msgid "Added support for syncing with CalDAV servers"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:89
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:90
 msgid ""
 "Added support for selecting multiple reminders in one click by holding shift"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:90
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:91
 msgid "Added support for dragging and dropping reminders between lists"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:91
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:92
 msgid "Added support for importing and exporting ical/ics files"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:92
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:93
 msgid "Added support for syncing recurring reminders with Microsoft To Do"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:93
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:94
 msgid "Added support for creating monthly and yearly repeating reminders"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:94
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:95
 msgid ""
 "Version numbers are now handled in a logical way (as in they aren't just "
 "doubles)"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:95
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:96
 msgid ""
 "Microsoft sign in window now appears in the app instead of in the browser"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:96
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:97
 msgid "Significantly improve how recurring reminders function"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:97
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:98
 msgid "Fix date/time text wrapping awkwardly"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:98
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:99
 msgid "Fix some other minor issues"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:99
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:203
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:100
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:204
 msgid "Bump API version"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:106
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:107
 msgid "Fix versioning by bumping to 4.0"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:113
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:114
 msgid "Remove warning about cloud syncing being in beta"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:114
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:115
 msgid "Fix issue where you could make reminder recurring when it shouldn't be"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:121
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:122
 msgid "Change delete icon"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:122
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:123
 msgid "Fix some ui bugs"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:123
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:124
 msgid "Some tiny performance improvements"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:124
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:125
 msgid "Improve logging"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:131
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:132
 msgid "UI Improvements to sidebar"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:132
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:133
 msgid "Fix issues when moving reminders between lists"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:133
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:134
 msgid "Fix issue with error dialogs"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:140
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:141
 msgid "Fix issue when deleting lists"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:147
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:148
 msgid "Fix issue when removing selected reminders"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:154
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:155
 msgid "Performance improvements"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:155
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:156
 msgid "Don't freeze UI when updating MS reminders"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:156
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:157
 msgid "Automatically refresh reminders after waking from suspend"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:157
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:158
 msgid "Fix issues with deleting lists"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:158
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:159
 msgid "Fix issues when queueing remote changes while internet is disconnected"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:165
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:166
 msgid "Stop showing completed reminders on upcoming page"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:166
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:167
 msgid "Cross out completed reminders on all reminders page"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:173
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:174
 msgid "Add support for setting due dates without sending notifications"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:174
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:175
 msgid ""
 "Add support for selecting and editing multiple reminders (Start selecting "
 "with Ctrl + LMB or by pressing and holding a reminder)"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:175
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:176
 msgid "Slightly improve error handling"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:182
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:183
 msgid "Fix issue when setting reminders in another year"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:189
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:190
 msgid "Fix issue when saving Microsoft To Do Reminders"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:196
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:197
 msgid "New notification sound"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:197
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:198
 msgid "Allow sorting reminders by created time and last updated time"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:198
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:199
 msgid "Allow marking reminders as important"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:199
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:200
 msgid "Slightly improved UI"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:200
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:201
 msgid "Added keyboard shortcuts page"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:201
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:202
 msgid "Added more keyboard shortcuts"
 msgstr ""
 
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:202
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:203
 msgid "Lots of bugfixes"
 msgstr ""
 

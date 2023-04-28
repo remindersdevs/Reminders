@@ -20,6 +20,7 @@
       <li>Optionally play a sound when notifications are sent</li>
       <li>Optionally sync with Microsoft To Do</li>
       <li>Optionally sync with CalDAV servers</li>
+      <li>Import and export ical/ics files</li>
     </ul>
   </description>
 
