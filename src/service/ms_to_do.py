@@ -283,7 +283,7 @@ class MSToDo():
 
             if user_id in self.tokens.keys():
                 results = self.do_request('POST', f'me/todo/lists/{task_list}/tasks', user_id, data=task).json()
-                return results
+                return results['id']
         except requests.ConnectionError as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
