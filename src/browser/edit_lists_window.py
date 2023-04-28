@@ -15,7 +15,7 @@
 
 import logging
 
-from gi.repository import Gtk, Adw, GLib
+from gi.repository import Gtk, Adw
 from gettext import gettext as _
 
 from remembrance import info
@@ -39,15 +39,15 @@ class EditListsWindow(Adw.Window):
         self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: self.close())))
 
         for user_id, value in self.win.task_list_names.items():
-            if user_id in self.win.emails.keys() or user_id == 'local':
-                self.users[user_id] = ListGroup(self, user_id, value)
+            if user_id in self.win.usernames.keys():
+                self.users[user_id] = ListGroup(self, user_id, self.win.usernames[user_id], value)
                 self.box.append(self.users[user_id])
 
     def list_updated(self, user_id, list_id, list_name):
         if user_id in self.users.keys():
             self.users[user_id].add_child(list_name, list_id)
         else:
-            self.users[user_id] = ListGroup(self, user_id, {list_id: list_name})
+            self.users[user_id] = ListGroup(self, user_id, self.win.usernames[user_id], {list_id: list_name})
             self.box.append(self.users[user_id])
 
     def list_removed(self, user_id, list_id):
@@ -56,6 +56,17 @@ class EditListsWindow(Adw.Window):
             if len(self.users[user_id].lists.keys()) == 0:
                 self.box.remove(self.users[user_id])
                 self.users.pop(user_id)
+
+    def signed_in(self, user_id, username):
+        self.users[user_id] = ListGroup(self, user_id, username, {})
+        self.box.append(self.users[user_id])
+
+    def signed_out(self, user_id):
+        self.box.remove(self.users[user_id])
+        self.users.pop(user_id)
+
+    def username_updated(self, user_id, username):
+        self.users[user_id].set_title(username)
 
     def do_close(self):
         for row in self.unsaved:
@@ -89,12 +100,12 @@ class EditListsWindow(Adw.Window):
         return True
 
 class ListGroup(Adw.PreferencesGroup):
-    def __init__(self, edit_win, user_id, lists, *args, **kwargs):
+    def __init__(self, edit_win, user_id, username, lists, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.edit_win = edit_win
         self.win = edit_win.win
         self.user_id = user_id
-        self.set_title(_('Local') if user_id == 'local' else self.win.emails[user_id])
+        self.set_title(username)
         self.lists = {}
         for list_id, list_name in lists.items():
             self.add_child(list_name, list_id)
@@ -157,18 +168,11 @@ class ListRow(Adw.EntryRow):
 
     def update(self):
         try:
-            list_name = self.get_text()
+            list_name = self.get_text().strip()
             count = 0
-            while True:
-                duplicate = False
-                for lists in self.win.all_task_list_names.values():
-                    if list_name in lists.values():
-                        count += 1
-                        list_name = f'{self.get_text()} ({count})'
-                        duplicate = True
-                        break
-                if not duplicate:
-                    break
+            while list_name in self.win.all_task_list_names[self.user_id].values():
+                count += 1
+                list_name = f'{self.get_text().strip()} ({count})'
             self.list_id = self.win.update_list(self.user_id, list_name, self.list_id)
             self.list_name = list_name
             self.save_button.set_sensitive(False)

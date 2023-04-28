@@ -1,4 +1,4 @@
-# Reminders DBus Service Info, version 4.1
+# Reminders DBus Service version 5.0 Documentation
 name: io.github.dgsasha.Remembrance.Service3
 
 interface: io.github.dgsasha.Remembrance.Service3.Reminders
@@ -56,6 +56,109 @@ Type: a{sv}
 | 'user-id' | s | This is the id of the user that owns the reminder. | 'local' |
 
 ## Methods
+
+### GetUsers
+Get usernames of all users, including the local user
+- Returns (a{sa{ss}})
+    - usernames
+        - Type: a{sa{ss}}
+        - Each key is either 'local', 'ms-to-do', or 'caldav' and each value is a dict
+        - Each of these dicts represents the users within that service, and within that dict each key is a user id and each value is the username
+
+### GetLists
+Get all lists. This will also return lists that arent being synced.
+- Returns (a{sa{ss}})
+    - lists
+        - Type: a{sa{ss}}
+        - Each key is a user id and each value is another dictionary where each key is a list id and each value is the name of the list
+
+### GetReminders
+Returns all reminders
+- Returns (aa{sv})
+    - reminders
+        - Type: aa{sv}
+        - An array of [reminders](#reminder-object)
+
+### GetRemindersInList
+Returns all reminders in specified list
+- Parameters (ss)
+    - user-id
+        - Type: s
+    - list-id
+        - Type: s
+- Returns (aa{sv})
+    - reminders
+        - Type: aa{sv}
+        - An array of [reminders](#reminder-object)
+
+### GetSyncedLists
+- Returns (a{sas})
+    - list-ids
+        - Type: a{sas}
+        - Each key is a user id and each value is an array of the list ids that are synced on that account
+
+### SetSyncedLists
+Set the task lists that should be synced, this also refreshes the reminders
+- Parameters (a{sas})
+    - list-ids
+        - Type: a{sas}
+        - Each key should be a user id and each value should be an array of the list ids that are synced on that account
+
+### GetWeekStart
+- Returns (b)
+    - week-start-sunday
+        - Type: b
+        - True if week starts on sunday
+
+### SetWeekStart
+- Parameters (b)
+    - week-start-sunday
+        - Type: b
+        - True if week starts on sunday
+
+### CreateList
+Create a list
+- Parameters (sss)
+    - [app-id](#app-id-parameter)
+        - Type: s
+    - user-id
+        - Type: s
+        - The user the list should be created for, can be 'local' or a Microsoft user id
+    - list-name
+        - Type: s
+        - The name of the list
+
+- Returns (s)
+    - list-id
+        - Type: s
+        - Id that was generated to represent the list, keep track of these
+
+### RenameList
+Rename a list
+- Parameters (ssss)
+    - [app-id](#app-id-parameter)
+        - Type: s
+    - user-id
+        - Type: s
+        - The user where the list is located, can be 'local' or a Microsoft user id
+    - list-id
+        - Type: s
+        - The id of the list you are renaming
+    - list-name
+        - Type: s
+        - The new name of the list
+
+### RemoveList
+Remove a list
+- Parameters (sss)
+    - [app-id](#app-id-parameter)
+        - Type: s
+    - user-id
+        - Type: s
+        - The user where the list is located, can be 'local' or a Microsoft user id
+    - list-id
+        - Type: s
+        - The id of the list you are deleting, list ids that are equal to the user id are default lists and cannot be removed
 
 ### CreateReminder
 Add a new reminder
@@ -116,106 +219,107 @@ Remove a reminder
         - Type: s
         - Id of the reminder you want to remove
 
-### CreateList
-Create a list
-- Parameters (sss)
-    - [app-id](#app-id-parameter)
-        - Type: s
-    - user-id
-        - Type: s
-        - The user the list should be created for, can be 'local' or a Microsoft user id
-    - list-name
-        - Type: s
-        - The name of the list
-
+### MSGetLoginURL
+Gets a url so the user can login to a microsoft account, once logged out the reminders will be refreshed
 - Returns (s)
-    - list-id
+    - url
         - Type: s
-        - Id that was generated to represent the list, keep track of these
+        - The login url
 
-### RenameList
-Rename a list
+### CalDAVLogin
+Log in to a CalDAV server, once logged out the reminders will be refreshed
 - Parameters (ssss)
-    - [app-id](#app-id-parameter)
+    - display-name
         - Type: s
+        - This will be saved as the username for display purposes, but will not be used to login to the server
+    - url
+        - Type: s
+        - The server url
+    - username
+        - Type: s
+        - The server login username
+    - password
+        - Type: s
+        - The server login password
+
+### CalDAVUpdateDisplayName
+Log in to a CalDAV server, once logged out the reminders will be refreshed
+- Parameters (ss)
     - user-id
         - Type: s
-        - The user where the list is located, can be 'local' or a Microsoft user id
-    - list-id
+        - The user to update
+    - display-name
         - Type: s
-        - The id of the list you are renaming
-    - list-name
-        - Type: s
-        - The new name of the list
+        - This will be saved as the username for display purposes, but will not be used to login to the server
 
-### RemoveList
-Remove a list
-- Parameters (sss)
-    - [app-id](#app-id-parameter)
-        - Type: s
-    - user-id
-        - Type: s
-        - The user where the list is located, can be 'local' or a Microsoft user id
-    - list-id
-        - Type: s
-        - The id of the list you are deleting, list ids that are equal to the user id are default lists and cannot be removed
-
-### ReturnReminders
-Returns all reminders
-- Returns (aa{sv})
-    - reminders
-        - Type: aa{sv}
-        - An array of [reminders](#reminder-object)
-
-### ReturnLists
-Get all lists. This will also return lists that arent being synced.
-- Returns (a{sa{ss}})
-    - lists
-        - Type: a{sa{ss}}
-        - Each key is a user id and each value is another dictionary where each key is a list id and each value is the name of the list
-
-### Refresh
-Read reminders file again and also check for remote updates. Changes will be emitted with their respective signals.
-
-### MSGetEmails
-Get emails of currently logged in Microsoft accounts
-- Returns (a{ss})
-    - email
-        - Type: a{ss}
-        - Each key is a user id and each value is the email of the account
-
-### MSGetSyncedLists
-- Returns (a{sas})
-    - list-ids
-        - Type: a{sas}
-        - Each key is a user id and each value is an array of the list ids that are synced on that account
-
-### MSSetSyncedLists
-Set the task lists that should be synced, this also refreshes the reminders
-- Parameters (a{sas})
-    - list-ids
-        - Type: a{sas}
-        - Each key should be a user id and each value should be an array of the list ids that are synced on that account
-
-### MSLogin
-Open browser window to login to microsoft account, once logged in the reminders will be refreshed
-
-### MSLogout
-Log out of a microsoft account, once logged out the reminders will be refreshed
+### Logout
+Log out of a remote account, once logged out the reminders will be refreshed
 - Parameters (s)
     - user-id
         - Type: s
 
+### Refresh
+Read reminders file again and also check for remote updates. Changes will be emitted with their respective signals, mainly through the [refreshed](#refreshed) signal.
+
+### RefreshUser
+Same as [refresh](#refresh) but only for one user
+- Parameters (s)
+    - user-id
+        - Type: s
+        - The user to refresh
+
 ### GetVersion
-- Returns (d)
+- Returns (s)
     - version
-        - Type: d
-        - The version of the service that is currently loaded
+        - Type: s
+        - The version of the service that is currently loaded (PEP 440)
 
 ### Quit
 Quits the service
 
 ## Signals
+
+### SyncedListsChanged
+Emitted when the dictionary of synced lists is changed
+- Parameters (a{sas})
+    - list-ids
+        - Type: a{sas}
+        - Each key is a user id and each value is an array of the list ids that are synced on that account
+
+### WeekStartChanged
+- Parameters (s)
+    - week-start-sunday
+        - Type: b
+        - True if week starts on sunday
+
+### ListUpdated
+Emitted when a list is created or updated
+- Parameters (ssss)
+    - app-id
+        - Type: s
+        - The id of the app that initiated the change
+    - user-id
+        - Type: s
+        - The user id of the list that was updated
+    - list-id
+        - Type: s
+        - The id of the list that was updated
+    - list-name
+        - Type: s
+        - The name of the list that was updated
+
+### ListRemoved
+Emitted when a list is removed
+- Parameters (sss)
+    - app-id
+        - Type: s
+        - The id of the app that initiated the change
+    - user-id
+        - Type: s
+        - The user id of the list that was removed
+    - list-id
+        - Type: s
+        - The id of the list that was removed
 
 ### ReminderShown
 Emitted when a reminder is shown
@@ -223,6 +327,16 @@ Emitted when a reminder is shown
     - reminder-id
         - Type: s
         - The id of the reminder that was shown in a notification
+
+### ReminderUpdated
+Emitted when a Reminder is created or updated
+- Parameters (sa{sv})
+    - app-id
+        - Type: s
+        - The id of the app that initiated the change
+    - [reminder](#reminder-object)
+        - Type: a{sv}
+        - Note that the 'completed' key will not be included here
 
 ### CompletedUpdated
 Emitted when a reminder's completed status is changed
@@ -250,69 +364,41 @@ Emitted when a reminder is removed
         - Type: s
         - The id of the reminder that was deleted
 
-### ReminderUpdated
-Emitted when a Reminder is created or updated
-- Parameters (sa{sv})
-    - app-id
-        - Type: s
-        - The id of the app that initiated the change
-    - [reminder](#reminder-object)
-        - Type: a{sv}
-        - Note that the 'completed' and 'old-timestamp' keys will not be included here
-
-### ListRemoved
-Emitted when a list is removed
-- Parameters (sss)
-    - app-id
-        - Type: s
-        - The id of the app that initiated the change
-    - user-id
-        - Type: s
-        - The user id of the list that was removed
-    - list-id
-        - Type: s
-        - The id of the list that was removed
-
-### ListUpdated
-Emitted when a list is created or updated
-- Parameters (ssss)
-    - app-id
-        - Type: s
-        - The id of the app that initiated the change
-    - user-id
-        - Type: s
-        - The user id of the list that was updated
-    - list-id
-        - Type: s
-        - The id of the list that was updated
-    - list-name
-        - Type: s
-        - The name of the list that was updated
+### Refreshed
+- Parameters (aa{sv}as)
+    - updated-reminders
+        - Type: aa{sv}
+        - An array of [reminders](#reminder-object) that were updated
+        - Note that the 'completed' key will not be included here
+    - removed-reminders
+        - Type: as
+        - An array of reminder ids that were removed
 
 ### MSSignedIn
-Emitted when the user signs in to a Microsoft account from the browser
-- Returns (ss)
+Emitted when the user signs in to a Microsoft account
+- Parameters (ss)
     - user-id
         - Type: s
-    - email
+    - username
         - Type: s
 
-## MSSignedOut
-Emitted when a Microsoft account is signed out
-- Returns (ss)
+### CalDAVSignedIn
+Emitted when the user signs in to a Microsoft account
+- Parameters (ss)
+    - user-id
+        - Type: s
+    - name
+        - Type: s
+
+## SignedOut
+Emitted when an account is signed out
+- Parameters (ss)
     - user-id
         - Type: s
 
-### MSSyncedListsChanged
-Emitted when the dictionary of synced lists is changed
-- Returns (a{sas})
-    - list-ids
-        - Type: a{sas}
-        - Each key is a user id and each value is an array of the list ids that are synced on that account
-
-## MSError
+## Error
 Emitted when making a remote change failed
-- Returns (s)
+- Parameters (s)
     - error
         - Type: s
         - This is a stack trace of the error

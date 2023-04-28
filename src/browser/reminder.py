@@ -22,6 +22,7 @@ from gettext import gettext as _
 from math import floor
 
 from remembrance import info
+from remembrance.browser.dnd_reminder import DNDReminder
 
 logger = logging.getLogger(info.app_executable)
 
@@ -93,6 +94,36 @@ class Reminder(Adw.ExpanderRow):
 
         self.win.connect('notify::time-format', lambda *args: self.set_time_label())
 
+        drag_source = Gtk.DragSource()
+        drag_source.connect('drag-begin', self.drag_begin)
+        drag_source.connect('drag-cancel', self.drag_cancel)
+        drag_source.connect('drag-end', self.drag_end)
+        drag_source.set_content(Gdk.ContentProvider.new_for_value(self.id))
+        drag_source.set_actions(Gdk.DragAction.MOVE)
+        self.add_controller(drag_source)
+
+    def drag_begin(self, drag_source, drag):
+        icon = Gtk.DragIcon.get_for_drag(drag)
+        icon.set_child(
+            DNDReminder(
+                self.time_label.get_label() if self.time_label.get_visible() else None,
+                self.repeat_label.get_label() if self.time_label.get_visible() else None,
+                self.past_due_icon.get_visible(),
+                self.completed,
+                self.options['important'],
+                title = self.get_title(),
+                subtitle = self.get_subtitle()
+            )
+        )
+        self.hide()
+
+    def drag_end(self, drag_source, drag, delete_data):
+        if not delete_data:
+            self.show()
+
+    def drag_cancel(self, drag_source, drag, reason):
+        self.show()
+
     def set_text(self):
         self.set_title(f'<span strikethrough=\'{"true" if self.completed and not self.no_strikethrough else "false"}\'>{self.options["title"]}</span>')
         if len(self.options['description']) > 0:
@@ -104,6 +135,15 @@ class Reminder(Adw.ExpanderRow):
         if gesture.get_current_event_state() & Gdk.ModifierType.CONTROL_MASK:
             self.win.set_selecting(True)
 
+        if gesture.get_current_event_state() & Gdk.ModifierType.SHIFT_MASK:
+            if self.win.reminders_list.get_property('selection-mode') == Gtk.SelectionMode.MULTIPLE:
+                self.select_between()
+                self.selected = False
+                self.win.last_selected_row = self
+                return
+
+        self.win.last_selected_row = self
+
         if self.win.reminders_list.get_property('selection-mode') == Gtk.SelectionMode.MULTIPLE:
             if not self in self.win.reminders_list.get_selected_rows():
                 self.set_selectable(True)
@@ -111,6 +151,33 @@ class Reminder(Adw.ExpanderRow):
                 self.selected = False
             else:
                 self.selected = True
+
+    def select_between(self):
+        if self.win.last_selected_row is None:
+            return
+        count = 0
+        selecting = False
+        set_selecting_false = False
+        while True:
+            row = self.win.reminders_list.get_row_at_index(count)
+            if row is None:
+                break
+            elif (row is self.win.last_selected_row or row is self) and self.win.last_selected_row is not self:
+                if not selecting:
+                    selecting = True
+                else:
+                    set_selecting_false = True
+            if selecting:
+                row.set_selectable(True)
+                self.win.reminders_list.select_row(row)
+            else:
+                self.win.reminders_list.unselect_row(row)
+                row.set_selectable(False)
+
+            if set_selecting_false:
+                set_selecting_false = False
+                selecting = False
+            count += 1
 
     def long_pressed(self, gesture, x, y):
         if self.win.reminders_list.get_property('selection-mode') != Gtk.SelectionMode.NONE:
@@ -186,7 +253,7 @@ class Reminder(Adw.ExpanderRow):
         self.set_important()
         self.set_labels()
         self.refresh_time()
-        self.changed()
+        self.win.invalidate_filter()
 
     def set_repeat_times(self, times):
         if self.options['repeat-times'] != times:
@@ -203,7 +270,7 @@ class Reminder(Adw.ExpanderRow):
             self.past_due_icon.set_visible(timestamp <= now)
         elif self.options['due-date'] != 0 and not self.completed:
             timestamp = self.options['due-date']
-            self.past_due_icon.set_visible(datetime.datetime.fromtimestamp(self.options['due-date']).astimezone(tz=datetime.timezone.utc).date() < datetime.date.today())
+            self.past_due_icon.set_visible(datetime.datetime.fromtimestamp(self.options['due-date'], tz=datetime.timezone.utc).date() < datetime.date.today())
         else:
             self.past_due_icon.set_visible(False)
 
@@ -267,7 +334,7 @@ class Reminder(Adw.ExpanderRow):
         if not self.no_strikethrough:
             self.set_text()
         self.refresh_time()
-        self.changed()
+        self.win.invalidate_filter()
 
     def remove(self):
         try:

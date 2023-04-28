@@ -4,11 +4,16 @@ data/browser/io.github.dgsasha.Remembrance.desktop.in.in
 data/service/io.github.dgsasha.Remembrance.Service1.desktop.in.in
 data/io.github.dgsasha.Remembrance.gschema.xml.in
 data/io.github.dgsasha.Remembrance.metainfo.xml.in.in
+src/browser/resources/ui/caldav_sign_in.ui
 src/browser/resources/ui/edit_lists_window.ui
+src/browser/resources/ui/error_dialog.ui
+src/browser/resources/ui/export_lists_window.ui
+src/browser/resources/ui/import_lists_window.ui
 src/browser/resources/ui/main_window.ui
+src/browser/resources/ui/microsoft_sign_in.ui
 src/browser/resources/ui/move_reminders_window.ui
-src/browser/resources/ui/ms_user_row.ui
 src/browser/resources/ui/preferences.ui
+src/browser/resources/ui/preferences_user_row.ui
 src/browser/resources/ui/reminder.ui
 src/browser/resources/ui/reminder_edit_window.ui
 src/browser/resources/ui/shortcuts_window.ui

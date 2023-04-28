@@ -15,7 +15,16 @@
         <child>
           <object class="GtkLabel" id="label">
             <property name="halign">start</property>
+            <property name="hexpand">true</property>
             <property name="ellipsize">end</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="count_label">
+            <property name="halign">end</property>
+            <style>
+              <class name="subtitle"/>
+            </style>
           </object>
         </child>
       </object>

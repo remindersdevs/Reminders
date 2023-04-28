@@ -106,7 +106,16 @@
                                 <child>
                                   <object class="GtkLabel">
                                     <property name="halign">start</property>
+                                    <property name="hexpand">true</property>
                                     <property name="label" translatable="yes">All Reminders</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="all_count_label">
+                                    <property name="halign">end</property>
+                                    <style>
+                                      <class name="subtitle"/>
+                                    </style>
                                   </object>
                                 </child>
                               </object>
@@ -129,7 +138,16 @@
                                 <child>
                                   <object class="GtkLabel">
                                     <property name="halign">start</property>
+                                    <property name="hexpand">true</property>
                                     <property name="label" translatable="yes">Upcoming Reminders</property>
+                                  </object>
+                                </child>
+                                  <child>
+                                  <object class="GtkLabel" id="upcoming_count_label">
+                                    <property name="halign">end</property>
+                                    <style>
+                                      <class name="subtitle"/>
+                                    </style>
                                   </object>
                                 </child>
                               </object>
@@ -152,7 +170,16 @@
                                 <child>
                                   <object class="GtkLabel">
                                     <property name="halign">start</property>
+                                    <property name="hexpand">true</property>
                                     <property name="label" translatable="yes">Past Reminders</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="past_count_label">
+                                    <property name="halign">end</property>
+                                    <style>
+                                      <class name="subtitle"/>
+                                    </style>
                                   </object>
                                 </child>
                               </object>
@@ -175,7 +202,16 @@
                                 <child>
                                   <object class="GtkLabel">
                                     <property name="halign">start</property>
+                                    <property name="hexpand">true</property>
                                     <property name="label" translatable="yes">Completed Reminders</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="completed_count_label">
+                                    <property name="halign">end</property>
+                                    <style>
+                                      <class name="subtitle"/>
+                                    </style>
                                   </object>
                                 </child>
                               </object>
@@ -570,6 +606,14 @@
       <item>
         <attribute name="label" translatable="yes">_Refresh</attribute>
         <attribute name="action">app.refresh</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Export Lists</attribute>
+        <attribute name="action">app.export</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Import Lists</attribute>
+        <attribute name="action">app.import</attribute>
       </item>
     </section>
     <section>

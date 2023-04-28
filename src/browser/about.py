@@ -19,10 +19,19 @@ from gettext import gettext as _
 
 RELEASE_NOTES = '''
 <ul>
-    <li>Fix date/time text wrapping awkwardly</li>
+    <li>Added support for making the week start on sunday</li>
+    <li>Added indicators that show how many incomplete reminders are in each list/group</li>
+    <li>Added support for syncing with CalDAV servers</li>
+    <li>Added support for selecting multiple reminders in one click by holding shift</li>
+    <li>Added support for dragging and dropping reminders between lists</li>
+    <li>Added support for importing and exporting ical/ics files</li>
+    <li>Added support for syncing recurring reminders with Microsoft To Do</li>
+    <li>Added support for creating monthly and yearly repeating reminders</li>
+    <li>Version numbers are now handled in a logical way (as in they aren't just doubles)</li>
+    <li>Microsoft sign in window now appears in the app instead of in the browser</li>
     <li>Significantly improve how recurring reminders function</li>
-    <li>Allow syncing recurring reminders with Microsoft To Do</li>
-    <li>Allow creating monthly and yearly repeating reminders</li>
+    <li>Fix date/time text wrapping awkwardly</li>
+    <li>Fix some other minor issues</li>
     <li>Bump API version</li>
 </ul>
 '''

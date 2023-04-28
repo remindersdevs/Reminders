@@ -46,7 +46,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="AdwActionRow">
+                          <object class="AdwActionRow" id="important_row">
                             <property name="title" translatable="yes">Important</property>
                             <property name="subtitle" translatable="yes">This will make the reminder display first in the list</property>
                             <property name="activatable-widget">importance_switch</property>
@@ -283,7 +283,7 @@
                                   <class name="repeat-row"/>
                                 </style>
                                 <child>
-                                  <object class="GtkBox">
+                                  <object class="GtkBox" id="days_box">
                                     <property name="orientation">horizontal</property>
                                     <property name="halign">center</property>
                                     <property name="valign">center</property>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="caldav_sign_in" parent="AdwWindow">
+    <property name="default-height">400</property>
+    <property name="default-width">300</property>
+    <property name="modal">true</property>
+    <property name="title" translatable="yes">CalDAV Sync</property>
+    <property name="content">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="AdwHeaderBar"/>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="hscrollbar-policy">never</property>
+            <property name="propagate-natural-height">True</property>
+            <property name="vexpand">True</property>
+            <property name="child">
+              <object class="AdwClamp">
+                <property name="maximum-size">250</property>
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="spacing">6</property>
+                    <property name="orientation">vertical</property>
+                    <style>
+                      <class name="main-box"/>
+                    </style>
+                    <child>
+                      <object class="GtkEntry" id="name_entry">
+                        <property name="placeholder-text" translatable="yes">Display Name</property>
+                        <signal name="changed" handler="text_changed" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="url_entry">
+                        <property name="placeholder-text" translatable="yes">Server URL</property>
+                        <signal name="changed" handler="text_changed" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="username_entry">
+                        <property name="placeholder-text" translatable="yes">Username</property>
+                        <signal name="changed" handler="text_changed" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkPasswordEntry" id="password_entry">
+                        <property name="placeholder-text" translatable="yes">Password</property>
+                        <property name="show-peek-icon">true</property>
+                        <signal name="changed" handler="text_changed" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="label" translatable="yes">Sign In</property>
+                        <signal name="clicked" handler="sign_in" swapped="no"/>
+                        <style>
+                          <class name="suggested-action"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+</interface>

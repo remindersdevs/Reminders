@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="export_lists_window" parent="AdwWindow">
+    <property name="title" translatable="yes">Export Lists</property>
+    <property name="default-width">400</property>
+    <property name="width-request">360</property>
+    <property name="default-height">450</property>
+    <property name="modal">true</property>
+    <style>
+      <class name="reminder-edit-window"/>
+    </style>
+    <property name="content">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkHeaderBar">
+            <style>
+              <class name="flat"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="hscrollbar-policy">never</property>
+            <property name="propagate-natural-height">True</property>
+            <property name="vexpand">True</property>
+            <property name="child">
+              <object class="AdwClamp">
+                <property name="child">
+                  <object class="GtkBox">
+                    <style>
+                      <class name="main-box"/>
+                    </style>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkListBox" id="lists">
+                        <property name="selection-mode">none</property>
+                        <style>
+                          <class name="boxed-list"/>
+                          <class name="lists"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator"/>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="hexpand">true</property>
+            <style>
+              <class name="response-area"/>
+            </style>
+            <child>
+              <object class="GtkButton" id="cancel_btn">
+                <property name="hexpand">true</property>
+                <property name="label" translatable="yes">Cancel</property>
+                <signal name="clicked" handler="on_cancel" swapped="no"/>
+                <style>
+                  <class name="flat"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSeparator">
+                <property name="orientation">vertical</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="save_btn">
+                <property name="hexpand">true</property>
+                <property name="label" translatable="yes">Export</property>
+                <signal name="clicked" handler="on_save" swapped="no"/>
+                <style>
+                  <class name="flat"/>
+                  <class name="suggested"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+</interface>

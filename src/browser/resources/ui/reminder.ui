@@ -2,6 +2,9 @@
 <interface>
   <template class="reminder" parent="AdwExpanderRow">
     <signal name="notify::expanded" handler="expanded_cb" swapped="no"/>
+    <style>
+      <class name="reminder"/>
+    </style>
     <property name="selectable">false</property>
     <child type="prefix">
       <object class="GtkImage" id="completed_icon">

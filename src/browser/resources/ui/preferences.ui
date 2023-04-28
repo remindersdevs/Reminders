@@ -21,7 +21,7 @@
               <object class="AdwExpanderRow" id="ms_sync_row">
                 <property name="title" translatable="yes">Microsoft To Do</property>
                 <child>
-                  <object class="AdwActionRow" id="add_account_row">
+                  <object class="AdwActionRow" id="ms_add_account">
                     <style>
                       <class name="row-button"/>
                       <class name="suggested-action"/>
@@ -40,7 +40,35 @@
                         <property name="halign">start</property>
                       </object>
                     </child>
-                    <signal name="activated" handler="sign_in" swapped="no"/>
+                    <signal name="activated" handler="ms_sign_in" swapped="no"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwExpanderRow" id="caldav_sync_row">
+                <property name="title" translatable="yes">CalDAV</property>
+                <child>
+                  <object class="AdwActionRow" id="caldav_add_account">
+                    <style>
+                      <class name="row-button"/>
+                      <class name="suggested-action"/>
+                    </style>
+                    <property name="activatable">true</property>
+                    <child type="prefix">
+                      <object class="GtkLabel">
+                        <property name="valign">center</property>
+                        <property name="halign">center</property>
+                        <property name="label" translatable="yes">Add Account</property>
+                      </object>
+                    </child>
+                    <child type="prefix">
+                      <object class="GtkBox">
+                        <property name="hexpand">true</property>
+                        <property name="halign">start</property>
+                      </object>
+                    </child>
+                    <signal name="activated" handler="caldav_sign_in" swapped="no"/>
                   </object>
                 </child>
               </object>
@@ -68,6 +96,17 @@
               <object class="AdwComboRow" id="time_format_row">
                 <property name="title" translatable="yes">Time format</property>
                 <property name="model">time_formats</property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwActionRow">
+                <property name="title" translatable="yes">Week starts on Sunday</property>
+                <property name="activatable-widget">week_switch</property>
+                <child>
+                  <object class="GtkSwitch" id="week_switch">
+                    <property name="valign">center</property>
+                  </object>
+                </child>
               </object>
             </child>
             <child>

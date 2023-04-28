@@ -13,6 +13,7 @@ finish-args:
   - --system-talk-name=org.freedesktop.login1
   - --talk-name=org.freedesktop.secrets
   - --socket=pulseaudio
+  - --filesystem=xdg-download
 
 modules:
   - shared-modules/intltool/intltool-0.51.json

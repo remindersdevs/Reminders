@@ -43,7 +43,7 @@ class Countdowns():
         if parameters.unpack()[0]:
             return
 
-        for reminder_id in self.dict.keys():
+        for reminder_id in self.dict.copy().keys():
             self._start(reminder_id, resuming=True)
 
     def remove_countdown(self, reminder_id):

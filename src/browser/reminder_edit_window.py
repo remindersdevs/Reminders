@@ -13,7 +13,6 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import time
 import ctypes
 import datetime
 import logging
@@ -79,6 +78,7 @@ class ReminderEditWindow(Adw.Window):
     repeat_duration_button = Gtk.Template.Child()
     importance_switch = Gtk.Template.Child()
     repeat_times_row = Gtk.Template.Child()
+    days_box = Gtk.Template.Child()
 
     def __init__(self, win, app, reminder = None, **kwargs):
         super().__init__(**kwargs)
@@ -91,6 +91,17 @@ class ReminderEditWindow(Adw.Window):
         self.win.connect('notify::time-format', lambda *args: self.time_format_updated())
         self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>s'), Gtk.CallbackAction.new(lambda *args: self.on_save())))
         self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: self.close())))
+        self.app.settings.connect('changed::week-starts-sunday', lambda *args: self.week_start_changed())
+        self.week_start_changed()
+
+    def week_start_changed(self):
+        starts_sunday = self.app.settings.get_boolean('week-starts-sunday')
+        if starts_sunday:
+            self.days_box.remove(self.sun_btn)
+            self.days_box.prepend(self.sun_btn)
+        else:
+            self.days_box.remove(self.sun_btn)
+            self.days_box.append(self.sun_btn)
 
     def setup(self, reminder):
         self.reminder = reminder
@@ -414,104 +425,105 @@ class ReminderEditWindow(Adw.Window):
         try:
             options = self.get_options()
 
-            if self.check_changed(options):
-                if self.id is None:
-                    results = self.app.run_service_method(
-                        'CreateReminder',
-                        GLib.Variant(
-                            '(sa{sv})',
-                            (
-                                info.app_id,
-                                {
-                                    'title': GLib.Variant('s', options['title']),
-                                    'description': GLib.Variant('s', options['description']),
-                                    'due-date': GLib.Variant('u', options['due-date']),
-                                    'timestamp': GLib.Variant('u', options['timestamp']),
-                                    'important': GLib.Variant('u', options['important']),
-                                    'repeat-type': GLib.Variant('q', options['repeat-type']),
-                                    'repeat-frequency': GLib.Variant('q', options['repeat-frequency']),
-                                    'repeat-days': GLib.Variant('q', options['repeat-days']),
-                                    'repeat-times': GLib.Variant('n', options['repeat-times']),
-                                    'repeat-until': GLib.Variant('u', options['repeat-until']),
-                                    'list-id': GLib.Variant('s', options['list-id']),
-                                    'user-id': GLib.Variant('s', options['user-id'])
-                                }
-                            )
+            if self.id is None:
+                results = self.app.run_service_method(
+                    'CreateReminder',
+                    GLib.Variant(
+                        '(sa{sv})',
+                        (
+                            info.app_id,
+                            {
+                                'title': GLib.Variant('s', options['title']),
+                                'description': GLib.Variant('s', options['description']),
+                                'due-date': GLib.Variant('u', options['due-date']),
+                                'timestamp': GLib.Variant('u', options['timestamp']),
+                                'important': GLib.Variant('u', options['important']),
+                                'repeat-type': GLib.Variant('q', options['repeat-type']),
+                                'repeat-frequency': GLib.Variant('q', options['repeat-frequency']),
+                                'repeat-days': GLib.Variant('q', options['repeat-days']),
+                                'repeat-times': GLib.Variant('n', options['repeat-times']),
+                                'repeat-until': GLib.Variant('u', options['repeat-until']),
+                                'list-id': GLib.Variant('s', options['list-id']),
+                                'user-id': GLib.Variant('s', options['user-id'])
+                            }
                         )
                     )
-                    self.id, options['created-timestamp'] = results.unpack()
-                else:
-                    results = self.app.run_service_method(
-                        'UpdateReminder',
-                        GLib.Variant(
-                            '(sa{sv})',
-                            (
-                                info.app_id,
-                                {
-                                    'id': GLib.Variant('s', self.id),
-                                    'title': GLib.Variant('s', options['title']),
-                                    'description': GLib.Variant('s', options['description']),
-                                    'due-date': GLib.Variant('u', options['due-date']),
-                                    'timestamp': GLib.Variant('u', options['timestamp']),
-                                    'important': GLib.Variant('u', options['important']),
-                                    'repeat-type': GLib.Variant('q', options['repeat-type']),
-                                    'repeat-frequency': GLib.Variant('q', options['repeat-frequency']),
-                                    'repeat-days': GLib.Variant('q', options['repeat-days']),
-                                    'repeat-times': GLib.Variant('n', options['repeat-times']),
-                                    'repeat-until': GLib.Variant('u', options['repeat-until']),
-                                    'list-id': GLib.Variant('s', options['list-id']),
-                                    'user-id': GLib.Variant('s', options['user-id'])
-                                }
-                            )
+                )
+                self.id, options['created-timestamp'] = results.unpack()
+            else:
+                results = self.app.run_service_method(
+                    'UpdateReminder',
+                    GLib.Variant(
+                        '(sa{sv})',
+                        (
+                            info.app_id,
+                            {
+                                'id': GLib.Variant('s', self.id),
+                                'title': GLib.Variant('s', options['title']),
+                                'description': GLib.Variant('s', options['description']),
+                                'due-date': GLib.Variant('u', options['due-date']),
+                                'timestamp': GLib.Variant('u', options['timestamp']),
+                                'important': GLib.Variant('u', options['important']),
+                                'repeat-type': GLib.Variant('q', options['repeat-type']),
+                                'repeat-frequency': GLib.Variant('q', options['repeat-frequency']),
+                                'repeat-days': GLib.Variant('q', options['repeat-days']),
+                                'repeat-times': GLib.Variant('n', options['repeat-times']),
+                                'repeat-until': GLib.Variant('u', options['repeat-until']),
+                                'list-id': GLib.Variant('s', options['list-id']),
+                                'user-id': GLib.Variant('s', options['user-id'])
+                            }
                         )
                     )
-                    options['updated-timestamp'] = results.unpack()[0]
+                )
+                options['updated-timestamp'] = results.unpack()[0]
 
-                self.options = options
+            self.options = options
 
-                if self.reminder is not None:
-                    self.reminder.set_options(self.options)
-                else:
-                    self.reminder = Reminder(self.win, self.options, self.id)
-                    self.win.reminders_list.append(self.reminder)
-                    self.win.reminder_lookup_dict[self.id] = self.reminder
+            if self.reminder is not None:
+                self.reminder.set_options(self.options)
+            else:
+                self.reminder = Reminder(self.win, self.options, self.id)
+                self.win.reminders_list.append(self.reminder)
+                self.win.reminder_lookup_dict[self.id] = self.reminder
 
-                self.win.reminders_list.invalidate_sort()
+            self.win.reminders_list.invalidate_sort()
+            self.win.invalidate_filter()
 
             self.set_visible(False)
         except Exception as error:
             logger.exception(error)
 
-    def set_ms(self, is_ms):
-        self.repeat_type_button.set_visible(not is_ms)
-        self.ms_repeat_type_button.set_visible(is_ms)
-
-        self.repeat_times_row.set_sensitive(not is_ms)
+    def set_ms(self):
+        self.repeat_times_row.set_sensitive(False)
         self.repeat_row.set_sensitive(True)
 
-        if is_ms:
+        if self.repeat_type_button.get_visible():
             repeat_type = self.repeat_type_button.get_selected() + 1
             repeat_type -= 3
             if repeat_type > 0:
                 self.ms_repeat_type_button.set_selected(repeat_type)
-        else:
-            repeat_type = self.ms_repeat_type_button.get_selected() + 3
-            self.repeat_type_button.set_selected(repeat_type - 1)
+
+            self.repeat_type_button.set_visible(False)
+            self.ms_repeat_type_button.set_visible(True)
 
     def set_notify(self, notify):
-        self.repeat_type_button.set_visible(notify)
-        self.ms_repeat_type_button.set_visible(not notify)
-        self.repeat_times_row.set_sensitive(notify)
         self.repeat_times_row.set_sensitive(True)
         self.repeat_row.set_sensitive(True)
-        if not notify:
+
+        if not notify and self.repeat_type_button.get_visible():
             repeat_type = self.repeat_type_button.get_selected() + 1
             repeat_type -= 3
             if repeat_type > 0:
-                self.repeat_type_button.set_selected(repeat_type)
-        else:
+                self.ms_repeat_type_button.set_selected(repeat_type)
+
+            self.repeat_type_button.set_visible(False)
+            self.ms_repeat_type_button.set_visible(True)
+        elif not self.repeat_type_button.get_visible():
             repeat_type = self.ms_repeat_type_button.get_selected() + 3
             self.repeat_type_button.set_selected(repeat_type - 1)
+
+            self.ms_repeat_type_button.set_visible(False)
+            self.repeat_type_button.set_visible(True)
 
     @Gtk.Template.Callback()
     def repeat_day_changed(self, calendar = None, data = None):
@@ -554,8 +566,8 @@ class ReminderEditWindow(Adw.Window):
         if not self.task_list_row.get_visible():
             self.task_list = self.user_id = 'local'
         if self.time_row.get_enable_expansion():
-            if self.task_list_row.get_visible() and self.user_id != 'local':
-                self.set_ms(True)
+            if self.user_id in self.win.ms_users.keys():
+                self.set_ms()
             else:
                 self.set_notify(self.notif_btn.get_active())
         else:
@@ -565,8 +577,8 @@ class ReminderEditWindow(Adw.Window):
     @Gtk.Template.Callback()
     def time_switched(self, switch, data = None):
         if self.time_row.get_enable_expansion():
-            if self.task_list_row.get_visible() and self.user_id != 'local':
-                self.set_ms(True)
+            if self.user_id in self.win.ms_users.keys():
+                self.set_ms()
             else:
                 self.set_notify(self.notif_btn.get_active())
         else:

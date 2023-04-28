@@ -128,7 +128,7 @@ box.header > box {
     margin: 6px 0;
 }
 
-row.header separator {
+.reminder separator {
     opacity: 0.6;
     margin: 3px 0;
 }
@@ -286,4 +286,13 @@ list.nested row.expander {
 list.nested list.nested {
     background-color: alpha(@card_shade_color, 0.3);
     border-radius: 0;
+}
+
+.navigation-sidebar:drop(active) {
+    box-shadow: none;
+}
+
+.navigation-sidebar row:drop(active) {
+    color: @accent_bg_color;
+    box-shadow: inset 0 0 0 1px @accent_bg_color;
 }

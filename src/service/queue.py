@@ -29,7 +29,6 @@ class Queue():
     def __init__(self, reminders):
         self.get_queue()
         self.reminders = reminders
-        self.to_do = reminders.to_do
 
     def reset(self):
         self.queue = {
@@ -101,7 +100,7 @@ class Queue():
             retval = []
         return retval
 
-    def add_reminder(self, reminder_id, retry = True):
+    def create_reminder(self, reminder_id, retry = True):
         try:
             if reminder_id not in self.queue['reminders']['create']:
                 self.queue['reminders']['create'].append(reminder_id)
@@ -109,7 +108,7 @@ class Queue():
         except Exception as error:
             if retry:
                 self.reset()
-                self.add_reminder(reminder_id, False)
+                self.create_reminder(reminder_id, False)
             else:
                 raise error
 
@@ -181,12 +180,12 @@ class Queue():
             else:
                 raise error
 
-    def remove_list(self, list_id, ms_id, user_id, retry = True):
+    def remove_list(self, list_id, uid, user_id, retry = True):
         try:
             if list_id in self.queue['lists']['update']:
                 self.queue['lists']['update'].pop(list_id)
 
-            value = [ms_id, user_id]
+            value = [uid, user_id]
 
             if list_id not in self.queue['lists']['create'] and value not in self.queue['lists']['delete']:
                 self.queue['lists']['delete'].append(value)
@@ -195,16 +194,15 @@ class Queue():
         except Exception as error:
             if retry:
                 self.reset()
-                self.remove_list(list_id, ms_id, user_id, False)
+                self.remove_list(list_id, uid, user_id, False)
             else:
                 raise error
 
     def load(self):
         queue = deepcopy(self.queue)
         list_ids = self.reminders.list_ids
-        ms = self.reminders.ms
-        local = self.reminders.local
-        list_names = self.reminders.list_names
+        reminders = self.reminders.reminders
+        lists = self.reminders.lists
 
         try:
             try:
@@ -212,13 +210,13 @@ class Queue():
                     try:
                         if list_id in list_ids:
                             user_id = list_ids[list_id]['user-id']
-                            if list_id in list_names[user_id]:
-                                list_name = list_names[user_id][list_id]
+                            if list_id in lists[user_id]:
+                                list_name = lists[user_id][list_id]
 
-                                new_ms_id = self.to_do.create_list(user_id, list_name)
+                                new_uid = self.reminders._remote_create_list(user_id, list_name)
 
-                                if new_ms_id is not None:
-                                    list_ids[list_id]['ms-id'] = new_ms_id
+                                if new_uid is not None:
+                                    list_ids[list_id]['uid'] = new_uid
 
                     except requests.ConnectionError as error:
                         raise error
@@ -234,10 +232,18 @@ class Queue():
             try:
                 for reminder_id in queue['reminders']['create']:
                     try:
-                        if reminder_id in ms:
-                            new_task_id = self.reminders._to_ms_task(reminder_id, ms[reminder_id], updating=False)
-                            if new_task_id is not None:
-                                ms[reminder_id]['ms-id'] = new_task_id
+                        if reminders[reminder_id]['user-id'] == 'local':
+                            location = 'local'
+                        elif reminders[reminder_id]['user-id'] in self.reminders.to_do.users.keys():
+                            location = 'ms-to-do'
+                        elif reminders[reminder_id]['user-id'] in self.reminders.caldav.users.keys():
+                            location = 'caldav'
+                        else:
+                            raise KeyError('Invalid user id')
+
+                        new_task_id = self.reminders._to_remote_task(reminders[reminder_id], location, False)
+                        if new_task_id is not None:
+                            reminders[reminder_id]['uid'] = new_task_id
 
                     except requests.ConnectionError as error:
                         raise error
@@ -253,8 +259,12 @@ class Queue():
             try:
                 for reminder_id in queue['reminders']['complete']:
                     try:
-                        if reminder_id in ms:
-                            self.reminders._ms_set_completed(reminder_id, ms[reminder_id])
+                        if reminders[reminder_id]['user-id'] in self.reminders.to_do.users.keys():
+                            self.reminders._ms_set_completed(reminder_id, reminders[reminder_id])
+                        elif reminders[reminder_id]['user-id'] in self.reminders.caldav.users.keys():
+                            self.reminders._caldav_set_completed(reminder_id, reminders[reminder_id])
+                        else:
+                            raise KeyError('Invalid reminder id')
 
                     except requests.ConnectionError as error:
                         raise error
@@ -270,15 +280,22 @@ class Queue():
             try:
                 for reminder_id, args in queue['reminders']['update'].items():
                     try:
-                        for dictionary in (ms, local):
-                            if reminder_id in dictionary.keys():
-                                old_task_id = args[0]
-                                old_user_id = args[1]
-                                old_list_id = args[2]
-                                updating = args[3]
-                                new_task_id = self.reminders._to_ms_task(reminder_id, dictionary[reminder_id], old_user_id, old_list_id, old_task_id, updating)
-                                if new_task_id is not None:
-                                    dictionary[reminder_id]['ms-id'] = new_task_id
+                        if reminders[reminder_id]['user-id'] == 'local':
+                            location = 'local'
+                        elif reminders[reminder_id]['user-id'] in self.reminders.to_do.users.keys():
+                            location = 'ms-to-do'
+                        elif reminders[reminder_id]['user-id'] in self.reminders.caldav.users.keys():
+                            location = 'caldav'
+                        else:
+                            raise KeyError('Invalid user id')
+
+                        old_task_id = args[0]
+                        old_user_id = args[1]
+                        old_list_id = args[2]
+                        updating = args[3]
+                        new_task_id = self.reminders._to_remote_task(reminders[reminder_id], location, updating, old_user_id, old_list_id, old_task_id)
+                        if new_task_id is not None:
+                            reminders[reminder_id]['uid'] = new_task_id
 
                     except requests.ConnectionError as error:
                         raise error
@@ -295,11 +312,11 @@ class Queue():
                 for list_id in queue['lists']['update']:
                     try:
                         if list_id in list_ids:
-                            ms_id = list_ids[list_id]['ms-id']
+                            uid = list_ids[list_id]['uid']
                             user_id = list_ids[list_id]['user-id']
-                            if list_id in list_names[user_id]:
-                                list_name = list_names[user_id][list_id]
-                                self.to_do.update_list(user_id, ms_id, list_name)
+                            if list_id in lists[user_id]:
+                                list_name = lists[user_id][list_id]
+                                self.reminders._remote_rename_list(user_id, uid, list_name)
 
                     except requests.ConnectionError as error:
                         raise error
@@ -319,7 +336,7 @@ class Queue():
                         user_id = value[1]
                         task_list = value[2]
 
-                        self.to_do.remove_task(user_id, task_list, task_id)
+                        self.reminders._remote_remove_task(user_id, task_list, task_id)
 
                     except requests.ConnectionError as error:
                         raise error
@@ -335,10 +352,10 @@ class Queue():
             try:
                 for value in queue['lists']['delete']:
                     try:
-                        ms_id = value[0]
+                        uid = value[0]
                         user_id = value[1]
 
-                        self.to_do.delete_list(user_id, ms_id)
+                        self.reminders._remote_delete_list(user_id, uid)
 
                     except requests.ConnectionError as error:
                         raise error

@@ -13,9 +13,17 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
+
 from gettext import gettext as _
 
+from remembrance import info
+from remembrance.browser.caldav_sign_in import CalDAVSignIn
+from remembrance.browser.microsoft_sign_in import MicrosoftSignIn
+
 from gi.repository import Gtk, Adw, GLib, Gio, Pango
+
+logger = logging.getLogger(info.app_executable)
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/preferences.ui')
 class PreferencesWindow(Adw.PreferencesWindow):
@@ -25,16 +33,20 @@ class PreferencesWindow(Adw.PreferencesWindow):
     sound_theme_switch = Gtk.Template.Child()
     time_format_row = Gtk.Template.Child()
     ms_sync_row = Gtk.Template.Child()
-    add_account_row = Gtk.Template.Child()
+    caldav_sync_row = Gtk.Template.Child()
+    ms_add_account = Gtk.Template.Child()
+    caldav_add_account = Gtk.Template.Child()
     refresh_button = Gtk.Template.Child()
     refresh_time_row = Gtk.Template.Child()
     spinner = Gtk.Template.Child()
+    week_switch = Gtk.Template.Child()
 
     def __init__(self, app, **kwargs):
         super().__init__(**kwargs)
         self.app = app
         self.settings = app.settings
         self.set_transient_for(self.app.win)
+        self.settings.bind('week-starts-sunday', self.week_switch, 'active', Gio.SettingsBindFlags.DEFAULT)
         self.settings.bind('notification-sound', self.sound_switch, 'enable-expansion', Gio.SettingsBindFlags.DEFAULT)
         self.settings.bind('included-notification-sound', self.sound_theme_switch, 'active', Gio.SettingsBindFlags.DEFAULT)
         self.settings.connect('changed::time-format', lambda *args: self.update_time_dropdown())
@@ -44,17 +56,22 @@ class PreferencesWindow(Adw.PreferencesWindow):
         self.update_refresh_dropdown()
         self.time_format_row.connect('notify::selected', lambda *args: self.update_time_format())
         self.refresh_time_row.connect('notify::selected', lambda *args: self.update_refresh_time())
-        self.app.service.connect('g-signal::MSSignedIn', self.signed_in_cb)
-        self.app.service.connect('g-signal::MSSignedOut', self.signed_out_cb)
         self.refresh_button.connect('clicked', lambda *args: self.app.refresh_reminders())
         self.connect('close-request', self.on_close)
         self.synced = self.settings.get_value('synced-task-lists').unpack()
         self.user_rows = {}
 
-        for user_id, email in self.app.win.emails.items():
-            self.on_signed_in(user_id, email)
+        for user_id, username in self.app.win.ms_users.items():
+            self.on_ms_signed_in(user_id, username)
+        for user_id, username in self.app.win.caldav_users.items():
+            self.on_caldav_signed_in(user_id, username)
+
         self.synced_lists_updated()
         self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: self.close())))
+
+    def username_updated(self, user_id, username):
+        if user_id in self.user_rows.keys():
+            self.user_rows[user_id].set_username(username)
 
     def synced_lists_updated(self, only_user_id = None):
         self.synced = self.settings.get_value('synced-task-lists').unpack()
@@ -82,16 +99,27 @@ class PreferencesWindow(Adw.PreferencesWindow):
                 synced[user_id] = row.synced
         if self.synced != synced:
             self.synced = synced
-            self.settings.set_value('synced-task-lists', GLib.Variant('a{sas}', self.synced))
+            try:
+                self.app.run_service_method('SetSyncedLists', GLib.Variant('(a{sas})', (self.synced,)), False)
+            except Exception as error:
+                logger.exception(error)
+
         self.set_visible(False)
         return True
 
-    def on_signed_in(self, user_id, email):
+    def on_ms_signed_in(self, user_id, username):
         names = self.app.win.all_task_list_names[user_id] if user_id in self.app.win.all_task_list_names else {}
-        self.user_rows[user_id] = MSUserRow(self, user_id, email, names)
+        self.user_rows[user_id] = PreferencesUserRow(self, user_id, username, names)
         self.ms_sync_row.add_row(self.user_rows[user_id])
-        self.ms_sync_row.remove(self.add_account_row)
-        self.ms_sync_row.add_row(self.add_account_row) # move to end
+        self.ms_sync_row.remove(self.ms_add_account)
+        self.ms_sync_row.add_row(self.ms_add_account) # move to end
+
+    def on_caldav_signed_in(self, user_id, username):
+        names = self.app.win.all_task_list_names[user_id] if user_id in self.app.win.all_task_list_names else {}
+        self.user_rows[user_id] = PreferencesUserRow(self, user_id, username, names, True)
+        self.caldav_sync_row.add_row(self.user_rows[user_id])
+        self.caldav_sync_row.remove(self.caldav_add_account)
+        self.caldav_sync_row.add_row(self.caldav_add_account) # move to end
 
     def list_updated(self, user_id, list_id, list_name):
         if user_id in self.user_rows.keys():
@@ -102,7 +130,8 @@ class PreferencesWindow(Adw.PreferencesWindow):
             self.user_rows[user_id].task_list_deleted(list_id)
 
     def on_signed_out(self, user_id):
-        self.ms_sync_row.remove(self.user_rows[user_id])
+        row = self.user_rows[user_id]
+        row.get_parent().remove(row)
         self.user_rows.pop(user_id)
 
     def update_refresh_dropdown(self):
@@ -117,46 +146,53 @@ class PreferencesWindow(Adw.PreferencesWindow):
     def update_time_format(self):
         self.settings.set_enum('time-format', self.time_format_row.get_selected())
 
-    def signed_out_cb(self, proxy, sender_name, signal_name, parameters):
-        user_id = parameters.unpack()[0]
-        self.on_signed_out(user_id)
-
-    def signed_in_cb(self, proxy, sender_name, signal_name, parameters):
-        user_id, email = parameters.unpack()
+    def ms_signed_in(self, user_id, username):
         if user_id not in self.user_rows.keys():
-            self.on_signed_in(user_id, email)
+            self.on_ms_signed_in(user_id, username)
+            self.user_rows[user_id].set_expanded(True)
+            self.synced_lists_updated(user_id)
+
+    def caldav_signed_in(self, user_id, username):
+        if user_id not in self.user_rows.keys():
+            self.on_caldav_signed_in(user_id, username)
             self.user_rows[user_id].set_expanded(True)
             self.synced_lists_updated(user_id)
 
     @Gtk.Template.Callback()
-    def sign_in(self, row = None):
-        try:
-            self.app.win.sign_in()
-        except Exception as error:
-            self.app.logger.exception(error)
+    def ms_sign_in(self, row = None):
+        MicrosoftSignIn(self)
 
-@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/ms_user_row.ui')
-class MSUserRow(Adw.ExpanderRow):
-    __gtype_name__ = 'user_row'
+    @Gtk.Template.Callback()
+    def caldav_sign_in(self, row = None):
+        CalDAVSignIn(self)
+
+@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/preferences_user_row.ui')
+class PreferencesUserRow(Adw.ExpanderRow):
+    __gtype_name__ = 'preferences_user_row'
     task_list_grid = Gtk.Template.Child()
     all_check = Gtk.Template.Child()
     task_list_row = Gtk.Template.Child()
+    username_row = Gtk.Template.Child()
+    save_btn = Gtk.Template.Child()
 
-    def __init__(self, preferences, user_id, email, lists, **kwargs):
+    def __init__(self, preferences, user_id, username, lists, caldav = False, **kwargs):
         super().__init__(**kwargs)
         self.preferences = preferences
         self.user_id = user_id
         self.column = 1
         self.task_lists = {'all': 'All'}
         self.task_list_checks = {}
-        self.set_email(email)
+        self.set_username(username)
         self.lists = lists
         self.synced = self.preferences.synced[self.user_id] if self.user_id in self.preferences.synced else []
         self.set_task_lists()
+        if caldav:
+            self.username_row.set_visible(True)
 
-    def set_email(self, email):
-        self.email = email
-        self.set_title(email)
+    def set_username(self, username):
+        self.username = username
+        self.set_title(username)
+        self.username_row.set_text(username)
 
     def set_task_lists(self):
         if 'all' in self.synced:
@@ -214,12 +250,27 @@ class MSUserRow(Adw.ExpanderRow):
                     self.synced.append(list_id)
 
     @Gtk.Template.Callback()
+    def save_username(self, button = None):
+        username = self.username_row.get_text().strip()
+        try:
+            self.preferences.app.run_service_method('CalDAVUpdateDisplayName', GLib.Variant('(ss)', (self.user_id, username)))
+        except Exception as error:
+            logger.exception(error)
+        self.set_username(username)
+        self.check_saved()
+
+    @Gtk.Template.Callback()
+    def check_saved(self, button = None):
+        unsaved = self.username_row.get_text() != self.username
+        self.save_btn.set_sensitive(unsaved)
+
+    @Gtk.Template.Callback()
     def sign_out(self, button = None):
         try:
             confirm_dialog = Adw.MessageDialog(
                 transient_for=self.preferences,
                 heading=_('Are you sure you want to sign out?'),
-                body=_(f'This will sign out <b>{self.email}</b>'),
+                body=_(f'This will sign out <b>{self.username}</b>'),
                 body_use_markup=True
             )
             confirm_dialog.add_response('cancel', _('Cancel'))
@@ -229,7 +280,7 @@ class MSUserRow(Adw.ExpanderRow):
             confirm_dialog.connect('response::logout', lambda *args: self.preferences.app.win.sign_out(self.user_id))
             confirm_dialog.present()
         except Exception as error:
-            self.preferences.app.logger.exception(error)
+            logger.exception(error)
 
     @Gtk.Template.Callback()
     def all_lists_selected(self, button = None, data = None):

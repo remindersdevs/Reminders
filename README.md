@@ -51,8 +51,12 @@ flatpak run io.github.dgsasha.Remembrance.Devel --restart-service
 - `Libadwaita`
 - `GLib`
 - `GSound`
+- `WebKitGTK`
 - `python3-msal`
 - `python3-requests`
+- `python3-caldav`
+- `python3-icalendar`
+- `python3-setuptools`
 
 ### Building (generic):
 ```

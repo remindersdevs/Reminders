@@ -17,6 +17,18 @@
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
+                <property name="accelerator">&lt;ctrl&gt;E</property>
+                <property name="title" translatable="yes">Export</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="accelerator">&lt;ctrl&gt;I</property>
+                <property name="title" translatable="yes">Import</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
                 <property name="accelerator">&lt;ctrl&gt;semicolon</property>
                 <property name="title" translatable="yes">Preferences</property>
               </object>

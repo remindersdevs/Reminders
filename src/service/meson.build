@@ -5,10 +5,13 @@ conf.set('LOCALE_DIR', get_option('prefix') / get_option('localedir'))
 source_files = files(
   '__init__.py',
   'backend.py',
+  'caldav.py',
   'countdowns.py',
+  'icalendar.py',
   'application.py',
   'ms_to_do.py',
-  'queue.py'
+  'queue.py',
+  'reminder.py'
 )
 
 install_data(

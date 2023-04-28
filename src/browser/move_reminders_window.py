@@ -13,12 +13,10 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import time
 import logging
 
 from gi.repository import Gtk, Adw, GLib
 from gettext import gettext as _
-from math import floor
 
 from remembrance import info
 
@@ -41,9 +39,9 @@ class MoveRemindersWindow(Adw.Window):
         self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: self.close())))
 
         for user_id, value in self.win.task_list_names.items():
-            if user_id in self.win.emails.keys() or user_id == 'local':
+            if user_id in self.win.usernames.keys():
                 for list_id, list_name in value.items():
-                    row = Adw.ActionRow(title=list_name, subtitle=_('Local') if user_id == 'local' else self.win.emails[user_id], activatable=False)
+                    row = Adw.ActionRow(title=list_name, subtitle=self.win.usernames[user_id], activatable=False)
                     self.lists.append(row)
                     self.rows[row] = (user_id, list_id)
                     if user_id == selected[0] and list_id == selected[1]:
@@ -57,8 +55,8 @@ class MoveRemindersWindow(Adw.Window):
             for reminder in self.reminders:
                 options = reminder.options.copy()
                 options['user-id'], options['list-id'] = self.rows[selected]
-                if reminder.get_sensitive() and reminder.options['list-id'] != options['list-id'] or reminder.options['user-id'] != options['user-id']:
-                    if options['user-id'] != 'local':
+                if reminder.get_visible() and reminder.options['list-id'] != options['list-id'] or reminder.options['user-id'] != options['user-id']:
+                    if options['user-id'] in self.win.ms_users.keys():
                         if options['repeat-type'] in (1, 2):
                             options['repeat-type'] = 0
                             options['repeat-frequency'] = 1
@@ -88,13 +86,13 @@ class MoveRemindersWindow(Adw.Window):
 
                     options['updated-timestamp'] = results.unpack()[0]
                     reminder.options.update(options)
-                    reminder.changed()
                     reminder.set_repeat_label()
             self.close()
         except Exception as error:
             logger.exception(error)
 
         self.win.reminders_list.invalidate_sort()
+        self.win.invalidate_filter()
 
     @Gtk.Template.Callback()
     def on_cancel(self, button = None):
@@ -102,7 +100,6 @@ class MoveRemindersWindow(Adw.Window):
 
     @Gtk.Template.Callback()
     def on_save(self, button = None):
-
         confirm_dialog = Adw.MessageDialog(
             transient_for=self,
             heading=_('Are you sure you want to move the currently selected reminder(s)?')

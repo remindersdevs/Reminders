@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/io/github/dgsasha/remembrance">
+    <file>ui/caldav_sign_in.ui</file>
+    <file>ui/dnd_reminder.ui</file>
     <file>ui/edit_lists_window.ui</file>
     <file>ui/error_dialog.ui</file>
+    <file>ui/export_lists_window.ui</file>
+    <file>ui/import_lists_window.ui</file>
     <file>ui/main_window.ui</file>
+    <file>ui/microsoft_sign_in.ui</file>
     <file>ui/move_reminders_window.ui</file>
-    <file>ui/ms_user_row.ui</file>
     <file>ui/preferences.ui</file>
+    <file>ui/preferences_user_row.ui</file>
     <file>ui/reminder.ui</file>
     <file>ui/reminder_edit_window.ui</file>
     <file>ui/shortcuts_window.ui</file>

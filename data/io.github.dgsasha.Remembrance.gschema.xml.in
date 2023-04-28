@@ -48,15 +48,10 @@
       <summary>Descending sort</summary>
       <description>If reminders sort should be descending</description>
     </key>
-    <key type="b" name="completed-last">
-      <default>true</default>
-      <summary>Completed last</summary>
-      <description>Show completed reminders last</description>
-    </key>
-    <key type="b" name="completed-reversed">
-      <default>true</default>
-      <summary>Completed reverse</summary>
-      <description>Reverse order of completed reminders when sorted by time</description>
+    <key type="b" name="week-starts-sunday">
+      <default>false</default>
+      <summary>Week starts on sunday</summary>
+      <description>If week should start on sunday</description>
     </key>
     <key name="width" type="i">
       <default>800</default>
@@ -66,11 +61,6 @@
     </key>
     <key name="is-maximized" type="b">
       <default>false</default>
-    </key>
-    <key name="sync-ms" type="b">
-      <default>false</default>
-      <summary>Sync with Microsoft To Do</summary>
-      <description>Reverse order of completed reminders when sorted by time</description>
     </key>
     <key name="synced-task-lists" type="a{sas}">
       <default>[]</default>

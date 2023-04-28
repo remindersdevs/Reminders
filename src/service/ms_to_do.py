@@ -15,15 +15,21 @@
 
 import json
 import logging
+import datetime
 import requests
 import msal
 import atexit
 import gi
 
 gi.require_version('Secret', '1')
-from gi.repository import Secret
+from gi.repository import Secret, GLib
+
+from http.server import HTTPServer, BaseHTTPRequestHandler
+from urllib.parse import parse_qs
+from threading import Thread
 
 from remembrance import info
+from remembrance.service.reminder import Reminder
 
 GRAPH = 'https://graph.microsoft.com/v1.0'
 
@@ -32,20 +38,40 @@ SCOPES = [
     'User.Read'
 ]
 
+DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+
 logger = logging.getLogger(info.service_executable)
+
+class Redirect(BaseHTTPRequestHandler):
+    def __init__(self, callback, error_callback, *args):
+        self.callback = callback
+        self.error_callback = error_callback
+        super().__init__(*args)
+
+    def do_GET(self):
+        results = parse_qs(self.path[2:])
+        for key, value in results.items():
+            if isinstance(value, list) and len(value) == 1:
+                results[key] = value[0]
+        if 'error' not in results:
+            self.callback(results)
+            self.send_response(200)
+        else:
+            self.send_response(301)
+            redirect = self.error_callback()
+            self.send_header('Location', redirect)
+            self.end_headers()
 
 class MSToDo():
     def __init__(self, reminders):
         self.app = None
+        self.flow = None
         self.tokens = {}
         self.users = {}
         self.reminders = reminders
         self.cache = msal.SerializableTokenCache()
-        self.schema = Secret.Schema.new(
-            info.app_id,
-            Secret.SchemaFlags.NONE,
-            { 'name': Secret.SchemaAttributeType.STRING }
-        )
+        self.schema = reminders.schema
+        self.flows = {}
 
         atexit.register(self.store)
         self.read_cache()
@@ -54,6 +80,14 @@ class MSToDo():
             self.get_tokens()
         except:
             pass
+
+        server = HTTPServer(('', 0), lambda *args: Redirect(self.login, self.get_login_url, *args))
+        self.port = server.server_port
+        thread = Thread(target=self.start_server, args=(server,), daemon=True)
+        thread.start()
+
+    def start_server(self, server):
+        server.serve_forever()
 
     def do_request(self, method, url, user_id, data = None, retry = True):
         try:
@@ -103,13 +137,21 @@ class MSToDo():
             self.store()
 
         except requests.ConnectionError as error:
-            self.users = json.loads(
-                Secret.password_lookup_sync(
-                    self.schema,
-                    { 'name': 'microsoft-users' },
-                    None
+            try:
+                self.users = json.loads(
+                    Secret.password_lookup_sync(
+                        self.schema,
+                        { 'name': 'microsoft-users' },
+                        None
+                    )
                 )
-            )
+                for i, value in self.users.items():
+                    for key in ('email', 'local-id'):
+                        if key not in value.keys():
+                            self.users.pop(i)
+                            break
+            except:
+                self.users = {}
             raise error
         except Exception as error:
             logger.exception(error)
@@ -146,13 +188,17 @@ class MSToDo():
         except:
             self.logout_all()
 
-    def login(self):
+    def get_login_url(self):
+        if self.app is None:
+            self.app = msal.PublicClientApplication(info.client_id, token_cache=self.cache)
+        self.flow = self.app.initiate_auth_code_flow(scopes=SCOPES, redirect_uri=f'http://localhost:{self.port}')
+        return self.flow['auth_uri']
+
+    def login(self, results):
         try:
-            if self.app is None:
-                self.app = msal.PublicClientApplication(info.client_id, token_cache=self.cache)
-            response = self.app.acquire_token_interactive(scopes=SCOPES, timeout=300)
-            token = response['access_token']
-            local_id = response['id_token_claims']['oid']
+            result = self.app.acquire_token_by_auth_code_flow(self.flow, results)
+            token = result['access_token']
+            local_id = result['id_token_claims']['oid']
             result = requests.request('GET', f'{GRAPH}/me', headers={'Authorization': f'Bearer {token}'})
             result.raise_for_status()
             result = result.json()
@@ -165,7 +211,7 @@ class MSToDo():
                 'local-id': local_id
             }
             self.store()
-            return result['id']
+            self.reminders.emit_login(user_id)
         except Exception as error:
             logger.exception(error)
             raise error
@@ -325,14 +371,25 @@ class MSToDo():
             logger.exception(error)
             raise error
 
-    def get_lists(self):
+    def get_lists(self, only_user_id = None):
         task_lists = {}
+        not_synced = []
 
-        if self.users.keys() != self.tokens.keys():
-            self.get_tokens()
+        try:
+            if self.users.keys() != self.tokens.keys():
+                self.get_tokens()
+        except:
+            pass
 
         for user_id in self.tokens.keys():
+            if only_user_id is not None and user_id != only_user_id:
+                not_synced.append(user_id)
+                continue
             try:
+                email = self.do_request('GET', 'me', user_id).json()['userPrincipalName']
+                if email != self.users[user_id]['email']:
+                    self.reminders.do_emit('UsernameUpdated', GLib.Variant('(ss)', (user_id, email)))
+
                 lists = self.do_request('GET', 'me/todo/lists', user_id).json()['value']
 
                 task_lists[user_id] = []
@@ -350,12 +407,14 @@ class MSToDo():
                         'name': list_name,
                         'tasks': tasks
                     })
+            except requests.ConnectionError:
+                not_synced.append(user_id)
             except Exception as error:
                 logger.exception(error)
                 self.tokens.pop(user_id)
-                raise error
+                not_synced.append(user_id)
 
-        return task_lists
+        return task_lists, not_synced
 
     def get_tasks(self, list_id, user_id):
         try:
@@ -373,3 +432,119 @@ class MSToDo():
         except Exception as error:
             logger.exception(error)
             raise error
+
+    def rfc_to_timestamp(self, rfc):
+        return GLib.DateTime.new_from_iso8601(rfc, GLib.TimeZone.new_utc()).to_unix()
+
+    def timestamp_to_rfc(self, timestamp):
+        return GLib.DateTime.new_from_unix_utc(timestamp).format_iso8601()
+
+    def reminder_to_task(self, reminder):
+        reminder_json = {}
+        reminder_json['title'] = reminder['title']
+        reminder_json['body'] = {}
+        reminder_json['body']['content'] = reminder['description']
+        reminder_json['body']['contentType'] = 'text'
+
+        reminder_json['importance'] = 'high' if reminder['important'] else 'normal'
+
+        if reminder['due-date'] != 0:
+            reminder_json['dueDateTime'] = {}
+            reminder_json['dueDateTime']['dateTime'] = self.reminders._timestamp_to_rfc(reminder['due-date'])
+            reminder_json['dueDateTime']['timeZone'] = 'UTC'
+        else:
+            reminder_json['dueDateTime'] = None
+
+        if reminder['timestamp'] != 0:
+            reminder_json['isReminderOn'] = True
+            reminder_json['reminderDateTime'] = {}
+            reminder_json['reminderDateTime']['dateTime'] = self.reminders._timestamp_to_rfc(reminder['timestamp'])
+            reminder_json['reminderDateTime']['timeZone'] = 'UTC'
+        else:
+            reminder_json['isReminderOn'] = False
+            reminder_json['reminderDateTime'] = None
+
+        if reminder['repeat-type'] != 0:
+            reminder_json['recurrence'] = {}
+            reminder_json['recurrence']['pattern'] = {}
+            if reminder['repeat-type'] == info.RepeatType.DAY:
+                reminder_json['recurrence']['pattern']['type'] = 'daily'
+            elif reminder['repeat-type'] == info.RepeatType.WEEK:
+                reminder_json['recurrence']['pattern']['type'] = 'weekly'
+            elif reminder['repeat-type'] == info.RepeatType.MONTH:
+                reminder_json['recurrence']['pattern']['type'] = 'absoluteMonthly'
+            elif reminder['repeat-type'] == info.RepeatType.YEAR:
+                reminder_json['recurrence']['pattern']['type'] = 'absoluteYearly'
+
+            reminder_json['recurrence']['pattern']['interval'] = reminder['repeat-frequency']
+
+            reminder_json['recurrence']['pattern']['daysOfWeek'] = []
+            if reminder['repeat-days'] == 0:
+                reminder_json['recurrence']['pattern']['daysOfWeek'].append(DAYS[datetime.date.today().weekday()])
+            else:
+                repeat_days_flag = info.RepeatDays(reminder['repeat-days'])
+                for num, flag in (
+                    (0, info.RepeatDays.MON),
+                    (1, info.RepeatDays.TUE),
+                    (2, info.RepeatDays.WED),
+                    (3, info.RepeatDays.THU),
+                    (4, info.RepeatDays.FRI),
+                    (5, info.RepeatDays.SAT),
+                    (6, info.RepeatDays.SUN)
+                ):
+                    if flag in repeat_days_flag:
+                        reminder_json['recurrence']['pattern']['daysOfWeek'].append(DAYS[num])
+            reminder_json['recurrence']['pattern']['firstDayOfWeek'] = 'sunday' if self.reminders.app.settings.get_boolean('week-starts-sunday') else 'monday'
+        else:
+            reminder_json['recurrence'] = None
+
+        return reminder_json
+
+    def task_to_reminder(self, task, list_id, user_id, reminder = None, timestamp = None):
+        if reminder is None:
+            reminder = Reminder()
+        if timestamp is None:
+            timestamp = self.reminders._rfc_to_timestamp(task['reminderDateTime']['dateTime']) if 'reminderDateTime' in task else 0
+        reminder['uid'] = task['id']
+        reminder['title'] = task['title'].strip()
+        reminder['description'] = task['body']['content'].strip() if task['body']['contentType'] == 'text' else ''
+        reminder['completed'] = 'status' in task and task['status'] == 'completed'
+        reminder['important'] = task['importance'] == 'high'
+        reminder['timestamp'] = timestamp
+        if timestamp == 0:
+            reminder['due-date'] = self.reminders._rfc_to_timestamp(task['dueDateTime']['dateTime']) if 'dueDateTime' in task else 0
+        else:
+            notif_date = datetime.date.fromtimestamp(reminder['timestamp'])
+            reminder['due-date'] = int(datetime.datetime(notif_date.year, notif_date.month, notif_date.day, tzinfo=datetime.timezone.utc).timestamp())
+
+        if reminder['created-timestamp'] == 0:
+            reminder['created-timestamp'] = self.reminders._rfc_to_timestamp(task['createdDateTime'])
+        if reminder['updated-timestamp'] == 0:
+            reminder['updated-timestamp'] = self.reminders._rfc_to_timestamp(task['lastModifiedDateTime'])
+
+        reminder['list-id'] = list_id
+        reminder['user-id'] = user_id
+
+        if 'recurrence' in task:
+            if len(task['recurrence'].keys()) > 0:
+                reminder['repeat-until'] = 0
+                reminder['repeat-times'] = -1
+                if task['recurrence']['pattern']['type'] == 'daily':
+                    reminder['repeat-type'] = info.RepeatType.DAY
+                elif task['recurrence']['pattern']['type'] == 'weekly':
+                    reminder['repeat-type'] = info.RepeatType.WEEK
+                elif task['recurrence']['pattern']['type'] == 'absoluteMonthly':
+                    reminder['repeat-type'] = info.RepeatType.MONTH
+                elif task['recurrence']['pattern']['type'] == 'absoluteYearly':
+                    reminder['repeat-type'] = info.RepeatType.YEAR
+
+                reminder['repeat-frequency'] = task['recurrence']['pattern']['interval']
+
+                if 'daysOfWeek' in task['recurrence']['pattern']:
+                    reminder['repeat-days'] = 0
+                    flags = list(info.RepeatDays.__members__.values())
+                    for day in task['recurrence']['pattern']['daysOfWeek']:
+                        index = DAYS.index(day)
+                        reminder['repeat-days'] += flags[index]
+
+        return reminder

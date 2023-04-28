@@ -23,6 +23,7 @@ gi.require_version('Adw', '1')
 
 from gi.repository import Gtk, Adw, GLib, Gio
 from gettext import gettext as _
+from pkg_resources import parse_version
 
 from remembrance import info
 from remembrance.browser.error_dialog import ErrorDialog
@@ -30,9 +31,11 @@ from remembrance.browser.main_window import MainWindow
 from remembrance.browser.about import about_window
 from remembrance.browser.preferences import PreferencesWindow
 from remembrance.browser.shortcuts_window import ShortcutsWindow
+from remembrance.browser.export_lists_window import ExportListsWindow
+from remembrance.browser.import_lists_window import ImportListsWindow
 
 # Always update this when new features are added that require the service to restart
-MIN_SERVICE_VERSION = 3.9
+MIN_SERVICE_VERSION = '5.0'
 
 class Remembrance(Adw.Application):
     '''Application for the frontend'''
@@ -65,6 +68,14 @@ class Remembrance(Adw.Application):
             _('Start on a different page'),
             '(upcoming|past|completed)',
         )
+        self.add_main_option(
+            GLib.OPTION_REMAINING,
+            0,
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.STRING_ARRAY,
+            'URI',
+            None
+        )
 
     def do_command_line(self, command):
         commands = command.get_options_dict()
@@ -84,6 +95,11 @@ class Remembrance(Adw.Application):
                 print(f'{value} is not a valid page')
 
         self.do_activate()
+
+        files = commands.lookup_value(GLib.OPTION_REMAINING)
+        if files:
+            self.open_files(files)
+
         return 0
 
     def do_startup(self):
@@ -112,8 +128,13 @@ class Remembrance(Adw.Application):
             'GetVersion',
             None
         ).unpack()[0]
-        if self.restart or loaded_service_version < MIN_SERVICE_VERSION:
-            if MIN_SERVICE_VERSION <= info.service_version:
+
+        loaded_ver = parse_version(str(loaded_service_version))
+        min_ver = parse_version(str(MIN_SERVICE_VERSION))
+        installed_ver = parse_version(str(info.service_version))
+
+        if self.restart or loaded_ver < min_ver:
+            if min_ver <= installed_ver:
                 try:
                     self.run_service_method(
                         'Quit',
@@ -145,7 +166,7 @@ class Remembrance(Adw.Application):
         self.settings.bind('width', self.win, 'default-width', Gio.SettingsBindFlags.DEFAULT)
         self.settings.bind('height', self.win, 'default-height', Gio.SettingsBindFlags.DEFAULT)
         self.settings.bind('is-maximized', self.win, 'maximized', Gio.SettingsBindFlags.DEFAULT)
-        self.service.connect('g-signal::MSError', self.error_cb)
+        self.service.connect('g-signal::Error', self.error_cb)
         self.service.connect('g-signal::CompletedUpdated', self.reminder_completed_cb)
         self.service.connect('g-signal::ReminderRemoved', self.reminder_deleted_cb)
         self.service.connect('g-signal::ReminderUpdated', self.reminder_updated_cb)
@@ -157,6 +178,8 @@ class Remembrance(Adw.Application):
         self.create_action('refresh', self.refresh_reminders, accels=['<Ctrl>r'])
         self.create_action('preferences', self.show_preferences, accels=['<control>comma'])
         self.create_action('shortcuts', self.show_shortcuts, accels=['<control>question'])
+        self.create_action('export', self.export, accels=['<Ctrl>e'])
+        self.create_action('import', self.import_lists, accels=['<Ctrl>i'])
         self.create_action('about', self.show_about)
         Gtk.StyleContext.add_provider_for_display(self.win.get_display(), self.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         self.win.present()
@@ -165,6 +188,7 @@ class Remembrance(Adw.Application):
         error = parameters.unpack()[0]
         if self.error_dialog is not None:
             self.error_dialog.destroy()
+            self.error_dialog = None
         self.error_dialog = ErrorDialog(self, _('Something went wrong'), _('Changes were not saved. This bug should be reported.'), error)
         self.refresh_reminders()
 
@@ -184,6 +208,7 @@ class Remembrance(Adw.Application):
             reminder.set_completed(True)
             self.win.reminders_list.invalidate_sort()
             self.win.selected_changed()
+            self.win.invalidate_filter()
         except AttributeError:
             pass
 
@@ -211,6 +236,7 @@ class Remembrance(Adw.Application):
             reminder.set_completed(completed)
             self.win.reminders_list.invalidate_sort()
             self.win.selected_changed()
+            self.win.invalidate_filter()
 
     def repeat_updated_cb(self, proxy, sender_name, signal_name, parameters):
         reminder_id = parameters.unpack()
@@ -233,6 +259,7 @@ class Remembrance(Adw.Application):
 
         self.win.reminders_list.invalidate_sort()
         self.win.selected_changed()
+        self.win.invalidate_filter()
 
     def reminder_updated_cb(self, proxy, sender_name, signal_name, parameters):
         app_id, reminder = parameters.unpack()
@@ -245,6 +272,7 @@ class Remembrance(Adw.Application):
 
         self.win.reminders_list.invalidate_sort()
         self.win.selected_changed()
+        self.win.invalidate_filter()
 
     def delete_reminder(self, reminder_id):
         try:
@@ -260,6 +288,7 @@ class Remembrance(Adw.Application):
         app_id, reminder_id = parameters.unpack()
         if app_id != info.app_id:
             self.delete_reminder(reminder_id)
+            self.win.invalidate_filter()
 
     def connect_to_service(self):
         self.service = Gio.DBusProxy.new_for_bus_sync(
@@ -277,7 +306,8 @@ class Remembrance(Adw.Application):
             self.logger.error('Faled to start proxy to connect to service')
             sys.exit(1)
 
-    def run_service_method(self, method, parameters, sync = True, callback = None, retry = True):
+    def run_service_method(self, method, parameters, sync = True, callback = None, retry = True, show_error_dialog = True):
+        self.mark_busy()
         try:
             if sync:
                 retval = self.service.call_sync(
@@ -300,18 +330,25 @@ class Remembrance(Adw.Application):
         except GLib.GError as error:
             error_text = ''.join(traceback.format_exception(error))
             if 'The name is not activatable' in str(error):
-                if self.error_dialog is not None:
-                    self.error_dialog.destroy()
-                self.error_dialog = ErrorDialog(self, _('Reminders failed to start'), _('If this is your first time running Reminders, you will probably have to log out and log back in before using it. This is due to a bug in Flatpak.'), error_text)
+                if show_error_dialog:
+                    if self.error_dialog is not None:
+                        self.error_dialog.destroy()
+                        self.error_dialog = None
+                    self.error_dialog = ErrorDialog(self, _('Reminders failed to start'), _('If this is your first time running Reminders, you will probably have to log out and log back in before using it. This is due to a bug in Flatpak.'), error_text)
+                self.unmark_busy()
                 raise error
             elif 'failed to execute' in str(error) or not retry: # method failed
-                if self.error_dialog is not None:
-                    self.error_dialog.destroy()
-                self.error_dialog = ErrorDialog(self, _('Something went wrong'), _('Changes were not saved. This bug should be reported.'), error_text)
+                if show_error_dialog:
+                    if self.error_dialog is not None:
+                        self.error_dialog.destroy()
+                        self.error_dialog = None
+                    self.error_dialog = ErrorDialog(self, _('Something went wrong'), _('Changes were not saved. This bug should be reported.'), error_text)
+                self.unmark_busy()
                 raise error
             elif retry: # service was probably disconnected
                 self.connect_to_service()
                 retval = self.run_service_method(method, parameters, sync, callback, False)
+        self.unmark_busy()
         return retval
 
     def create_action(self, name, callback, variant = None, accels = None):
@@ -329,6 +366,32 @@ class Remembrance(Adw.Application):
 
     def show_shortcuts(self, action, data):
         ShortcutsWindow(self.win)
+
+    def export(self, action, data):
+        ExportListsWindow(self)
+
+    def import_lists(self, action, data):
+        dialog = Gtk.FileDialog.new()
+        filters = Gio.ListStore.new(Gtk.FileFilter)
+        file_filter = Gtk.FileFilter.new()
+        file_filter.add_mime_type('text/calendar')
+        filters.append(file_filter)
+        dialog.set_filters(filters)
+        dialog.open_multiple(self.win, None, self.open_cb)
+
+    def open_cb(self, dialog, result, data = None):
+        try:
+            result = dialog.open_multiple_finish(result)
+        except:
+            return
+        files = []
+        for file in result:
+            files.append(file.get_path())
+
+        ImportListsWindow(self, files)
+
+    def open_files(self, files):
+        ImportListsWindow(self, files)
 
     def show_preferences(self, action, data):
         if self.preferences is None:
