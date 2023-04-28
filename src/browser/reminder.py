@@ -346,6 +346,7 @@ class Reminder(Adw.ExpanderRow):
                 if self.id in self.win.reminder_lookup_dict:
                     self.win.reminder_lookup_dict.pop(self.id)
             self.win.reminders_list.remove(self)
+            self.invalidate_filter()
         except Exception as error:
             logger.exception(error)
 

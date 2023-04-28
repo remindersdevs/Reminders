@@ -1164,6 +1164,7 @@ class MainWindow(Adw.ApplicationWindow):
             logger.exception(error)
 
         self.set_selecting(False)
+        self.invalidate_filter()
 
     def selected_change_important(self, important):
         try:

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-28 12:31-0400\n"
+"POT-Creation-Date: 2023-04-28 12:37-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -424,11 +424,11 @@ msgstr ""
 #: src/browser/resources/ui/move_reminders_window.ui:62
 #: src/browser/resources/ui/reminder_edit_window.ui:474
 #: src/browser/edit_lists_window.py:90 src/browser/edit_lists_window.py:193
-#: src/browser/main_window.py:398 src/browser/main_window.py:1268
-#: src/browser/main_window.py:1283 src/browser/main_window.py:1302
-#: src/browser/main_window.py:1317 src/browser/main_window.py:1332
+#: src/browser/main_window.py:398 src/browser/main_window.py:1269
+#: src/browser/main_window.py:1284 src/browser/main_window.py:1303
+#: src/browser/main_window.py:1318 src/browser/main_window.py:1333
 #: src/browser/move_reminders_window.py:107 src/browser/preferences.py:276
-#: src/browser/reminder.py:391
+#: src/browser/reminder.py:392
 msgid "Cancel"
 msgstr ""
 
@@ -516,7 +516,7 @@ msgstr ""
 
 #: src/browser/resources/ui/main_window.ui:555
 #: src/browser/resources/ui/reminder.ui:83 src/browser/edit_lists_window.py:194
-#: src/browser/reminder.py:392
+#: src/browser/reminder.py:393
 msgid "Remove"
 msgstr ""
 
@@ -948,9 +948,9 @@ msgid "Are you sure you want to close the window?"
 msgstr ""
 
 #: src/browser/edit_lists_window.py:91 src/browser/main_window.py:399
-#: src/browser/main_window.py:1269 src/browser/main_window.py:1284
-#: src/browser/main_window.py:1303 src/browser/main_window.py:1318
-#: src/browser/main_window.py:1333 src/browser/move_reminders_window.py:108
+#: src/browser/main_window.py:1270 src/browser/main_window.py:1285
+#: src/browser/main_window.py:1304 src/browser/main_window.py:1319
+#: src/browser/main_window.py:1334 src/browser/move_reminders_window.py:108
 msgid "Yes"
 msgstr ""
 
@@ -1101,59 +1101,59 @@ msgstr ""
 msgid "All Lists"
 msgstr ""
 
-#: src/browser/main_window.py:1240
+#: src/browser/main_window.py:1241
 #, python-brace-format
 msgid "Searching '{text}'"
 msgstr ""
 
-#: src/browser/main_window.py:1247
+#: src/browser/main_window.py:1248
 msgid "Start typing to search"
 msgstr ""
 
-#: src/browser/main_window.py:1265
+#: src/browser/main_window.py:1266
 msgid "Mark reminders as complete?"
 msgstr ""
 
-#: src/browser/main_window.py:1266
+#: src/browser/main_window.py:1267
 msgid ""
 "Are you sure you want to mark the currently selected reminder(s) as complete?"
 msgstr ""
 
-#: src/browser/main_window.py:1280
+#: src/browser/main_window.py:1281
 msgid "Mark reminders as incomplete?"
 msgstr ""
 
-#: src/browser/main_window.py:1281
+#: src/browser/main_window.py:1282
 msgid ""
 "Are you sure you want to mark the currently selected reminder(s) as "
 "incomplete?"
 msgstr ""
 
-#: src/browser/main_window.py:1299
+#: src/browser/main_window.py:1300
 msgid "Mark reminders as important?"
 msgstr ""
 
-#: src/browser/main_window.py:1300
+#: src/browser/main_window.py:1301
 msgid ""
 "Are you sure you want to mark the currently selected reminder(s) as "
 "important?"
 msgstr ""
 
-#: src/browser/main_window.py:1314
+#: src/browser/main_window.py:1315
 msgid "Mark reminders as unimportant?"
 msgstr ""
 
-#: src/browser/main_window.py:1315
+#: src/browser/main_window.py:1316
 msgid ""
 "Are you sure you want to mark the currently selected reminder(s) as "
 "unimportant?"
 msgstr ""
 
-#: src/browser/main_window.py:1329
+#: src/browser/main_window.py:1330
 msgid "Remove reminders?"
 msgstr ""
 
-#: src/browser/main_window.py:1330
+#: src/browser/main_window.py:1331
 msgid ""
 "Are you sure you want to remove the currently selected reminder(s)? This "
 "cannot be undone."
@@ -1172,11 +1172,11 @@ msgstr ""
 msgid "This will sign out <b>{self.username}</b>"
 msgstr ""
 
-#: src/browser/reminder.py:387
+#: src/browser/reminder.py:388
 msgid "Remove reminder?"
 msgstr ""
 
-#: src/browser/reminder.py:388
+#: src/browser/reminder.py:389
 #, python-brace-format
 msgid "This will remove {reminder} and cannot be undone."
 msgstr ""
