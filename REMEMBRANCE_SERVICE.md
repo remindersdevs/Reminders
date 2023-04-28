@@ -399,7 +399,7 @@ Emitted when an account is signed out
 ## Error
 Emitted when making a remote change failed
 - Parameters (s)
-    - error
+    - stack-trace
         - Type: s
         - This is a stack trace of the error
 
