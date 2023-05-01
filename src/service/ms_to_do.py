@@ -625,7 +625,8 @@ class MSToDo():
             notif_date = datetime.date.fromtimestamp(reminder['timestamp'])
             reminder['due-date'] = int(datetime.datetime(notif_date.year, notif_date.month, notif_date.day, tzinfo=datetime.timezone.utc).timestamp())
 
-        reminder['created-timestamp'] = self.reminders._rfc_to_timestamp(task['createdDateTime'])
+        if reminder['created-timestamp'] == 0:
+            reminder['created-timestamp'] = self.reminders._rfc_to_timestamp(task['createdDateTime'])
         reminder['updated-timestamp'] = self.reminders._rfc_to_timestamp(task['lastModifiedDateTime'])
         reminder['completed-timestamp'] = 0
         reminder['completed-date'] = self.reminders._rfc_to_timestamp(task['completedDateTime']['dateTime']) if 'completedDateTime' in task else 0

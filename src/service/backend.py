@@ -544,17 +544,17 @@ class Reminders():
         except Exception as error:
             self.emit_error(error)
 
-    def _do_remote_update_reminder(self, reminder_id, location, old_user_id, old_list_id, old_task_id, updating, save = True):
+    def _do_remote_update_reminder(self, reminder_id, location, old_user_id, old_list_uid, old_uid, updating, old_list_id, save = True):
         try:
             uid = None
             try:
                 self.queue.load()
-                uid = self._to_remote_task(self.reminders[reminder_id], location, updating, old_user_id, old_list_id, old_task_id, self.reminders[reminder_id]['completed'], self.reminders[reminder_id]['completed-timestamp'], self.reminders[reminder_id]['completed-date'])
+                uid = self._to_remote_task(self.reminders[reminder_id], location, updating, old_user_id, old_list_uid, old_uid, self.reminders[reminder_id]['completed'], self.reminders[reminder_id]['completed-timestamp'], self.reminders[reminder_id]['completed-date'])
             except (ConnectionError, Timeout):
-                self.queue.update_reminder(reminder_id, old_task_id, old_user_id, old_list_id, updating, self.reminders[reminder_id]['completed'], self.reminders[reminder_id]['completed-timestamp'], self.reminders[reminder_id]['completed-date'])
+                self.queue.update_reminder(reminder_id, old_uid, old_user_id, old_list_uid, old_list_id, updating, self.reminders[reminder_id]['completed'], self.reminders[reminder_id]['completed-timestamp'], self.reminders[reminder_id]['completed-date'])
             except HTTPError as error:
                 if error.response.status_code == 503:
-                    self.queue.update_reminder(reminder_id, old_task_id, old_user_id, old_list_id, updating, self.reminders[reminder_id]['completed'], self.reminders[reminder_id]['completed-timestamp'], self.reminders[reminder_id]['completed-date'])
+                    self.queue.update_reminder(reminder_id, old_uid, old_user_id, old_list_uid, old_list_id, updating, self.reminders[reminder_id]['completed'], self.reminders[reminder_id]['completed-timestamp'], self.reminders[reminder_id]['completed-date'])
                 else:
                     raise error
             if uid is not None:
@@ -562,6 +562,10 @@ class Reminders():
                 if save:
                     self._save_reminders()
         except Exception as error:
+            self.reminders[reminder_id]['uid'] = old_uid
+            self.reminders[reminder_id]['list-id'] = old_list_id
+            if save:
+                self._save_reminders()
             self.emit_error(error)
 
     def _do_remote_update_completed(self, reminder_id, reminder_dict):
@@ -1516,12 +1520,12 @@ class Reminders():
         old_uid = None
         old_user_id = None
         updating = True
-        if self.reminders[reminder_id]['list-id'] != reminder_dict['list-id']:
+        old_list_id = self.reminders[reminder_id]['list-id']
+        if old_list_id != reminder_dict['list-id']:
             updating = False
-            reminder_dict['uid'] = ''
-            user_id = self.lists[self.reminders[reminder_id]['list-id']]['user-id']
+            user_id = self.lists[old_list_id]['user-id']
             if user_id != 'local':
-                old_list_uid = self.lists[self.reminders[reminder_id]['list-id']]['uid']
+                old_list_uid = self.lists[old_list_id]['uid']
                 old_uid = self.reminders[reminder_id]['uid']
                 old_user_id = user_id
 
@@ -1532,7 +1536,7 @@ class Reminders():
             self._reminder_updated(app_id, reminder_id, reminder_dict)
             self._save_reminders()
 
-        GLib.idle_add(lambda *args: self._do_remote_update_reminder(reminder_id, location, old_user_id, old_list_uid, old_uid, updating, save))
+        GLib.idle_add(lambda *args: self._do_remote_update_reminder(reminder_id, location, old_user_id, old_list_uid, old_uid, updating, old_list_id, save))
 
         return GLib.Variant('(u)', (now,))
 

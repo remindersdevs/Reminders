@@ -115,15 +115,15 @@ class ReminderQueue():
             else:
                 raise error
 
-    def update_reminder(self, reminder_id, old_task_id, old_user_id, old_list_id, updating, completed, completed_timestamp, completed_date, retry = True):
+    def update_reminder(self, reminder_id, old_uid, old_user_id, old_list_uid, old_list_id, updating, completed, completed_timestamp, completed_date, retry = True):
         try:
             if reminder_id not in self.queue['reminders']['create'] and reminder_id not in self.queue['reminders']['update']:
-                self.queue['reminders']['update'][reminder_id] = [old_task_id, old_user_id, old_list_id, updating, completed, completed_timestamp, completed_date]
+                self.queue['reminders']['update'][reminder_id] = [old_uid, old_user_id, old_list_uid, old_list_id, updating, completed, completed_timestamp, completed_date]
                 self.write()
         except Exception as error:
             if retry:
                 self.reset()
-                self.update_reminder(reminder_id, old_task_id, old_user_id, old_list_id, updating, completed, completed_timestamp, completed_date, False)
+                self.update_reminder(reminder_id, old_uid, old_user_id, old_list_uid, old_list_id, updating, completed, completed_timestamp, completed_date, False)
             else:
                 raise error
 
@@ -253,14 +253,14 @@ class ReminderQueue():
         else:
             raise KeyError('Invalid user id')
 
-        old_task_id = args[0]
+        old_uid = args[0]
         old_user_id = args[1]
-        old_list_id = args[2]
-        updating = args[3]
-        completed = args[4]
-        completed_timestamp = args[5]
-        completed_date = args[6]
-        new_task_id = self.reminders._to_remote_task(self.reminders.reminders[reminder_id], location, updating, old_user_id, old_list_id, old_task_id, completed, completed_timestamp)
+        old_list_uid = args[2]
+        updating = args[4]
+        completed = args[5]
+        completed_timestamp = args[6]
+        completed_date = args[7]
+        new_task_id = self.reminders._to_remote_task(self.reminders.reminders[reminder_id], location, updating, old_user_id, old_list_uid, old_uid, completed, completed_timestamp)
         if new_task_id is not None:
             self.reminders.reminders[reminder_id]['uid'] = new_task_id
 
@@ -340,7 +340,10 @@ class ReminderQueue():
                 threads = []
                 queue = Queue()
                 for reminder_id, value in old_queue['reminders']['update'].items():
-                    thread = QueueThread(queue, reminder_id, target = self.do_update_reminder, args = (reminder_id, value))
+                    def cb():
+                        self.reminders.reminders[reminder_id]['uid'] = value[0]
+                        self.reminders.reminders[reminder_id]['list-id'] = value[3]
+                    thread = QueueThread(queue, reminder_id, except_cb = cb, target = self.do_update_reminder, args = (reminder_id, value))
                     thread.start()
                     threads.append(thread)
 
@@ -469,10 +472,11 @@ class ReminderQueue():
         self.reminders._save_lists()
 
 class QueueThread(Thread):
-    def __init__(self, queue, value, *args, **kwargs):
+    def __init__(self, queue, value, except_cb = None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.queue = queue
         self.val = value
+        self.except_cb = except_cb
 
     def run(self):
         try:
@@ -490,3 +494,5 @@ class QueueThread(Thread):
         except Exception as error:
             logger.exception(error)
             self.queue.put(self.val)
+            if except_cb is not None:
+                self.except_cb()
