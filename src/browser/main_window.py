@@ -774,6 +774,7 @@ class MainWindow(Adw.ApplicationWindow):
             self.reminder_edit_win.set_task_list_dropdown()
 
         self.move_revealer.set_reveal_child(len(self.task_list_ids) > 1)
+        self.move_revealer.set_hexpand(self.move_revealer.props.reveal_child)
 
     def unpack_reminders(self, reminders):
         for reminder in reminders:
