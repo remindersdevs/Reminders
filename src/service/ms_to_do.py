@@ -20,7 +20,7 @@ from gi.repository import Secret, GLib
 from remembrance import info
 from remembrance.service.reminder import Reminder
 from msal import PublicClientApplication, SerializableTokenCache
-from requests import request, HTTPError, ConnectionError
+from requests import request, HTTPError, ConnectionError, Timeout
 from logging import getLogger
 from atexit import register as atexit_register
 from json import dumps, loads
@@ -89,9 +89,9 @@ class MSToDo():
     def do_request(self, method, url, user_id, data = None, retry = True):
         try:
             if data is None:
-                results = request(method, f'{GRAPH}/{url}', headers={'Authorization': f'Bearer {self.tokens[user_id]}'})
+                results = request(method, f'{GRAPH}/{url}', headers={'Authorization': f'Bearer {self.tokens[user_id]}'}, timeout=5)
             else:
-                results = request(method, f'{GRAPH}/{url}', data=dumps(data), headers={'Authorization': f'Bearer {self.tokens[user_id]}', 'Content-Type': 'application/json'})
+                results = request(method, f'{GRAPH}/{url}', data=dumps(data), headers={'Authorization': f'Bearer {self.tokens[user_id]}', 'Content-Type': 'application/json'}, timeout=5)
             results.raise_for_status()
             return results
         except HTTPError as error:
@@ -120,7 +120,7 @@ class MSToDo():
             for account in accounts:
                 try:
                     token = self.app.acquire_token_silent(SCOPES, account)['access_token']
-                    result = request('GET', f'{GRAPH}/me', headers={'Authorization': f'Bearer {token}'})
+                    result = request('GET', f'{GRAPH}/me', headers={'Authorization': f'Bearer {token}'}, timeout=5)
                     result.raise_for_status()
                     result = result.json()
                     user_id = result['id']
@@ -137,14 +137,14 @@ class MSToDo():
                         raise error
                     else:
                         logger.exception(error)
-                except ConnectionError as error:
+                except (ConnectionError, Timeout) as error:
                     raise error
                 except Exception as error:
                     logger.exception(error)
 
             self.store()
 
-        except (ConnectionError, HTTPError) as error:
+        except (ConnectionError, HTTPError, Timeout) as error:
             try:
                 self.users = loads(
                     Secret.password_lookup_sync(
@@ -207,7 +207,7 @@ class MSToDo():
             result = self.app.acquire_token_by_auth_code_flow(self.flow, results)
             token = result['access_token']
             local_id = result['id_token_claims']['oid']
-            result = request('GET', f'{GRAPH}/me', headers={'Authorization': f'Bearer {token}'})
+            result = request('GET', f'{GRAPH}/me', headers={'Authorization': f'Bearer {token}'}, timeout=5)
             result.raise_for_status()
             result = result.json()
             user_id = result['id']
@@ -304,7 +304,7 @@ class MSToDo():
             else:
                 logger.exception(error)
                 raise error
-        except ConnectionError as error:
+        except (ConnectionError, Timeout) as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
             raise error
@@ -328,7 +328,7 @@ class MSToDo():
             else:
                 logger.exception(error)
                 raise error
-        except ConnectionError as error:
+        except (ConnectionError, Timeout) as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
             raise error
@@ -349,7 +349,7 @@ class MSToDo():
             else:
                 logger.exception(error)
                 raise error
-        except ConnectionError as error:
+        except (ConnectionError, Timeout) as error:
             raise error
         except Exception as error:
             logger.exception(error)
@@ -372,7 +372,7 @@ class MSToDo():
             else:
                 logger.exception(error)
                 raise error
-        except ConnectionError as error:
+        except (ConnectionError, Timeout) as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
             raise error
@@ -396,7 +396,7 @@ class MSToDo():
             else:
                 logger.exception(error)
                 raise error
-        except ConnectionError as error:
+        except (ConnectionError, Timeout) as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
             raise error
@@ -419,7 +419,7 @@ class MSToDo():
             else:
                 logger.exception(error)
                 raise error
-        except ConnectionError as error:
+        except (ConnectionError, Timeout) as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
             raise error
@@ -493,7 +493,7 @@ class MSToDo():
                 else:
                     logger.exception(error)
                     not_synced.append(user_id)
-            except ConnectionError:
+            except (ConnectionError, Timeout):
                 not_synced.append(user_id)
                 self.tokens.pop(user_id)
             except Exception as error:
@@ -519,7 +519,7 @@ class MSToDo():
             else:
                 logger.exception(error)
                 raise error
-        except ConnectionError as error:
+        except (ConnectionError, Timeout) as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
             raise error
