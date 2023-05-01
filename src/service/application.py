@@ -33,8 +33,8 @@ class RemembranceService(Gio.Application):
             self.settings = Gio.Settings(info.base_app_id)
 
             if info.portals_enabled:
-                import gi
-                gi.require_version('Xdp', '1.0')
+                from gi import require_version
+                require_version('Xdp', '1.0')
                 from gi.repository import Xdp
 
                 self.portal = Xdp.Portal()

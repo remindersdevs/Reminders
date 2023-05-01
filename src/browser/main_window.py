@@ -14,17 +14,12 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
-import time
-import gi
-import logging
 
-gi.require_version('Gtk', '4.0')
-gi.require_version('Adw', '1')
+from gi import require_version
+require_version('Gtk', '4.0')
+require_version('Adw', '1')
 
 from gi.repository import Gtk, Adw, GLib, Gio, GObject, Gdk
-from gettext import gettext as _
-from difflib import SequenceMatcher
-from math import floor, ceil
 
 from remembrance import info
 from remembrance.browser.reminder import Reminder
@@ -32,8 +27,13 @@ from remembrance.browser.calendar import Calendar
 from remembrance.browser.edit_lists_window import EditListsWindow
 from remembrance.browser.reminder_edit_window import ReminderEditWindow
 from remembrance.browser.move_reminders_window import MoveRemindersWindow
+from time import time, strftime
+from logging import getLogger
+from gettext import gettext as _
+from difflib import SequenceMatcher
+from math import floor, ceil
 
-logger = logging.getLogger(info.app_executable)
+logger = getLogger(info.app_executable)
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/task_list_row.ui')
 class TaskListRow(Gtk.ListBoxRow):
@@ -472,7 +472,7 @@ class MainWindow(Adw.ApplicationWindow):
     def set_time_format(self):
         setting = self.app.settings.get_enum('time-format')
         if setting == 0:
-            if time.strftime('%p'):
+            if strftime('%p'):
                 self.set_twelve_hour()
             else:
                 self.set_twentyfour_hour()
@@ -920,7 +920,7 @@ class MainWindow(Adw.ApplicationWindow):
         return retval
 
     def upcoming_filter(self, reminder, list_id = None, just_filter = False):
-        now = floor(time.time())
+        now = floor(time())
         if (reminder.options['timestamp'] == 0 or reminder.options['timestamp'] > now) and not reminder.completed:
             retval = self.task_list_filter(reminder, list_id)
         else:
@@ -933,7 +933,7 @@ class MainWindow(Adw.ApplicationWindow):
         return retval
 
     def past_filter(self, reminder, list_id = None, just_filter = False):
-        now = ceil(time.time())
+        now = ceil(time())
         if not reminder.completed and ((reminder.options['timestamp'] != 0 and reminder.options['timestamp'] < now) or \
         (reminder.options['due-date'] != 0 and datetime.datetime.fromtimestamp(reminder.options['due-date'], tz=datetime.timezone.utc).date() < datetime.date.today())):
             retval = self.task_list_filter(reminder, list_id)

@@ -13,7 +13,6 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import logging
 import gi
 
 from remembrance import info
@@ -21,7 +20,9 @@ from remembrance import info
 gi.require_version('WebKit', '6.0')
 from gi.repository import Gtk, Adw, WebKit
 
-logger = logging.getLogger(info.app_executable)
+from logging import getLogger
+
+logger = getLogger(info.app_executable)
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/microsoft_sign_in.ui')
 class MicrosoftSignIn(Adw.Window):

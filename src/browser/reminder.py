@@ -13,18 +13,18 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import time
 import datetime
-import logging
 
 from gi.repository import Gtk, Adw, GLib, GObject, Gdk
-from gettext import gettext as _
-from math import floor
 
 from remembrance import info
 from remembrance.browser.dnd_reminder import DNDReminder
+from time import time
+from logging import getLogger
+from gettext import gettext as _
+from math import floor
 
-logger = logging.getLogger(info.app_executable)
+logger = getLogger(info.app_executable)
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/reminder.ui')
 class Reminder(Adw.ExpanderRow):
@@ -284,7 +284,7 @@ class Reminder(Adw.ExpanderRow):
     def refresh_time(self):
         if self.options['timestamp'] != 0 and not self.completed:
             timestamp = self.options['timestamp']
-            now = floor(time.time())
+            now = floor(time())
             self.past_due_icon.set_visible(timestamp <= now)
         elif self.options['due-date'] != 0 and not self.completed:
             timestamp = self.options['due-date']

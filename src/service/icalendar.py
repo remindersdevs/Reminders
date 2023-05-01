@@ -13,10 +13,7 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import icalendar
 import datetime
-import logging
-import time
 
 from remembrance import info
 from remembrance.service.reminder import Reminder
@@ -24,8 +21,11 @@ from remembrance.service.reminder import Reminder
 from gi.repository import GLib
 from os import path, mkdir
 from math import floor
+from logging import getLogger
+from time import time
+from icalendar.cal import Calendar, Todo
 
-logger = logging.getLogger(info.service_executable)
+logger = getLogger(info.service_executable)
 
 DOWNLOADS_DIR = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOWNLOAD)
 if DOWNLOADS_DIR is None:
@@ -43,7 +43,7 @@ class iCalendar():
             list_names = self.reminders.lists
             if list_id in list_names:
                 list_name = list_names[list_id]['name']
-                calendar = icalendar.cal.Calendar()
+                calendar = Calendar()
                 calendar.add('X-WR-CALNAME', list_name)
                 calendar.add('VERSION', 2.0)
 
@@ -56,7 +56,7 @@ class iCalendar():
 
             task = self.reminders.caldav.reminder_to_task(reminder, exporting = True)
 
-            todo = icalendar.cal.Todo()
+            todo = Todo()
             for key, value in task.items():
                 if key in todo:
                     todo.pop(key, None)
@@ -86,7 +86,7 @@ class iCalendar():
         for file in files:
             if path.isfile(file):
                 with open(file, 'r') as f:
-                    calendar = icalendar.cal.Calendar.from_ical(f.read())
+                    calendar = Calendar.from_ical(f.read())
                     list_name = calendar['X-WR-CALNAME'] if 'X-WR-CALNAME' in calendar else path.splitext(path.basename(file))[0]
                     if list_id is None:
                         user_id = 'local'
@@ -120,7 +120,7 @@ class iCalendar():
                                 except:
                                     pass
 
-                            is_future = timestamp > floor(time.time())
+                            is_future = timestamp > floor(time())
                             reminder['shown'] = timestamp != 0 and not is_future
 
                             reminder = self.reminders.caldav.task_to_reminder(todo, list_id, reminder, timestamp, due_date)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-01 13:38-0400\n"
+"POT-Creation-Date: 2023-05-01 15:02-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -449,11 +449,11 @@ msgstr ""
 #: src/browser/resources/ui/main_window.ui:408
 #: src/browser/resources/ui/move_reminders_window.ui:62
 #: src/browser/resources/ui/reminder_edit_window.ui:474
-#: src/browser/edit_lists_window.py:97 src/browser/edit_lists_window.py:202
+#: src/browser/edit_lists_window.py:96 src/browser/edit_lists_window.py:201
 #: src/browser/main_window.py:388 src/browser/main_window.py:1281
 #: src/browser/main_window.py:1296 src/browser/main_window.py:1315
 #: src/browser/main_window.py:1330 src/browser/main_window.py:1345
-#: src/browser/move_reminders_window.py:112 src/browser/preferences.py:275
+#: src/browser/move_reminders_window.py:111 src/browser/preferences.py:274
 #: src/browser/reminder.py:412
 msgid "Cancel"
 msgstr ""
@@ -541,7 +541,7 @@ msgid "Move"
 msgstr ""
 
 #: src/browser/resources/ui/main_window.ui:555
-#: src/browser/resources/ui/reminder.ui:83 src/browser/edit_lists_window.py:203
+#: src/browser/resources/ui/reminder.ui:83 src/browser/edit_lists_window.py:202
 #: src/browser/reminder.py:413
 msgid "Remove"
 msgstr ""
@@ -683,7 +683,7 @@ msgid "All"
 msgstr ""
 
 #: src/browser/resources/ui/preferences_user_row.ui:59
-#: src/browser/preferences.py:276
+#: src/browser/preferences.py:275
 msgid "Sign Out"
 msgstr ""
 
@@ -931,15 +931,15 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 
-#: src/browser/application.py:55
+#: src/browser/application.py:56
 msgid "Print the version of the app"
 msgstr ""
 
-#: src/browser/application.py:62
+#: src/browser/application.py:63
 msgid "Restart service before starting app"
 msgstr ""
 
-#: src/browser/application.py:69
+#: src/browser/application.py:70
 msgid "Start on a different page"
 msgstr ""
 
@@ -961,34 +961,34 @@ msgid ""
 "out and log back in before using it. This is due to a bug in Flatpak."
 msgstr ""
 
-#: src/browser/edit_lists_window.py:23 src/browser/edit_lists_window.py:119
+#: src/browser/edit_lists_window.py:22 src/browser/edit_lists_window.py:118
 msgid "New List"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:94 src/browser/main_window.py:385
+#: src/browser/edit_lists_window.py:93 src/browser/main_window.py:385
 msgid "You have unsaved changes"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:95 src/browser/main_window.py:386
+#: src/browser/edit_lists_window.py:94 src/browser/main_window.py:386
 msgid "Are you sure you want to close the window?"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:98 src/browser/main_window.py:389
+#: src/browser/edit_lists_window.py:97 src/browser/main_window.py:389
 #: src/browser/main_window.py:1282 src/browser/main_window.py:1297
 #: src/browser/main_window.py:1316 src/browser/main_window.py:1331
-#: src/browser/main_window.py:1346 src/browser/move_reminders_window.py:113
+#: src/browser/main_window.py:1346 src/browser/move_reminders_window.py:112
 msgid "Yes"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:154
+#: src/browser/edit_lists_window.py:153
 msgid "What should the list be called?"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:198
+#: src/browser/edit_lists_window.py:197
 msgid "Remove list?"
 msgstr ""
 
-#: src/browser/edit_lists_window.py:199
+#: src/browser/edit_lists_window.py:198
 #, python-brace-format
 msgid "This will remove {list_name} and cannot be undone."
 msgstr ""
@@ -1185,15 +1185,15 @@ msgid ""
 "cannot be undone."
 msgstr ""
 
-#: src/browser/move_reminders_window.py:110
+#: src/browser/move_reminders_window.py:109
 msgid "Are you sure you want to move the currently selected reminder(s)?"
 msgstr ""
 
-#: src/browser/preferences.py:271
+#: src/browser/preferences.py:270
 msgid "Are you sure you want to sign out?"
 msgstr ""
 
-#: src/browser/preferences.py:272
+#: src/browser/preferences.py:271
 #, python-brace-format
 msgid "This will sign out <b>{self.username}</b>"
 msgstr ""
@@ -1225,14 +1225,14 @@ msgstr ""
 msgid "AM"
 msgstr ""
 
-#: src/service/backend.py:814
+#: src/service/backend.py:815
 msgid "Mark as completed"
 msgstr ""
 
-#: src/service/backend.py:1195
+#: src/service/backend.py:1196
 msgid "Local Reminders"
 msgstr ""
 
-#: src/service/backend.py:1857
+#: src/service/backend.py:1858
 msgid "Local"
 msgstr ""

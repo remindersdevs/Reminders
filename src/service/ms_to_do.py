@@ -13,23 +13,20 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import json
-import logging
 import datetime
-import requests
-import msal
-import atexit
-import gi
 
-gi.require_version('Secret', '1')
 from gi.repository import Secret, GLib
-
-from http.server import HTTPServer, BaseHTTPRequestHandler
-from urllib.parse import parse_qs
-from threading import Thread
 
 from remembrance import info
 from remembrance.service.reminder import Reminder
+from msal import PublicClientApplication, SerializableTokenCache
+from requests import request, HTTPError, ConnectionError
+from logging import getLogger
+from atexit import register as atexit_register
+from json import dumps, loads
+from http.server import HTTPServer, BaseHTTPRequestHandler
+from urllib.parse import parse_qs
+from threading import Thread
 
 GRAPH = 'https://graph.microsoft.com/v1.0'
 
@@ -40,7 +37,7 @@ SCOPES = [
 
 DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 
-logger = logging.getLogger(info.service_executable)
+logger = getLogger(info.service_executable)
 
 class Redirect(BaseHTTPRequestHandler):
     def __init__(self, callback, error_callback, *args):
@@ -69,11 +66,11 @@ class MSToDo():
         self.tokens = {}
         self.users = {}
         self.reminders = reminders
-        self.cache = msal.SerializableTokenCache()
+        self.cache = SerializableTokenCache()
         self.schema = reminders.schema
         self.flows = {}
 
-        atexit.register(self.store)
+        atexit_register(self.store)
         self.read_cache()
 
         try:
@@ -92,12 +89,12 @@ class MSToDo():
     def do_request(self, method, url, user_id, data = None, retry = True):
         try:
             if data is None:
-                results = requests.request(method, f'{GRAPH}/{url}', headers={'Authorization': f'Bearer {self.tokens[user_id]}'})
+                results = request(method, f'{GRAPH}/{url}', headers={'Authorization': f'Bearer {self.tokens[user_id]}'})
             else:
-                results = requests.request(method, f'{GRAPH}/{url}', data=json.dumps(data), headers={'Authorization': f'Bearer {self.tokens[user_id]}', 'Content-Type': 'application/json'})
+                results = request(method, f'{GRAPH}/{url}', data=dumps(data), headers={'Authorization': f'Bearer {self.tokens[user_id]}', 'Content-Type': 'application/json'})
             results.raise_for_status()
             return results
-        except requests.HTTPError as error:
+        except HTTPError as error:
             if error.response.status_code == 401 and retry:
                 self.get_tokens()
                 results = self.do_request(method, url, user_id, data, False)
@@ -115,7 +112,7 @@ class MSToDo():
     def get_tokens(self):
         try:
             if self.app is None:
-                self.app = msal.PublicClientApplication(info.client_id, token_cache=self.cache)
+                self.app = PublicClientApplication(info.client_id, token_cache=self.cache)
             self.tokens = {}
             self.users = {}
             accounts = self.app.get_accounts()
@@ -123,7 +120,7 @@ class MSToDo():
             for account in accounts:
                 try:
                     token = self.app.acquire_token_silent(SCOPES, account)['access_token']
-                    result = requests.request('GET', f'{GRAPH}/me', headers={'Authorization': f'Bearer {token}'})
+                    result = request('GET', f'{GRAPH}/me', headers={'Authorization': f'Bearer {token}'})
                     result.raise_for_status()
                     result = result.json()
                     user_id = result['id']
@@ -135,21 +132,21 @@ class MSToDo():
                         'email': email,
                         'local-id': local_id
                     }
-                except requests.HTTPError as error:
+                except HTTPError as error:
                     if error.response.status_code == 503:
                         raise error
                     else:
                         logger.exception(error)
-                except requests.ConnectionError as error:
+                except ConnectionError as error:
                     raise error
                 except Exception as error:
                     logger.exception(error)
 
             self.store()
 
-        except (requests.ConnectionError, requests.HTTPError) as error:
+        except (ConnectionError, HTTPError) as error:
             try:
-                self.users = json.loads(
+                self.users = loads(
                     Secret.password_lookup_sync(
                         self.schema,
                         { 'name': 'microsoft-users' },
@@ -183,7 +180,7 @@ class MSToDo():
                 { 'name': 'microsoft-users' },
                 None,
                 'users',
-                json.dumps(self.users),
+                dumps(self.users),
                 None
             )
 
@@ -201,7 +198,7 @@ class MSToDo():
 
     def get_login_url(self):
         if self.app is None:
-            self.app = msal.PublicClientApplication(info.client_id, token_cache=self.cache)
+            self.app = PublicClientApplication(info.client_id, token_cache=self.cache)
         self.flow = self.app.initiate_auth_code_flow(scopes=SCOPES, redirect_uri=f'http://localhost:{self.port}')
         return self.flow['auth_uri']
 
@@ -210,7 +207,7 @@ class MSToDo():
             result = self.app.acquire_token_by_auth_code_flow(self.flow, results)
             token = result['access_token']
             local_id = result['id_token_claims']['oid']
-            result = requests.request('GET', f'{GRAPH}/me', headers={'Authorization': f'Bearer {token}'})
+            result = request('GET', f'{GRAPH}/me', headers={'Authorization': f'Bearer {token}'})
             result.raise_for_status()
             result = result.json()
             user_id = result['id']
@@ -231,7 +228,7 @@ class MSToDo():
         try:
             try:
                 if self.app is None:
-                    self.app = msal.PublicClientApplication(info.client_id, token_cache=self.cache)
+                    self.app = PublicClientApplication(info.client_id, token_cache=self.cache)
                 accounts = self.app.get_accounts()
                 for account in accounts:
                     self.app.remove_account(account)
@@ -260,7 +257,7 @@ class MSToDo():
         try:
             try:
                 if self.app is None:
-                    self.app = msal.PublicClientApplication(info.client_id, token_cache=self.cache)
+                    self.app = PublicClientApplication(info.client_id, token_cache=self.cache)
                 accounts = self.app.get_accounts()
                 for account in accounts:
                     if account['local_account_id'] == self.users[user_id]['local-id']:
@@ -299,7 +296,7 @@ class MSToDo():
             if user_id in self.tokens.keys():
                 results = self.do_request('POST', f'me/todo/lists/{task_list}/tasks', user_id, data=task).json()
                 return results['id']
-        except requests.HTTPError as error:
+        except HTTPError as error:
             if error.response.status_code == 503:
                 if user_id in self.tokens.keys():
                     self.tokens.pop(user_id)
@@ -307,7 +304,7 @@ class MSToDo():
             else:
                 logger.exception(error)
                 raise error
-        except requests.ConnectionError as error:
+        except ConnectionError as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
             raise error
@@ -323,7 +320,7 @@ class MSToDo():
             if user_id in self.tokens.keys():
                 results = self.do_request('PATCH', f'me/todo/lists/{task_list}/tasks/{task_id}', user_id, data=task).json()
                 return results
-        except requests.HTTPError as error:
+        except HTTPError as error:
             if error.response.status_code == 503:
                 if user_id in self.tokens.keys():
                     self.tokens.pop(user_id)
@@ -331,7 +328,7 @@ class MSToDo():
             else:
                 logger.exception(error)
                 raise error
-        except requests.ConnectionError as error:
+        except ConnectionError as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
             raise error
@@ -346,13 +343,13 @@ class MSToDo():
 
             if user_id in self.tokens.keys():
                 self.do_request('DELETE', f'me/todo/lists/{task_list}/tasks/{task_id}', user_id)
-        except requests.HTTPError as error:
+        except HTTPError as error:
             if error.response.status_code == 503:
                 raise error
             else:
                 logger.exception(error)
                 raise error
-        except requests.ConnectionError as error:
+        except ConnectionError as error:
             raise error
         except Exception as error:
             logger.exception(error)
@@ -367,7 +364,7 @@ class MSToDo():
             if user_id in self.tokens.keys():
                 results = self.do_request('POST', 'me/todo/lists', user_id, content).json()
                 return results['id']
-        except requests.HTTPError as error:
+        except HTTPError as error:
             if error.response.status_code == 503:
                 if user_id in self.tokens.keys():
                     self.tokens.pop(user_id)
@@ -375,7 +372,7 @@ class MSToDo():
             else:
                 logger.exception(error)
                 raise error
-        except requests.ConnectionError as error:
+        except ConnectionError as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
             raise error
@@ -391,7 +388,7 @@ class MSToDo():
 
             if user_id in self.tokens.keys():
                 self.do_request('PATCH', f'me/todo/lists/{ms_id}', user_id, content)
-        except requests.HTTPError as error:
+        except HTTPError as error:
             if error.response.status_code == 503:
                 if user_id in self.tokens.keys():
                     self.tokens.pop(user_id)
@@ -399,7 +396,7 @@ class MSToDo():
             else:
                 logger.exception(error)
                 raise error
-        except requests.ConnectionError as error:
+        except ConnectionError as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
             raise error
@@ -414,7 +411,7 @@ class MSToDo():
 
             if user_id in self.tokens.keys():
                 self.do_request('DELETE', f'me/todo/lists/{ms_id}', user_id)
-        except requests.HTTPError as error:
+        except HTTPError as error:
             if error.response.status_code == 503:
                 if user_id in self.tokens.keys():
                     self.tokens.pop(user_id)
@@ -422,7 +419,7 @@ class MSToDo():
             else:
                 logger.exception(error)
                 raise error
-        except requests.ConnectionError as error:
+        except ConnectionError as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
             raise error
@@ -489,14 +486,14 @@ class MSToDo():
                         'name': task_list['displayName'],
                         'tasks': tasks
                     })
-            except requests.HTTPError as error:
+            except HTTPError as error:
                 if error.response.status_code == 503:
                     not_synced.append(user_id)
                     self.tokens.pop(user_id)
                 else:
                     logger.exception(error)
                     not_synced.append(user_id)
-            except requests.ConnectionError:
+            except ConnectionError:
                 not_synced.append(user_id)
                 self.tokens.pop(user_id)
             except Exception as error:
@@ -514,7 +511,7 @@ class MSToDo():
                 tasks = self.do_request('GET', f'me/todo/lists/{list_id}/tasks', user_id).json()['value']
 
             return tasks
-        except requests.HTTPError as error:
+        except HTTPError as error:
             if error.response.status_code == 503:
                 if user_id in self.tokens.keys():
                     self.tokens.pop(user_id)
@@ -522,7 +519,7 @@ class MSToDo():
             else:
                 logger.exception(error)
                 raise error
-        except requests.ConnectionError as error:
+        except ConnectionError as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
             raise error

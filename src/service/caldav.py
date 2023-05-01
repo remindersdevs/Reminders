@@ -13,21 +13,21 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import json
-import logging
 import datetime
-import requests
-import caldav
-import gi
 
-gi.require_version('Secret', '1')
 from gi.repository import Secret
 
 from remembrance import info
 from remembrance.service.reminder import Reminder
+from logging import getLogger
+from json import loads, dumps
+from requests import HTTPError, Timeout, ConnectionError
+from caldav.davclient import DAVClient
+from caldav.elements.dav import DisplayName
+from caldav.objects import Todo
 
 DAYS = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']
-logger = logging.getLogger(info.service_executable)
+logger = getLogger(info.service_executable)
 
 class CalDAV():
     def __init__(self, reminders):
@@ -48,8 +48,8 @@ class CalDAV():
             username = self.users[user_id]['username']
             password = self.users[user_id]['password']
             try:
-                self.principals[user_id] = caldav.davclient.DAVClient(url, None, username, password, timeout=5).principal()
-            except (requests.ConnectionError, requests.Timeout) as error:
+                self.principals[user_id] = DAVClient(url, None, username, password, timeout=5).principal()
+            except (ConnectionError, Timeout) as error:
                 raise error
             except:
                 logout.append(user_id)
@@ -64,13 +64,13 @@ class CalDAV():
                 { 'name': 'caldav' },
                 None,
                 'users',
-                json.dumps(self.users),
+                dumps(self.users),
                 None
             )
 
     def load_users(self):
         try:
-            self.users = json.loads(Secret.password_lookup_sync(
+            self.users = loads(Secret.password_lookup_sync(
                 self.schema,
                 { 'name': 'caldav' },
                 None
@@ -89,7 +89,7 @@ class CalDAV():
             username = None
         if password == '':
             password = None
-        self.principals[user_id] = caldav.davclient.DAVClient(url, None, username, password).principal()
+        self.principals[user_id] = DAVClient(url, None, username, password).principal()
         self.users[user_id] = {
             'name': name,
             'url': url,
@@ -127,19 +127,19 @@ class CalDAV():
                 todo = calendar.save_todo(**task)
                 task_id = todo.icalendar_component.get('UID', None)
                 return task_id
-            except requests.HTTPError as error:
+            except HTTPError as error:
                 if error.response.status_code == 503:
                     raise error
                 else:
                     logger.exception(error)
                     raise error
-            except (requests.ConnectionError, requests.Timeout) as error:
+            except (ConnectionError, Timeout) as error:
                 raise error
             except Exception as error:
                 logger.exception(error)
                 raise error
         else:
-            raise requests.ConnectionError
+            raise ConnectionError
 
     def update_task(self, user_id, task_list, task_id, task):
         if user_id not in self.principals:
@@ -148,7 +148,7 @@ class CalDAV():
         if user_id in self.principals:
             try:
                 calendar = self.principals[user_id].calendar(cal_id=task_list)
-                todo = calendar.object_by_uid(task_id, comp_class=caldav.objects.Todo)
+                todo = calendar.object_by_uid(task_id, comp_class=Todo)
 
                 i = todo.icalendar_component
                 for key, value in task.items():
@@ -156,19 +156,19 @@ class CalDAV():
                     if value is not None:
                         i.add(key, value)
                 todo.save()
-            except requests.HTTPError as error:
+            except HTTPError as error:
                 if error.response.status_code == 503:
                     raise error
                 else:
                     logger.exception(error)
                     raise error
-            except (requests.ConnectionError, requests.Timeout) as error:
+            except (ConnectionError, Timeout) as error:
                 raise error
             except Exception as error:
                 logger.exception(error)
                 raise error
         else:
-            raise requests.ConnectionError
+            raise ConnectionError
 
     def complete_recurring(self, todo, completion_timestamp):
         # from https://github.com/python-caldav/caldav/blob/v1.2.1/caldav/objects.py#L2492
@@ -201,7 +201,7 @@ class CalDAV():
             try:
                 calendar = self.principals[user_id].calendar(cal_id=task_list)
                 now = datetime.datetime.fromtimestamp(completed_timestamp, tz=datetime.timezone.utc)
-                todo = calendar.object_by_uid(task_id, comp_class=caldav.objects.Todo)
+                todo = calendar.object_by_uid(task_id, comp_class=Todo)
 
                 new_id = None
                 rrule = todo.icalendar_component.get('RRULE', None)
@@ -210,19 +210,19 @@ class CalDAV():
                 else:
                     todo.complete(handle_rrule=False)
                 return new_id, todo.icalendar_component
-            except requests.HTTPError as error:
+            except HTTPError as error:
                 if error.response.status_code == 503:
                     raise error
                 else:
                     logger.exception(error)
                     raise error
-            except (requests.ConnectionError, requests.Timeout) as error:
+            except (ConnectionError, Timeout) as error:
                 raise error
             except Exception as error:
                 logger.exception(error)
                 raise error
         else:
-            raise requests.ConnectionError
+            raise ConnectionError
 
     def incomplete_task(self, user_id, task_list, task_id):
         if user_id not in self.principals:
@@ -231,21 +231,21 @@ class CalDAV():
         if user_id in self.principals:
             try:
                 calendar = self.principals[user_id].calendar(cal_id=task_list)
-                todo = calendar.object_by_uid(task_id, comp_class=caldav.objects.Todo)
+                todo = calendar.object_by_uid(task_id, comp_class=Todo)
                 todo.uncomplete()
-            except requests.HTTPError as error:
+            except HTTPError as error:
                 if error.response.status_code == 503:
                     raise error
                 else:
                     logger.exception(error)
                     raise error
-            except (requests.ConnectionError, requests.Timeout) as error:
+            except (ConnectionError, Timeout) as error:
                 raise error
             except Exception as error:
                 logger.exception(error)
                 raise error
         else:
-            raise requests.ConnectionError
+            raise ConnectionError
 
     def remove_task(self, user_id, task_list, task_id):
         if user_id not in self.principals:
@@ -254,21 +254,21 @@ class CalDAV():
         if user_id in self.principals:
             try:
                 calendar = self.principals[user_id].calendar(cal_id=task_list)
-                todo = calendar.object_by_uid(task_id, comp_class=caldav.objects.Todo)
+                todo = calendar.object_by_uid(task_id, comp_class=Todo)
                 todo.delete()
-            except requests.HTTPError as error:
+            except HTTPError as error:
                 if error.response.status_code == 503:
                     raise error
                 else:
                     logger.exception(error)
                     raise error
-            except (requests.ConnectionError, requests.Timeout) as error:
+            except (ConnectionError, Timeout) as error:
                 raise error
             except Exception as error:
                 logger.exception(error)
                 raise error
         else:
-            raise requests.ConnectionError
+            raise ConnectionError
 
     def create_list(self, user_id, list_name):
         if user_id not in self.principals:
@@ -278,19 +278,19 @@ class CalDAV():
             try:
                 calendar = self.principals[user_id].make_calendar(name=list_name, supported_calendar_component_set=['VTODO'])
                 return calendar.id
-            except requests.HTTPError as error:
+            except HTTPError as error:
                 if error.response.status_code == 503:
                     raise error
                 else:
                     logger.exception(error)
                     raise error
-            except (requests.ConnectionError, requests.Timeout) as error:
+            except (ConnectionError, Timeout) as error:
                 raise error
             except Exception as error:
                 logger.exception(error)
                 raise error
         else:
-            raise requests.ConnectionError
+            raise ConnectionError
 
     def update_list(self, user_id, calendar_id, list_name):
         if user_id not in self.principals:
@@ -299,21 +299,21 @@ class CalDAV():
         if user_id in self.principals:
             try:
                 calendar = self.principals[user_id].calendar(cal_id=calendar_id)
-                calendar.set_properties([caldav.elements.dav.DisplayName(list_name)])
+                calendar.set_properties([DisplayName(list_name)])
                 calendar.save()
-            except requests.HTTPError as error:
+            except HTTPError as error:
                 if error.response.status_code == 503:
                     raise error
                 else:
                     logger.exception(error)
                     raise error
-            except (requests.ConnectionError, requests.Timeout) as error:
+            except (ConnectionError, Timeout) as error:
                 raise error
             except Exception as error:
                 logger.exception(error)
                 raise error
         else:
-            raise requests.ConnectionError
+            raise ConnectionError
 
     def delete_list(self, user_id, calendar_id):
         if user_id not in self.principals:
@@ -323,19 +323,19 @@ class CalDAV():
             try:
                 calendar = self.principals[user_id].calendar(cal_id=calendar_id)
                 calendar.delete()
-            except requests.HTTPError as error:
+            except HTTPError as error:
                 if error.response.status_code == 503:
                     raise error
                 else:
                     logger.exception(error)
                     raise error
-            except (requests.ConnectionError, requests.Timeout) as error:
+            except (ConnectionError, Timeout) as error:
                 raise error
             except Exception as error:
                 logger.exception(error)
                 raise error
         else:
-            raise requests.ConnectionError
+            raise ConnectionError
 
     def get_lists(self, removed_list_ids, old_lists, synced_ids, only_user_id = None):
         task_lists = {}
@@ -386,13 +386,13 @@ class CalDAV():
                         'name': calendar.get_display_name(),
                         'tasks': tasks
                     })
-            except requests.HTTPError as error:
+            except HTTPError as error:
                 if error.response.status_code == 503:
                     not_synced.append(user_id)
                 else:
                     logger.exception(error)
                     not_synced.append(user_id)
-            except (requests.ConnectionError, requests.Timeout):
+            except (ConnectionError, Timeout):
                 not_synced.append(user_id)
             except Exception as error:
                 logger.exception(error)

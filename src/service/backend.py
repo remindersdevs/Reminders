@@ -13,21 +13,12 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import csv
-import json
-import time
-import logging
 import datetime
-import gi
-import traceback
-import requests
-import uuid
-import threading
-from queue import Queue
 
-gi.require_version('GSound', '1.0')
-gi.require_version('Secret', '1')
+from gi import require_version
+require_version('GSound', '1.0')
+require_version('Secret', '1')
+
 from gi.repository import GLib, Gio, GSound, Secret
 from remembrance import info
 from remembrance.service.ms_to_do import MSToDo
@@ -40,6 +31,16 @@ from remembrance.service.reminder import Reminder
 from gettext import gettext as _
 from math import floor
 from calendar import monthrange
+from threading import Thread
+from queue import Queue
+from uuid import uuid1
+from traceback import format_exception
+from logging import getLogger
+from time import time
+from os import path, mkdir, remove, getpid
+from json import load as load_json
+from csv import DictReader, DictWriter
+from requests import HTTPError, Timeout, ConnectionError
 
 REMINDERS_FILE = f'{info.data_dir}/reminders.csv'
 LISTS_FILE = f'{info.data_dir}/lists.csv'
@@ -50,9 +51,9 @@ TASK_LISTS_FILE = f'{info.data_dir}/task_lists.json'
 TASK_LIST_IDS_FILE = f'{info.data_dir}/task_list_ids.csv'
 
 VERSION = info.service_version
-PID = os.getpid()
+PID = getpid()
 
-logger = logging.getLogger(info.service_executable)
+logger = getLogger(info.service_executable)
 
 XML = f'''<node name="/">
 <interface name="{info.service_interface}">
@@ -243,8 +244,8 @@ XML = f'''<node name="/">
 
 class Reminders():
     def __init__(self, app):
-        if not os.path.isdir(info.data_dir):
-            os.mkdir(info.data_dir)
+        if not path.isdir(info.data_dir):
+            mkdir(info.data_dir)
         self.connection = Gio.bus_get_sync(Gio.BusType.SESSION, None)
         self.app = app
         self.reminders = self.lists = {}
@@ -310,7 +311,7 @@ class Reminders():
 
     def emit_error(self, error):
         logger.exception(error)
-        self.do_emit('Error', GLib.Variant('(s)', ("".join(traceback.format_exception(error)),)))
+        self.do_emit('Error', GLib.Variant('(s)', ("".join(format_exception(error)),)))
 
     def emit_login(self, user_id):
         username = self.to_do.users[user_id]['email']
@@ -453,7 +454,7 @@ class Reminders():
                     except:
                         timestamp = 0
 
-                    is_future = timestamp > floor(time.time())
+                    is_future = timestamp > floor(time())
 
                     if reminder_id in old_reminders:
                         if reminder_id in updated_reminder_ids:
@@ -502,7 +503,7 @@ class Reminders():
                         except:
                             pass
 
-                    is_future = timestamp > floor(time.time())
+                    is_future = timestamp > floor(time())
 
                     if reminder_id in old_reminders:
                         if reminder_id in updated_reminder_ids:
@@ -530,9 +531,9 @@ class Reminders():
             try:
                 self.queue.load()
                 uid = self._to_remote_task(self.reminders[reminder_id], location, False)
-            except (requests.ConnectionError, requests.Timeout):
+            except (ConnectionError, Timeout):
                 self.queue.create_reminder(reminder_id, location)
-            except requests.HTTPError as error:
+            except HTTPError as error:
                 if error.response.status_code == 503:
                     self.queue.create_reminder(reminder_id, location)
                 else:
@@ -549,9 +550,9 @@ class Reminders():
             try:
                 self.queue.load()
                 uid = self._to_remote_task(self.reminders[reminder_id], location, updating, old_user_id, old_list_id, old_task_id, self.reminders[reminder_id]['completed'], self.reminders[reminder_id]['completed-timestamp'], self.reminders[reminder_id]['completed-date'])
-            except (requests.ConnectionError, requests.Timeout):
+            except (ConnectionError, Timeout):
                 self.queue.update_reminder(reminder_id, old_task_id, old_user_id, old_list_id, updating, self.reminders[reminder_id]['completed'], self.reminders[reminder_id]['completed-timestamp'], self.reminders[reminder_id]['completed-date'])
-            except requests.HTTPError as error:
+            except HTTPError as error:
                 if error.response.status_code == 503:
                     self.queue.update_reminder(reminder_id, old_task_id, old_user_id, old_list_id, updating, self.reminders[reminder_id]['completed'], self.reminders[reminder_id]['completed-timestamp'], self.reminders[reminder_id]['completed-date'])
                 else:
@@ -568,9 +569,9 @@ class Reminders():
             try:
                 self.queue.load()
                 self._remote_set_completed(reminder_id, reminder_dict)
-            except (requests.ConnectionError, requests.Timeout):
+            except (ConnectionError, Timeout):
                 self.queue.update_completed(reminder_id)
-            except requests.HTTPError as error:
+            except HTTPError as error:
                 if error.response.status_code == 503:
                     self.queue.update_completed(reminder_id)
                 else:
@@ -583,9 +584,9 @@ class Reminders():
             try:
                 self.queue.load()
                 self._remote_remove_task(user_id, task_list, task_id)
-            except (requests.ConnectionError, requests.Timeout):
+            except (ConnectionError, Timeout):
                 self.queue.remove_reminder(reminder_id, task_id, user_id, task_list)
-            except requests.HTTPError as error:
+            except HTTPError as error:
                 if error.response.status_code == 503:
                     self.queue.remove_reminder(reminder_id, task_id, user_id, task_list)
                 else:
@@ -599,9 +600,9 @@ class Reminders():
             try:
                 self.queue.load()
                 uid = self._remote_create_list(user_id, list_name)
-            except (requests.ConnectionError, requests.Timeout):
+            except (ConnectionError, Timeout):
                 self.queue.add_list(list_id)
-            except requests.HTTPError as error:
+            except HTTPError as error:
                 if error.response.status_code == 503:
                     self.queue.add_list(list_id)
                 else:
@@ -616,9 +617,9 @@ class Reminders():
             try:
                 self.queue.load()
                 self._remote_rename_list(user_id, uid, new_name)
-            except (requests.ConnectionError, requests.Timeout):
+            except (ConnectionError, Timeout):
                 self.queue.update_list(list_id)
-            except requests.HTTPError as error:
+            except HTTPError as error:
                 if error.response.status_code == 503:
                     self.queue.update_list(list_id)
                 else:
@@ -631,9 +632,9 @@ class Reminders():
             try:
                 self.queue.load()
                 self._remote_delete_list(user_id, uid)
-            except (requests.ConnectionError, requests.Timeout):
+            except (ConnectionError, Timeout):
                 self.queue.remove_list(list_id, uid, user_id)
-            except requests.HTTPError as error:
+            except HTTPError as error:
                 if error.response.status_code == 503:
                     self.queue.remove_list(list_id, uid, user_id)
                 else:
@@ -784,10 +785,10 @@ class Reminders():
 
             invocation.return_value(retval)
         except Exception as error:
-            invocation.return_dbus_error('org.freedesktop.DBus.Error.Failed', f'{error} - Method {method} failed to execute\n{"".join(traceback.format_exception(error))}')
+            invocation.return_dbus_error('org.freedesktop.DBus.Error.Failed', f'{error} - Method {method} failed to execute\n{"".join(format_exception(error))}')
 
     def _do_generate_id(self):
-        return str(uuid.uuid1())
+        return str(uuid1())
 
     def _remove_countdown(self, reminder_id):
         self.countdowns.remove_countdown(reminder_id)
@@ -871,7 +872,7 @@ class Reminders():
         if delta is not None:
             reminder_datetime += delta
             timestamp = reminder_datetime.timestamp()
-            while ((timestamp < floor(time.time())) if notify else (reminder_datetime.date() < datetime.date.today())):
+            while ((timestamp < floor(time())) if notify else (reminder_datetime.date() < datetime.date.today())):
                 if repeat_times != -1:
                     repeat_times -= 1
                 if repeat_times == 0:
@@ -939,7 +940,7 @@ class Reminders():
 
             reminder_datetime += datetime.timedelta(days=(((days[index] - weekday - 1) % 7 + 1) + 7 * week_frequency))
             timestamp = reminder_datetime.timestamp()
-            while ((timestamp < floor(time.time())) if notify else (reminder_datetime.date() < datetime.date.today())):
+            while ((timestamp < floor(time())) if notify else (reminder_datetime.date() < datetime.date.today())):
                 week_frequency = 0
                 if repeat_times != -1:
                     repeat_times -= 1
@@ -962,7 +963,7 @@ class Reminders():
         elif repeat_type == info.RepeatType.MONTH:
             reminder_datetime = self._month_repeat(reminder_datetime, frequency)
             timestamp = reminder_datetime.timestamp()
-            while ((timestamp < floor(time.time())) if notify else (reminder_datetime.date() < datetime.date.today())):
+            while ((timestamp < floor(time())) if notify else (reminder_datetime.date() < datetime.date.today())):
                 if repeat_times != -1:
                     repeat_times -= 1
                 if repeat_times == 0:
@@ -973,7 +974,7 @@ class Reminders():
         elif repeat_type == info.RepeatType.YEAR:
             reminder_datetime = self._year_repeat(reminder_datetime, frequency)
             timestamp = reminder_datetime.timestamp()
-            while ((timestamp < floor(time.time())) if notify else (reminder_datetime.date() < datetime.date.today())):
+            while ((timestamp < floor(time())) if notify else (reminder_datetime.date() < datetime.date.today())):
                 if repeat_times != -1:
                     repeat_times -= 1
                 if repeat_times == 0:
@@ -1027,7 +1028,7 @@ class Reminders():
 
     def _save_reminders(self):
         with open(REMINDERS_FILE, 'w', newline='') as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=['id'] + list(info.reminder_defaults.keys()))
+            writer = DictWriter(csvfile, fieldnames=['id'] + list(info.reminder_defaults.keys()))
             writer.writeheader()
 
             for reminder_id, reminder in self.reminders.items():
@@ -1055,7 +1056,7 @@ class Reminders():
 
     def _save_lists(self):
         with open(LISTS_FILE, 'w', newline='') as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=['id', 'name', 'user-id', 'uid'])
+            writer = DictWriter(csvfile, fieldnames=['id', 'name', 'user-id', 'uid'])
             writer.writeheader()
 
             for list_id, task_list in self.lists.items():
@@ -1094,18 +1095,18 @@ class Reminders():
         list_ids = {}
         synced = []
 
-        if os.path.isfile(TASK_LISTS_FILE):
+        if path.isfile(TASK_LISTS_FILE):
             try:
                 with open(TASK_LISTS_FILE, newline='') as jsonfile:
-                    old_lists = json.load(jsonfile)
+                    old_lists = load_json(jsonfile)
             except:
                 pass
-            os.remove(TASK_LISTS_FILE)
+            remove(TASK_LISTS_FILE)
 
-        if os.path.isfile(TASK_LIST_IDS_FILE):
+        if path.isfile(TASK_LIST_IDS_FILE):
             try:
                 with open(TASK_LIST_IDS_FILE, newline='') as csvfile:
-                    reader = csv.DictReader(csvfile)
+                    reader = DictReader(csvfile)
 
                     for row in reader:
                         list_ids[row['list-id']] = {
@@ -1114,7 +1115,7 @@ class Reminders():
                         }
             except:
                 pass
-            os.remove(TASK_LIST_IDS_FILE)
+            remove(TASK_LIST_IDS_FILE)
 
         for user_id, value in old_lists.items():
             for list_id, list_name in value.items():
@@ -1124,10 +1125,10 @@ class Reminders():
                     'uid': list_ids[list_id]['uid'] if list_id in list_ids.keys() else ''
                 }
 
-        if os.path.isfile(MS_REMINDERS_FILE):
+        if path.isfile(MS_REMINDERS_FILE):
             try:
                 with open(MS_REMINDERS_FILE, newline='') as csvfile:
-                    reader = csv.DictReader(csvfile)
+                    reader = DictReader(csvfile)
                     for row in reader:
                         repeat_times = self._get_int(row, 'repeat-times')
                         reminder_id = row['id']
@@ -1148,7 +1149,7 @@ class Reminders():
                         reminders[reminder_id]['uid'] = self._get_str(row, 'ms-id')
             except:
                 pass
-            os.remove(MS_REMINDERS_FILE)
+            remove(MS_REMINDERS_FILE)
 
         old_synced = self.app.settings.get_value('synced-task-lists').unpack()
         for user_id, values in old_synced.items():
@@ -1170,9 +1171,9 @@ class Reminders():
         lists = {}
 
         try:
-            if os.path.isfile(LISTS_FILE):
+            if path.isfile(LISTS_FILE):
                 with open(LISTS_FILE, newline='') as csvfile:
-                    reader = csv.DictReader(csvfile)
+                    reader = DictReader(csvfile)
 
                     for row in reader:
                         try:
@@ -1198,9 +1199,9 @@ class Reminders():
             }
 
         try:
-            if os.path.isfile(REMINDERS_FILE):
+            if path.isfile(REMINDERS_FILE):
                 with open(REMINDERS_FILE, newline='') as csvfile:
-                    reader = csv.DictReader(csvfile)
+                    reader = DictReader(csvfile)
 
                     for row in reader:
                         try:
@@ -1283,7 +1284,7 @@ class Reminders():
     # Below methods can be accessed by other apps over dbus
     def update_completed(self, app_id: str, reminder_id: str, completed: bool, now = None, today = None, save = True):
         if now is None:
-            now = floor(time.time())
+            now = floor(time())
 
         if today is None:
             today = datetime.datetime.combine(datetime.date.fromtimestamp(now), datetime.time(), tzinfo=datetime.timezone.utc).timestamp()
@@ -1324,7 +1325,7 @@ class Reminders():
         return GLib.Variant('(uu)', (now, today))
 
     def update_completedv(self, app_id: str, reminder_ids: list, completed: bool):
-        now = floor(time.time())
+        now = floor(time())
         today = datetime.datetime.combine(datetime.date.fromtimestamp(now), datetime.time(), tzinfo=datetime.timezone.utc).timestamp()
         threads = []
         queue = Queue()
@@ -1443,7 +1444,7 @@ class Reminders():
                 # due date has to be the same day as the reminder date
                 reminder_dict['due-date'] = int(datetime.datetime(notif_date.year, notif_date.month, notif_date.day, tzinfo=datetime.timezone.utc).timestamp())
 
-        now = floor(time.time())
+        now = floor(time())
         reminder_dict['created-timestamp'] = now
         reminder_dict['updated-timestamp'] = now
 
@@ -1498,10 +1499,10 @@ class Reminders():
             reminder_dict['important'] = bool(kwargs['important'])
 
         if now is None:
-            now = floor(time.time())
+            now = floor(time())
         reminder_dict['updated-timestamp'] = now
 
-        if reminder_dict['timestamp'] > floor(time.time()):
+        if reminder_dict['timestamp'] > floor(time()):
             reminder_dict['shown'] = False
 
         if reminder_dict['timestamp'] != 0:
@@ -1536,7 +1537,7 @@ class Reminders():
         return GLib.Variant('(u)', (now,))
 
     def update_reminderv(self, app_id: str, reminders: list):
-        now = floor(time.time())
+        now = floor(time())
 
         updated_ids = []
         if len(reminders) > 1:
@@ -1877,7 +1878,7 @@ class Reminders():
         else:
             self.ical.from_ical(files, list_id)
 
-class UpdateThread(threading.Thread):
+class UpdateThread(Thread):
     def __init__(self, queue, value, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.queue = queue

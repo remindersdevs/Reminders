@@ -13,16 +13,14 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import logging
-import traceback
-
 from gi.repository import Gtk, Adw, GLib
 from gettext import gettext as _
-
 from remembrance import info
 from remembrance.browser.error_dialog import ErrorDialog
+from traceback import format_exception
+from logging import getLogger
 
-logger = logging.getLogger(info.app_executable)
+logger = getLogger(info.app_executable)
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/import_lists_window.ui')
 class ImportListsWindow(Adw.Window):
@@ -56,7 +54,7 @@ class ImportListsWindow(Adw.Window):
             self.app.run_service_method('ImportLists', GLib.Variant('(ass)', (self.files, task_list)), show_error_dialog=False)
             self.close()
         except Exception as error:
-            error_text = ''.join(traceback.format_exception(error))
+            error_text = ''.join(format_exception(error))
             logger.exception(error)
             self.app.error_dialog = ErrorDialog(self, _("Couldn't import lists"), _('Check that you are importing a valid iCalendar file.'), error_text, parent_window=self)
 

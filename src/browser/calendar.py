@@ -14,17 +14,17 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
-import threading
-import logging
-import time
 
 from gi.repository import GLib, Gio
 
 from remembrance import info
+from logging import getLogger
+from time import time
+from threading import Thread
 
-logger = logging.getLogger(info.app_executable)
+logger = getLogger(info.app_executable)
 
-class Calendar(threading.Thread):
+class Calendar(Thread):
     '''Updates date labels when day changes'''
     def __init__(self, win):
         self.win = win
@@ -74,7 +74,7 @@ class Calendar(threading.Thread):
                 GLib.Source.remove(self.countdown_id)
                 self.countdown_id = 0
 
-            now = time.time()
+            now = time()
             wait = int(1000 * (self.timestamp - now))
             if wait > 0:
                 self.countdown_id = GLib.timeout_add(wait, self.on_countdown_done)

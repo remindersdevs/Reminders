@@ -13,8 +13,6 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import logging
-
 from gettext import gettext as _
 
 from remembrance import info
@@ -22,8 +20,9 @@ from remembrance.browser.caldav_sign_in import CalDAVSignIn
 from remembrance.browser.microsoft_sign_in import MicrosoftSignIn
 
 from gi.repository import Gtk, Adw, GLib, Gio, Pango
+from logging import getLogger
 
-logger = logging.getLogger(info.app_executable)
+logger = getLogger(info.app_executable)
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/preferences.ui')
 class PreferencesWindow(Adw.PreferencesWindow):

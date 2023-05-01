@@ -13,19 +13,18 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import json
-import requests
-import logging
-import threading
-from queue import Queue
-
-from copy import deepcopy
-
 from remembrance import info
-QUEUE_FILE = f'{info.data_dir}/queue.json'
+from logging import getLogger
+from queue import Queue
+from copy import deepcopy
+from requests import Timeout, HTTPError, ConnectionError
+from threading import Thread
+from json import load, dump
+from os.path import isfile
 
-logger = logging.getLogger(info.service_executable)
+logger = getLogger(info.service_executable)
+
+QUEUE_FILE = f'{info.data_dir}/queue.json'
 
 DEFAULT = {
     'reminders': {
@@ -51,9 +50,9 @@ class ReminderQueue():
 
     def get_queue(self):
         try:
-            if os.path.isfile(QUEUE_FILE):
+            if isfile(QUEUE_FILE):
                 with open(QUEUE_FILE, 'r') as jsonfile:
-                    self.queue = json.load(jsonfile)
+                    self.queue = load(jsonfile)
             else:
                 self.reset()
         except:
@@ -61,7 +60,7 @@ class ReminderQueue():
 
     def write(self):
         with open(QUEUE_FILE, 'w') as jsonfile:
-            json.dump(self.queue, jsonfile)
+            dump(self.queue, jsonfile)
 
     def get_updated_reminder_ids(self):
         try:
@@ -469,7 +468,7 @@ class ReminderQueue():
         self.reminders._save_reminders()
         self.reminders._save_lists()
 
-class QueueThread(threading.Thread):
+class QueueThread(Thread):
     def __init__(self, queue, value, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.queue = queue
@@ -480,9 +479,9 @@ class QueueThread(threading.Thread):
             if self._target is not None:
                 self._target(*self._args, **self._kwargs)
                 self.queue.put(self.val)
-        except (requests.ConnectionError, requests.Timeout) as error:
+        except (ConnectionError, Timeout) as error:
             self.queue.put(error)
-        except requests.HTTPError as error:
+        except HTTPError as error:
             if error.response.status_code == 503:
                 self.queue.put(error)
             else:

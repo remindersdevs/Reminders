@@ -13,16 +13,15 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import logging
-
 from gi.repository import Gtk, Adw
 from gettext import gettext as _
 
 from remembrance import info
+from logging import getLogger
 
 DEFAULT_LIST_TITLE = _('New List')
 
-logger = logging.getLogger(info.app_executable)
+logger = getLogger(info.app_executable)
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/edit_lists_window.ui')
 class EditListsWindow(Adw.Window):

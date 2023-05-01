@@ -13,14 +13,13 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import logging
-
 from gi.repository import Gtk, Adw, GLib
-from gettext import gettext as _
 
 from remembrance import info
+from gettext import gettext as _
+from logging import getLogger
 
-logger = logging.getLogger(info.app_executable)
+logger = getLogger(info.app_executable)
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/move_reminders_window.ui')
 class MoveRemindersWindow(Adw.Window):

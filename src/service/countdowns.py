@@ -13,14 +13,13 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import time
-import logging
-
 from gi.repository import GLib, Gio
 
 from remembrance import info
+from time import time
+from logging import getLogger
 
-logger = logging.getLogger(info.service_executable)
+logger = getLogger(info.service_executable)
 
 class Countdowns():
     '''Handles timeouts for notifications'''
@@ -87,7 +86,7 @@ class Countdowns():
             # wait 30 seconds after waking from suspend, this hopefully will give enough time for internet to reconnect
             wait = 30000 if resuming else dictionary['interval'] * 60000
         else:
-            now = time.time()
+            now = time()
             wait = int(1000 * (dictionary['timestamp'] - now))
 
         if wait > 0:

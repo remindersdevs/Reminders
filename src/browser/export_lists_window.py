@@ -13,14 +13,13 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import logging
-
 from gi.repository import Gtk, Adw, GLib, Gio
 from gettext import gettext as _
 
 from remembrance import info
+from logging import getLogger
 
-logger = logging.getLogger(info.app_executable)
+logger = getLogger(info.app_executable)
 
 class ListRow(Adw.ActionRow):
     def __init__(self, *args, **kwargs):

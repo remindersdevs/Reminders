@@ -13,17 +13,17 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import ctypes
 import datetime
-import logging
 
 from gi.repository import Gtk, Adw, GLib, Gio
 from gettext import gettext as _
 
 from remembrance import info
 from remembrance.browser.reminder import Reminder
+from ctypes import c_double
+from logging import getLogger
 
-logger = logging.getLogger(info.app_executable)
+logger = getLogger(info.app_executable)
 
 DEFAULT_OPTIONS = info.reminder_defaults.copy()
 DEFAULT_OPTIONS.pop('uid')
@@ -587,7 +587,7 @@ class ReminderEditWindow(Adw.Window):
         new_value = int(spin_button.get_text())
         if self.win.props.time_format == info.TimeFormat.TWELVE_HOUR and new_value == 12:
             new_value = 0
-        double = ctypes.c_double.from_address(hash(gpointer))
+        double = c_double.from_address(hash(gpointer))
         double.value = float(new_value)
         return True
 

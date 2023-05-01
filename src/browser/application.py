@@ -14,16 +14,14 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
-import gi
 import logging
-import traceback
 
-gi.require_version('Gtk', '4.0')
-gi.require_version('Adw', '1')
+from gi import require_version
+
+require_version('Gtk', '4.0')
+require_version('Adw', '1')
 
 from gi.repository import Gtk, Adw, GLib, Gio, Gdk
-from gettext import gettext as _
-from pkg_resources import parse_version
 
 from remembrance import info
 from remembrance.browser.error_dialog import ErrorDialog
@@ -33,6 +31,9 @@ from remembrance.browser.preferences import PreferencesWindow
 from remembrance.browser.shortcuts_window import ShortcutsWindow
 from remembrance.browser.export_lists_window import ExportListsWindow
 from remembrance.browser.import_lists_window import ImportListsWindow
+from gettext import gettext as _
+from pkg_resources import parse_version
+from traceback import format_exception
 
 # Always update this when new features are added that require the service to restart
 MIN_SERVICE_VERSION = '5.0.beta2'
@@ -109,8 +110,7 @@ class Remembrance(Adw.Application):
         self.refreshing = False
 
         if info.portals_enabled:
-            import gi
-            gi.require_version('Xdp', '1.0')
+            require_version('Xdp', '1.0')
             from gi.repository import Xdp
 
             portal = Xdp.Portal()
@@ -358,7 +358,7 @@ class Remembrance(Adw.Application):
                     None
                 )
         except GLib.GError as error:
-            error_text = ''.join(traceback.format_exception(error))
+            error_text = ''.join(format_exception(error))
             if 'The name is not activatable' in str(error):
                 if show_error_dialog:
                     if self.error_dialog is not None:
