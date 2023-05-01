@@ -37,16 +37,16 @@ logger = logging.getLogger(info.app_executable)
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/task_list_row.ui')
 class TaskListRow(Gtk.ListBoxRow):
-    __gtype_name__ = 'task_list_row'
+    __gtype_name__ = 'TaskListRow'
     label = Gtk.Template.Child()
     icon = Gtk.Template.Child()
     count_label = Gtk.Template.Child()
 
     def __init__(self, label, user_id, list_id, icon = None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.user_id = user_id
         self.list_id = list_id
-        self.set_action_target_value(GLib.Variant('(ss)', (user_id, list_id)))
+        self.user_id = user_id
+        self.set_action_target_value(GLib.Variant('s', list_id))
 
         if icon is not None:
             self.icon.set_from_icon_name(icon)
@@ -60,7 +60,7 @@ class TaskListRow(Gtk.ListBoxRow):
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/main_window.ui')
 class MainWindow(Adw.ApplicationWindow):
     '''Main application Window'''
-    __gtype_name__ = 'application_window'
+    __gtype_name__ = 'MainWindow'
 
     page_label = Gtk.Template.Child()
     page_sub_label = Gtk.Template.Child()
@@ -110,7 +110,6 @@ class MainWindow(Adw.ApplicationWindow):
         self.expanded = None
         self.last_selected_row = None
         self.selected = None
-        self.spinning_cursor = Gdk.Cursor.new_from_name('wait')
 
         self.row_filter_pairs = (
             (self.all_row, self.all_filter, self.all_count_label),
@@ -119,7 +118,7 @@ class MainWindow(Adw.ApplicationWindow):
         )
 
         self.app = app
-        self.selected_user_id, self.selected_list_id = self.app.settings.get_value('selected-task-list').unpack()
+        self.selected_list_id = self.app.settings.get_string('selected-list')
         self.set_time_format()
 
         self.reminders_list.set_placeholder(self.placeholder)
@@ -136,11 +135,10 @@ class MainWindow(Adw.ApplicationWindow):
         self.search_entry.connect('stop-search', lambda *args: self.search_revealer.set_reveal_child(False))
         self.settings_create_action('sort')
         self.settings_create_action('descending-sort')
-        self.settings_create_action('selected-task-list')
+        self.settings_create_action('selected-list')
         self.app.settings.connect('changed::sort', self.set_sort)
         self.app.settings.connect('changed::descending-sort', self.set_sort_direction)
         self.app.settings.connect('changed::week-starts-sunday', lambda *args: self.week_start_changed())
-
         self.descending_sort = self.app.settings.get_boolean('descending-sort')
         self.sort = self.app.settings.get_enum('sort')
         self.sort_button.set_icon_name('view-sort-descending-symbolic' if self.descending_sort else 'view-sort-ascending-symbolic')
@@ -165,7 +163,7 @@ class MainWindow(Adw.ApplicationWindow):
         self.app.service.connect('g-signal::SignedOut', self.signed_out_cb)
         self.app.service.connect('g-signal::UsernameUpdated', self.username_updated)
 
-        self.all_task_list_names = self.app.run_service_method('GetLists', None).unpack()[0]
+        self.all_lists = self.app.run_service_method('GetListsDict', None).unpack()[0]
         self.set_synced_ids()
         self.set_task_lists()
 
@@ -209,20 +207,19 @@ class MainWindow(Adw.ApplicationWindow):
             if self.selected is row:
                 current_filter = filter_func
 
-        for user_id in self.task_list_rows:
-            for list_id, row in self.task_list_rows[user_id].items():
-                count = 0
-                if current_filter is not None:
-                    for reminder in self.reminder_lookup_dict.values():
-                        if reminder.completed:
-                            continue
-                        result = current_filter(reminder, user_id, list_id, just_filter = True)
-                        if result:
-                            count += 1
-                row.set_count(count)
+        for list_id, row in self.task_list_rows.items():
+            count = 0
+            if current_filter is not None:
+                for reminder in self.reminder_lookup_dict.values():
+                    if reminder.completed:
+                        continue
+                    result = current_filter(reminder, list_id, just_filter = True)
+                    if result:
+                        count += 1
+            row.set_count(count)
 
     def setup_dnd(self):
-        drop_target = Gtk.DropTarget.new(str, Gdk.DragAction.MOVE)
+        drop_target = Gtk.DropTarget.new(GObject.TYPE_STRV, Gdk.DragAction.MOVE)
         drop_target.connect('enter', self.enter)
         drop_target.connect('motion', self.motion)
         drop_target.connect('leave', self.leave)
@@ -231,7 +228,7 @@ class MainWindow(Adw.ApplicationWindow):
 
     def enter(self, drop_target, x, y):
         row = self.task_lists_list.get_row_at_y(y)
-        if row is not None and row.user_id != 'all' and row.list_id != 'all':
+        if row is not None and row.list_id != 'all':
             self.task_lists_list.drag_highlight_row(row)
             return Gdk.DragAction.MOVE
         else:
@@ -240,7 +237,7 @@ class MainWindow(Adw.ApplicationWindow):
 
     def motion(self, drop_target, x, y):
         row = self.task_lists_list.get_row_at_y(y)
-        if row is not None and row.user_id != 'all' and row.list_id != 'all':
+        if row is not None and row.list_id != 'all':
             self.task_lists_list.drag_highlight_row(row)
             return Gdk.DragAction.MOVE
         else:
@@ -250,59 +247,62 @@ class MainWindow(Adw.ApplicationWindow):
     def leave(self, drop_target):
         self.task_lists_list.drag_unhighlight_row()
 
-    def drop(self, drop_target, value, x, y):
+    def drop(self, drop_target, values, x, y):
         row = self.task_lists_list.get_row_at_y(y)
-        if row is None and row.user_id == 'all' or row.list_id == 'all':
+        if row is None and row.list_id == 'all':
             self.task_lists_list.drag_unhighlight_row()
             return False
-        reminder = self.reminder_lookup_dict[value]
-        options = reminder.options.copy()
-        options['user-id'], options['list-id'] = row.user_id, row.list_id
-        if reminder.options['list-id'] != options['list-id'] or reminder.options['user-id'] != options['user-id']:
-            if options['user-id'] in self.ms_users.keys():
-                if options['repeat-type'] in (1, 2):
-                    options['repeat-type'] = 0
-                    options['repeat-frequency'] = 1
-                    options['repeat-days'] = 0
-                options['repeat-until'] = 0
-                options['repeat-times'] = -1
+        variants = []
+        options = {}
+        for reminder_id in values:
+            try:
+                reminder = self.reminder_lookup_dict[reminder_id]
+            except:
+                continue
+            options[reminder.id] = reminder.options.copy()
+            opts = options[reminder.id]
+            opts['list-id'] = row.list_id
+            if reminder.options['list-id'] != opts['list-id']:
+                user_id = self.synced_lists[opts['list-id']]['user-id']
+                if user_id in self.ms_users.keys():
+                    if opts['repeat-type'] in (1, 2):
+                        opts['repeat-type'] = 0
+                        opts['repeat-frequency'] = 1
+                        opts['repeat-days'] = 0
+                    opts['repeat-until'] = 0
+                    opts['repeat-times'] = -1
 
-            if options['user-id'] in self.caldav_users.keys():
-                if options['repeat-type'] in (1, 2):
-                    options['repeat-type'] = 0
-                    options['repeat-frequency'] = 1
-                    options['repeat-days'] = 0
-                    options['repeat-until'] = 0
-                    options['repeat-times'] = -1
+                variants.append({
+                    'id': GLib.Variant('s', reminder.id),
+                    'repeat-type': GLib.Variant('q', opts['repeat-type']),
+                    'repeat-frequency': GLib.Variant('q', opts['repeat-frequency']),
+                    'repeat-days': GLib.Variant('q', opts['repeat-days']),
+                    'repeat-times': GLib.Variant('n', opts['repeat-times']),
+                    'repeat-until': GLib.Variant('u', opts['repeat-until']),
+                    'list-id': GLib.Variant('s', opts['list-id'])
+                })
+            reminder.show()
 
-            results = self.app.run_service_method(
-                'UpdateReminder',
-                GLib.Variant(
-                    '(sa{sv})',
-                    (
-                        info.app_id,
-                        {
-                            'id': GLib.Variant('s', reminder.id),
-                            'repeat-type': GLib.Variant('q', options['repeat-type']),
-                            'repeat-frequency': GLib.Variant('q', options['repeat-frequency']),
-                            'repeat-days': GLib.Variant('q', options['repeat-days']),
-                            'repeat-times': GLib.Variant('n', options['repeat-times']),
-                            'repeat-until': GLib.Variant('u', options['repeat-until']),
-                            'list-id': GLib.Variant('s', options['list-id']),
-                            'user-id': GLib.Variant('s', options['user-id'])
-                        }
-                    )
+        results = self.app.run_service_method(
+            'UpdateReminderv',
+            GLib.Variant(
+                '(saa{sv})',
+                (
+                    info.app_id,
+                    variants
                 )
             )
+        )
 
-            options['updated-timestamp'] = results.unpack()[0]
-            reminder.options.update(options)
+        updated_ids, timestamp = results.unpack()
+        for reminder_id in updated_ids:
+            reminder = self.reminder_lookup_dict[reminder_id]
+            options[reminder_id]['updated-timestamp'] = timestamp
+            reminder.options.update(options[reminder_id])
             reminder.set_repeat_label()
-            reminder.show()
-        else:
-            reminder.show()
-        self.reminders_list.invalidate_sort()
+
         self.invalidate_filter()
+        self.reminders_list.invalidate_sort()
         self.task_lists_list.drag_unhighlight_row()
         return True
 
@@ -368,16 +368,6 @@ class MainWindow(Adw.ApplicationWindow):
         self.complete_revealer.set_hexpand(self.complete_revealer.props.reveal_child)
         self.unimportant_revealer.set_hexpand(self.unimportant_revealer.props.reveal_child)
         self.important_revealer.set_hexpand(self.important_revealer.props.reveal_child)
-
-    def set_busy(self, busy, win = None):
-        if win is None:
-            win = self
-        if busy:
-            win.get_native().get_surface().set_cursor(self.spinning_cursor)
-            self.app.mark_busy()
-        else:
-            win.get_native().get_surface().set_cursor(None)
-            self.app.unmark_busy()
 
     def new_edit_win(self, reminder = None):
         if self.reminder_edit_win is None:
@@ -543,11 +533,11 @@ class MainWindow(Adw.ApplicationWindow):
             self.edit_lists_window.set_visible(True)
 
     def filter_reminders(self, action, variant, data = None):
-        self.selected_user_id, self.selected_list_id = variant.unpack()
-        self.app.settings.set_value('selected-task-list', GLib.Variant('(ss)', (self.selected_user_id, self.selected_list_id)))
+        self.selected_list_id = variant.unpack()
+        self.app.settings.set_string('selected-list', self.selected_list_id)
 
     def set_synced_ids(self):
-        self.synced_ids = self.app.settings.get_value('synced-task-lists').unpack()
+        self.synced_ids = self.app.settings.get_value('synced-lists').unpack()
 
     def synced_ids_changed(self, proxy, sender_name, signal_name, parameters):
         self.synced_ids = parameters.unpack()[0]
@@ -555,32 +545,33 @@ class MainWindow(Adw.ApplicationWindow):
         removed_task_lists = []
         new_task_lists = []
 
-        for user_id in self.all_task_list_names.keys():
-            for list_id, list_name in self.all_task_list_names[user_id].items():
-                if user_id == 'local' or (user_id in self.synced_ids and ('all' in self.synced_ids[user_id] or list_id in self.synced_ids[user_id])):
-                    if user_id not in self.task_list_names.keys():
-                        self.task_list_names[user_id] = {}
-                    if list_id not in self.task_list_names[user_id]:
-                        self.task_list_names[user_id][list_id] = list_name
-                        new_task_lists.append((user_id, list_id, list_name))
-                else:
-                    if user_id in self.task_list_names and list_id in self.task_list_names[user_id]:
-                        self.task_list_names[user_id].pop(list_id)
-                        removed_task_lists.append((user_id, list_id))
-                        if len(self.task_list_names[user_id]) == 0:
-                            self.task_list_names.pop(user_id)
+        for list_id, value in self.all_lists.items():
+            list_name = value['name']
+            user_id = value['user-id']
+            if user_id == 'local' or (user_id in self.synced_ids or list_id in self.synced_ids):
+                if list_id not in self.synced_lists:
+                    self.synced_lists[list_id] = self.all_lists[list_id]
+                    new_task_lists.append((user_id, list_id, list_name))
+            else:
+                if list_id in self.synced_lists:
+                    self.synced_lists.pop(list_id)
+                    removed_task_lists.append(list_id)
 
         if len(new_task_lists) > 0 or len(removed_task_lists) > 0:
             for user_id, list_id, list_name in new_task_lists:
                 self.update_task_list_row(user_id, list_id, list_name)
-            for user_id, list_id in removed_task_lists:
-                self.remove_task_list_row(user_id, list_id)
+            for list_id in removed_task_lists:
+                self.remove_task_list_row(list_id)
 
             self.set_reminder_task_list_dropdown()
 
     def signed_out_cb(self, proxy, sender_name, signal_name, parameters):
         user_id = parameters.unpack()[0]
         self.usernames.pop(user_id)
+        if user_id in self.ms_users:
+            self.ms_users.pop(user_id)
+        if user_id in self.caldav_users:
+            self.caldav_users.pop(user_id)
         if self.app.preferences is not None:
             self.app.preferences.on_signed_out(user_id)
         if self.edit_lists_window is not None:
@@ -605,15 +596,15 @@ class MainWindow(Adw.ApplicationWindow):
             self.edit_lists_window.signed_in(user_id, username)
 
     def update_task_list(self):
-        self.selected_user_id, self.selected_list_id = self.app.settings.get_value('selected-task-list').unpack()
+        self.selected_list_id = self.app.settings.get_string('selected-list')
 
         try:
-            row = self.task_list_rows[self.selected_user_id][self.selected_list_id]
+            row = self.task_list_rows[self.selected_list_id]
             if row not in self.task_lists_list.get_selected_rows():
                 row.activate()
             self.page_sub_label.set_label(row.label.get_label())
         except:
-            self.app.settings.set_value('selected-task-list', GLib.Variant('(ss)', ('all', 'all')))
+            self.app.settings.set_string('selected-list', 'all')
             return
 
         self.invalidate_filter()
@@ -622,58 +613,54 @@ class MainWindow(Adw.ApplicationWindow):
     def update_task_list_row(self, user_id, list_id, list_name):
         old_duplicated = self.duplicated.copy()
         self.duplicated = []
-        values = []
-        values_staging = []
-        for dictionary in self.task_list_names.values():
-            for i in dictionary.values():
-                if i in values:
-                    self.duplicated.append(i)
-                else:
-                    values_staging.append(i)
-            # We don't want to count duplicates if they are on the same user, in that case it really doesn't matter
-            values = values_staging.copy()
+        values = {}
+        for dictionary in self.synced_lists.values():
+            if dictionary['name'] in values and values[dictionary['name']] != dictionary['user-id']:
+                self.duplicated.append(dictionary['name'])
+            else:
+                values[dictionary['name']] = dictionary['user-id']
 
         duplicated = False
-        for list_user_id, dictionary in self.task_list_names.items():
+        for task_list_id, dictionary in self.synced_lists.items():
+            list_user_id = dictionary['user-id']
+            task_list_name = dictionary['name']
             if user_id == list_user_id:
                 continue
-            for task_list_id, task_list_name in dictionary.items():
-                if list_name == task_list_name:
-                    duplicated = True
-                    if list_user_id in self.task_list_rows and task_list_id in self.task_list_rows[list_user_id]:
-                        label = f"{task_list_name} ({self.usernames[list_user_id]})"
-                        self.task_list_rows[list_user_id][task_list_id].label.set_label(label)
+            if list_name == task_list_name:
+                duplicated = True
+                if task_list_id in self.task_list_rows:
+                    label = f"{task_list_name} ({self.usernames[list_user_id]})"
+                    self.task_list_rows[task_list_id].label.set_label(label)
 
         for name in old_duplicated:
             if name not in self.duplicated:
-                for list_user_id, dictionary in self.task_list_names.items():
-                    for task_list_id, task_list_name in dictionary.items():
-                        if task_list_name == name:
-                            self.task_list_rows[list_user_id][task_list_id].label.set_label(name)
+                for task_list_id, dictionary in self.synced_lists.items():
+                    task_list_name = dictionary['name']
+                    if task_list_name == name:
+                        self.task_list_rows[task_list_id].label.set_label(name)
 
         label = f"{list_name} ({self.usernames[user_id]})" if duplicated else list_name
 
-        if user_id in self.task_list_rows and list_id in self.task_list_rows[user_id]:
-            self.task_list_rows[user_id][list_id].label.set_label(label)
+        if list_id in self.task_list_rows:
+            self.task_list_rows[list_id].label.set_label(label)
         else:
             row = TaskListRow(label, user_id, list_id)
             self.task_lists_list.append(row)
-            if user_id not in self.task_list_rows.keys():
-                self.task_list_rows[user_id] = {}
-            self.task_list_rows[user_id][list_id] = row
+            self.task_list_rows[list_id] = row
             self.task_lists_list.invalidate_sort()
 
     def username_updated(self, proxy, sender_name, signal_name, parameters):
         user_id, username = parameters.unpack()
         self.usernames[user_id] = username
-        for list_user_id, dictionary in self.task_list_names.items():
+        for task_list_id, dictionary in self.synced_lists.items():
+            list_user_id = dictionary['user-id']
+            task_list_name = dictionary['name']
             if user_id != list_user_id:
                 continue
-            for task_list_id, task_list_name in dictionary.items():
-                if task_list_name in self.duplicated:
-                    if list_user_id in self.task_list_rows and task_list_id in self.task_list_rows[list_user_id]:
-                        label = f"{task_list_name} ({self.usernames[list_user_id]})"
-                        self.task_list_rows[list_user_id][task_list_id].label.set_label(label)
+            if task_list_name in self.duplicated:
+                if task_list_id in self.task_list_rows:
+                    label = f"{task_list_name} ({self.usernames[list_user_id]})"
+                    self.task_list_rows[task_list_id].label.set_label(label)
 
         self.set_reminder_task_list_dropdown()
 
@@ -683,120 +670,105 @@ class MainWindow(Adw.ApplicationWindow):
             self.edit_lists_window.username_updated(user_id, username)
 
     def list_updated(self, user_id, list_id, list_name):
-        if user_id not in self.all_task_list_names.keys():
-            self.all_task_list_names[user_id] = {}
-        if user_id not in self.task_list_names.keys():
-            self.task_list_names[user_id] = {}
-        self.all_task_list_names[user_id][list_id] = list_name
-        if user_id == 'local' or (user_id in self.synced_ids and ('all' in self.synced_ids[user_id] or list_id in self.synced_ids[user_id])):
-            self.task_list_names[user_id][list_id] = list_name
-
+        self.all_lists[list_id] = {
+            'name': list_name,
+            'user-id': user_id
+        }
+        self.synced_lists[list_id] = self.all_lists[list_id]
         self.update_task_list_row(user_id, list_id, list_name)
 
         self.set_reminder_task_list_dropdown()
 
-    def remove_task_list_row(self, user_id, list_id):
+    def remove_task_list_row(self, list_id):
         old_duplicated = self.duplicated.copy()
         self.duplicated = []
-        values = []
-        values_staging = []
-        for dictionary in self.task_list_names.values():
-            for i in dictionary.values():
-                if i in values:
-                    self.duplicated.append(i)
-                else:
-                    values_staging.append(i)
-            # We don't want to count duplicates if they are on the same user, in that case it really doesn't matter
-            values = values_staging.copy()
+        values = {}
+        for dictionary in self.synced_lists.values():
+            if dictionary['name'] in values and values[dictionary['name']] != dictionary['user-id']:
+                self.duplicated.append(dictionary['name'])
+            else:
+                values[dictionary['name']] = dictionary['user-id']
 
-        row = self.task_list_rows[user_id][list_id]
+        row = self.task_list_rows[list_id]
         self.task_lists_list.remove(row)
-        self.task_list_rows[user_id].pop(list_id)
+        self.task_list_rows.pop(list_id)
 
         for name in old_duplicated:
             if name not in self.duplicated:
-                for list_user_id, dictionary in self.task_list_names.items():
-                    for task_list_id, task_list_name in dictionary.items():
-                        if task_list_name == name:
-                            self.task_list_rows[list_user_id][task_list_id].label.set_label(name)
-                            return
+                for task_list_id, dictionary in self.synced_lists.items():
+                    task_list_name = dictionary['name']
+                    if task_list_name == name:
+                        self.task_list_rows[task_list_id].label.set_label(name)
 
-    def list_removed(self, user_id, list_id):
-        for dictionary in self.all_task_list_names, self.task_list_names:
+    def list_removed(self, list_id):
+        for dictionary in self.all_lists, self.synced_lists:
             try:
-                dictionary[user_id].pop(list_id)
+                dictionary.pop(list_id)
             except:
                 pass
 
-        self.remove_task_list_row(user_id, list_id)
+        self.remove_task_list_row(list_id)
 
         self.set_reminder_task_list_dropdown()
         self.update_task_list()
 
     def set_task_lists(self):
-        self.task_list_names = {}
-        for user_id in self.all_task_list_names.keys():
-            if user_id not in self.task_list_names.keys():
-                self.task_list_names[user_id] = {}
-            for key, value in self.all_task_list_names[user_id].items():
-                if user_id == 'local' or (user_id in self.synced_ids and ('all' in self.synced_ids[user_id] or key in self.synced_ids[user_id])):
-                    self.task_list_names[user_id][key] = value
+        self.synced_lists = {}
+        for list_id, value in self.all_lists.items():
+            user_id = value['user-id']
+            if user_id == 'local' or (user_id in self.synced_ids or list_id in self.synced_ids):
+                self.synced_lists[list_id] = self.all_lists[list_id]
 
         self.duplicated = []
-        values = []
-        values_staging = []
-        for dictionary in self.task_list_names.values():
-            for i in dictionary.values():
-                if i in values:
-                    self.duplicated.append(i)
-                else:
-                    values_staging.append(i)
-            # We don't want to count duplicates if they are on the same user, in that case it really doesn't matter
-            values = values_staging.copy()
+        values = {}
+        for dictionary in self.synced_lists.values():
+            if dictionary['name'] in values and values[dictionary['name']] != dictionary['user-id']:
+                self.duplicated.append(dictionary['name'])
+            else:
+                values[dictionary['name']] = dictionary['user-id']
 
         self.task_list_rows = {}
 
-        all_row = TaskListRow(_('All Lists'), 'all', 'all', icon='view-grid-symbolic')
+        all_row = TaskListRow(_('All Lists'), None, 'all', icon='view-grid-symbolic')
         self.task_lists_list.append(all_row)
-        self.task_list_rows['all'] = {}
-        self.task_list_rows['all']['all'] = all_row
+        self.task_list_rows['all'] = all_row
 
-        for user_id in self.task_list_names.keys():
-            if user_id in self.usernames:
-                self.task_list_rows[user_id] = {}
-                for list_id, name in self.task_list_names[user_id].items():
-                    if name in self.duplicated:
-                        label = f"{name} ({self.usernames[user_id]})"
-                    else:
-                        label = name
-                    row = TaskListRow(label, user_id, list_id)
-                    self.task_lists_list.append(row)
-                    self.task_list_rows[user_id][list_id] = row
+        for list_id, value in self.synced_lists.items():
+            name = value['name']
+            user_id = value['user-id']
+            if name in self.duplicated:
+                label = f"{name} ({self.usernames[user_id]})"
+            else:
+                label = name
+            row = TaskListRow(label, user_id, list_id)
+            self.task_lists_list.append(row)
+            self.task_list_rows[list_id] = row
 
         self.set_reminder_task_list_dropdown()
 
         try:
-            row = self.task_list_rows[self.selected_user_id][self.selected_list_id]
+            row = self.task_list_rows[self.selected_list_id]
             row.activate()
             self.page_sub_label.set_label(row.label.get_label())
         except:
-            self.app.settings.connect('changed::selected-task-list', lambda *args: self.update_task_list())
-            self.task_list_rows['all']['all'].activate()
+            self.app.settings.connect('changed::selected-list', lambda *args: self.update_task_list())
+            self.task_list_rows['all'].activate()
             return
 
-        self.app.settings.connect('changed::selected-task-list', lambda *args: self.update_task_list())
+        self.app.settings.connect('changed::selected-list', lambda *args: self.update_task_list())
 
     def set_reminder_task_list_dropdown(self):
         self.string_list = Gtk.StringList()
         self.task_list_ids = []
 
-        for user_id in self.task_list_names.keys():
-            for list_id, name in self.task_list_names[user_id].items():
-                if name not in self.duplicated or user_id not in self.usernames.keys():
-                    self.string_list.append(f'{name}')
-                else:
-                    self.string_list.append(f"{name} ({self.usernames[user_id]})")
-                self.task_list_ids.append((list_id, user_id))
+        for list_id, value in self.synced_lists.items():
+            name = value['name']
+            user_id = value['user-id']
+            if name not in self.duplicated or user_id not in self.usernames.keys():
+                self.string_list.append(f'{name}')
+            else:
+                self.string_list.append(f"{name} ({self.usernames[user_id]})")
+            self.task_list_ids.append(list_id)
 
         if self.reminder_edit_win is not None:
             self.reminder_edit_win.set_task_list_dropdown()
@@ -842,8 +814,8 @@ class MainWindow(Adw.ApplicationWindow):
         repeat_until = self.get_kwarg(kwargs, 'repeat-until', 0)
         created_timestamp = self.get_kwarg(kwargs, 'created-timestamp', 0)
         updated_timestamp = self.get_kwarg(kwargs, 'updated-timestamp', 0)
+        completed_timestamp = self.get_kwarg(kwargs, 'completed-date', 0)
         task_list = self.get_kwarg(kwargs, 'list-id', 'local')
-        user_id = self.get_kwarg(kwargs, 'user-id', 'local')
 
         if reminder_id not in self.reminder_lookup_dict.keys():
             reminder = Reminder(
@@ -861,8 +833,8 @@ class MainWindow(Adw.ApplicationWindow):
                     'repeat-times': repeat_times,
                     'created-timestamp': created_timestamp,
                     'updated-timestamp': updated_timestamp,
-                    'list-id': task_list,
-                    'user-id': user_id
+                    'completed-date': completed_timestamp,
+                    'list-id': task_list
                 },
                 reminder_id,
                 completed
@@ -877,23 +849,40 @@ class MainWindow(Adw.ApplicationWindow):
         if list_id is None:
             retval = self.app.run_service_method(
                 'CreateList',
-                GLib.Variant('(sss)', (info.app_id, user_id, list_name))
+                GLib.Variant(
+                    '(sa{sv})', (
+                        info.app_id,
+                        {
+                            'name': GLib.Variant('s', list_name),
+                            'user-id': GLib.Variant('s', user_id)
+                        }
+                    )
+                )
             ).unpack()[0]
         else:
             self.app.run_service_method(
-                'RenameList',
-                GLib.Variant('(ssss)', (info.app_id, user_id, list_id, list_name))
+                'UpdateList',
+                GLib.Variant(
+                    '(sa{sv})', (
+                        info.app_id,
+                        {
+                            'id': GLib.Variant('s', list_id),
+                            'name': GLib.Variant('s', list_name),
+                            'user-id': GLib.Variant('s', user_id)
+                        }
+                    )
+                )
             )
         return retval
 
-    def delete_list(self, user_id, list_id):
+    def delete_list(self, list_id):
         self.app.run_service_method(
             'RemoveList',
-            GLib.Variant('(sss)', (info.app_id, user_id, list_id))
+            GLib.Variant('(ss)', (info.app_id, list_id))
         )
 
     def sign_out(self, user_id):
-        self.app.run_service_method('Logout', GLib.Variant('(s)', (user_id,)), False)
+        self.app.run_service_method('Logout', GLib.Variant('(s)', (user_id,)))
 
     def create_action(self, name, callback, variant = None, accels = None):
         action = Gio.SimpleAction.new(name, variant)
@@ -906,23 +895,21 @@ class MainWindow(Adw.ApplicationWindow):
         action = self.app.settings.create_action(name)
         self.add_action(action)
 
-    def task_list_filter(self, reminder, user_id = None, list_id = None):
-        user_id = reminder.options['user-id']
+    def task_list_filter(self, reminder, list_id = None):
         task_list = reminder.options['list-id']
-        selected_user_id = self.selected_user_id if user_id is None else user_id
         selected_list_id = self.selected_list_id if list_id is None else list_id
         if selected_list_id == 'all':
             return True
         else:
-            return user_id == selected_user_id and task_list == selected_list_id
+            return task_list == selected_list_id
 
     def no_filter(self, reminder):
         reminder.set_sensitive(True)
         reminder.set_no_strikethrough(True)
         return True
 
-    def all_filter(self, reminder, user_id = None, list_id = None, just_filter = False):
-        retval = self.task_list_filter(reminder, user_id, list_id)
+    def all_filter(self, reminder, list_id = None, just_filter = False):
+        retval = self.task_list_filter(reminder, list_id)
         if not just_filter:
             reminder.set_no_strikethrough(False)
             reminder.set_sensitive(retval)
@@ -931,10 +918,10 @@ class MainWindow(Adw.ApplicationWindow):
                 reminder.set_selectable(False)
         return retval
 
-    def upcoming_filter(self, reminder, user_id = None, list_id = None, just_filter = False):
+    def upcoming_filter(self, reminder, list_id = None, just_filter = False):
         now = floor(time.time())
         if (reminder.options['timestamp'] == 0 or reminder.options['timestamp'] > now) and not reminder.completed:
-            retval = self.task_list_filter(reminder, user_id, list_id)
+            retval = self.task_list_filter(reminder, list_id)
         else:
             retval = False
         if not just_filter:
@@ -944,11 +931,11 @@ class MainWindow(Adw.ApplicationWindow):
                 reminder.set_selectable(False)
         return retval
 
-    def past_filter(self, reminder, user_id = None, list_id = None, just_filter = False):
+    def past_filter(self, reminder, list_id = None, just_filter = False):
         now = ceil(time.time())
         if not reminder.completed and ((reminder.options['timestamp'] != 0 and reminder.options['timestamp'] < now) or \
         (reminder.options['due-date'] != 0 and datetime.datetime.fromtimestamp(reminder.options['due-date'], tz=datetime.timezone.utc).date() < datetime.date.today())):
-            retval = self.task_list_filter(reminder, user_id, list_id)
+            retval = self.task_list_filter(reminder, list_id)
         else:
             retval = False
         if not just_filter:
@@ -958,9 +945,9 @@ class MainWindow(Adw.ApplicationWindow):
                 reminder.set_selectable(False)
         return retval
 
-    def completed_filter(self, reminder, user_id = None, list_id = None, just_filter = False):
+    def completed_filter(self, reminder, list_id = None, just_filter = False):
         if reminder.completed:
-            retval = self.task_list_filter(reminder, user_id, list_id)
+            retval = self.task_list_filter(reminder, list_id)
             if not just_filter:
                 reminder.set_no_strikethrough(True)
         else:
@@ -1054,9 +1041,9 @@ class MainWindow(Adw.ApplicationWindow):
             self.sidebar_list.select_row(self.all_row)
         self.reminders_list.set_filter_func(self.all_filter)
         self.page_label.set_label(_('All Reminders'))
-        self.reminders_list.invalidate_sort()
         self.selected = self.all_row
         self.invalidate_filter()
+        self.reminders_list.invalidate_sort()
         if self.flap.get_folded():
             self.flap.set_reveal_flap(False)
 
@@ -1065,9 +1052,9 @@ class MainWindow(Adw.ApplicationWindow):
             self.sidebar_list.select_row(self.upcoming_row)
         self.reminders_list.set_filter_func(self.upcoming_filter)
         self.page_label.set_label(_('Upcoming Reminders'))
-        self.reminders_list.invalidate_sort()
         self.selected = self.upcoming_row
         self.invalidate_filter()
+        self.reminders_list.invalidate_sort()
         if self.flap.get_folded():
             self.flap.set_reveal_flap(False)
 
@@ -1076,9 +1063,9 @@ class MainWindow(Adw.ApplicationWindow):
             self.sidebar_list.select_row(self.past_row)
         self.reminders_list.set_filter_func(self.past_filter)
         self.page_label.set_label(_('Past Reminders'))
-        self.reminders_list.invalidate_sort()
         self.selected = self.past_row
         self.invalidate_filter()
+        self.reminders_list.invalidate_sort()
         if self.flap.get_folded():
             self.flap.set_reveal_flap(False)
 
@@ -1087,9 +1074,9 @@ class MainWindow(Adw.ApplicationWindow):
             self.sidebar_list.select_row(self.completed_row)
         self.reminders_list.set_filter_func(self.completed_filter)
         self.page_label.set_label(_('Completed Reminders'))
-        self.reminders_list.invalidate_sort()
         self.selected = self.completed_row
         self.invalidate_filter()
+        self.reminders_list.invalidate_sort()
         if self.flap.get_folded():
             self.flap.set_reveal_flap(False)
 
@@ -1150,16 +1137,23 @@ class MainWindow(Adw.ApplicationWindow):
 
     def selected_remove_reminders(self):
         try:
+            reminder_ids = []
             for reminder in self.reminders_list.get_selected_rows():
                 if reminder.get_visible():
-                    self.app.run_service_method(
-                        'RemoveReminder',
-                        GLib.Variant(
-                            '(ss)', (info.app_id, reminder.id)
-                        )
-                    )
-                    self.reminder_lookup_dict.pop(reminder.id)
-                    self.reminders_list.remove(reminder)
+                    reminder_ids.append(reminder.id)
+
+            results = self.app.run_service_method(
+                'RemoveReminderv',
+                GLib.Variant(
+                    '(sas)', (info.app_id, reminder_ids)
+                )
+            )
+
+            removed_reminder_ids = results.unpack()[0]
+            for reminder_id in removed_reminder_ids:
+                reminder = self.reminder_lookup_dict[reminder_id]
+                self.reminder_lookup_dict.pop(reminder_id)
+                self.reminders_list.remove(reminder)
         except Exception as error:
             logger.exception(error)
 
@@ -1168,49 +1162,66 @@ class MainWindow(Adw.ApplicationWindow):
 
     def selected_change_important(self, important):
         try:
+            variants = []
             for reminder in self.reminders_list.get_selected_rows():
                 if reminder.get_visible() and reminder.options['important'] != important:
-                    results = self.app.run_service_method(
-                        'UpdateReminder',
-                        GLib.Variant(
-                            '(sa{sv})',
-                            (
-                                info.app_id,
-                                {
-                                    'id': GLib.Variant('s', reminder.id),
-                                    'important': GLib.Variant('b', important)
-                                }
-                            )
-                        )
+                    variants.append(
+                        {
+                            'id': GLib.Variant('s', reminder.id),
+                            'important': GLib.Variant('b', important)
+                        }
                     )
-                    reminder.options['updated-timestamp'] = results.unpack()[0]
-                    reminder.options['important'] = important
-                    reminder.set_important()
+
+            results = self.app.run_service_method(
+                'UpdateReminderv',
+                GLib.Variant(
+                    '(saa{sv})',
+                    (
+                        info.app_id,
+                        variants
+                    )
+                )
+            )
+
+            updated_reminder_ids, timestamp = results.unpack()
+            for reminder_id in updated_reminder_ids:
+                reminder = self.reminder_lookup_dict[reminder_id]
+                reminder.options['updated-timestamp'] = timestamp
+                reminder.options['important'] = important
+                reminder.set_important()
         except Exception as error:
             logger.exception(error)
 
-        self.reminders_list.invalidate_sort()
         self.selected_changed()
         self.invalidate_filter()
+        self.reminders_list.invalidate_sort()
 
     def selected_change_completed(self, completed):
         try:
+            reminder_ids = []
             for reminder in self.reminders_list.get_selected_rows():
                 if reminder.get_visible() and reminder.completed != completed:
-                    results = self.app.run_service_method(
-                        'UpdateCompleted',
-                        GLib.Variant(
-                            '(ssb)', (info.app_id, reminder.id, completed)
-                        )
-                    )
-                    reminder.options['updated-timestamp'] = results.unpack()[0]
-                    reminder.set_completed(completed)
+                    reminder_ids.append(reminder.id)
+
+            results = self.app.run_service_method(
+                'UpdateCompletedv',
+                GLib.Variant(
+                    '(sasb)', (info.app_id, reminder_ids, completed)
+                )
+            )
+
+            updated_reminder_ids, timestamp, completed_date = results.unpack()
+            for reminder_id in updated_reminder_ids:
+                reminder = self.reminder_lookup_dict[reminder_id]
+                reminder.options['updated-timestamp'] = timestamp
+                reminder.options['completed-date'] = completed_date
+                reminder.set_completed(completed)
         except Exception as error:
             logger.exception(error)
 
-        self.reminders_list.invalidate_sort()
         self.selected_changed()
         self.invalidate_filter()
+        self.reminders_list.invalidate_sort()
 
     @Gtk.Template.Callback()
     def show_flap_button(self, flap = None, data = None):

@@ -17,6 +17,8 @@ import os
 import json
 import requests
 import logging
+import threading
+from queue import Queue
 
 from copy import deepcopy
 
@@ -25,25 +27,27 @@ QUEUE_FILE = f'{info.data_dir}/queue.json'
 
 logger = logging.getLogger(info.service_executable)
 
-class Queue():
+DEFAULT = {
+    'reminders': {
+        'create': [],
+        'update': {},
+        'delete': [],
+        'complete': []
+    },
+    'lists': {
+        'create': [],
+        'update': [],
+        'delete': []
+    }
+}
+
+class ReminderQueue():
     def __init__(self, reminders):
         self.get_queue()
         self.reminders = reminders
 
     def reset(self):
-        self.queue = {
-            'reminders': {
-                'create': [],
-                'update': {},
-                'delete': [],
-                'complete': []
-            },
-            'lists': {
-                'create': [],
-                'update': [],
-                'delete': []
-            }
-        }
+        self.queue = DEFAULT
 
     def get_queue(self):
         try:
@@ -112,16 +116,15 @@ class Queue():
             else:
                 raise error
 
-    def update_reminder(self, reminder_id, old_task_id, old_user_id, old_list_id, updating, retry = True):
+    def update_reminder(self, reminder_id, old_task_id, old_user_id, old_list_id, updating, completed, completed_timestamp, completed_date, retry = True):
         try:
-            if reminder_id not in self.queue['reminders']['create']:
-                if reminder_id not in self.queue['reminders']['update']:
-                    self.queue['reminders']['update'][reminder_id] = [old_task_id, old_user_id, old_list_id, updating]
+            if reminder_id not in self.queue['reminders']['create'] and reminder_id not in self.queue['reminders']['update']:
+                self.queue['reminders']['update'][reminder_id] = [old_task_id, old_user_id, old_list_id, updating, completed, completed_timestamp, completed_date]
                 self.write()
         except Exception as error:
             if retry:
                 self.reset()
-                self.update_reminder(reminder_id, old_task_id, old_user_id, old_list_id, updating, False)
+                self.update_reminder(reminder_id, old_task_id, old_user_id, old_list_id, updating, completed, completed_timestamp, completed_date, False)
             else:
                 raise error
 
@@ -129,6 +132,9 @@ class Queue():
         try:
             if reminder_id not in self.queue['reminders']['complete']:
                 self.queue['reminders']['complete'].append(reminder_id)
+                self.write()
+            else:
+                self.queue['reminders']['complete'].pop(reminder_id)
                 self.write()
         except Exception as error:
             if retry:
@@ -198,183 +204,290 @@ class Queue():
             else:
                 raise error
 
+    def do_create_list(self, list_id):
+        if list_id in self.reminders.lists:
+            user_id = self.reminders.lists[list_id]['user-id']
+            list_name = self.reminders.lists[list_id]['name']
+
+            new_uid = self.reminders._remote_create_list(user_id, list_name)
+
+            if new_uid is not None:
+                self.reminders.lists[list_id]['uid'] = new_uid
+
+    def do_update_list(self, list_id):
+        if list_id in self.reminders.lists:
+            uid = self.reminders.lists[list_id]['uid']
+            user_id = self.reminders.lists[list_id]['user-id']
+            list_name = self.reminders.lists[list_id]['name']
+            self.reminders._remote_rename_list(user_id, uid, list_name)
+
+    def do_remove_list(self, value):
+        uid = value[0]
+        user_id = value[1]
+
+        self.reminders._remote_delete_list(user_id, uid)
+
+    def do_create_reminder(self, reminder_id):
+        user_id = self.reminders.lists[self.reminders.reminders[reminder_id]['list-id']]['user-id']
+        if user_id == 'local':
+            location = 'local'
+        elif user_id in self.reminders.to_do.users.keys():
+            location = 'ms-to-do'
+        elif user_id in self.reminders.caldav.users.keys():
+            location = 'caldav'
+        else:
+            raise KeyError('Invalid user id')
+
+        new_task_id = self.reminders._to_remote_task(self.reminders.reminders[reminder_id], location, False)
+        if new_task_id is not None:
+            self.reminders.reminders[reminder_id]['uid'] = new_task_id
+
+    def do_update_reminder(self, reminder_id, args):
+        user_id = self.reminders.lists[self.reminders.reminders[reminder_id]['list-id']]['user-id']
+
+        if user_id == 'local':
+            location = 'local'
+        elif user_id in self.reminders.to_do.users.keys():
+            location = 'ms-to-do'
+        elif user_id in self.reminders.caldav.users.keys():
+            location = 'caldav'
+        else:
+            raise KeyError('Invalid user id')
+
+        old_task_id = args[0]
+        old_user_id = args[1]
+        old_list_id = args[2]
+        updating = args[3]
+        completed = args[4]
+        completed_timestamp = args[5]
+        completed_date = args[6]
+        new_task_id = self.reminders._to_remote_task(self.reminders.reminders[reminder_id], location, updating, old_user_id, old_list_id, old_task_id, completed, completed_timestamp)
+        if new_task_id is not None:
+            self.reminders.reminders[reminder_id]['uid'] = new_task_id
+
+    def do_complete_reminder(self, reminder_id):
+        user_id = self.reminders.lists[self.reminders.reminders[reminder_id]['list-id']]['user-id']
+
+        if user_id in self.reminders.to_do.users.keys():
+            self.reminders._ms_set_completed(reminder_id, self.reminders.reminders[reminder_id])
+        elif user_id in self.reminders.caldav.users.keys():
+            self.reminders._caldav_set_completed(reminder_id, self.reminders.reminders[reminder_id])
+        else:
+            raise KeyError('Invalid reminder id')
+
+    def do_remove_reminder(self, value):
+        task_id = value[0]
+        user_id = value[1]
+        task_list = value[2]
+
+        self.reminders._remote_remove_task(user_id, task_list, task_id)
+
     def load(self):
-        queue = deepcopy(self.queue)
-        list_ids = self.reminders.list_ids
-        reminders = self.reminders.reminders
-        lists = self.reminders.lists
+        old_queue = deepcopy(self.queue)
+        if old_queue == DEFAULT:
+            return
 
         try:
+            error = None
             try:
-                for list_id in queue['lists']['create']:
-                    try:
-                        if list_id in list_ids:
-                            user_id = list_ids[list_id]['user-id']
-                            if list_id in lists[user_id]:
-                                list_name = lists[user_id][list_id]
+                threads = []
+                queue = Queue()
+                for list_id in old_queue['lists']['create']:
+                    thread = QueueThread(queue, list_id, target = self.do_create_list, args = (list_id,))
+                    thread.start()
+                    threads.append(thread)
 
-                                new_uid = self.reminders._remote_create_list(user_id, list_name)
+                for thread in threads:
+                    thread.join()
 
-                                if new_uid is not None:
-                                    list_ids[list_id]['uid'] = new_uid
-
-                    except requests.ConnectionError as error:
-                        raise error
-                    except Exception as error:
-                        logger.exception(error)
-
-                    self.queue['lists']['create'].remove(list_id)
-            except requests.ConnectionError as error:
-                raise error
+                while not queue.empty():
+                    value = queue.get()
+                    if isinstance(value, Exception):
+                        error = value
+                    else:
+                        if value in self.queue['lists']['create']:
+                            self.queue['lists']['create'].remove(value)
             except:
                 self.queue['lists']['create'] = []
 
-            try:
-                for reminder_id in queue['reminders']['create']:
-                    try:
-                        if reminders[reminder_id]['user-id'] == 'local':
-                            location = 'local'
-                        elif reminders[reminder_id]['user-id'] in self.reminders.to_do.users.keys():
-                            location = 'ms-to-do'
-                        elif reminders[reminder_id]['user-id'] in self.reminders.caldav.users.keys():
-                            location = 'caldav'
-                        else:
-                            raise KeyError('Invalid user id')
-
-                        new_task_id = self.reminders._to_remote_task(reminders[reminder_id], location, False)
-                        if new_task_id is not None:
-                            reminders[reminder_id]['uid'] = new_task_id
-
-                    except requests.ConnectionError as error:
-                        raise error
-                    except Exception as error:
-                        logger.exception(error)
-
-                    self.queue['reminders']['create'].remove(reminder_id)
-            except requests.ConnectionError as error:
+            if error is not None:
                 raise error
+
+            try:
+                threads = []
+                queue = Queue()
+                for reminder_id in old_queue['reminders']['create']:
+                    thread = QueueThread(queue, reminder_id, target = self.do_create_reminder, args = (reminder_id,))
+                    thread.start()
+                    threads.append(thread)
+
+                for thread in threads:
+                    thread.join()
+
+                while not queue.empty():
+                    value = queue.get()
+                    if isinstance(value, Exception):
+                        error = value
+                    else:
+                        if value in self.queue['reminders']['create']:
+                            self.queue['reminders']['create'].remove(value)
             except:
                 self.queue['reminders']['create'] = []
 
-            try:
-                for reminder_id in queue['reminders']['complete']:
-                    try:
-                        if reminders[reminder_id]['user-id'] in self.reminders.to_do.users.keys():
-                            self.reminders._ms_set_completed(reminder_id, reminders[reminder_id])
-                        elif reminders[reminder_id]['user-id'] in self.reminders.caldav.users.keys():
-                            self.reminders._caldav_set_completed(reminder_id, reminders[reminder_id])
-                        else:
-                            raise KeyError('Invalid reminder id')
-
-                    except requests.ConnectionError as error:
-                        raise error
-                    except Exception as error:
-                        logger.exception(error)
-
-                    self.queue['reminders']['complete'].remove(reminder_id)
-            except requests.ConnectionError as error:
+            if error is not None:
                 raise error
-            except:
-                self.queue['reminders']['complete'] = []
 
             try:
-                for reminder_id, args in queue['reminders']['update'].items():
-                    try:
-                        if reminders[reminder_id]['user-id'] == 'local':
-                            location = 'local'
-                        elif reminders[reminder_id]['user-id'] in self.reminders.to_do.users.keys():
-                            location = 'ms-to-do'
-                        elif reminders[reminder_id]['user-id'] in self.reminders.caldav.users.keys():
-                            location = 'caldav'
-                        else:
-                            raise KeyError('Invalid user id')
+                threads = []
+                queue = Queue()
+                for reminder_id, value in old_queue['reminders']['update'].items():
+                    thread = QueueThread(queue, reminder_id, target = self.do_update_reminder, args = (reminder_id, value))
+                    thread.start()
+                    threads.append(thread)
 
-                        old_task_id = args[0]
-                        old_user_id = args[1]
-                        old_list_id = args[2]
-                        updating = args[3]
-                        new_task_id = self.reminders._to_remote_task(reminders[reminder_id], location, updating, old_user_id, old_list_id, old_task_id)
-                        if new_task_id is not None:
-                            reminders[reminder_id]['uid'] = new_task_id
+                for thread in threads:
+                    thread.join()
 
-                    except requests.ConnectionError as error:
-                        raise error
-                    except Exception as error:
-                        logger.exception(error)
-
-                    self.queue['reminders']['update'].pop(reminder_id)
-            except requests.ConnectionError as error:
-                raise error
+                while not queue.empty():
+                    value = queue.get()
+                    if isinstance(value, Exception):
+                        error = value
+                    else:
+                        if value in self.queue['reminders']['update']:
+                            self.queue['reminders']['update'].pop(value)
             except:
                 self.queue['reminders']['update'] = {}
 
-            try:
-                for list_id in queue['lists']['update']:
-                    try:
-                        if list_id in list_ids:
-                            uid = list_ids[list_id]['uid']
-                            user_id = list_ids[list_id]['user-id']
-                            if list_id in lists[user_id]:
-                                list_name = lists[user_id][list_id]
-                                self.reminders._remote_rename_list(user_id, uid, list_name)
-
-                    except requests.ConnectionError as error:
-                        raise error
-                    except Exception as error:
-                        logger.exception(error)
-
-                    self.queue['lists']['update'].remove(list_id)
-            except requests.ConnectionError as error:
+            if error is not None:
                 raise error
+
+            try:
+                threads = []
+                queue = Queue()
+                for reminder_id in old_queue['reminders']['complete']:
+                    thread = QueueThread(queue, reminder_id, target = self.do_complete_reminder, args = (reminder_id,))
+                    thread.start()
+                    threads.append(thread)
+
+                for thread in threads:
+                    thread.join()
+
+                while not queue.empty():
+                    value = queue.get()
+                    if isinstance(value, Exception):
+                        error = value
+                    else:
+                        if value in self.queue['reminders']['complete']:
+                            self.queue['reminders']['complete'].remove(value)
+            except:
+                self.queue['reminders']['complete'] = []
+
+            if error is not None:
+                raise error
+
+            try:
+                threads = []
+                queue = Queue()
+                for list_id in old_queue['lists']['update']:
+                    thread = QueueThread(queue, list_id, target = self.do_update_list, args = (list_id,))
+                    thread.start()
+                    threads.append(thread)
+
+                for thread in threads:
+                    thread.join()
+
+                while not queue.empty():
+                    value = queue.get()
+                    if isinstance(value, Exception):
+                        error = value
+                    else:
+                        if value in self.queue['lists']['update']:
+                            self.queue['lists']['update'].remove(value)
             except:
                 self.queue['lists']['update'] = []
 
-            try:
-                for value in queue['reminders']['delete']:
-                    try:
-                        task_id = value[0]
-                        user_id = value[1]
-                        task_list = value[2]
-
-                        self.reminders._remote_remove_task(user_id, task_list, task_id)
-
-                    except requests.ConnectionError as error:
-                        raise error
-                    except Exception as error:
-                        logger.exception(error)
-
-                    self.queue['reminders']['delete'].remove(value)
-            except requests.ConnectionError as error:
+            if error is not None:
                 raise error
+
+            try:
+                threads = []
+                queue = Queue()
+                for value in old_queue['reminders']['delete']:
+                    thread = QueueThread(queue, value, target = self.do_remove_reminder, args = (value,))
+                    thread.start()
+                    threads.append(thread)
+
+                for thread in threads:
+                    thread.join()
+
+                while not queue.empty():
+                    value = queue.get()
+                    if isinstance(value, Exception):
+                        error = value
+                    else:
+                        if value in self.queue['reminders']['delete']:
+                            self.queue['reminders']['delete'].remove(value)
             except:
                 self.queue['reminders']['delete'] = []
 
-            try:
-                for value in queue['lists']['delete']:
-                    try:
-                        uid = value[0]
-                        user_id = value[1]
-
-                        self.reminders._remote_delete_list(user_id, uid)
-
-                    except requests.ConnectionError as error:
-                        raise error
-                    except Exception as error:
-                        logger.exception(error)
-
-                    self.queue['lists']['delete'].remove(value)
-            except requests.ConnectionError as error:
+            if error is not None:
                 raise error
+
+            try:
+                threads = []
+                queue = Queue()
+                for value in old_queue['lists']['delete']:
+                    thread = QueueThread(queue, value, target = self.do_remove_list, args = (value,))
+                    thread.start()
+                    threads.append(thread)
+
+                for thread in threads:
+                    thread.join()
+
+                while not queue.empty():
+                    value = queue.get()
+                    if isinstance(value, Exception):
+                        error = value
+                    else:
+                        if value in self.queue['lists']['delete']:
+                            self.queue['lists']['delete'].remove(value)
             except:
                 self.queue['lists']['delete'] = []
-        except requests.ConnectionError as error:
-            if queue != self.queue:
+
+            if error is not None:
+                raise error
+
+        except Exception as error:
+            if old_queue != self.queue:
                 self.write()
             self.reminders._save_reminders()
-            self.reminders._save_list_ids()
+            self.reminders._save_lists()
             raise error
 
-        if queue != self.queue:
+        if old_queue != self.queue:
             self.write()
         self.reminders._save_reminders()
-        self.reminders._save_list_ids()
+        self.reminders._save_lists()
+
+class QueueThread(threading.Thread):
+    def __init__(self, queue, value, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.queue = queue
+        self.val = value
+
+    def run(self):
+        try:
+            if self._target is not None:
+                self._target(*self._args, **self._kwargs)
+                self.queue.put(self.val)
+        except (requests.ConnectionError, requests.Timeout) as error:
+            self.queue.put(error)
+        except requests.HTTPError as error:
+            if error.response.status_code == 503:
+                self.queue.put(error)
+            else:
+                logger.exception(error)
+                self.queue.put(self.val)
+        except Exception as error:
+            logger.exception(error)
+            self.queue.put(self.val)

@@ -62,14 +62,24 @@
     <key name="is-maximized" type="b">
       <default>false</default>
     </key>
+    <key name="synced-lists" type="as">
+      <default>[]</default>
+      <summary>Remote lists that should be synced</summary>
+      <description>Add a user id if you want to sync all of the lists on a user, or any list id on the user</description>
+    </key>
+    <key name="selected-list" type="s">
+      <default>'all'</default>
+      <summary>Selected list</summary>
+      <description>list ids can be 'all', 'local', or an actual id</description>
+    </key>
     <key name="synced-task-lists" type="a{sas}">
       <default>[]</default>
-      <summary>Task lists that should be synced</summary>
+      <summary>[DEPRECATED] Task lists that should be synced</summary>
       <description>{user_id: [task_list_ids]}, task_list_ids can be 'all' or an array of ids</description>
     </key>
     <key name="selected-task-list" type="(ss)">
       <default>('all', 'all')</default>
-      <summary>Task lists that should be visible</summary>
+      <summary>[DEPRECATED] Task lists that should be visible</summary>
       <description>(user_id, task_id) ids can be 'all', 'local', or an actual id</description>
     </key>
   </schema>

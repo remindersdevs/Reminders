@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="error_dialog" parent="AdwWindow">
+  <template class="ErrorDialog" parent="AdwWindow">
     <property name="default-height">300</property>
     <property name="default-width">500</property>
     <property name="content">

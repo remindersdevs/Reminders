@@ -38,7 +38,7 @@ What days to repeat on for weekly repeating reminders, can be zero to just use t
 Type: a{sv}
 | Key | VariantType | Description | Default |
 | --- | --- | --- | --- |
-| 'id' | s | This is the id of the reminder. | This cannot be left blank, no default. |
+| 'id' | s | This is the id of the reminder. | This usually cannot be left blank, no default. |
 | 'title' | s | This is the title of the reminder. | '' |
 | 'description' | s | This is a short description of the reminder. | '' |
 | 'due-date' | u | This is a Unix timestamp for the day that the reminder is due. This should be at 00:00 of the desired day in UTC, and can be 0 if you don't want to set a due date. | 0 |
@@ -52,8 +52,16 @@ Type: a{sv}
 | 'repeat-until' | u | This is a Unix timestamp that represents the last day that the reminder should be repeated on. This should be at 00:00 of the desired day in UTC. Must be 0 for Microsoft Tasks | 0 |
 | 'created-timestamp' | u | This is a Unix timestamp that represents the time the reminder was created, this is set automatically and cannot be changed. | 0 |
 | 'updated-timestamp' | u | This is a Unix timestamp that represents the last time the reminder was updated, this is set automatically and cannot be changed. | 0 |
+| 'completed-date' | u | This is a Unix timestamp that represents the day the reminder was completed, at 00:00 in UTC. 0 if not complete. This is set automatically and cannot be changed. | 0 |
 | 'list-id' | s | This is the id of the list that the reminder is in. | 'local' |
-| 'user-id' | s | This is the id of the user that owns the reminder. | 'local' |
+
+## List Object
+Type: a{sv}
+| Key | VariantType | Description | Default |
+| --- | --- | --- | --- |
+| 'id' | s | This is the id of the reminder. | This usually cannot be left blank, no default. |
+| 'name' | s | This is the name of the list. | '' |
+| 'user-id' | s | This is the id of the user who owns the list. | '' |
 
 ## Methods
 
@@ -66,11 +74,19 @@ Get usernames of all users, including the local user
         - Each of these dicts represents the users within that service, and within that dict each key is a user id and each value is the username
 
 ### GetLists
-Get all lists. This will also return lists that arent being synced.
-- Returns (a{sa{ss}})
+Get all lists. This will also return lists that aren't being synced.
+- Returns (aas{sv})
     - lists
-        - Type: a{sa{ss}}
-        - Each key is a user id and each value is another dictionary where each key is a list id and each value is the name of the list
+        - Type: aas{sv}
+        - An array of [lists](#list-object)
+
+### GetListsDict
+Get all lists as a dictionary. This will also return lists that aren't being synced.
+- Returns (a{sas{sv}})
+    - lists
+        - Type: a{sas{sv}}
+        - An dictionary where each key is a list id and each value is a [list](#list-object)
+        - The 'id' key is not included in the list object
 
 ### GetReminders
 Returns all reminders
@@ -78,6 +94,14 @@ Returns all reminders
     - reminders
         - Type: aa{sv}
         - An array of [reminders](#reminder-object)
+
+### GetRemindersDict
+Returns all reminders as a dictionary
+- Returns (a{sa{sv}})
+    - reminders
+        - Type: a{sa{sv}}
+        - An dictionary where each key is a reminder id and each value is a [reminder](#reminder-object)
+        - The 'id' key is not included in the reminder object
 
 ### GetRemindersInList
 Returns all reminders in specified list
@@ -92,17 +116,17 @@ Returns all reminders in specified list
         - An array of [reminders](#reminder-object)
 
 ### GetSyncedLists
-- Returns (a{sas})
+- Returns (as)
     - list-ids
-        - Type: a{sas}
-        - Each key is a user id and each value is an array of the list ids that are synced on that account
+        - Type: as
+        - An array of remote list ids that are being synced
 
 ### SetSyncedLists
 Set the task lists that should be synced, this also refreshes the reminders
-- Parameters (a{sas})
+- Parameters (as)
     - list-ids
-        - Type: a{sas}
-        - Each key should be a user id and each value should be an array of the list ids that are synced on that account
+        - Type: as
+        - An array of remote list ids that are being synced
 
 ### GetWeekStart
 - Returns (b)
@@ -121,41 +145,29 @@ Create a list
 - Parameters (sss)
     - [app-id](#app-id-parameter)
         - Type: s
-    - user-id
-        - Type: s
-        - The user the list should be created for, can be 'local' or a Microsoft user id
-    - list-name
-        - Type: s
-        - The name of the list
+    - [list](#list-object)
+        - Type: a{sv}
+        - Note that the 'id' key will be ignored here
 
 - Returns (s)
     - list-id
         - Type: s
         - Id that was generated to represent the list, keep track of these
 
-### RenameList
-Rename a list
+### UpdateList
+Rename/Update a list
 - Parameters (ssss)
     - [app-id](#app-id-parameter)
         - Type: s
-    - user-id
-        - Type: s
-        - The user where the list is located, can be 'local' or a Microsoft user id
-    - list-id
-        - Type: s
-        - The id of the list you are renaming
-    - list-name
-        - Type: s
-        - The new name of the list
+    - [list](#list-object)
+        - Type: a{sv}
+        - Note that the 'user-id' key will be ignored here, you currently can't move lists between users
 
 ### RemoveList
 Remove a list
 - Parameters (sss)
     - [app-id](#app-id-parameter)
         - Type: s
-    - user-id
-        - Type: s
-        - The user where the list is located, can be 'local' or a Microsoft user id
     - list-id
         - Type: s
         - The id of the list you are deleting, list ids that are equal to the user id are default lists and cannot be removed
@@ -167,7 +179,7 @@ Add a new reminder
         - Type: s
     - [reminder](#reminder-object)
         - Type: a{sv}
-        - Note that the 'completed' key will be ignored here
+        - Note that the 'completed' and 'id' key will be ignored here
         - You can leave any of these values blank, in that case the default value will be used
 
 - Returns (su)
@@ -204,6 +216,9 @@ Update the completed status of a reminder
     - completed
         - Type: b
         - Whether or not the reminder should be completed
+    - completed-date
+        - Type: u
+        - The Unix timestamp of the day the reminder was completed
 
 - Returns (u)
     - updated-timestamp
@@ -218,6 +233,62 @@ Remove a reminder
     - reminder-id
         - Type: s
         - Id of the reminder you want to remove
+
+### UpdateReminderv
+Update an existing reminder
+- Parameters (saa{sv})
+    - [app-id](#app-id-parameter)
+        - Type: s
+    - reminders
+        - Type: aa{sv}
+        - An array of [reminders](#reminder-object) that were updated
+        - Note that the 'completed' key will be ignored here
+        - You can leave any of these values blank, in that case the previous value will be used
+
+- Returns (u)
+    - updated-reminder-ids
+        - Type: as
+        - Ids of reminders that were actually updated (in case there were errors)
+    - updated-timestamp
+        - Type: u
+        - The Unix timestamp of when the reminder was updated
+
+### UpdateCompletedv
+Update the completed status of a reminder
+- Parameters (sasb)
+    - [app-id](#app-id-parameter)
+        - Type: s
+    - reminder-ids
+        - Type: as
+        - Ids of the reminders you want to update
+    - completed
+        - Type: b
+        - Whether or not the reminder should be completed
+
+- Returns (asu)
+    - updated-reminder-ids
+        - Type: as
+        - Ids of reminders that were actually updated (in case there were errors)
+    - updated-timestamp
+        - Type: u
+        - The Unix timestamp of when the reminder was updated
+    - completed-date
+        - Type: u
+        - The Unix timestamp of the day the reminder was completed
+
+### RemoveReminderv
+Remove multiple reminders
+- Parameters (sas)
+    - [app-id](#app-id-parameter)
+        - Type: s
+    - reminder-ids
+        - Type: as
+        - Ids of the reminders you want to remove
+
+- Returns (as)
+    - removed-reminder-ids
+        - Type: as
+        - Ids of reminders that were actually removed (in case there were errors)
 
 ### MSGetLoginURL
 Gets a url so the user can login to a microsoft account, once logged out the reminders will be refreshed
@@ -258,8 +329,29 @@ Log out of a remote account, once logged out the reminders will be refreshed
     - user-id
         - Type: s
 
+### ExportLists
+Export lists to ical/ics file
+- Parameters (as)
+    - list-ids
+        - Type: as
+        - An array of list ids that represent the lists to export
+
+- Returns (s)
+    - folder
+        - Type: s
+
+### ImportLists
+Import lists from an ical/ics file
+- Parameters (ass)
+    - ical-files
+        - Type: as
+        - An array of files ids to import
+    - list-id
+        - Type: s
+        - The list to import the files to, or 'auto' if you want to create new lists
+
 ### Refresh
-Read reminders file again and also check for remote updates. Changes will be emitted with their respective signals, mainly through the [refreshed](#refreshed) signal.
+Read reminders file again and also check for remote updates. Changes will be emitted with their respective signals
 
 ### RefreshUser
 Same as [refresh](#refresh) but only for one user
@@ -294,29 +386,17 @@ Emitted when the dictionary of synced lists is changed
 
 ### ListUpdated
 Emitted when a list is created or updated
-- Parameters (ssss)
-    - app-id
+- Parameters (a{sv})
+    - [app-id](#app-id-parameter)
         - Type: s
-        - The id of the app that initiated the change
-    - user-id
-        - Type: s
-        - The user id of the list that was updated
-    - list-id
-        - Type: s
-        - The id of the list that was updated
-    - list-name
-        - Type: s
-        - The name of the list that was updated
+    - [list](#list-object)
+        - Type: a{sv}
 
 ### ListRemoved
 Emitted when a list is removed
 - Parameters (sss)
-    - app-id
+    - [app-id](#app-id-parameter)
         - Type: s
-        - The id of the app that initiated the change
-    - user-id
-        - Type: s
-        - The user id of the list that was removed
     - list-id
         - Type: s
         - The id of the list that was removed
@@ -331,19 +411,17 @@ Emitted when a reminder is shown
 ### ReminderUpdated
 Emitted when a Reminder is created or updated
 - Parameters (sa{sv})
-    - app-id
+    - [app-id](#app-id-parameter)
         - Type: s
-        - The id of the app that initiated the change
     - [reminder](#reminder-object)
         - Type: a{sv}
         - Note that the 'completed' key will not be included here
 
 ### CompletedUpdated
 Emitted when a reminder's completed status is changed
-- Parameters (ssbu)
-    - app-id
+- Parameters (ssbuu)
+    - [app-id](#app-id-parameter)
         - Type: s
-        - The id of the app that initiated the change
     - reminder-id
         - Type: s
         - The id of the reminder that was updated
@@ -352,24 +430,50 @@ Emitted when a reminder's completed status is changed
         - Whether or not the reminder was set as completed
     - updated-timestamp
         - Type: u
-        - The Unix timestamp of when the reminder was updated
+        - The Unix timestamp of when the reminder was last updated
+    - completed-date
+        - Type: u
+        - The Unix timestamp of the day the reminder was completed
 
 ### ReminderRemoved
 Emitted when a reminder is removed
 - Parameters (ss)
-    - app-id
+    - [app-id](#app-id-parameter)
         - Type: s
-        - The id of the app that initiated the change
     - reminder-id
         - Type: s
         - The id of the reminder that was deleted
 
-### Refreshed
-- Parameters (aa{sv}as)
-    - updated-reminders
+### RemindersUpdated
+- Parameters (saa{sv})
+    - [app-id](#app-id-parameter)
+        - Type: s
+    - reminders
         - Type: aa{sv}
         - An array of [reminders](#reminder-object) that were updated
-        - Note that the 'completed' key will not be included here
+
+### RemindersCompleted
+Emitted when multiple reminders' completed status changes
+- Parameters (saa{sv})
+    - [app-id](#app-id-parameter)
+        - Type: s
+    - reminder-ids
+        - Type: as
+        - The ids of the reminders that were completed
+    - completed
+        - Type: b
+        - Whether or not the reminders were set as completed
+    - updated-timestamp
+        - Type: u
+        - The Unix timestamp of when the reminders were updated
+    - completed-date
+        - Type: u
+        - The Unix timestamp of the day the reminders were completed
+
+### RemindersRemoved
+- Parameters (sas)
+    - [app-id](#app-id-parameter)
+        - Type: s
     - removed-reminders
         - Type: as
         - An array of reminder ids that were removed
@@ -397,7 +501,7 @@ Emitted when an account is signed out
         - Type: s
 
 ## Error
-Emitted when making a remote change failed
+Emitted when making certain changes fails (otherwise the error will be returned through dbus)
 - Parameters (s)
     - stack-trace
         - Type: s

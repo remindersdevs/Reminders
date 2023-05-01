@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="shortcuts_window" parent="GtkShortcutsWindow">
+  <template class="ShortcutsWindow" parent="GtkShortcutsWindow">
     <property name="modal">true</property>
     <child>
       <object class="GtkShortcutsSection">

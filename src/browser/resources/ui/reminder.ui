@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="reminder" parent="AdwExpanderRow">
+  <template class="Reminder" parent="AdwExpanderRow">
     <signal name="notify::expanded" handler="expanded_cb" swapped="no"/>
     <style>
       <class name="reminder"/>

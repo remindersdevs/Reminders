@@ -39,23 +39,19 @@ class iCalendar():
         folder = DOWNLOADS_DIR + '/' + f'Reminders {datetime.datetime.now().strftime("%c")}'
 
         calendars = {}
-        for user_id, list_id in lists:
+        for list_id in lists:
             list_names = self.reminders.lists
-            if user_id in list_names and list_id in list_names[user_id]:
-                list_name = list_names[user_id][list_id]
+            if list_id in list_names:
+                list_name = list_names[list_id]['name']
                 calendar = icalendar.cal.Calendar()
                 calendar.add('X-WR-CALNAME', list_name)
                 calendar.add('VERSION', 2.0)
 
-                if user_id not in calendars.keys():
-                    calendars[user_id] = {}
-
-                calendars[user_id][list_id] = calendar
+                calendars[list_id] = calendar
 
         for reminder in self.reminders.reminders.values():
-            user_id = user_id
             list_id = reminder['list-id']
-            if (user_id, list_id) not in lists:
+            if list_id not in lists:
                 continue
 
             task = self.reminders.caldav.reminder_to_task(reminder, exporting = True)
@@ -67,35 +63,36 @@ class iCalendar():
                 if value is not None:
                     todo.add(key, value)
             try:
-                calendars[user_id][list_id].add_component(todo)
+                calendars[list_id].add_component(todo)
             except:
                 pass
 
         mkdir(folder)
 
-        for user_id in calendars:
-            for list_id, calendar in calendars[user_id].items():
-                base_filename = folder + '/' + calendar['X-WR-CALNAME']
-                filename = f'{base_filename}.ical'
-                count = 1
-                while path.exists(filename):
-                    filename = f'{base_filename} ({count}).ical'
-                    count += 1
+        for list_id, calendar in calendars.items():
+            base_filename = folder + '/' + calendar['X-WR-CALNAME']
+            filename = f'{base_filename}.ical'
+            count = 1
+            while path.exists(filename):
+                filename = f'{base_filename} ({count}).ical'
+                count += 1
 
-                with open(filename, 'w') as f:
-                    f.write(calendar.to_ical().decode('UTF-8'))
+            with open(filename, 'w') as f:
+                f.write(calendar.to_ical().decode('UTF-8'))
 
         return folder
 
-    def from_ical(self, files, user_id = None, list_id = None):
+    def from_ical(self, files, list_id = None):
         for file in files:
             if path.isfile(file):
                 with open(file, 'r') as f:
                     calendar = icalendar.cal.Calendar.from_ical(f.read())
                     list_name = calendar['X-WR-CALNAME'] if 'X-WR-CALNAME' in calendar else path.splitext(path.basename(file))[0]
-                    if user_id is None and list_id is None:
+                    if list_id is None:
                         user_id = 'local'
-                        list_id = self.reminders.create_list(info.service_id, user_id, list_name, variant = False)
+                        list_id = self.reminders.create_list(info.service_id, variant = False, **{'user-id': user_id, 'name': list_name})
+                    else:
+                        user_id = self.reminders.lists[list_id]['user-id']
 
                     if user_id == 'local':
                         location = 'local'
@@ -104,11 +101,6 @@ class iCalendar():
                     elif user_id in self.reminders.caldav.users.keys():
                         location = 'caldav'
                     else:
-                        raise KeyError('Invalid user id')
-
-                    try:
-                        list_name = self.reminders.lists[user_id][list_id]
-                    except KeyError:
                         raise KeyError('Invalid list id')
 
                     new_ids = []
@@ -124,17 +116,17 @@ class iCalendar():
                                     if isinstance(due, datetime.datetime):
                                         timestamp = due.timestamp()
                                     elif isinstance(due, datetime.date):
-                                        due_date = datetime.datetime.combine(due, datetime.time()).astimezone(tz=datetime.timezone.utc).timestamp()
+                                        due_date = datetime.datetime.combine(due, datetime.time(), tzinfo=datetime.timezone.utc).timestamp()
                                 except:
                                     pass
 
                             is_future = timestamp > floor(time.time())
                             reminder['shown'] = timestamp != 0 and not is_future
 
-                            reminder = self.reminders.caldav.task_to_reminder(todo, list_id, user_id, reminder, timestamp, due_date)
-                            new_id = self.reminders._do_generate_id(list(self.reminders.ms_reminders.keys()) + list(self.reminders.caldav_reminders.keys()) + list(self.reminders.local_reminders.keys()))
+                            reminder = self.reminders.caldav.task_to_reminder(todo, list_id, reminder, timestamp, due_date)
+                            new_id = self.reminders._do_generate_id()
                             new_ids.append(new_id)
-                            self.reminders[new_id] = reminder
+                            self.reminders.reminders[new_id] = reminder
                             self.reminders._set_countdown(new_id)
                             self.reminders._do_remote_create_reminder(new_id, location)
                         except Exception as error:
@@ -143,5 +135,5 @@ class iCalendar():
 
                     if len(new_ids) > 0:
                         new_reminders = self.reminders.get_reminders(ids=new_ids, return_variant=False)
-                        self.reminders.do_emit('Refreshed', GLib.Variant('(aa{sv}as)', (new_reminders, [])))
+                        self.reminders.do_emit('RemindersUpdated', GLib.Variant('(saa{sv})', (info.service_id, new_reminders)))
                     self.reminders._save_reminders()

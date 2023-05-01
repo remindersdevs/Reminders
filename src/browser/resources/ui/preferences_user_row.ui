@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="preferences_user_row" parent="AdwExpanderRow">
+  <template class="PreferencesUserRow" parent="AdwExpanderRow">
     <child>
       <object class="AdwEntryRow" id="username_row">
         <property name="visible">false</property>

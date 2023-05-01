@@ -21,7 +21,7 @@ import traceback
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 
-from gi.repository import Gtk, Adw, GLib, Gio
+from gi.repository import Gtk, Adw, GLib, Gio, Gdk
 from gettext import gettext as _
 from pkg_resources import parse_version
 
@@ -46,6 +46,7 @@ class Remembrance(Adw.Application):
         self.preferences = None
         self.win = None
         self.error_dialog = None
+        self.spinning_cursor = Gdk.Cursor.new_from_name('wait')
         self.page = 'all'
         self.add_main_option(
             'version', ord('v'),
@@ -168,10 +169,12 @@ class Remembrance(Adw.Application):
         self.settings.bind('is-maximized', self.win, 'maximized', Gio.SettingsBindFlags.DEFAULT)
         self.service.connect('g-signal::Error', self.error_cb)
         self.service.connect('g-signal::CompletedUpdated', self.reminder_completed_cb)
+        self.service.connect('g-signal::RemindersCompleted', self.reminders_completed_cb)
         self.service.connect('g-signal::ReminderRemoved', self.reminder_deleted_cb)
         self.service.connect('g-signal::ReminderUpdated', self.reminder_updated_cb)
         self.service.connect('g-signal::ReminderShown', self.repeat_updated_cb)
-        self.service.connect('g-signal::Refreshed', self.refreshed_cb)
+        self.service.connect('g-signal::RemindersUpdated', self.reminders_updated_cb)
+        self.service.connect('g-signal::RemindersRemoved', self.reminders_removed_cb)
         self.service.connect('g-signal::ListUpdated', self.list_updated_cb)
         self.service.connect('g-signal::ListRemoved', self.list_removed_cb)
         self.create_action('quit', self.quit_app, accels=['<Ctrl>q'])
@@ -194,26 +197,32 @@ class Remembrance(Adw.Application):
 
     def notification_clicked_cb(self, action, variant, data = None):
         self.page = 'past'
-        self.settings.set_value('selected-task-list', GLib.Variant('(ss)', ('all', 'all')))
+        self.settings.set_string('selected-list', 'all')
         self.do_activate()
 
     def notification_completed_cb(self, action, variant, data = None):
         reminder_id = variant.get_string()
-        self.run_service_method(
+        results = self.run_service_method(
             'UpdateCompleted',
             GLib.Variant('(ssb)', (info.app_id, reminder_id, True))
         )
+        timestamp, completed_date = results.unpack()
         try:
             reminder = self.win.reminder_lookup_dict[reminder_id]
+            reminder.options['updated-timestamp'] = timestamp
+            reminder.options['completed-date'] = completed_date
             reminder.set_completed(True)
-            self.win.reminders_list.invalidate_sort()
             self.win.selected_changed()
             self.win.invalidate_filter()
+            self.win.reminders_list.invalidate_sort()
         except AttributeError:
             pass
 
     def list_updated_cb(self, proxy, sender_name, signal_name, parameters):
-        app_id, user_id, list_id, list_name = parameters.unpack()
+        app_id, task_list = parameters.unpack()
+        list_id = task_list['id']
+        list_name = task_list['name']
+        user_id = task_list['user-id']
         self.win.list_updated(user_id, list_id, list_name)
         if self.preferences is not None:
             self.preferences.list_updated(user_id, list_id, list_name)
@@ -221,45 +230,66 @@ class Remembrance(Adw.Application):
             self.win.edit_lists_window.list_updated(user_id, list_id, list_name)
 
     def list_removed_cb(self, proxy, sender_name, signal_name, parameters):
-        app_id, user_id, list_id = parameters.unpack()
-        self.win.list_removed(user_id, list_id)
+        app_id, list_id = parameters.unpack()
+        user_id = self.win.all_lists[list_id]['user-id']
+        self.win.list_removed(list_id)
         if self.preferences is not None:
             self.preferences.list_removed(user_id, list_id)
         if app_id != info.app_id and self.win.edit_lists_window is not None:
             self.win.edit_lists_window.list_removed(user_id, list_id)
 
     def reminder_completed_cb(self, proxy, sender_name, signal_name, parameters):
-        app_id, reminder_id, completed, updated_timestamp = parameters.unpack()
+        app_id, reminder_id, completed, updated_timestamp, completed_date = parameters.unpack()
         if app_id != info.app_id:
             reminder = self.win.reminder_lookup_dict[reminder_id]
             reminder.options['updated-timestamp'] = updated_timestamp
+            reminder.options['completed-date'] = completed_date
             reminder.set_completed(completed)
-            self.win.reminders_list.invalidate_sort()
             self.win.selected_changed()
             self.win.invalidate_filter()
+            self.win.reminders_list.invalidate_sort()
+
+    def reminders_completed_cb(self, proxy, sender_name, signal_name, parameters):
+        app_id, reminder_ids, completed, updated_timestamp, completed_date = parameters.unpack()
+        if app_id != info.app_id:
+            for reminder_id in reminder_ids:
+                reminder = self.win.reminder_lookup_dict[reminder_id]
+                reminder.options['updated-timestamp'] = updated_timestamp
+                reminder.options['completed-date'] = completed_date
+                reminder.set_completed(completed)
+            self.win.selected_changed()
+            self.win.invalidate_filter()
+            self.win.reminders_list.invalidate_sort()
 
     def repeat_updated_cb(self, proxy, sender_name, signal_name, parameters):
         reminder_id = parameters.unpack()
         reminder = self.win.reminder_lookup_dict[reminder_id]
         reminder.refresh_time()
 
-    def refreshed_cb(self, proxy, sender_name, signal_name, parameters):
-        new_reminders, deleted_reminders = parameters.unpack()
-        for new_reminder in new_reminders:
-            reminder_id = new_reminder['id']
-            if reminder_id in self.win.reminder_lookup_dict:
-                reminder = self.win.reminder_lookup_dict[reminder_id]
-                reminder.update(new_reminder)
-                if new_reminder['completed'] != reminder.completed:
-                    reminder.set_completed(new_reminder['completed'])
-            else:
-                self.win.display_reminder(**new_reminder)
-        for reminder_id in deleted_reminders:
-            self.delete_reminder(reminder_id)
+    def reminders_updated_cb(self, proxy, sender_name, signal_name, parameters):
+        app_id, new_reminders = parameters.unpack()
+        if app_id != info.app_id:
+            for new_reminder in new_reminders:
+                reminder_id = new_reminder['id']
+                if reminder_id in self.win.reminder_lookup_dict:
+                    reminder = self.win.reminder_lookup_dict[reminder_id]
+                    reminder.update(new_reminder)
+                    if new_reminder['completed'] != reminder.completed:
+                        reminder.set_completed(new_reminder['completed'])
+                else:
+                    self.win.display_reminder(**new_reminder)
 
-        self.win.reminders_list.invalidate_sort()
-        self.win.selected_changed()
-        self.win.invalidate_filter()
+            self.win.selected_changed()
+            self.win.invalidate_filter()
+            self.win.reminders_list.invalidate_sort()
+
+    def reminders_removed_cb(self, proxy, sender_name, signal_name, parameters):
+        app_id, deleted_reminders = parameters.unpack()
+        if app_id != info.app_id:
+            for reminder_id in deleted_reminders:
+                self.delete_reminder(reminder_id)
+
+            self.win.invalidate_filter()
 
     def reminder_updated_cb(self, proxy, sender_name, signal_name, parameters):
         app_id, reminder = parameters.unpack()
@@ -270,9 +300,9 @@ class Remembrance(Adw.Application):
             else:
                 self.win.display_reminder(**reminder)
 
-        self.win.reminders_list.invalidate_sort()
         self.win.selected_changed()
         self.win.invalidate_filter()
+        self.win.reminders_list.invalidate_sort()
 
     def delete_reminder(self, reminder_id):
         try:

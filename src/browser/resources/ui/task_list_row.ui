@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="task_list_row" parent="GtkListBoxRow">
-    <property name="action-name">win.selected-task-list</property>
+  <template class="TaskListRow" parent="GtkListBoxRow">
+    <property name="action-name">win.selected-list</property>
     <child>
       <object class="GtkBox">
         <property name="orientation">horizontal</property>

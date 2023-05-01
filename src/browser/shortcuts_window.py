@@ -17,7 +17,7 @@ from gi.repository import Gtk
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/shortcuts_window.ui')
 class ShortcutsWindow(Gtk.ShortcutsWindow):
-    __gtype_name__ = 'shortcuts_window'
+    __gtype_name__ = 'ShortcutsWindow'
 
     def __init__(self, win, *args, **kwargs):
         super().__init__(*args, **kwargs)

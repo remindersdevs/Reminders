@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="application_window" parent="AdwApplicationWindow">
+  <template class="MainWindow" parent="AdwApplicationWindow">
     <style>
       <class name="remembrance"/>
     </style>

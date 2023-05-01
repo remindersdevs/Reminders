@@ -26,7 +26,7 @@ logger = logging.getLogger(info.app_executable)
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/edit_lists_window.ui')
 class EditListsWindow(Adw.Window):
-    __gtype_name__ = 'edit_lists_window'
+    __gtype_name__ = 'EditListsWindow'
 
     box = Gtk.Template.Child()
 
@@ -38,17 +38,24 @@ class EditListsWindow(Adw.Window):
         self.unsaved = []
         self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: self.close())))
 
-        for user_id, value in self.win.task_list_names.items():
-            if user_id in self.win.usernames.keys():
-                self.users[user_id] = ListGroup(self, user_id, self.win.usernames[user_id], value)
-                self.box.append(self.users[user_id])
+        for user_id, username in self.win.usernames.items():
+            self.users[user_id] = ListGroup(self, user_id, username)
+            self.box.append(self.users[user_id])
+
+        for list_id, value in self.win.synced_lists.items():
+            user_id = value['user-id']
+            name = value['name']
+            try:
+                self.users[user_id].add_child(name, list_id)
+            except:
+                pass
 
     def list_updated(self, user_id, list_id, list_name):
-        if user_id in self.users.keys():
-            self.users[user_id].add_child(list_name, list_id)
-        else:
-            self.users[user_id] = ListGroup(self, user_id, self.win.usernames[user_id], {list_id: list_name})
+        if user_id not in self.users.keys():
+            self.users[user_id] = ListGroup(self, user_id, self.win.usernames[user_id])
             self.box.append(self.users[user_id])
+
+        self.users[user_id].add_child(list_name, list_id)
 
     def list_removed(self, user_id, list_id):
         if user_id in self.users.keys():
@@ -58,7 +65,7 @@ class EditListsWindow(Adw.Window):
                 self.users.pop(user_id)
 
     def signed_in(self, user_id, username):
-        self.users[user_id] = ListGroup(self, user_id, username, {})
+        self.users[user_id] = ListGroup(self, user_id, username)
         self.box.append(self.users[user_id])
 
     def signed_out(self, user_id):
@@ -100,15 +107,13 @@ class EditListsWindow(Adw.Window):
         return True
 
 class ListGroup(Adw.PreferencesGroup):
-    def __init__(self, edit_win, user_id, username, lists, *args, **kwargs):
+    def __init__(self, edit_win, user_id, username, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.edit_win = edit_win
         self.win = edit_win.win
         self.user_id = user_id
         self.set_title(username)
         self.lists = {}
-        for list_id, list_name in lists.items():
-            self.add_child(list_name, list_id)
 
         new_list_btn = Gtk.Button()
         content = Adw.ButtonContent(icon_name='list-add-symbolic', label=_('New List'))
@@ -135,7 +140,7 @@ class ListGroup(Adw.PreferencesGroup):
 
     def remove_child(self, child, user_id, list_id):
         if list_id is not None:
-            self.win.delete_list(user_id, list_id)
+            self.win.delete_list(list_id)
             self.lists.pop(list_id)
         self.remove(child)
 
@@ -170,7 +175,11 @@ class ListRow(Adw.EntryRow):
         try:
             list_name = self.get_text().strip()
             count = 0
-            while list_name in self.win.all_task_list_names[self.user_id].values():
+            used = []
+            for value in self.win.all_lists.values():
+                if value['user-id'] == self.user_id:
+                    used.append(value['name'])
+            while list_name in used:
                 count += 1
                 list_name = f'{self.get_text().strip()} ({count})'
             self.list_id = self.win.update_list(self.user_id, list_name, self.list_id)

@@ -51,14 +51,14 @@ class PreferencesWindow(Adw.PreferencesWindow):
         self.settings.bind('included-notification-sound', self.sound_theme_switch, 'active', Gio.SettingsBindFlags.DEFAULT)
         self.settings.connect('changed::time-format', lambda *args: self.update_time_dropdown())
         self.settings.connect('changed::refresh-frequency', lambda *args: self.update_refresh_dropdown())
-        self.settings.connect('changed::synced-task-lists', lambda *args: self.synced_lists_updated())
+        self.settings.connect('changed::synced-lists', lambda *args: self.synced_lists_updated())
         self.update_time_dropdown()
         self.update_refresh_dropdown()
         self.time_format_row.connect('notify::selected', lambda *args: self.update_time_format())
         self.refresh_time_row.connect('notify::selected', lambda *args: self.update_refresh_time())
         self.refresh_button.connect('clicked', lambda *args: self.app.refresh_reminders())
         self.connect('close-request', self.on_close)
-        self.synced = self.settings.get_value('synced-task-lists').unpack()
+        self.synced = self.settings.get_value('synced-lists').unpack()
         self.user_rows = {}
 
         for user_id, username in self.app.win.ms_users.items():
@@ -74,33 +74,25 @@ class PreferencesWindow(Adw.PreferencesWindow):
             self.user_rows[user_id].set_username(username)
 
     def synced_lists_updated(self, only_user_id = None):
-        self.synced = self.settings.get_value('synced-task-lists').unpack()
+        self.synced = self.settings.get_value('synced-lists').unpack()
 
-        for user_id in self.synced.keys():
+        for user_id, row in self.user_rows.items():
             if only_user_id is not None and user_id != only_user_id:
                 continue
-            if user_id not in self.user_rows:
-                continue
-            row = self.user_rows[user_id]
-            if 'all' in self.synced[user_id]:
-                row.all_check.set_active(True)
-                return
-            else:
-                row.all_check.set_active(False)
-
+            all_synced = user_id in self.synced
+            row.all_check.set_active(all_synced)
             for list_id, check in row.task_list_checks.items():
-                check.set_active(list_id in self.synced[user_id])
+                check.set_active(list_id in self.synced and not all_synced)
 
     def on_close(self, window, data = None):
-        synced = {}
-        for user_id, row in self.user_rows.items():
+        synced = []
+        for row in self.user_rows.values():
             if row.task_list_row.get_visible():
-                row.update_synced()
-                synced[user_id] = row.synced
+                synced += row.get_synced()
         if self.synced != synced:
             self.synced = synced
             try:
-                self.app.run_service_method('SetSyncedLists', GLib.Variant('(a{sas})', (self.synced,)), False)
+                self.app.run_service_method('SetSyncedLists', GLib.Variant('(as)', (self.synced,)), False)
             except Exception as error:
                 logger.exception(error)
 
@@ -108,15 +100,21 @@ class PreferencesWindow(Adw.PreferencesWindow):
         return True
 
     def on_ms_signed_in(self, user_id, username):
-        names = self.app.win.all_task_list_names[user_id] if user_id in self.app.win.all_task_list_names else {}
-        self.user_rows[user_id] = PreferencesUserRow(self, user_id, username, names)
+        lists = {}
+        for list_id, value in self.app.win.all_lists.items():
+            if value['user-id'] == user_id:
+                lists[list_id] = value['name']
+        self.user_rows[user_id] = PreferencesUserRow(self, user_id, username, lists)
         self.ms_sync_row.add_row(self.user_rows[user_id])
         self.ms_sync_row.remove(self.ms_add_account)
         self.ms_sync_row.add_row(self.ms_add_account) # move to end
 
     def on_caldav_signed_in(self, user_id, username):
-        names = self.app.win.all_task_list_names[user_id] if user_id in self.app.win.all_task_list_names else {}
-        self.user_rows[user_id] = PreferencesUserRow(self, user_id, username, names, True)
+        lists = {}
+        for list_id, value in self.app.win.all_lists.items():
+            if value['user-id'] == user_id:
+                lists[list_id] = value['name']
+        self.user_rows[user_id] = PreferencesUserRow(self, user_id, username, lists, True)
         self.caldav_sync_row.add_row(self.user_rows[user_id])
         self.caldav_sync_row.remove(self.caldav_add_account)
         self.caldav_sync_row.add_row(self.caldav_add_account) # move to end
@@ -168,7 +166,7 @@ class PreferencesWindow(Adw.PreferencesWindow):
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/preferences_user_row.ui')
 class PreferencesUserRow(Adw.ExpanderRow):
-    __gtype_name__ = 'preferences_user_row'
+    __gtype_name__ = 'PreferencesUserRow'
     task_list_grid = Gtk.Template.Child()
     all_check = Gtk.Template.Child()
     task_list_row = Gtk.Template.Child()
@@ -184,7 +182,6 @@ class PreferencesUserRow(Adw.ExpanderRow):
         self.task_list_checks = {}
         self.set_username(username)
         self.lists = lists
-        self.synced = self.preferences.synced[self.user_id] if self.user_id in self.preferences.synced else []
         self.set_task_lists()
         if caldav:
             self.username_row.set_visible(True)
@@ -195,7 +192,7 @@ class PreferencesUserRow(Adw.ExpanderRow):
         self.username_row.set_text(username)
 
     def set_task_lists(self):
-        if 'all' in self.synced:
+        if self.user_id in self.preferences.synced:
             self.all_check.set_active(True)
         else:
             self.all_check.set_active(False)
@@ -237,17 +234,19 @@ class PreferencesUserRow(Adw.ExpanderRow):
         self.task_list_grid.attach_next_to(check, None, pos, 1, 1)
         all_checked = self.all_check.get_active()
         check.set_sensitive(not all_checked)
-        if not all_checked and list_id in self.synced:
+        if not all_checked and list_id in self.preferences.synced:
             check.set_active(True)
 
-    def update_synced(self):
+    def get_synced(self):
         if self.all_check.get_active():
-            self.synced = ['all']
+            synced = [self.user_id]
         else:
-            self.synced = []
+            synced = []
             for list_id, check in self.task_list_checks.items():
                 if check.get_active():
-                    self.synced.append(list_id)
+                    synced.append(list_id)
+
+        return synced
 
     @Gtk.Template.Callback()
     def save_username(self, button = None):

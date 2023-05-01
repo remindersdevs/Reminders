@@ -17,7 +17,7 @@ import time
 import datetime
 import logging
 
-from gi.repository import Gtk, Adw, GLib, Gdk
+from gi.repository import Gtk, Adw, GLib, GObject, Gdk
 from gettext import gettext as _
 from math import floor
 
@@ -29,7 +29,7 @@ logger = logging.getLogger(info.app_executable)
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/reminder.ui')
 class Reminder(Adw.ExpanderRow):
     '''Ui for each reminder'''
-    __gtype_name__ = 'reminder'
+    __gtype_name__ = 'Reminder'
 
     completed_icon = Gtk.Template.Child()
     separator = Gtk.Template.Child()
@@ -58,6 +58,7 @@ class Reminder(Adw.ExpanderRow):
         self.options = options
         self.selected = False
         self.no_strikethrough = False
+        self.hidden = None
 
         self.prefix_box = self.completed_icon.get_parent().get_parent()
         self.set_completed(completed)
@@ -95,12 +96,29 @@ class Reminder(Adw.ExpanderRow):
         self.win.connect('notify::time-format', lambda *args: self.set_time_label())
 
         drag_source = Gtk.DragSource()
+        drag_source.connect('prepare', self.prepare)
         drag_source.connect('drag-begin', self.drag_begin)
-        drag_source.connect('drag-cancel', self.drag_cancel)
         drag_source.connect('drag-end', self.drag_end)
-        drag_source.set_content(Gdk.ContentProvider.new_for_value(self.id))
         drag_source.set_actions(Gdk.DragAction.MOVE)
         self.add_controller(drag_source)
+
+    def prepare(self, drag_source, x, y):
+        selected = self.win.reminders_list.get_selected_rows()
+        if self in selected:
+            ids = []
+            self.hidden = selected
+            for reminder in selected:
+                reminder.hide()
+                ids.append(reminder.id)
+
+        else:
+            ids = [self.id]
+            self.hide()
+            self.hidden = [self]
+
+        self.win.set_selecting(False)
+
+        return Gdk.ContentProvider.new_for_value(GObject.Value(GObject.TYPE_STRV, ids))
 
     def drag_begin(self, drag_source, drag):
         icon = Gtk.DragIcon.get_for_drag(drag)
@@ -115,14 +133,14 @@ class Reminder(Adw.ExpanderRow):
                 subtitle = self.get_subtitle()
             )
         )
-        self.hide()
 
     def drag_end(self, drag_source, drag, delete_data):
         if not delete_data:
-            self.show()
-
-    def drag_cancel(self, drag_source, drag, reason):
-        self.show()
+            if self.hidden is not None:
+                for reminder in self.hidden:
+                    reminder.show()
+                self.hidden = None
+        drag_source.set_content(None)
 
     def set_text(self):
         self.set_title(f'<span strikethrough=\'{"true" if self.completed and not self.no_strikethrough else "false"}\'>{self.options["title"]}</span>')
@@ -234,9 +252,8 @@ class Reminder(Adw.ExpanderRow):
             if self.options['repeat-times'] != options['repeat-times'] or self.options['repeat-until'] != options['repeat-until']:
                 edit_win.set_repeat_duration(options['repeat-until'], options['repeat-times'])
 
-            if self.options['list-id'] != options['list-id'] or self.options['user-id'] != options['user-id']:
+            if self.options['list-id'] != options['list-id']:
                 edit_win.task_list = options['list-id']
-                edit_win.user_id = options['user-id']
                 edit_win.set_task_list_dropdown_selected()
 
             if self.options['important'] != options['important']:
@@ -247,7 +264,9 @@ class Reminder(Adw.ExpanderRow):
         self.set_options(options)
 
     def set_options(self, options):
-        self.options.update(options)
+        for key, value in options.items():
+            if key in self.options.keys():
+                self.options[key] = value
 
         self.set_text()
         self.set_important()
@@ -346,7 +365,7 @@ class Reminder(Adw.ExpanderRow):
                 if self.id in self.win.reminder_lookup_dict:
                     self.win.reminder_lookup_dict.pop(self.id)
             self.win.reminders_list.remove(self)
-            self.invalidate_filter()
+            self.win.invalidate_filter()
         except Exception as error:
             logger.exception(error)
 
@@ -361,7 +380,9 @@ class Reminder(Adw.ExpanderRow):
                 'UpdateCompleted',
                 GLib.Variant('(ssb)', (info.app_id, self.id, self.completed))
             )
-            self.options['updated-timestamp'] = results.unpack()[0]
+            timestamp, completed_date = results.unpack()
+            self.options['updated-timestamp'] = timestamp
+            self.options['completed-date'] = completed_date
 
             self.win.reminders_list.invalidate_sort()
         except Exception as error:

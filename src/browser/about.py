@@ -25,12 +25,14 @@ RELEASE_NOTES = '''
     <li>Added support for selecting multiple reminders in one click by holding shift</li>
     <li>Added support for dragging and dropping reminders between lists</li>
     <li>Added support for importing and exporting ical/ics files</li>
+    <li>Added more multithreading to significantly speed up certain operations</li>
     <li>Added support for syncing recurring reminders with Microsoft To Do</li>
     <li>Added support for creating monthly and yearly repeating reminders</li>
     <li>Version numbers are now handled in a logical way (as in they aren't just doubles)</li>
     <li>Microsoft sign in window now appears in the app instead of in the browser</li>
     <li>Significantly improve how recurring reminders function</li>
     <li>Fix date/time text wrapping awkwardly</li>
+    <li>Improvements to handling of network errors</li>
     <li>Fix some other minor issues</li>
     <li>Bump API version</li>
 </ul>

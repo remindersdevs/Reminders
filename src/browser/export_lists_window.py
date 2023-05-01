@@ -31,7 +31,7 @@ class ListRow(Adw.ActionRow):
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/export_lists_window.ui')
 class ExportListsWindow(Adw.Window):
-    __gtype_name__ = 'export_lists_window'
+    __gtype_name__ = 'ExportListsWindow'
 
     lists = Gtk.Template.Child()
 
@@ -42,12 +42,12 @@ class ExportListsWindow(Adw.Window):
         self.rows = {}
         self.set_transient_for(self.win)
 
-        for user_id, value in self.win.task_list_names.items():
-            if user_id in self.win.usernames.keys():
-                for list_id, list_name in value.items():
-                    row = ListRow(title=list_name, subtitle=self.win.usernames[user_id])
-                    self.lists.append(row)
-                    self.rows[row] = (user_id, list_id)
+        for list_id, value in self.win.synced_lists.items():
+            list_name = value['name']
+            user_id = value['user-id']
+            row = ListRow(title=list_name, subtitle=self.win.usernames[user_id])
+            self.lists.append(row)
+            self.rows[row] = list_id
 
         self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>s'), Gtk.CallbackAction.new(lambda *args: self.on_save())))
         self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: self.close())))
@@ -65,13 +65,13 @@ class ExportListsWindow(Adw.Window):
     @Gtk.Template.Callback()
     def on_save(self, button = None):
         lists = []
-        for row, value in self.rows.items():
+        for row, list_id in self.rows.items():
             if row.check.get_active():
-                lists.append(value)
+                lists.append(list_id)
 
         if len(lists) > 0:
             try:
-                result = self.app.run_service_method('ExportLists', GLib.Variant('(a(ss))', (lists,)))
+                result = self.app.run_service_method('ExportLists', GLib.Variant('(as)', (lists,)))
                 folder = result.unpack()[0]
                 uri = GLib.filename_to_uri(folder, None)
                 dialog = Adw.MessageDialog(

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="microsoft_sign_in" parent="AdwWindow">
+  <template class="MicrosoftSignIn" parent="AdwWindow">
     <property name="default-height">500</property>
     <property name="default-width">400</property>
     <property name="modal">true</property>

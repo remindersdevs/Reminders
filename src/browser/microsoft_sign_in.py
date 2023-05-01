@@ -25,7 +25,7 @@ logger = logging.getLogger(info.app_executable)
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/microsoft_sign_in.ui')
 class MicrosoftSignIn(Adw.Window):
-    __gtype_name__ = 'microsoft_sign_in'
+    __gtype_name__ = 'MicrosoftSignIn'
 
     main = Gtk.Template.Child()
 

@@ -40,8 +40,9 @@ reminder_defaults = {
     'repeat-times': -1,
     'created-timestamp': 0,
     'updated-timestamp': 0,
+    'completed-timestamp': 0,
+    'completed-date': 0,
     'list-id': 'local',
-    'user-id': 'local',
     'uid': ''
 }
 

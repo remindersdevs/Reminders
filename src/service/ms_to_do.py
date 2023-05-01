@@ -102,6 +102,12 @@ class MSToDo():
                 self.get_tokens()
                 results = self.do_request(method, url, user_id, data, False)
                 return results
+            elif error.response.status_code == 503:
+                if retry:
+                    results = self.do_request(method, url, user_id, data, False)
+                    return results
+                else:
+                    raise error
             else:
                 logger.exception(error)
                 raise error
@@ -129,6 +135,11 @@ class MSToDo():
                         'email': email,
                         'local-id': local_id
                     }
+                except requests.HTTPError as error:
+                    if error.response.status_code == 503:
+                        raise error
+                    else:
+                        logger.exception(error)
                 except requests.ConnectionError as error:
                     raise error
                 except Exception as error:
@@ -136,7 +147,7 @@ class MSToDo():
 
             self.store()
 
-        except requests.ConnectionError as error:
+        except (requests.ConnectionError, requests.HTTPError) as error:
             try:
                 self.users = json.loads(
                     Secret.password_lookup_sync(
@@ -228,14 +239,16 @@ class MSToDo():
                 pass
             self.tokens = {}
             self.users = {}
-            Secret.password_clear_sync(
+            Secret.password_clear(
                 self.schema,
                 { 'name': 'microsoft-cache' },
+                None,
                 None
             )
-            Secret.password_clear_sync(
+            Secret.password_clear(
                 self.schema,
                 { 'name': 'microsoft-users' },
+                None,
                 None
             )
 
@@ -259,14 +272,16 @@ class MSToDo():
             if user_id in self.users:
                 self.users.pop(user_id)
             if self.users == {}:
-                Secret.password_clear_sync(
+                Secret.password_clear(
                     self.schema,
                     { 'name': 'microsoft-cache' },
+                    None,
                     None
                 )
-                Secret.password_clear_sync(
+                Secret.password_clear(
                     self.schema,
                     { 'name': 'microsoft-users' },
+                    None,
                     None
                 )
             else:
@@ -284,6 +299,14 @@ class MSToDo():
             if user_id in self.tokens.keys():
                 results = self.do_request('POST', f'me/todo/lists/{task_list}/tasks', user_id, data=task).json()
                 return results['id']
+        except requests.HTTPError as error:
+            if error.response.status_code == 503:
+                if user_id in self.tokens.keys():
+                    self.tokens.pop(user_id)
+                raise error
+            else:
+                logger.exception(error)
+                raise error
         except requests.ConnectionError as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
@@ -300,6 +323,14 @@ class MSToDo():
             if user_id in self.tokens.keys():
                 results = self.do_request('PATCH', f'me/todo/lists/{task_list}/tasks/{task_id}', user_id, data=task).json()
                 return results
+        except requests.HTTPError as error:
+            if error.response.status_code == 503:
+                if user_id in self.tokens.keys():
+                    self.tokens.pop(user_id)
+                raise error
+            else:
+                logger.exception(error)
+                raise error
         except requests.ConnectionError as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
@@ -315,9 +346,13 @@ class MSToDo():
 
             if user_id in self.tokens.keys():
                 self.do_request('DELETE', f'me/todo/lists/{task_list}/tasks/{task_id}', user_id)
+        except requests.HTTPError as error:
+            if error.response.status_code == 503:
+                raise error
+            else:
+                logger.exception(error)
+                raise error
         except requests.ConnectionError as error:
-            if user_id in self.tokens.keys():
-                self.tokens.pop(user_id)
             raise error
         except Exception as error:
             logger.exception(error)
@@ -332,6 +367,14 @@ class MSToDo():
             if user_id in self.tokens.keys():
                 results = self.do_request('POST', 'me/todo/lists', user_id, content).json()
                 return results['id']
+        except requests.HTTPError as error:
+            if error.response.status_code == 503:
+                if user_id in self.tokens.keys():
+                    self.tokens.pop(user_id)
+                raise error
+            else:
+                logger.exception(error)
+                raise error
         except requests.ConnectionError as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
@@ -348,6 +391,14 @@ class MSToDo():
 
             if user_id in self.tokens.keys():
                 self.do_request('PATCH', f'me/todo/lists/{ms_id}', user_id, content)
+        except requests.HTTPError as error:
+            if error.response.status_code == 503:
+                if user_id in self.tokens.keys():
+                    self.tokens.pop(user_id)
+                raise error
+            else:
+                logger.exception(error)
+                raise error
         except requests.ConnectionError as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
@@ -363,6 +414,14 @@ class MSToDo():
 
             if user_id in self.tokens.keys():
                 self.do_request('DELETE', f'me/todo/lists/{ms_id}', user_id)
+        except requests.HTTPError as error:
+            if error.response.status_code == 503:
+                if user_id in self.tokens.keys():
+                    self.tokens.pop(user_id)
+                raise error
+            else:
+                logger.exception(error)
+                raise error
         except requests.ConnectionError as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
@@ -371,7 +430,7 @@ class MSToDo():
             logger.exception(error)
             raise error
 
-    def get_lists(self, only_user_id = None):
+    def get_lists(self, removed_list_ids, old_lists, synced_ids, only_user_id = None):
         task_lists = {}
         not_synced = []
 
@@ -381,10 +440,15 @@ class MSToDo():
         except:
             pass
 
-        for user_id in self.tokens.keys():
+        for user_id in self.users.keys():
+            if user_id not in self.tokens.keys():
+                not_synced.append(user_id)
+                continue
+
             if only_user_id is not None and user_id != only_user_id:
                 not_synced.append(user_id)
                 continue
+
             try:
                 email = self.do_request('GET', 'me', user_id).json()['userPrincipalName']
                 if email != self.users[user_id]['email']:
@@ -395,23 +459,48 @@ class MSToDo():
                 task_lists[user_id] = []
 
                 for task_list in lists:
-                    list_id = task_list['id']
-                    list_name = task_list['displayName']
-                    is_default = task_list['wellknownListName'] == 'defaultList'
+                    list_uid = task_list['id']
 
-                    tasks = self.do_request('GET', f'me/todo/lists/{list_id}/tasks', user_id).json()['value']
+                    if list_uid in removed_list_ids:
+                        continue
+
+                    list_id = None
+                    if task_list['wellknownListName'] == 'defaultList':
+                        list_id = user_id
+                    else:
+                        try:
+                            for task_list_id, value in old_lists.items():
+                                if value['uid'] == list_uid and value['user-id'] == user_id:
+                                    list_id = task_list_id
+                        except:
+                            pass
+
+                    if list_id is None:
+                        list_id = self.reminders._do_generate_id()
+
+                    if user_id not in synced_ids and list_id not in synced_ids:
+                        tasks = []
+                    else:
+                        tasks = self.do_request('GET', f'me/todo/lists/{list_uid}/tasks', user_id).json()['value']
 
                     task_lists[user_id].append({
                         'id': list_id,
-                        'default': is_default,
-                        'name': list_name,
+                        'uid': list_uid,
+                        'name': task_list['displayName'],
                         'tasks': tasks
                     })
+            except requests.HTTPError as error:
+                if error.response.status_code == 503:
+                    not_synced.append(user_id)
+                    self.tokens.pop(user_id)
+                else:
+                    logger.exception(error)
+                    not_synced.append(user_id)
             except requests.ConnectionError:
                 not_synced.append(user_id)
+                self.tokens.pop(user_id)
             except Exception as error:
                 logger.exception(error)
-                self.tokens.pop(user_id)
                 not_synced.append(user_id)
 
         return task_lists, not_synced
@@ -425,6 +514,14 @@ class MSToDo():
                 tasks = self.do_request('GET', f'me/todo/lists/{list_id}/tasks', user_id).json()['value']
 
             return tasks
+        except requests.HTTPError as error:
+            if error.response.status_code == 503:
+                if user_id in self.tokens.keys():
+                    self.tokens.pop(user_id)
+                raise error
+            else:
+                logger.exception(error)
+                raise error
         except requests.ConnectionError as error:
             if user_id in self.tokens.keys():
                 self.tokens.pop(user_id)
@@ -439,7 +536,7 @@ class MSToDo():
     def timestamp_to_rfc(self, timestamp):
         return GLib.DateTime.new_from_unix_utc(timestamp).format_iso8601()
 
-    def reminder_to_task(self, reminder):
+    def reminder_to_task(self, reminder, completed = None, completed_date = None):
         reminder_json = {}
         reminder_json['title'] = reminder['title']
         reminder_json['body'] = {}
@@ -448,12 +545,26 @@ class MSToDo():
 
         reminder_json['importance'] = 'high' if reminder['important'] else 'normal'
 
+        if completed is not None:
+            reminder_json['status'] = 'completed' if completed else 'notStarted'
+
+        if completed_date is not None:
+            if completed_date != 0:
+                reminder_json['completedDateTime'] = {}
+                reminder_json['completedDateTime']['dateTime'] = self.reminders._timestamp_to_rfc(completed_date)
+                reminder_json['completedDateTime']['timeZone'] = 'UTC'
+            else:
+                reminder_json['completedDateTime'] = None
+
         if reminder['due-date'] != 0:
             reminder_json['dueDateTime'] = {}
             reminder_json['dueDateTime']['dateTime'] = self.reminders._timestamp_to_rfc(reminder['due-date'])
             reminder_json['dueDateTime']['timeZone'] = 'UTC'
         else:
             reminder_json['dueDateTime'] = None
+
+        reminder_json['createdDateTime'] = self.reminders._timestamp_to_rfc(reminder['created-timestamp'])
+        reminder_json['lastModifiedDateTime'] = self.reminders._timestamp_to_rfc(reminder['updated-timestamp'])
 
         if reminder['timestamp'] != 0:
             reminder_json['isReminderOn'] = True
@@ -500,7 +611,7 @@ class MSToDo():
 
         return reminder_json
 
-    def task_to_reminder(self, task, list_id, user_id, reminder = None, timestamp = None):
+    def task_to_reminder(self, task, list_id, reminder = None, timestamp = None):
         if reminder is None:
             reminder = Reminder()
         if timestamp is None:
@@ -517,26 +628,25 @@ class MSToDo():
             notif_date = datetime.date.fromtimestamp(reminder['timestamp'])
             reminder['due-date'] = int(datetime.datetime(notif_date.year, notif_date.month, notif_date.day, tzinfo=datetime.timezone.utc).timestamp())
 
-        if reminder['created-timestamp'] == 0:
-            reminder['created-timestamp'] = self.reminders._rfc_to_timestamp(task['createdDateTime'])
-        if reminder['updated-timestamp'] == 0:
-            reminder['updated-timestamp'] = self.reminders._rfc_to_timestamp(task['lastModifiedDateTime'])
+        reminder['created-timestamp'] = self.reminders._rfc_to_timestamp(task['createdDateTime'])
+        reminder['updated-timestamp'] = self.reminders._rfc_to_timestamp(task['lastModifiedDateTime'])
+        reminder['completed-timestamp'] = 0
+        reminder['completed-date'] = self.reminders._rfc_to_timestamp(task['completedDateTime']['dateTime']) if 'completedDateTime' in task else 0
 
         reminder['list-id'] = list_id
-        reminder['user-id'] = user_id
 
         if 'recurrence' in task:
             if len(task['recurrence'].keys()) > 0:
                 reminder['repeat-until'] = 0
                 reminder['repeat-times'] = -1
                 if task['recurrence']['pattern']['type'] == 'daily':
-                    reminder['repeat-type'] = info.RepeatType.DAY
+                    reminder['repeat-type'] = int(info.RepeatType.DAY)
                 elif task['recurrence']['pattern']['type'] == 'weekly':
-                    reminder['repeat-type'] = info.RepeatType.WEEK
+                    reminder['repeat-type'] = int(info.RepeatType.WEEK)
                 elif task['recurrence']['pattern']['type'] == 'absoluteMonthly':
-                    reminder['repeat-type'] = info.RepeatType.MONTH
+                    reminder['repeat-type'] = int(info.RepeatType.MONTH)
                 elif task['recurrence']['pattern']['type'] == 'absoluteYearly':
-                    reminder['repeat-type'] = info.RepeatType.YEAR
+                    reminder['repeat-type'] = int(info.RepeatType.YEAR)
 
                 reminder['repeat-frequency'] = task['recurrence']['pattern']['interval']
 

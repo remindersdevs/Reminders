@@ -24,7 +24,7 @@ logger = logging.getLogger(info.app_executable)
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/move_reminders_window.ui')
 class MoveRemindersWindow(Adw.Window):
-    __gtype_name__ = 'move_reminders_window'
+    __gtype_name__ = 'MoveRemindersWindow'
 
     lists = Gtk.Template.Child()
 
@@ -34,65 +34,70 @@ class MoveRemindersWindow(Adw.Window):
         self.reminders = reminders
         self.win = win
         self.rows = {}
-        selected = (reminders[0].options['user-id'], reminders[0].options['list-id'])
+        selected = reminders[0].options['list-id']
         self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>s'), Gtk.CallbackAction.new(lambda *args: self.on_save())))
         self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: self.close())))
 
-        for user_id, value in self.win.task_list_names.items():
-            if user_id in self.win.usernames.keys():
-                for list_id, list_name in value.items():
-                    row = Adw.ActionRow(title=list_name, subtitle=self.win.usernames[user_id], activatable=False)
-                    self.lists.append(row)
-                    self.rows[row] = (user_id, list_id)
-                    if user_id == selected[0] and list_id == selected[1]:
-                        self.lists.select_row(row)
+        for list_id, value in self.win.synced_lists.items():
+            list_name = value['name']
+            user_id = value['user-id']
+            row = Adw.ActionRow(title=list_name, subtitle=self.win.usernames[user_id], activatable=False)
+            self.lists.append(row)
+            self.rows[row] = list_id
+            if list_id == selected:
+                self.lists.select_row(row)
 
         self.present()
 
     def do_save(self):
         try:
             selected = self.lists.get_selected_rows()[0]
+            variants = []
+            options = {}
             for reminder in self.reminders:
-                options = reminder.options.copy()
-                options['user-id'], options['list-id'] = self.rows[selected]
-                if reminder.get_visible() and reminder.options['list-id'] != options['list-id'] or reminder.options['user-id'] != options['user-id']:
-                    if options['user-id'] in self.win.ms_users.keys():
-                        if options['repeat-type'] in (1, 2):
-                            options['repeat-type'] = 0
-                            options['repeat-frequency'] = 1
-                            options['repeat-days'] = 0
-                        options['repeat-until'] = 0
-                        options['repeat-times'] = -1
+                options[reminder.id] = reminder.options.copy()
+                opts = options[reminder.id]
+                opts['list-id'] = self.rows[selected]
+                if reminder.get_visible() and reminder.options['list-id'] != opts['list-id']:
+                    if self.win.synced_lists[opts['list-id']]['user-id'] in self.win.ms_users.keys():
+                        if opts['repeat-type'] in (1, 2):
+                            opts['repeat-type'] = 0
+                            opts['repeat-frequency'] = 1
+                            opts['repeat-days'] = 0
+                        opts['repeat-until'] = 0
+                        opts['repeat-times'] = -1
 
-                    results = self.win.app.run_service_method(
-                        'UpdateReminder',
-                        GLib.Variant(
-                            '(sa{sv})',
-                            (
-                                info.app_id,
-                                {
-                                    'id': GLib.Variant('s', reminder.id),
-                                    'repeat-type': GLib.Variant('q', options['repeat-type']),
-                                    'repeat-frequency': GLib.Variant('q', options['repeat-frequency']),
-                                    'repeat-days': GLib.Variant('q', options['repeat-days']),
-                                    'repeat-times': GLib.Variant('n', options['repeat-times']),
-                                    'repeat-until': GLib.Variant('u', options['repeat-until']),
-                                    'list-id': GLib.Variant('s', options['list-id']),
-                                    'user-id': GLib.Variant('s', options['user-id'])
-                                }
-                            )
+                    variants.append({
+                        'id': GLib.Variant('s', reminder.id),
+                        'repeat-type': GLib.Variant('q', opts['repeat-type']),
+                        'repeat-frequency': GLib.Variant('q', opts['repeat-frequency']),
+                        'repeat-days': GLib.Variant('q', opts['repeat-days']),
+                        'repeat-times': GLib.Variant('n', opts['repeat-times']),
+                        'repeat-until': GLib.Variant('u', opts['repeat-until']),
+                        'list-id': GLib.Variant('s', opts['list-id'])
+                    })
+                results = self.win.app.run_service_method(
+                    'UpdateReminderv',
+                    GLib.Variant(
+                        '(saa{sv})',
+                        (
+                            info.app_id,
+                            variants
                         )
                     )
-
-                    options['updated-timestamp'] = results.unpack()[0]
-                    reminder.options.update(options)
-                    reminder.set_repeat_label()
+                )
+            updated_reminder_ids, timestamp = results.unpack()
+            for reminder_id in updated_reminder_ids:
+                reminder = self.win.reminder_lookup_dict[reminder_id]
+                options[reminder_id]['updated-timestamp'] = timestamp
+                reminder.options.update(options[reminder_id])
+                reminder.set_repeat_label()
             self.close()
         except Exception as error:
             logger.exception(error)
 
-        self.win.reminders_list.invalidate_sort()
         self.win.invalidate_filter()
+        self.win.reminders_list.invalidate_sort()
 
     @Gtk.Template.Callback()
     def on_cancel(self, button = None):

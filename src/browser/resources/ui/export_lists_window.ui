@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="export_lists_window" parent="AdwWindow">
+  <template class="ExportListsWindow" parent="AdwWindow">
     <property name="title" translatable="yes">Export Lists</property>
     <property name="default-width">400</property>
     <property name="width-request">360</property>

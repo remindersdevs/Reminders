@@ -13,16 +13,12 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import time
-import datetime
-
 from gi.repository import Gtk, Adw
 from gettext import gettext as _
-from math import floor
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/dnd_reminder.ui')
 class DNDReminder(Adw.ActionRow):
-    __gtype_name__ = 'dnd_reminder'
+    __gtype_name__ = 'DNDReminder'
 
     completed_icon = Gtk.Template.Child()
     separator = Gtk.Template.Child()

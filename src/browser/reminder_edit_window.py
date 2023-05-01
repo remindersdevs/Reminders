@@ -25,27 +25,16 @@ from remembrance.browser.reminder import Reminder
 
 logger = logging.getLogger(info.app_executable)
 
-DEFAULT_OPTIONS = {
-    'title': '',
-    'description': '',
-    'due-date': 0,
-    'timestamp': 0,
-    'important': False,
-    'repeat-type': 0,
-    'repeat-frequency': 1,
-    'repeat-days': 0,
-    'repeat-until': 0,
-    'repeat-times': -1,
-    'old-timestamp': 0,
-    'created-timestamp': 0,
-    'updated-timestamp': 0,
-    'list-id': 'local',
-    'user-id': 'local'
-}
+DEFAULT_OPTIONS = info.reminder_defaults.copy()
+DEFAULT_OPTIONS.pop('uid')
+DEFAULT_OPTIONS.pop('updated-timestamp')
+DEFAULT_OPTIONS.pop('created-timestamp')
+DEFAULT_OPTIONS.pop('completed-timestamp')
+DEFAULT_OPTIONS.pop('completed-date')
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/reminder_edit_window.ui')
 class ReminderEditWindow(Adw.Window):
-    __gtype_name__ = 'reminder_edit_window'
+    __gtype_name__ = 'ReminderEditWindow'
 
     title_entry = Gtk.Template.Child()
     description_entry = Gtk.Template.Child()
@@ -110,12 +99,10 @@ class ReminderEditWindow(Adw.Window):
             self.options = reminder.options.copy()
             self.id = reminder.id
             self.task_list = self.options['list-id']
-            self.user_id = self.options['user-id']
         else:
             self.options = DEFAULT_OPTIONS.copy()
             self.id = None
             self.task_list = self.options['list-id'] = self.win.selected_list_id if self.win.selected_list_id != 'all' else 'local'
-            self.user_id = self.options['user-id'] = self.win.selected_user_id if self.win.selected_user_id != 'all' else 'local'
 
         self.set_time(self.options['timestamp'], self.options['due-date'])
         self.set_important(self.options['important'])
@@ -167,7 +154,6 @@ class ReminderEditWindow(Adw.Window):
             options['timestamp'] = 0
 
         options['list-id'] = self.task_list
-        options['user-id'] = self.user_id
 
         if not self.repeat_row.get_enable_expansion() or not self.repeat_row.get_sensitive():
             options['repeat-type'] = 0
@@ -233,7 +219,7 @@ class ReminderEditWindow(Adw.Window):
         return options != self.options
 
     def task_list_changed(self, row = None, param = None):
-        self.task_list, self.user_id = self.win.task_list_ids[self.task_list_row.get_selected()]
+        self.task_list = self.win.task_list_ids[self.task_list_row.get_selected()]
         self.task_list_visibility_changed()
 
     def update_repeat_day(self):
@@ -343,7 +329,7 @@ class ReminderEditWindow(Adw.Window):
             self.task_list_row_connection = None
 
         try:
-            index = self.win.task_list_ids.index((self.task_list, self.user_id))
+            index = self.win.task_list_ids.index(self.task_list)
             self.task_list_row.set_selected(index)
         except:
             self.task_list_row.set_selected(0)
@@ -443,8 +429,7 @@ class ReminderEditWindow(Adw.Window):
                                 'repeat-days': GLib.Variant('q', options['repeat-days']),
                                 'repeat-times': GLib.Variant('n', options['repeat-times']),
                                 'repeat-until': GLib.Variant('u', options['repeat-until']),
-                                'list-id': GLib.Variant('s', options['list-id']),
-                                'user-id': GLib.Variant('s', options['user-id'])
+                                'list-id': GLib.Variant('s', options['list-id'])
                             }
                         )
                     )
@@ -469,8 +454,7 @@ class ReminderEditWindow(Adw.Window):
                                 'repeat-days': GLib.Variant('q', options['repeat-days']),
                                 'repeat-times': GLib.Variant('n', options['repeat-times']),
                                 'repeat-until': GLib.Variant('u', options['repeat-until']),
-                                'list-id': GLib.Variant('s', options['list-id']),
-                                'user-id': GLib.Variant('s', options['user-id'])
+                                'list-id': GLib.Variant('s', options['list-id'])
                             }
                         )
                     )
@@ -486,8 +470,8 @@ class ReminderEditWindow(Adw.Window):
                 self.win.reminders_list.append(self.reminder)
                 self.win.reminder_lookup_dict[self.id] = self.reminder
 
-            self.win.reminders_list.invalidate_sort()
             self.win.invalidate_filter()
+            self.win.reminders_list.invalidate_sort()
 
             self.set_visible(False)
         except Exception as error:
@@ -564,9 +548,9 @@ class ReminderEditWindow(Adw.Window):
     @Gtk.Template.Callback()
     def task_list_visibility_changed(self, row = None, param = None):
         if not self.task_list_row.get_visible():
-            self.task_list = self.user_id = 'local'
+            self.task_list = 'local'
         if self.time_row.get_enable_expansion():
-            if self.user_id in self.win.ms_users.keys():
+            if self.win.synced_lists[self.task_list]['user-id'] in self.win.ms_users.keys():
                 self.set_ms()
             else:
                 self.set_notify(self.notif_btn.get_active())
@@ -577,7 +561,7 @@ class ReminderEditWindow(Adw.Window):
     @Gtk.Template.Callback()
     def time_switched(self, switch, data = None):
         if self.time_row.get_enable_expansion():
-            if self.user_id in self.win.ms_users.keys():
+            if self.win.synced_lists[self.task_list]['user-id'] in self.win.ms_users.keys():
                 self.set_ms()
             else:
                 self.set_notify(self.notif_btn.get_active())

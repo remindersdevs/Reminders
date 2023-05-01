@@ -22,7 +22,7 @@ logger = logging.getLogger(info.app_executable)
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/caldav_sign_in.ui')
 class CalDAVSignIn(Adw.Window):
-    __gtype_name__ = 'caldav_sign_in'
+    __gtype_name__ = 'CaldavSignIn'
     name_entry = Gtk.Template.Child()
     url_entry = Gtk.Template.Child()
     username_entry = Gtk.Template.Child()

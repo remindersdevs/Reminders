@@ -26,7 +26,7 @@ logger = logging.getLogger(info.app_executable)
 
 @Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/import_lists_window.ui')
 class ImportListsWindow(Adw.Window):
-    __gtype_name__ = 'import_lists_window'
+    __gtype_name__ = 'ImportListsWindow'
 
     expander = Gtk.Template.Child()
     task_list_row = Gtk.Template.Child()
@@ -48,12 +48,12 @@ class ImportListsWindow(Adw.Window):
 
     def do_save(self):
         if self.expander.get_enable_expansion():
-            task_list, user_id = self.win.task_list_ids[self.task_list_row.get_selected()]
+            task_list = self.win.task_list_ids[self.task_list_row.get_selected()]
         else:
-            task_list = user_id = 'auto'
+            task_list = 'auto'
 
         try:
-            self.app.run_service_method('ImportLists', GLib.Variant('(asss)', (self.files, user_id, task_list)), show_error_dialog=False)
+            self.app.run_service_method('ImportLists', GLib.Variant('(ass)', (self.files, task_list)), show_error_dialog=False)
             self.close()
         except Exception as error:
             error_text = ''.join(traceback.format_exception(error))

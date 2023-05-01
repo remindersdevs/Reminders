@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="edit_lists_window" parent="AdwWindow">
+  <template class="EditListsWindow" parent="AdwWindow">
     <property name="title" translatable="yes">Edit Lists</property>
     <property name="default-width">450</property>
     <property name="width-request">360</property>
