@@ -145,7 +145,7 @@ class Remembrance(Adw.Application):
                 except Exception as error:
                     self.logger.exception(f"{error}: Couldn't quit {info.service_executable}")
             else:
-                self.logger.exception(f'{info.service_executable} version is too low')
+                self.logger.error(f'{info.service_executable} version is too low')
                 sys.exit(1)
 
     def do_activate(self):
