@@ -1598,7 +1598,7 @@ class Reminders():
 
         if len(array) > 0:
             return GLib.Variant('(aa{sv})', (array,))
-        return GLib.Variant('(aa{sv})', ({}))
+        return GLib.Variant('(aa{sv})', ([],))
 
     def get_reminders(self, ids = None, return_variant = True):
         array = []
@@ -1630,7 +1630,7 @@ class Reminders():
             return array
         if len(array) > 0:
             return GLib.Variant('(aa{sv})', (array,))
-        return GLib.Variant('(aa{sv})', ({}))
+        return GLib.Variant('(aa{sv})', ([],))
 
     def get_reminders_dict(self):
         dictionary = {}
@@ -1657,7 +1657,7 @@ class Reminders():
 
         if len(dictionary) > 0:
             return GLib.Variant('(a{sa{sv}})', (dictionary,))
-        return GLib.Variant('(a{sa{sv}})', ({}))
+        return GLib.Variant('(a{sa{sv}})', ({},))
 
     def get_lists(self):
         array = []
