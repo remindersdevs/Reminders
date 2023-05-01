@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-30 19:55-0400\n"
+"POT-Creation-Date: 2023-05-01 10:42-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -454,7 +454,7 @@ msgstr ""
 #: src/browser/main_window.py:1295 src/browser/main_window.py:1314
 #: src/browser/main_window.py:1329 src/browser/main_window.py:1344
 #: src/browser/move_reminders_window.py:112 src/browser/preferences.py:275
-#: src/browser/reminder.py:413
+#: src/browser/reminder.py:412
 msgid "Cancel"
 msgstr ""
 
@@ -518,11 +518,11 @@ msgstr ""
 msgid "Completed Reminders"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:430 src/browser/reminder.py:347
+#: src/browser/resources/ui/main_window.ui:430 src/browser/reminder.py:346
 msgid "Complete"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:456 src/browser/reminder.py:343
+#: src/browser/resources/ui/main_window.ui:456 src/browser/reminder.py:342
 msgid "Incomplete"
 msgstr ""
 
@@ -542,7 +542,7 @@ msgstr ""
 
 #: src/browser/resources/ui/main_window.ui:555
 #: src/browser/resources/ui/reminder.ui:83 src/browser/edit_lists_window.py:203
-#: src/browser/reminder.py:414
+#: src/browser/reminder.py:413
 msgid "Remove"
 msgstr ""
 
@@ -1198,11 +1198,11 @@ msgstr ""
 msgid "This will sign out <b>{self.username}</b>"
 msgstr ""
 
-#: src/browser/reminder.py:409
+#: src/browser/reminder.py:408
 msgid "Remove reminder?"
 msgstr ""
 
-#: src/browser/reminder.py:410
+#: src/browser/reminder.py:409
 #, python-brace-format
 msgid "This will remove {reminder} and cannot be undone."
 msgstr ""
