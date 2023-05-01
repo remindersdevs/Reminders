@@ -35,7 +35,7 @@ from remembrance.browser.export_lists_window import ExportListsWindow
 from remembrance.browser.import_lists_window import ImportListsWindow
 
 # Always update this when new features are added that require the service to restart
-MIN_SERVICE_VERSION = '5.0.beta'
+MIN_SERVICE_VERSION = '5.0.beta2'
 
 class Remembrance(Adw.Application):
     '''Application for the frontend'''
