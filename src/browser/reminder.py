@@ -140,7 +140,6 @@ class Reminder(Adw.ExpanderRow):
                 for reminder in self.hidden:
                     reminder.show()
                 self.hidden = None
-        drag_source.set_content(None)
 
     def set_text(self):
         self.set_title(f'<span strikethrough=\'{"true" if self.completed and not self.no_strikethrough else "false"}\'>{self.options["title"]}</span>')
