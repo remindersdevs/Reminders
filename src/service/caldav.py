@@ -84,7 +84,7 @@ class CalDAV():
             self.users = {}
 
     def login(self, name, url, username, password):
-        user_id = self.reminders._do_generate_id(self.users.keys())
+        user_id = self.reminders._do_generate_id()
         if username == '':
             username = None
         if password == '':
@@ -347,7 +347,10 @@ class CalDAV():
         except:
             pass
 
-        for user_id in self.principals:
+        for user_id in self.users.keys():
+            if user_id not in self.principals.keys():
+                not_synced.append(user_id)
+                continue
             if only_user_id is not None and user_id != only_user_id:
                 not_synced.append(user_id)
                 continue
@@ -389,7 +392,7 @@ class CalDAV():
                 else:
                     logger.exception(error)
                     not_synced.append(user_id)
-            except requests.ConnectionError:
+            except (requests.ConnectionError, requests.Timeout):
                 not_synced.append(user_id)
             except Exception as error:
                 logger.exception(error)

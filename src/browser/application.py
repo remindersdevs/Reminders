@@ -172,7 +172,7 @@ class Remembrance(Adw.Application):
         self.service.connect('g-signal::RemindersCompleted', self.reminders_completed_cb)
         self.service.connect('g-signal::ReminderRemoved', self.reminder_deleted_cb)
         self.service.connect('g-signal::ReminderUpdated', self.reminder_updated_cb)
-        self.service.connect('g-signal::ReminderShown', self.repeat_updated_cb)
+        self.service.connect('g-signal::ReminderShown', self.reminder_shown_cb)
         self.service.connect('g-signal::RemindersUpdated', self.reminders_updated_cb)
         self.service.connect('g-signal::RemindersRemoved', self.reminders_removed_cb)
         self.service.connect('g-signal::ListUpdated', self.list_updated_cb)
@@ -261,8 +261,8 @@ class Remembrance(Adw.Application):
             self.win.invalidate_filter()
             self.win.reminders_list.invalidate_sort()
 
-    def repeat_updated_cb(self, proxy, sender_name, signal_name, parameters):
-        reminder_id = parameters.unpack()
+    def reminder_shown_cb(self, proxy, sender_name, signal_name, parameters):
+        reminder_id = parameters.unpack()[0]
         reminder = self.win.reminder_lookup_dict[reminder_id]
         reminder.refresh_time()
 

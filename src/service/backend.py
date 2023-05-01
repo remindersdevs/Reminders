@@ -822,6 +822,7 @@ class Reminders():
             else:
                 self.sound.play_full({GSound.ATTR_EVENT_ID: 'bell'}, None, self._sound_cb)
         self._shown(reminder_id)
+        self.do_emit('ReminderShown', GLib.Variant('(s)', (reminder_id,)))
         self.countdowns.dict[reminder_id]['id'] = 0
 
     def _sound_cb(self, context, result):
