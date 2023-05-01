@@ -1,4 +1,4 @@
-# Reminders DBus Service version 5.0 Documentation
+# Reminders DBus Service version 5.0.beta Documentation
 name: io.github.dgsasha.Remembrance.Service3
 
 interface: io.github.dgsasha.Remembrance.Service3.Reminders
@@ -11,7 +11,7 @@ At some point I might seperate this from Reminders and offer it as a standalone 
 
 This service will have some breaking changes made to it at times, so make sure you use the GetVersion method to check that the right version is installed.
 
-Newer versions of this service should still always be compatible with apps that expect an older version. If this ever changes, the bus name will be updated.
+Newer versions of this service should usually be compatible with apps that expect an older version. If this ever changes, the bus name will be updated.
 
 ## Enums
 ### RepeatType

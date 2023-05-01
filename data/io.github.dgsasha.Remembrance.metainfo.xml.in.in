@@ -81,7 +81,7 @@
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
   <releases>
-    <release version="5.0" date="2023-04-27">
+    <release version="5.0.beta" date="2023-05-01">
       <description>
         <ul>
           <li>Added support for making the week start on sunday</li>
