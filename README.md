@@ -74,8 +74,8 @@ remembrance --restart-service
 ## Todo
 - Windows port (Need to look into dbus support on Windows)
 - Add a debug mode and make it easier to get logs
-- Make a GNOME Shell extension that lets you view your reminders (This probably will never happen to be honest)
-- Maybe integrate the search with GNOME Shell (Also not happening)
+- Maybe make a GNOME Shell extension that lets you view your reminders (This probably will never happen)
+- Maybe integrate the search with GNOME Shell (Also probably not happening)
 
 If you want to contribute anything, just open a pull request. Depending on what you are going to contribute, you might want to [email me](mailto:dgsasha04@gmail.com) first. This will let me help you get started and it will also help me make sure that multiple people aren't working on the same feature without knowing it.
 

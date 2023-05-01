@@ -122,7 +122,7 @@ Returns all reminders in specified list
         - An array of remote list ids that are being synced
 
 ### SetSyncedLists
-Set the task lists that should be synced, this also refreshes the reminders
+Set the lists that should be synced, this also refreshes the reminders
 - Parameters (as)
     - list-ids
         - Type: as
@@ -179,7 +179,7 @@ Add a new reminder
         - Type: s
     - [reminder](#reminder-object)
         - Type: a{sv}
-        - Note that the 'completed' and 'id' key will be ignored here
+        - Note that the 'completed', and 'id' key will be ignored here
         - You can leave any of these values blank, in that case the default value will be used
 
 - Returns (su)
@@ -415,7 +415,7 @@ Emitted when a Reminder is created or updated
         - Type: s
     - [reminder](#reminder-object)
         - Type: a{sv}
-        - Note that the 'completed' key will not be included here
+        - Note that the 'completed' and 'completed-date' keys will not be included here
 
 ### CompletedUpdated
 Emitted when a reminder's completed status is changed
@@ -491,7 +491,7 @@ Emitted when the user signs in to a Microsoft account
 - Parameters (ss)
     - user-id
         - Type: s
-    - name
+    - display-name
         - Type: s
 
 ## SignedOut
