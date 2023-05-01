@@ -1,6 +1,6 @@
 project(
     'remembrance',
-    version: '5.0.beta',
+    version: '5.0.beta2',
     meson_version: '>= 0.59',
     default_options: ['prefix=/usr']
 )
