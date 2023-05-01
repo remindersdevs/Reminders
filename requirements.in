@@ -1,0 +1,4 @@
+msal==1.22.0
+requests==2.28.2
+caldav==1.2.1
+setuptools==67.7.2

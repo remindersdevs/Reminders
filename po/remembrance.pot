@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-01 11:55-0400\n"
+"POT-Creation-Date: 2023-05-01 13:20-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -898,15 +898,15 @@ msgid "Select all reminders"
 msgstr ""
 
 #: src/browser/resources/ui/shortcuts_window.ui:109
-msgid "Unselect all reminders"
+msgid "Hold to start selecting reminders"
 msgstr ""
 
 #: src/browser/resources/ui/shortcuts_window.ui:115
-msgid "Remove selected reminders"
+msgid "Unselect all reminders"
 msgstr ""
 
 #: src/browser/resources/ui/shortcuts_window.ui:121
-msgid "Hold to select multiple reminders"
+msgid "Remove selected reminders"
 msgstr ""
 
 #: src/browser/resources/ui/shortcuts_window.ui:128

@@ -105,6 +105,12 @@
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
+                <property name="accelerator">&lt;ctrl&gt;</property>
+                <property name="title" translatable="yes">Hold to start selecting reminders</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
                 <property name="accelerator">Escape</property>
                 <property name="title" translatable="yes">Unselect all reminders</property>
               </object>
@@ -113,12 +119,6 @@
               <object class="GtkShortcutsShortcut">
                 <property name="accelerator">Delete</property>
                 <property name="title" translatable="yes">Remove selected reminders</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="accelerator">&lt;ctrl&gt;</property>
-                <property name="title" translatable="yes">Hold to select multiple reminders</property>
               </object>
             </child>
           </object>
