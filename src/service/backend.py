@@ -310,7 +310,7 @@ class Reminders():
         self._register()
 
     def emit_error(self, error):
-        logger.exception(error)
+        logger.error("".join(format_exception(error)))
         self.do_emit('Error', GLib.Variant('(s)', ("".join(format_exception(error)),)))
 
     def emit_login(self, user_id):
