@@ -2,9 +2,9 @@
 <interface>
   <template class="EditListsWindow" parent="AdwWindow">
     <property name="title" translatable="yes">Edit Lists</property>
-    <property name="default-width">450</property>
+    <property name="default-width">400</property>
     <property name="width-request">360</property>
-    <property name="default-height">500</property>
+    <property name="default-height">450</property>
     <property name="modal">true</property>
     <signal name="close-request" handler="on_close" swapped="no"/>
     <property name="content">
