@@ -353,13 +353,6 @@ Import lists from an ical/ics file
 ### Refresh
 Read reminders file again and also check for remote updates. Changes will be emitted with their respective signals
 
-### RefreshUser
-Same as [refresh](#refresh) but only for one user
-- Parameters (s)
-    - user-id
-        - Type: s
-        - The user to refresh
-
 ### GetVersion
 - Returns (s)
     - version

@@ -337,7 +337,7 @@ class CalDAV():
         else:
             raise ConnectionError
 
-    def get_lists(self, removed_list_ids, old_lists, synced_ids, only_user_id = None):
+    def get_lists(self, removed_list_ids, old_lists, synced_ids):
         task_lists = {}
         not_synced = []
 
@@ -349,9 +349,6 @@ class CalDAV():
 
         for user_id in self.users.keys():
             if user_id not in self.principals.keys():
-                not_synced.append(user_id)
-                continue
-            if only_user_id is not None and user_id != only_user_id:
                 not_synced.append(user_id)
                 continue
             try:

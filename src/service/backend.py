@@ -120,7 +120,6 @@ class Reminders():
             'ExportLists': self.export_lists,
             'ImportLists': self.import_lists,
             'Refresh': self.refresh,
-            'RefreshUser': self.refresh_user,
             'GetVersion': self.get_version
         }
         self._register()
@@ -134,7 +133,7 @@ class Reminders():
         self.synced_ids.append(user_id)
         self._set_synced_lists_no_refresh(self.synced_ids)
         self.do_emit('MSSignedIn', GLib.Variant('(ss)', (user_id, username)))
-        self.refresh(False, user_id)
+        self.refresh(False)
 
     def start_countdowns(self):
         for reminder_id in self.reminders.keys():
@@ -214,16 +213,16 @@ class Reminders():
 
         self.synced_changed = self.app.settings.connect('changed::synced-lists', lambda *args: self._synced_task_list_changed())
 
-    def _sync_remote(self, old_reminders, old_lists, notify_past, only_user_id):
+    def _sync_remote(self, old_reminders, old_lists, notify_past):
         updated_reminder_ids = self.queue.get_updated_reminder_ids()
         removed_reminder_ids = self.queue.get_removed_reminder_ids()
 
         updated_list_ids = self.queue.get_updated_list_ids()
         removed_list_ids = self.queue.get_removed_list_ids()
 
-        ms_lists, ms_not_synced = self.to_do.get_lists(removed_list_ids, old_lists, self.synced_ids, only_user_id)
+        ms_lists, ms_not_synced = self.to_do.get_lists(removed_list_ids, old_lists, self.synced_ids)
 
-        caldav_lists, caldav_not_synced = self.caldav.get_lists(removed_list_ids, old_lists, self.synced_ids, only_user_id)
+        caldav_lists, caldav_not_synced = self.caldav.get_lists(removed_list_ids, old_lists, self.synced_ids)
 
         not_synced = ms_not_synced + caldav_not_synced
 
@@ -986,7 +985,7 @@ class Reminders():
             self.synced_ids += synced
             self._set_synced_lists_no_refresh(self.synced_ids)
 
-    def _get_reminders(self, notify_past = True, only_user_id = None, migrate_old = False):
+    def _get_reminders(self, notify_past = True, migrate_old = False):
         reminders = {}
         lists = {}
 
@@ -1065,7 +1064,7 @@ class Reminders():
 
         self._migrate_old(reminders, lists)
 
-        reminders, lists = self._sync_remote(reminders, lists, notify_past, only_user_id)
+        reminders, lists = self._sync_remote(reminders, lists, notify_past)
 
         return reminders, lists
 
@@ -1561,6 +1560,7 @@ class Reminders():
             self.lists.pop(list_id)
             self._save_lists()
             self.do_emit('ListRemoved', GLib.Variant('(ss)', (app_id, list_id)))
+            GLib.idle_add(lambda *args: self.refresh())
         else:
             raise KeyError('Invalid List ID')
 
@@ -1573,7 +1573,7 @@ class Reminders():
         self.synced_ids.append(user_id)
         self._set_synced_lists_no_refresh(self.synced_ids)
         self.do_emit('CalDAVSignedIn', GLib.Variant('(ss)', (user_id, name)))
-        GLib.idle_add(lambda *args: self.refresh(False, user_id))
+        GLib.idle_add(lambda *args: self.refresh(False))
 
     def caldav_update_username(self, user_id, username):
         self.caldav.users[user_id]['name'] = username
@@ -1592,20 +1592,15 @@ class Reminders():
             self.synced_ids.remove(user_id)
             self._set_synced_lists_no_refresh(self.synced_ids)
         self.do_emit('SignedOut', GLib.Variant('(s)', (user_id,)))
-        GLib.idle_add(lambda *args: self.refresh(only_user_id=user_id))
+        GLib.idle_add(lambda *args: self.refresh())
 
-    def refresh_user(self, user_id):
-        self.refresh(only_user_id=user_id)
-
-    def refresh(self, notify_past = True, only_user_id = None):
+    def refresh(self, notify_past = True):
         if self.refreshing:
             return
+
         self.refreshing = True
         try:
-            if only_user_id is None: # if only refreshing one user don't reset the timeout
-                self.countdowns.add_timeout(self.refresh_time, self._refresh_cb, 'refresh')
-
-            reminders, lists = self._get_reminders(notify_past, only_user_id)
+            reminders, lists = self._get_reminders(notify_past)
 
             new_ids = []
             removed_ids = []
@@ -1654,7 +1649,10 @@ class Reminders():
 
         except Exception as error:
             logger.exception(error)
+
         self.refreshing = False
+
+        self.countdowns.add_timeout(self.refresh_time, self._refresh_cb, 'refresh')
 
     def set_synced_lists(self, lists):
         variant = GLib.Variant('as', lists)

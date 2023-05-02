@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-02 16:07-0400\n"
+"POT-Creation-Date: 2023-05-02 16:55-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1232,14 +1232,14 @@ msgstr ""
 msgid "AM"
 msgstr ""
 
-#: src/service/backend.py:635
+#: src/service/backend.py:634
 msgid "Mark as completed"
 msgstr ""
 
-#: src/service/backend.py:1016
+#: src/service/backend.py:1015
 msgid "Local Reminders"
 msgstr ""
 
-#: src/service/backend.py:1678
+#: src/service/backend.py:1676
 msgid "Local"
 msgstr ""

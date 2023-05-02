@@ -126,9 +126,6 @@
       <arg name="list-id" type="s"/>
     </method>
     <method name="Refresh"/>
-    <method name="RefreshUser">
-      <arg name="user-id" type="s"/>
-    </method>
     <method name="GetVersion">
       <arg name="version" direction="out" type="s"/>
     </method>
