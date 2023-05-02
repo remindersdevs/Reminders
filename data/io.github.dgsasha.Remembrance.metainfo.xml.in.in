@@ -68,10 +68,10 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/dgsasha/remembrance/3106669ae881a235dd4290a792d9c18f07817b09/screenshot-dark.png</image>
+      <image>https://raw.githubusercontent.com/dgsasha/remembrance/c582346fdf564104042e67f329ea2caa5793920d/screenshot-dark.png</image>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/dgsasha/remembrance/3106669ae881a235dd4290a792d9c18f07817b09/screenshot-light.png</image>
+      <image>https://raw.githubusercontent.com/dgsasha/remembrance/c582346fdf564104042e67f329ea2caa5793920d/screenshot-light.png</image>
     </screenshot>
   </screenshots>
 
@@ -84,6 +84,7 @@
     <release version="5.0.beta" date="2023-05-01">
       <description>
         <ul>
+          <li>UI improvements</li>
           <li>Added support for making the week start on sunday</li>
           <li>Added indicators that show how many incomplete reminders are in each list/group</li>
           <li>Added support for syncing with CalDAV servers</li>

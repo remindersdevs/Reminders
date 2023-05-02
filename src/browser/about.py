@@ -19,6 +19,7 @@ from gettext import gettext as _
 
 RELEASE_NOTES = '''
 <ul>
+    <li>UI improvements</li>
     <li>Added support for making the week start on sunday</li>
     <li>Added indicators that show how many incomplete reminders are in each list/group</li>
     <li>Added support for syncing with CalDAV servers</li>
