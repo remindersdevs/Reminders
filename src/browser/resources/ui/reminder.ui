@@ -4,6 +4,7 @@
     <signal name="notify::expanded" handler="expanded_cb" swapped="no"/>
     <style>
       <class name="reminder"/>
+      <class name="card"/>
     </style>
     <property name="selectable">false</property>
     <child type="prefix">

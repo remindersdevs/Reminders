@@ -17,7 +17,7 @@
                 <signal name="notify::reveal-child" handler="search_enabled_cb" swapped="no"/>
                 <child>
                   <object class="GtkSearchEntry" id="search_entry">
-                    <property name="max-width-chars">25</property>
+                    <property name="max-width-chars">30</property>
                     <signal name="search-changed" handler="search_changed_cb" swapped="no"/>
                   </object>
                 </child>
@@ -78,7 +78,7 @@
             <property name="flap">
               <object class="GtkScrolledWindow">
                 <property name="vexpand">true</property>
-                <property name="width-request">230</property>
+                <property name="width-request">240</property>
                 <child>
                   <object class="GtkBox">
                     <style>
@@ -309,6 +309,7 @@
                                 <child>
                                   <object class="GtkBox">
                                     <property name="orientation">vertical</property>
+                                    <property name="spacing">2</property>
                                     <style>
                                       <class name="page-heading-box"/>
                                     </style>
@@ -317,7 +318,7 @@
                                         <property name="orientation">horizontal</property>
                                         <property name="valign">start</property>
                                         <property name="hexpand">true</property>
-                                        <property name="spacing">5</property>
+                                        <property name="spacing">8</property>
                                         <child>
                                           <object class="GtkLabel" id="page_label">
                                             <property name="label" translatable="yes">All Reminders</property>
@@ -361,6 +362,7 @@
                                     <style>
                                       <class name="boxed-list"/>
                                       <class name="reminders-list"/>
+                                      <class name="flat"/>
                                     </style>
                                   </object>
                                 </child>

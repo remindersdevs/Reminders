@@ -455,7 +455,10 @@ class CalDAV():
             if reminder['repeat-type'] == info.RepeatType.WEEK:
                 repeat_days = []
                 if reminder['repeat-days'] == 0:
-                    repeat_days.append((datetime.date.today().weekday() + 1) % 7)
+                    if reminder['timestamp'] != 0:
+                        repeat_days.append(DAYS[datetime.datetime.fromtimestamp(reminder['timestamp'], tz=datetime.timezone.utc).date().weekday()])
+                    else:
+                        repeat_days.append(DAYS[datetime.datetime.fromtimestamp(reminder['due-date'], tz=datetime.timezone.utc).date().weekday()])
                 else:
                     repeat_days_flag = info.RepeatDays(reminder['repeat-days'])
                     for index, flag in enumerate((
@@ -565,6 +568,6 @@ class CalDAV():
 
                 for day in days:
                     index = DAYS.index(day)
-                    reminder['repeat-days'] += flags[index]
+                    reminder['repeat-days'] += int(flags[index])
 
         return reminder

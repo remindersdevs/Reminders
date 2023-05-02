@@ -25,7 +25,7 @@ On what interval to repeat the reminder.
 - YEAR = 6
 
 ### RepeatDays
-What days to repeat on for weekly repeating reminders, can be zero to just use the weekday of the Reminder's timestamp, or add multiple values together to repeat on multiple days.
+What days to repeat on for weekly repeating reminders, or add multiple values together to repeat on multiple days. This can technically be zero but its better if you set a value.
 - MON = 1
 - TUE = 2
 - WED = 4

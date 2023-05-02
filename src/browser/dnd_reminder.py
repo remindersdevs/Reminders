@@ -64,3 +64,4 @@ class DNDReminder(Adw.ActionRow):
 
         self.set_size_request(self.get_allocated_width(), -1)
         self.add_css_class('card')
+        self.add_css_class('dnd-reminder')

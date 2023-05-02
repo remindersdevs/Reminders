@@ -252,7 +252,7 @@ button.refresh:dir(rtl)  {
     margin-right: 6px;
 }
 
-/* Elaborate fix for https://gitlab.gnome.org/GNOME/gtk/-/issues/5309 */
+/* Elaborate fix for https://gitlab.gnome.org/GNOME/gtk/-/issues/5309
 .reminders-list > row:nth-last-child(2),
 .reminders-list > row.expander:nth-last-child(2):not(:checked) > box > list > row.header,
 .reminders-list > row.expander:nth-last-child(2) > box > revealer > list.nested > row:last-child {
@@ -271,7 +271,7 @@ button.refresh:dir(rtl)  {
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
 }
-
+*/
 
 /* Add support for nested expander */
 list.nested row.header,
@@ -295,4 +295,22 @@ list.nested list.nested {
 .navigation-sidebar row:drop(active) {
     color: @accent_bg_color;
     box-shadow: inset 0 0 0 1px @accent_bg_color;
+}
+
+
+.reminders-list {background-color: transparent; box-shadow: none;}
+.reminders-list > row {margin-bottom: 12px; background-color: @card_bg_color;}
+.reminders-list > row row.header {border-top-left-radius: 12px; border-top-right-radius: 12px;}
+.reminders-list > row:not(:checked) row.header {border-radius: 12px; border-bottom: 0;}
+
+.reminder list:not(.nested) {border-radius: 12px;}
+
+.reminder list.nested {border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; background-color: alpha(@card_shade_color, 0.5);}
+.reminder list.nested row:last-child {border-bottom: 0;}
+.reminders-list > row.expander:nth-last-child(2) {
+    margin-bottom: 0;
+}
+
+.dnd-reminder {
+    margin: 6px;
 }

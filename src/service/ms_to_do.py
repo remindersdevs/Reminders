@@ -588,7 +588,10 @@ class MSToDo():
 
             reminder_json['recurrence']['pattern']['daysOfWeek'] = []
             if reminder['repeat-days'] == 0:
-                reminder_json['recurrence']['pattern']['daysOfWeek'].append(DAYS[datetime.date.today().weekday()])
+                if reminder['timestamp'] != 0:
+                    reminder_json['recurrence']['pattern']['daysOfWeek'].append(DAYS[datetime.datetime.fromtimestamp(reminder['timestamp'], tz=datetime.timezone.utc).date().weekday()])
+                else:
+                    reminder_json['recurrence']['pattern']['daysOfWeek'].append(DAYS[datetime.datetime.fromtimestamp(reminder['due-date'], tz=datetime.timezone.utc).date().weekday()])
             else:
                 repeat_days_flag = info.RepeatDays(reminder['repeat-days'])
                 for num, flag in (
@@ -653,6 +656,6 @@ class MSToDo():
                     flags = list(info.RepeatDays.__members__.values())
                     for day in task['recurrence']['pattern']['daysOfWeek']:
                         index = DAYS.index(day)
-                        reminder['repeat-days'] += flags[index]
+                        reminder['repeat-days'] += int(flags[index])
 
         return reminder

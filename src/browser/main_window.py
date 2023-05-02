@@ -99,9 +99,12 @@ class MainWindow(Adw.ApplicationWindow):
             title=_('Nothing to see here!'),
             subtitle=_('Press the plus button below to add a reminder')
         )
+        self.placeholder.add_css_class('card')
         self.search_placeholder = Adw.ActionRow(
             title=_('No reminders match your search')
         )
+        self.search_placeholder.add_css_class('card')
+
         self.set_title(info.app_name)
         self.set_icon_name(info.app_id)
         self.dropdown_connection = None
@@ -443,7 +446,8 @@ class MainWindow(Adw.ApplicationWindow):
             else:
                 type_name = str(repeat_frequency) + ' ' + _('weeks')
 
-            suffix = f" ({','.join(days)})"
+            if repeat_days != 0:
+                suffix = f" ({','.join(days)})"
         elif repeat_type == info.RepeatType.MONTH:
             if repeat_frequency == 1:
                 type_name = _('month')
@@ -905,7 +909,7 @@ class MainWindow(Adw.ApplicationWindow):
             return task_list == selected_list_id
 
     def no_filter(self, reminder):
-        reminder.set_sensitive(True)
+        #reminder.set_sensitive(True)
         reminder.set_no_strikethrough(True)
         return True
 
@@ -913,7 +917,7 @@ class MainWindow(Adw.ApplicationWindow):
         retval = self.task_list_filter(reminder, list_id)
         if not just_filter:
             reminder.set_no_strikethrough(False)
-            reminder.set_sensitive(retval)
+            #reminder.set_sensitive(retval)
             if not retval:
                 self.reminders_list.unselect_row(reminder)
                 reminder.set_selectable(False)
@@ -926,7 +930,7 @@ class MainWindow(Adw.ApplicationWindow):
         else:
             retval = False
         if not just_filter:
-            reminder.set_sensitive(retval)
+            #reminder.set_sensitive(retval)
             if not retval:
                 self.reminders_list.unselect_row(reminder)
                 reminder.set_selectable(False)
@@ -940,7 +944,7 @@ class MainWindow(Adw.ApplicationWindow):
         else:
             retval = False
         if not just_filter:
-            reminder.set_sensitive(retval)
+            #reminder.set_sensitive(retval)
             if not retval:
                 self.reminders_list.unselect_row(reminder)
                 reminder.set_selectable(False)
@@ -954,7 +958,7 @@ class MainWindow(Adw.ApplicationWindow):
         else:
             retval = False
         if not just_filter:
-            reminder.set_sensitive(retval)
+            #reminder.set_sensitive(retval)
             if not retval:
                 self.reminders_list.unselect_row(reminder)
                 reminder.set_selectable(False)
@@ -1102,7 +1106,7 @@ class MainWindow(Adw.ApplicationWindow):
         if retval:
             reminder.set_no_strikethrough(True)
 
-        reminder.set_sensitive(retval)
+        #reminder.set_sensitive(retval)
         if not retval:
             self.reminders_list.unselect_row(reminder)
             reminder.set_selectable(False)
