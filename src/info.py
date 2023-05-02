@@ -17,13 +17,13 @@ service_interface = '@SERVICE_INTERFACE@'
 service_object = '@SERVICE_OBJECT@'
 service_path = '@SERVICE_PATH@'
 
-service_version = '@VERSION@'
-
 portals_enabled = literal_eval('@PORTALS_ENABLED@')
 
 client_id = '@CLIENT_ID@'
 
 data_dir = f'{GLib.get_user_data_dir()}/{app_executable}'
+
+interface_file = f'@INTERFACES_DIR@/{service_interface}.xml'
 
 reminder_defaults = {
     'title': '',

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-02 13:33-0400\n"
+"POT-Creation-Date: 2023-05-02 16:07-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,7 +24,6 @@ msgid "Reminders"
 msgstr ""
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:5
-#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:10
 msgid "Set reminders for yourself"
 msgstr ""
 
@@ -34,12 +33,12 @@ msgid ""
 "Reminders;"
 msgstr ""
 
-#: data/service/io.github.dgsasha.Remembrance.Service1.desktop.in.in:4
+#: data/service/io.github.dgsasha.Remembrance.Service3.desktop.in.in:4
 msgid "Remembrance Service"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:23
-#: src/browser/resources/ui/preferences.ui:97
+#: src/browser/resources/ui/preferences.ui:113
 msgid "Time format"
 msgstr ""
 
@@ -48,7 +47,7 @@ msgid "What format to display the time in"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:28
-#: src/browser/resources/ui/main_window.ui:46
+#: src/browser/resources/ui/main_window.ui:62
 msgid "Sort by"
 msgstr ""
 
@@ -57,7 +56,7 @@ msgid "How to sort the reminders"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:33
-#: src/browser/resources/ui/preferences.ui:78
+#: src/browser/resources/ui/preferences.ui:94
 msgid "Auto refresh frequency"
 msgstr ""
 
@@ -132,6 +131,10 @@ msgstr ""
 msgid "(user_id, task_id) ids can be 'all', 'local', or an actual id"
 msgstr ""
 
+#: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:10
+msgid "Set reminders and manage tasks"
+msgstr ""
+
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:13
 msgid "What you can do with Reminders:"
 msgstr ""
@@ -193,7 +196,7 @@ msgid "Planner"
 msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:62
-#: src/browser/resources/ui/reminder_edit_window.ui:71
+#: src/browser/resources/ui/reminder_edit_window.ui:87
 msgid "Time"
 msgstr ""
 
@@ -410,49 +413,49 @@ msgstr ""
 msgid "Lots of bugfixes"
 msgstr ""
 
-#: src/browser/resources/ui/caldav_sign_in.ui:7
+#: src/browser/resources/ui/caldav_sign_in.ui:23
 msgid "CalDAV Sync"
 msgstr ""
 
-#: src/browser/resources/ui/caldav_sign_in.ui:31
-#: src/browser/resources/ui/preferences_user_row.ui:7
+#: src/browser/resources/ui/caldav_sign_in.ui:47
+#: src/browser/resources/ui/preferences_user_row.ui:23
 msgid "Display Name"
 msgstr ""
 
-#: src/browser/resources/ui/caldav_sign_in.ui:37
+#: src/browser/resources/ui/caldav_sign_in.ui:53
 msgid "Server URL"
 msgstr ""
 
-#: src/browser/resources/ui/caldav_sign_in.ui:43
+#: src/browser/resources/ui/caldav_sign_in.ui:59
 msgid "Username"
 msgstr ""
 
-#: src/browser/resources/ui/caldav_sign_in.ui:49
+#: src/browser/resources/ui/caldav_sign_in.ui:65
 msgid "Password"
 msgstr ""
 
-#: src/browser/resources/ui/caldav_sign_in.ui:56
+#: src/browser/resources/ui/caldav_sign_in.ui:72
 msgid "Sign In"
 msgstr ""
 
-#: src/browser/resources/ui/edit_lists_window.ui:4
-#: src/browser/resources/ui/main_window.ui:269
+#: src/browser/resources/ui/edit_lists_window.ui:20
+#: src/browser/resources/ui/main_window.ui:285
 msgid "Edit Lists"
 msgstr ""
 
-#: src/browser/resources/ui/error_dialog.ui:32
+#: src/browser/resources/ui/error_dialog.ui:48
 msgid "View Error"
 msgstr ""
 
-#: src/browser/resources/ui/export_lists_window.ui:4
+#: src/browser/resources/ui/export_lists_window.ui:20
 msgid "Export Lists"
 msgstr ""
 
-#: src/browser/resources/ui/export_lists_window.ui:62
-#: src/browser/resources/ui/import_lists_window.ui:76
-#: src/browser/resources/ui/main_window.ui:410
-#: src/browser/resources/ui/move_reminders_window.ui:62
-#: src/browser/resources/ui/reminder_edit_window.ui:474
+#: src/browser/resources/ui/export_lists_window.ui:78
+#: src/browser/resources/ui/import_lists_window.ui:92
+#: src/browser/resources/ui/main_window.ui:426
+#: src/browser/resources/ui/move_reminders_window.ui:78
+#: src/browser/resources/ui/reminder_edit_window.ui:490
 #: src/browser/edit_lists_window.py:96 src/browser/edit_lists_window.py:201
 #: src/browser/main_window.py:391 src/browser/main_window.py:1285
 #: src/browser/main_window.py:1300 src/browser/main_window.py:1319
@@ -462,466 +465,466 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: src/browser/resources/ui/export_lists_window.ui:77
-#: src/browser/resources/ui/shortcuts_window.ui:21
+#: src/browser/resources/ui/export_lists_window.ui:93
+#: src/browser/resources/ui/shortcuts_window.ui:37
 msgid "Export"
 msgstr ""
 
-#: src/browser/resources/ui/import_lists_window.ui:4
+#: src/browser/resources/ui/import_lists_window.ui:20
 msgid "Import Lists"
 msgstr ""
 
-#: src/browser/resources/ui/import_lists_window.ui:40
+#: src/browser/resources/ui/import_lists_window.ui:56
 msgid "Import to specific list"
 msgstr ""
 
-#: src/browser/resources/ui/import_lists_window.ui:41
+#: src/browser/resources/ui/import_lists_window.ui:57
 msgid "Otherwise new lists will be created"
 msgstr ""
 
-#: src/browser/resources/ui/import_lists_window.ui:47
+#: src/browser/resources/ui/import_lists_window.ui:63
 msgid "Select a list"
 msgstr ""
 
-#: src/browser/resources/ui/import_lists_window.ui:91
-#: src/browser/resources/ui/shortcuts_window.ui:27
+#: src/browser/resources/ui/import_lists_window.ui:107
+#: src/browser/resources/ui/shortcuts_window.ui:43
 msgid "Import"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:34
+#: src/browser/resources/ui/main_window.ui:50
 msgid "Show sidebar"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:45
+#: src/browser/resources/ui/main_window.ui:61
 msgid "Sort direction"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:59
-#: src/browser/resources/ui/shortcuts_window.ui:85
+#: src/browser/resources/ui/main_window.ui:75
+#: src/browser/resources/ui/shortcuts_window.ui:101
 msgid "Search"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:67
+#: src/browser/resources/ui/main_window.ui:83
 msgid "App menu"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:110
-#: src/browser/resources/ui/main_window.ui:324 src/browser/main_window.py:1048
+#: src/browser/resources/ui/main_window.ui:126
+#: src/browser/resources/ui/main_window.ui:340 src/browser/main_window.py:1048
 msgid "All Reminders"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:142 src/browser/main_window.py:1059
+#: src/browser/resources/ui/main_window.ui:158 src/browser/main_window.py:1059
 msgid "Upcoming Reminders"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:174 src/browser/main_window.py:1070
+#: src/browser/resources/ui/main_window.ui:190 src/browser/main_window.py:1070
 msgid "Past Reminders"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:206 src/browser/main_window.py:1081
+#: src/browser/resources/ui/main_window.ui:222 src/browser/main_window.py:1081
 msgid "Completed Reminders"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:432 src/browser/reminder.py:346
+#: src/browser/resources/ui/main_window.ui:448 src/browser/reminder.py:346
 msgid "Complete"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:458 src/browser/reminder.py:342
+#: src/browser/resources/ui/main_window.ui:474 src/browser/reminder.py:342
 msgid "Incomplete"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:484
-#: src/browser/resources/ui/reminder_edit_window.ui:50
+#: src/browser/resources/ui/main_window.ui:500
+#: src/browser/resources/ui/reminder_edit_window.ui:66
 msgid "Important"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:510
+#: src/browser/resources/ui/main_window.ui:526
 msgid "Unimportant"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:535
-#: src/browser/resources/ui/move_reminders_window.ui:77
+#: src/browser/resources/ui/main_window.ui:551
+#: src/browser/resources/ui/move_reminders_window.ui:93
 msgid "Move"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:557
-#: src/browser/resources/ui/reminder.ui:84 src/browser/edit_lists_window.py:202
-#: src/browser/reminder.py:413
+#: src/browser/resources/ui/main_window.ui:573
+#: src/browser/resources/ui/reminder.ui:100
+#: src/browser/edit_lists_window.py:202 src/browser/reminder.py:413
 msgid "Remove"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:579
-#: src/browser/resources/ui/main_window.ui:587
+#: src/browser/resources/ui/main_window.ui:595
+#: src/browser/resources/ui/main_window.ui:603
 msgid "Add a reminder"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:609
+#: src/browser/resources/ui/main_window.ui:625
 msgid "_Refresh"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:613
+#: src/browser/resources/ui/main_window.ui:629
 msgid "_Export Lists"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:617
+#: src/browser/resources/ui/main_window.ui:633
 msgid "_Import Lists"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:623
+#: src/browser/resources/ui/main_window.ui:639
 msgid "_Preferences"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:627
+#: src/browser/resources/ui/main_window.ui:643
 msgid "_Keyboard Shortcuts"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:631
+#: src/browser/resources/ui/main_window.ui:647
 msgid "_About Reminders"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:638
+#: src/browser/resources/ui/main_window.ui:654
 msgid "Sort By"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:640
+#: src/browser/resources/ui/main_window.ui:656
 msgid "_Time"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:645
+#: src/browser/resources/ui/main_window.ui:661
 msgid "_Alphabetical"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:650
+#: src/browser/resources/ui/main_window.ui:666
 msgid "_Created"
 msgstr ""
 
-#: src/browser/resources/ui/main_window.ui:655
+#: src/browser/resources/ui/main_window.ui:671
 msgid "_Last Updated"
 msgstr ""
 
-#: src/browser/resources/ui/microsoft_sign_in.ui:7
+#: src/browser/resources/ui/microsoft_sign_in.ui:23
 msgid "Microsoft To Do Sync"
 msgstr ""
 
-#: src/browser/resources/ui/move_reminders_window.ui:4
+#: src/browser/resources/ui/move_reminders_window.ui:20
 msgid "Move Selected Reminder(s)"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:4
-#: src/browser/resources/ui/shortcuts_window.ui:33
+#: src/browser/resources/ui/preferences.ui:20
+#: src/browser/resources/ui/shortcuts_window.ui:49
 msgid "Preferences"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:13
+#: src/browser/resources/ui/preferences.ui:29
 msgid "Syncing"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:22
+#: src/browser/resources/ui/preferences.ui:38
 msgid "Microsoft To Do"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:34
-#: src/browser/resources/ui/preferences.ui:62
+#: src/browser/resources/ui/preferences.ui:50
+#: src/browser/resources/ui/preferences.ui:78
 msgid "Add Account"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:50
+#: src/browser/resources/ui/preferences.ui:66
 msgid "CalDAV"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:82
+#: src/browser/resources/ui/preferences.ui:98
 msgid "Refresh"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:94
-#: src/browser/resources/ui/reminder_edit_window.ui:36
+#: src/browser/resources/ui/preferences.ui:110
+#: src/browser/resources/ui/reminder_edit_window.ui:52
 msgid "General"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:103
+#: src/browser/resources/ui/preferences.ui:119
 msgid "Week starts on Sunday"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:114
+#: src/browser/resources/ui/preferences.ui:130
 msgid "Play sound with notification"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:118
+#: src/browser/resources/ui/preferences.ui:134
 msgid "Use the included notification sound"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:119
+#: src/browser/resources/ui/preferences.ui:135
 msgid "Otherwise the bell sound from the enabled sound theme will be used"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:137
+#: src/browser/resources/ui/preferences.ui:153
 msgid "Use locale default"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:138
+#: src/browser/resources/ui/preferences.ui:154
 msgid "12 hour time"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:139
+#: src/browser/resources/ui/preferences.ui:155
 msgid "24 hour time"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:144
+#: src/browser/resources/ui/preferences.ui:160
 msgid "5 mins"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:145
+#: src/browser/resources/ui/preferences.ui:161
 msgid "15 mins"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:146
+#: src/browser/resources/ui/preferences.ui:162
 msgid "30 mins"
 msgstr ""
 
-#: src/browser/resources/ui/preferences.ui:147
+#: src/browser/resources/ui/preferences.ui:163
 msgid "60 mins"
 msgstr ""
 
-#: src/browser/resources/ui/preferences_user_row.ui:36
+#: src/browser/resources/ui/preferences_user_row.ui:52
 msgid "All"
 msgstr ""
 
-#: src/browser/resources/ui/preferences_user_row.ui:59
+#: src/browser/resources/ui/preferences_user_row.ui:75
 #: src/browser/preferences.py:275
 msgid "Sign Out"
 msgstr ""
 
-#: src/browser/resources/ui/reminder.ui:115
+#: src/browser/resources/ui/reminder.ui:131
 msgid "Edit"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:39
+#: src/browser/resources/ui/reminder_edit_window.ui:55
 msgid "What should the reminder be called?"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:45
+#: src/browser/resources/ui/reminder_edit_window.ui:61
 msgid "Short description of the reminder (Optional)"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:51
+#: src/browser/resources/ui/reminder_edit_window.ui:67
 msgid "This will make the reminder display first in the list"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:63
+#: src/browser/resources/ui/reminder_edit_window.ui:79
 msgid "Location"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:74
+#: src/browser/resources/ui/reminder_edit_window.ui:90
 msgid "Set a date/time"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:96
-#: src/browser/resources/ui/reminder_edit_window.ui:431
+#: src/browser/resources/ui/reminder_edit_window.ui:112
+#: src/browser/resources/ui/reminder_edit_window.ui:447
 msgid "Select date"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:131
+#: src/browser/resources/ui/reminder_edit_window.ui:147
 msgid "Hour"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:162
+#: src/browser/resources/ui/reminder_edit_window.ui:178
 msgid "Minute"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:208
+#: src/browser/resources/ui/reminder_edit_window.ui:224
 msgid "Send a notification"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:227
+#: src/browser/resources/ui/reminder_edit_window.ui:243
 msgid "Repeat the reminder"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:228
+#: src/browser/resources/ui/reminder_edit_window.ui:244
 msgid "The reminder will be updated when you complete it"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:243
+#: src/browser/resources/ui/reminder_edit_window.ui:259
 msgid "Repeat every"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:294
+#: src/browser/resources/ui/reminder_edit_window.ui:310
 msgid "Mon"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:295
+#: src/browser/resources/ui/reminder_edit_window.ui:311
 msgid "Monday"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:306
+#: src/browser/resources/ui/reminder_edit_window.ui:322
 msgid "Tue"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:307
+#: src/browser/resources/ui/reminder_edit_window.ui:323
 msgid "Tuesday"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:318
+#: src/browser/resources/ui/reminder_edit_window.ui:334
 msgid "Wed"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:319
+#: src/browser/resources/ui/reminder_edit_window.ui:335
 msgid "Wednesday"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:330
+#: src/browser/resources/ui/reminder_edit_window.ui:346
 msgid "Thu"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:331
+#: src/browser/resources/ui/reminder_edit_window.ui:347
 msgid "Thursday"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:342
+#: src/browser/resources/ui/reminder_edit_window.ui:358
 msgid "Fri"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:343
+#: src/browser/resources/ui/reminder_edit_window.ui:359
 msgid "Friday"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:354
+#: src/browser/resources/ui/reminder_edit_window.ui:370
 msgid "Sat"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:355
+#: src/browser/resources/ui/reminder_edit_window.ui:371
 msgid "Saturday"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:366
+#: src/browser/resources/ui/reminder_edit_window.ui:382
 msgid "Sun"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:367
+#: src/browser/resources/ui/reminder_edit_window.ui:383
 msgid "Sunday"
 msgstr ""
 
 #. Translators: This is a noun, preceded by a number to represent the number of occurrences of something
-#: src/browser/resources/ui/reminder_edit_window.ui:416
+#: src/browser/resources/ui/reminder_edit_window.ui:432
 msgid "time(s)"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:489
+#: src/browser/resources/ui/reminder_edit_window.ui:505
 msgid "Save"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:504
+#: src/browser/resources/ui/reminder_edit_window.ui:520
 msgid "minute(s)"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:505
+#: src/browser/resources/ui/reminder_edit_window.ui:521
 msgid "hour(s)"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:506
-#: src/browser/resources/ui/reminder_edit_window.ui:514
+#: src/browser/resources/ui/reminder_edit_window.ui:522
+#: src/browser/resources/ui/reminder_edit_window.ui:530
 msgid "day(s)"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:507
-#: src/browser/resources/ui/reminder_edit_window.ui:515
+#: src/browser/resources/ui/reminder_edit_window.ui:523
+#: src/browser/resources/ui/reminder_edit_window.ui:531
 msgid "week(s)"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:508
-#: src/browser/resources/ui/reminder_edit_window.ui:516
+#: src/browser/resources/ui/reminder_edit_window.ui:524
+#: src/browser/resources/ui/reminder_edit_window.ui:532
 msgid "months(s)"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:509
-#: src/browser/resources/ui/reminder_edit_window.ui:517
+#: src/browser/resources/ui/reminder_edit_window.ui:525
+#: src/browser/resources/ui/reminder_edit_window.ui:533
 msgid "years(s)"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:522
+#: src/browser/resources/ui/reminder_edit_window.ui:538
 msgid "Repeat forever"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:523
+#: src/browser/resources/ui/reminder_edit_window.ui:539
 msgid "Display a total of"
 msgstr ""
 
-#: src/browser/resources/ui/reminder_edit_window.ui:524
+#: src/browser/resources/ui/reminder_edit_window.ui:540
 msgid "Repeat until"
 msgstr ""
 
-#: src/browser/resources/ui/shortcuts_window.ui:11
+#: src/browser/resources/ui/shortcuts_window.ui:27
 msgid "Application"
 msgstr ""
 
-#: src/browser/resources/ui/shortcuts_window.ui:15
+#: src/browser/resources/ui/shortcuts_window.ui:31
 msgid "Show menu"
 msgstr ""
 
-#: src/browser/resources/ui/shortcuts_window.ui:39
+#: src/browser/resources/ui/shortcuts_window.ui:55
 msgid "Keyboard shortcuts"
 msgstr ""
 
-#: src/browser/resources/ui/shortcuts_window.ui:45
+#: src/browser/resources/ui/shortcuts_window.ui:61
 msgid "Quit"
 msgstr ""
 
-#: src/browser/resources/ui/shortcuts_window.ui:52
+#: src/browser/resources/ui/shortcuts_window.ui:68
 msgid "Navigation"
 msgstr ""
 
-#: src/browser/resources/ui/shortcuts_window.ui:56
+#: src/browser/resources/ui/shortcuts_window.ui:72
 msgid "Move left"
 msgstr ""
 
-#: src/browser/resources/ui/shortcuts_window.ui:62
+#: src/browser/resources/ui/shortcuts_window.ui:78
 msgid "Move up"
 msgstr ""
 
-#: src/browser/resources/ui/shortcuts_window.ui:68
+#: src/browser/resources/ui/shortcuts_window.ui:84
 msgid "Move right"
 msgstr ""
 
-#: src/browser/resources/ui/shortcuts_window.ui:74
+#: src/browser/resources/ui/shortcuts_window.ui:90
 msgid "Move down"
 msgstr ""
 
-#: src/browser/resources/ui/shortcuts_window.ui:81
+#: src/browser/resources/ui/shortcuts_window.ui:97
 msgid "Main Window"
 msgstr ""
 
-#: src/browser/resources/ui/shortcuts_window.ui:91
+#: src/browser/resources/ui/shortcuts_window.ui:107
 msgid "New reminder"
 msgstr ""
 
-#: src/browser/resources/ui/shortcuts_window.ui:97
+#: src/browser/resources/ui/shortcuts_window.ui:113
 msgid "Refresh reminders"
 msgstr ""
 
-#: src/browser/resources/ui/shortcuts_window.ui:103
+#: src/browser/resources/ui/shortcuts_window.ui:119
 msgid "Select all reminders"
 msgstr ""
 
-#: src/browser/resources/ui/shortcuts_window.ui:109
+#: src/browser/resources/ui/shortcuts_window.ui:125
 msgid "Hold to start selecting reminders"
 msgstr ""
 
-#: src/browser/resources/ui/shortcuts_window.ui:115
+#: src/browser/resources/ui/shortcuts_window.ui:131
 msgid "Unselect all reminders"
 msgstr ""
 
-#: src/browser/resources/ui/shortcuts_window.ui:121
+#: src/browser/resources/ui/shortcuts_window.ui:137
 msgid "Remove selected reminders"
 msgstr ""
 
-#: src/browser/resources/ui/shortcuts_window.ui:128
+#: src/browser/resources/ui/shortcuts_window.ui:144
 msgid "Child Windows"
 msgstr ""
 
-#: src/browser/resources/ui/shortcuts_window.ui:132
+#: src/browser/resources/ui/shortcuts_window.ui:148
 msgid "Close window"
 msgstr ""
 
-#: src/browser/resources/ui/shortcuts_window.ui:138
+#: src/browser/resources/ui/shortcuts_window.ui:154
 msgid "Save changes"
 msgstr ""
 
@@ -1229,14 +1232,14 @@ msgstr ""
 msgid "AM"
 msgstr ""
 
-#: src/service/backend.py:819
+#: src/service/backend.py:635
 msgid "Mark as completed"
 msgstr ""
 
-#: src/service/backend.py:1200
+#: src/service/backend.py:1016
 msgid "Local Reminders"
 msgstr ""
 
-#: src/service/backend.py:1862
+#: src/service/backend.py:1678
 msgid "Local"
 msgstr ""

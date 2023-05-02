@@ -50,197 +50,13 @@ MS_REMINDERS_FILE = f'{info.data_dir}/ms_reminders.csv'
 TASK_LISTS_FILE = f'{info.data_dir}/task_lists.json'
 TASK_LIST_IDS_FILE = f'{info.data_dir}/task_list_ids.csv'
 
-VERSION = info.service_version
+VERSION = info.version
 PID = getpid()
 
 logger = getLogger(info.service_executable)
 
-XML = f'''<node name="/">
-<interface name="{info.service_interface}">
-    <method name='GetUsers'>
-        <arg name='usernames' direction='out' type='a{{sa{{ss}}}}'/>
-    </method>
-    <method name='GetLists'>
-        <arg name='lists' direction='out' type='aa{{sv}}'/>
-    </method>
-    <method name='GetListsDict'>
-        <arg name='lists' direction='out' type='a{{sa{{sv}}}}'/>
-    </method>
-    <method name='GetReminders'>
-        <arg name='reminders' direction='out' type='aa{{sv}}'/>
-    </method>
-    <method name='GetRemindersDict'>
-        <arg name='reminders' direction='out' type='a{{sa{{sv}}}}'/>
-    </method>
-    <method name='GetRemindersInList'>
-        <arg name='list-id' type='s'/>
-        <arg name='reminders' direction='out' type='aa{{sv}}'/>
-    </method>
-    <method name='GetSyncedLists'>
-        <arg name='list-ids' direction='out' type='as'/>
-    </method>
-    <method name='SetSyncedLists'>
-        <arg name='synced-lists' type='as'/>
-    </method>
-    <method name='GetWeekStart'>
-        <arg name='week-start-sunday' direction='out' type='b'/>
-    </method>
-    <method name='SetWeekStart'>
-        <arg name='week-start-sunday' type='b'/>
-    </method>
-    <method name='CreateList'>
-        <arg name='app-id' type='s'/>
-        <arg name='list' type='a{{sv}}'/>
-        <arg name='list-id' direction='out' type='s'/>
-    </method>
-    <method name='UpdateList'>
-        <arg name='app-id' type='s'/>
-        <arg name='list' type='a{{sv}}'/>
-    </method>
-    <method name='RemoveList'>
-        <arg name='app-id' type='s'/>
-        <arg name='list-id' type='s'/>
-    </method>
-    <method name='CreateReminder'>
-        <arg name='app-id' type='s'/>
-        <arg name='reminder' type='a{{sv}}'/>
-        <arg name='reminder-id' direction='out' type='s'/>
-        <arg name='created-timestamp' direction='out' type='u'/>
-    </method>
-    <method name='UpdateReminder'>
-        <arg name='app-id' type='s'/>
-        <arg name='reminder' type='a{{sv}}'/>
-        <arg name='updated-timestamp' direction='out' type='u'/>
-    </method>
-    <method name='UpdateCompleted'>
-        <arg name='app-id' type='s'/>
-        <arg name='reminder-id' type='s'/>
-        <arg name='completed' type='b'/>
-        <arg name='updated-timestamp' direction='out' type='u'/>
-        <arg name='completed-date' direction='out' type='u'/>
-    </method>
-    <method name='RemoveReminder'>
-        <arg name='app-id' type='s'/>
-        <arg name='reminder-id' type='s'/>
-    </method>
-    <method name='UpdateReminderv'>
-        <arg name='app-id' type='s'/>
-        <arg name='reminders' type='aa{{sv}}'/>
-        <arg name='updated-reminder-ids' direction='out' type='as'/>
-        <arg name='updated-timestamp' direction='out' type='u'/>
-    </method>
-    <method name='UpdateCompletedv'>
-        <arg name='app-id' type='s'/>
-        <arg name='reminder-ids' type='as'/>
-        <arg name='completed' type='b'/>
-        <arg name='updated-reminder-ids' direction='out' type='as'/>
-        <arg name='updated-timestamp' direction='out' type='u'/>
-        <arg name='completed-date' direction='out' type='u'/>
-    </method>
-    <method name='RemoveReminderv'>
-        <arg name='app-id' type='s'/>
-        <arg name='reminder-ids' type='as'/>
-        <arg name='removed-reminder-ids' direction='out' type='as'/>
-    </method>
-    <method name='MSGetLoginURL'>
-        <arg name='url' direction='out' type='s'/>
-    </method>
-    <method name='CalDAVLogin'>
-        <arg name='display-name' type='s'/>
-        <arg name='url' type='s'/>
-        <arg name='username' type='s'/>
-        <arg name='password' type='s'/>
-    </method>
-    <method name='CalDAVUpdateDisplayName'>
-        <arg name='user-id' type='s'/>
-        <arg name='display-name' type='s'/>
-    </method>
-    <method name='Logout'>
-        <arg name='user-id' type='s'/>
-    </method>
-    <method name='ExportLists'>
-        <arg name='list-ids' type='as'/>
-        <arg name='folder' direction='out' type='s'/>
-    </method>
-    <method name='ImportLists'>
-        <arg name='ical-files' type='as'/>
-        <arg name='list-id' type='s'/>
-    </method>
-    <method name='Refresh'/>
-    <method name='RefreshUser'>
-        <arg name='user-id' type='s'/>
-    </method>
-    <method name='GetVersion'>
-        <arg name='version' direction='out' type='s'/>
-    </method>
-    <method name='Quit'/>
-    <signal name='SyncedListsChanged'>
-        <arg name='lists' direction='out' type='as'/>
-    </signal>
-    <signal name='WeekStartChanged'>
-        <arg name='week-start-sunday' direction='out' type='b'/>
-    </signal>
-    <signal name='ListUpdated'>
-        <arg name='app-id' direction='out' type='s'/>
-        <arg name='list' direction='out' type='a{{sv}}'/>
-    </signal>
-    <signal name='ListRemoved'>
-        <arg name='app-id' direction='out' type='s'/>
-        <arg name='list-id' direction='out' type='s'/>
-    </signal>
-    <signal name='ReminderShown'>
-        <arg name='reminder-id' direction='out' type='s'/>
-    </signal>
-    <signal name='ReminderUpdated'>
-        <arg name='app-id' direction='out' type='s'/>
-        <arg name='reminder' direction='out' type='a{{sv}}'/>
-    </signal>
-    <signal name='CompletedUpdated'>
-        <arg name='app-id' direction='out' type='s'/>
-        <arg name='reminder-id' direction='out' type='s'/>
-        <arg name='completed' direction='out' type='b'/>
-        <arg name='updated-timestamp' direction='out' type='u'/>
-        <arg name='completed-date' direction='out' type='u'/>
-    </signal>
-    <signal name='ReminderRemoved'>
-        <arg name='app-id' direction='out' type='s'/>
-        <arg name='reminder-id' direction='out' type='s'/>
-    </signal>
-    <signal name='RemindersCompleted'>
-        <arg name='app-id' direction='out' type='s'/>
-        <arg name='reminder-ids' direction='out' type='as'/>
-        <arg name='completed' direction='out' type='b'/>
-        <arg name='updated-timestamp' direction='out' type='u'/>
-        <arg name='completed-date' direction='out' type='u'/>
-    </signal>
-    <signal name='RemindersUpdated'>
-        <arg name='app-id' direction='out' type='s'/>
-        <arg name='reminders' direction='out' type='aa{{sv}}'/>
-    </signal>
-    <signal name='RemindersRemoved'>
-        <arg name='app-id' direction='out' type='s'/>
-        <arg name='reminder-ids' direction='out' type='as'/>
-    </signal>
-    <signal name='MSSignedIn'>
-        <arg name='user-id' direction='out' type='s'/>
-        <arg name='username' direction='out' type='s'/>
-    </signal>
-    <signal name='CalDAVSignedIn'>
-        <arg name='user-id' direction='out' type='s'/>
-        <arg name='display-name' direction='out' type='s'/>
-    </signal>
-    <signal name='UsernameUpdated'>
-        <arg name='user-id' direction='out' type='s'/>
-        <arg name='username' direction='out' type='s'/>
-    </signal>
-    <signal name='SignedOut'>
-        <arg name='user-id' direction='out' type='s'/>
-    </signal>
-    <signal name='Error'>
-        <arg name='stack-trace' direction='out' type='s'/>
-    </signal>
-</interface>
-</node>'''
+with open(info.interface_file, newline='') as f:
+    INTERFACE_XML = f.read()
 
 class Reminders():
     def __init__(self, app):
@@ -753,7 +569,7 @@ class Reminders():
         if self._regid is not None:
             self.connection.unregister_object(self._regid)
 
-        node_info = Gio.DBusNodeInfo.new_for_xml(XML)
+        node_info = Gio.DBusNodeInfo.new_for_xml(INTERFACE_XML)
         self._regid = self.connection.register_object(
             info.service_object,
             node_info.interfaces[0],

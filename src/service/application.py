@@ -29,7 +29,7 @@ class RemembranceService(Gio.Application):
             self.sandboxed = False
             self.portal = None
 
-            self.logger.info(f'Starting {info.service_executable} version {info.service_version}')
+            self.logger.info(f'Starting {info.service_executable} version {info.version}')
             self.settings = Gio.Settings(info.base_app_id)
 
             if info.portals_enabled:

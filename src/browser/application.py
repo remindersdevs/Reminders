@@ -132,7 +132,7 @@ class Remembrance(Adw.Application):
 
         loaded_ver = parse_version(str(loaded_service_version))
         min_ver = parse_version(str(MIN_SERVICE_VERSION))
-        installed_ver = parse_version(str(info.service_version))
+        installed_ver = parse_version(str(info.version))
 
         if self.restart or loaded_ver < min_ver:
             if min_ver <= installed_ver:

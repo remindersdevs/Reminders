@@ -15,6 +15,8 @@ info_conf.set('PORTALS_ENABLED', get_option('enable-portals') ? 'True' : 'False'
 
 info_conf.set('CLIENT_ID', get_option('client-id'))
 
+info_conf.set('INTERFACES_DIR', get_option('prefix') / get_option('datadir') / 'dbus-1/interfaces')
+
 configure_file(
     input: 'info.py',
     output: 'info.py',

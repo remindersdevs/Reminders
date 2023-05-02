@@ -1,7 +1,7 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
 data/browser/io.github.dgsasha.Remembrance.desktop.in.in
-data/service/io.github.dgsasha.Remembrance.Service1.desktop.in.in
+data/service/io.github.dgsasha.Remembrance.Service3.desktop.in.in
 data/io.github.dgsasha.Remembrance.gschema.xml.in
 data/io.github.dgsasha.Remembrance.metainfo.xml.in.in
 src/browser/resources/ui/caldav_sign_in.ui
