@@ -36,7 +36,7 @@ from pkg_resources import parse_version
 from traceback import format_exception
 
 # Always update this when new features are added that require the service to restart
-MIN_SERVICE_VERSION = '5.0.rc'
+MIN_SERVICE_VERSION = '5.0'
 
 class Remembrance(Adw.Application):
     '''Application for the frontend'''

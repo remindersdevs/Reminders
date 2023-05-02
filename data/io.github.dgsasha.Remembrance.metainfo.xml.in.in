@@ -81,7 +81,7 @@
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
   <releases>
-    <release version="5.0.beta" date="2023-05-01">
+    <release version="5.0" date="2023-05-03">
       <description>
         <ul>
           <li>UI improvements</li>

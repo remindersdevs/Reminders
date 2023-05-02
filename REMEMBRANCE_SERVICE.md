@@ -1,4 +1,4 @@
-# Reminders DBus Service version 5.0.beta2 Documentation
+# Reminders DBus Service version 5.0 Documentation
 name: io.github.dgsasha.Remembrance.Service3
 
 interface: io.github.dgsasha.Remembrance.Service3.Reminders
