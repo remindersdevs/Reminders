@@ -1,7 +1,7 @@
 <div align="center">
 
 ![Reminders](data/icons/io.github.remindersdevs.Reminders.svg)
-# Reminders, an open source reminder/to-do app
+# Reminders, an open source reminder app
 
 <a href="https://flathub.org/apps/details/io.github.dgsasha.Remembrance">
     <img src="https://flathub.org/assets/badges/flathub-badge-i-en.png" width="300px" height="100" alt="Download on Flathub"/>
