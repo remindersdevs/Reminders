@@ -314,7 +314,7 @@ class Reminders():
                             if isinstance(due, datetime.datetime):
                                 timestamp = due.timestamp()
                             elif isinstance(due, datetime.date):
-                                due_date = datetime.combine(due, datetime.time(), tzinfo=datetime.timezone.utc).timestamp()
+                                due_date = datetime.datetime.combine(due, datetime.time(), tzinfo=datetime.timezone.utc).timestamp()
                         except:
                             pass
 

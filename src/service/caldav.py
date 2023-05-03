@@ -490,7 +490,7 @@ class CalDAV():
                     if isinstance(due, datetime.datetime):
                         timestamp = int(due.timestamp())
                     elif isinstance(due, datetime.date):
-                        due_date = datetime.combine(due, datetime.time(), tzinfo=datetime.timezone.utc).timestamp()
+                        due_date = datetime.datetime.combine(due, datetime.time(), tzinfo=datetime.timezone.utc).timestamp()
                 except:
                     pass
 
@@ -548,7 +548,7 @@ class CalDAV():
                     if isinstance(until, datetime.datetime):
                         reminder['repeat-until'] = int(until.timestamp())
                     elif isinstance(until, datetime.date):
-                        reminder['repeat-until'] = int(datetime.combine(until, datetime.time(), tzinfo=datetime.timezone.utc).timestamp())
+                        reminder['repeat-until'] = int(datetime.datetime.combine(until, datetime.time(), tzinfo=datetime.timezone.utc).timestamp())
             except:
                 pass
 
