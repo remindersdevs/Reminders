@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/io/github/dgsasha/remembrance">
+  <gresource prefix="/io/github/remindersdevs/Reminders">
     <file>ui/caldav_sign_in.ui</file>
     <file>ui/dnd_reminder.ui</file>
     <file>ui/edit_lists_window.ui</file>

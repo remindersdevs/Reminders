@@ -19,7 +19,7 @@ resources = files(
 
 gnome.compile_resources(
     app_executable,
-    'remembrance.gresource.xml',
+    'reminders.gresource.xml',
     install: true,
     install_dir: python.get_install_dir() / meson.project_name() / 'browser',
     dependencies: resources,

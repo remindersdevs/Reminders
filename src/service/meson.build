@@ -20,7 +20,7 @@ install_data(
 )
 
 configure_file(
-    input: 'remembrance-service.py',
+    input: 'reminders-service.py',
     output: service_executable,
     configuration: conf,
     install: true,

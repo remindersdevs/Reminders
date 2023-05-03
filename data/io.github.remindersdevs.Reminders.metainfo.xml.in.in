@@ -3,7 +3,7 @@
 <component type="desktop-application">
   <content_rating type="oars-1.1"/>
 
-  <developer_name translatable="no">Sasha Hale</developer_name>
+  <developer_name translatable="yes">Reminders Developers</developer_name>
   <update_contact>dgsasha04_at_gmail.com</update_contact>
 
   <name>Reminders</name>
@@ -32,7 +32,7 @@
 
   <provides>
     <binary>@APP_EXECUTABLE@</binary>
-    <dbus type="session">io.github.dgsasha.Remembrance.Service1</dbus>
+    <dbus type="session">@SERVICE_ID@</dbus>
   </provides>
 
   <requires>

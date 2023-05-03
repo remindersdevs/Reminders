@@ -28,7 +28,7 @@ install_data(
 )
 
 configure_file(
-    input: 'remembrance.py',
+    input: 'reminders.py',
     output: app_executable,
     configuration: conf,
     install: true,

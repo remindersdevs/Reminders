@@ -1,5 +1,5 @@
 #!@PYTHON_PATH@
-# remembrance-service.py
+# Reminders - Set reminders and manage tasks
 # Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify it under
@@ -15,15 +15,14 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
-
 import gettext
 import locale
 
 locale_dir = '@LOCALE_DIR@'
 
 if __name__ == '__main__':
-    from remembrance import info
-    from remembrance.service.application import main
+    from reminders import info
+    from reminders.browser.application import main
 
     locale.bindtextdomain(info.app_executable, locale_dir)
     locale.textdomain(info.app_executable)

@@ -7,7 +7,7 @@ conf.set('APP_ID', app_id)
 conf.set('LIBEXECDIR', get_option('prefix') / get_option('libexecdir'))
 
 desktop_file = configure_file(
-    input: 'io.github.dgsasha.Remembrance.Service3.desktop.in.in',
+    input: 'io.github.remindersdevs.Reminders.Service.desktop.in.in',
     output: '@0@.desktop.in'.format(service_id),
     configuration: conf,
 )
@@ -35,7 +35,7 @@ if desktop_utils.found()
 endif
 
 configure_file(
-    input: 'io.github.dgsasha.Remembrance.Service3.service.in',
+    input: 'io.github.remindersdevs.Reminders.Service.service.in',
     output: '@0@.service'.format(service_id),
     install: true,
     install_dir: get_option('datadir') / 'dbus-1/services',
@@ -48,7 +48,7 @@ install_data(
 )
 
 configure_file(
-    input: 'io.github.dgsasha.Remembrance.Service3.Reminders.xml.in',
+    input: 'io.github.remindersdevs.Reminders.Service.xml.in',
     output: '@0@.xml'.format(service_interface),
     install: true,
     install_dir: get_option('datadir') / 'dbus-1/interfaces',

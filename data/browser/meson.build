@@ -4,7 +4,7 @@ conf.set('APP_ID', app_id)
 conf.set('BINDIR', get_option('prefix') / get_option('bindir'))
 
 desktop_file = configure_file(
-    input: 'io.github.dgsasha.Remembrance.desktop.in.in',
+    input: 'io.github.remindersdevs.Reminders.desktop.in.in',
     output: '@0@.desktop.in'.format(app_id),
     configuration: conf,
 )
@@ -27,7 +27,7 @@ endif
 
 
 configure_file(
-    input: 'io.github.dgsasha.Remembrance.service.in',
+    input: 'io.github.remindersdevs.Reminders.service.in',
     output: '@0@.service'.format(app_id),
     install: true,
     install_dir: get_option('datadir') / 'dbus-1/services',

@@ -20,13 +20,13 @@ require_version('GSound', '1.0')
 require_version('Secret', '1')
 
 from gi.repository import GLib, Gio, GSound, Secret
-from remembrance import info
-from remembrance.service.ms_to_do import MSToDo
-from remembrance.service.caldav import CalDAV
-from remembrance.service.queue import ReminderQueue
-from remembrance.service.countdowns import Countdowns
-from remembrance.service.icalendar import iCalendar
-from remembrance.service.reminder import Reminder
+from reminders import info
+from reminders.service.ms_to_do import MSToDo
+from reminders.service.caldav import CalDAV
+from reminders.service.queue import ReminderQueue
+from reminders.service.countdowns import Countdowns
+from reminders.service.icalendar import iCalendar
+from reminders.service.reminder import Reminder
 
 from gettext import gettext as _
 from math import floor
@@ -41,6 +41,7 @@ from os import path, mkdir, remove, getpid
 from json import load as load_json
 from csv import DictReader, DictWriter
 from requests import HTTPError, Timeout, ConnectionError
+from shutil import move
 
 REMINDERS_FILE = f'{info.data_dir}/reminders.csv'
 LISTS_FILE = f'{info.data_dir}/lists.csv'
@@ -54,6 +55,9 @@ VERSION = info.version
 PID = getpid()
 
 logger = getLogger(info.service_executable)
+
+if not path.isdir(info.data_dir) and path.isdir(info.old_data_dir):
+    move(info.old_data_dir, info.data_dir)
 
 with open(info.interface_file, newline='') as f:
     INTERFACE_XML = f.read()

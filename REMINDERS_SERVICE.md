@@ -1,9 +1,9 @@
 # Reminders DBus Service version 5.0 Documentation
-name: io.github.dgsasha.Remembrance.Service3
+name: io.github.remindersdevs.Reminders.Service
 
-interface: io.github.dgsasha.Remembrance.Service3.Reminders
+interface: io.github.remindersdevs.Reminders.Service
 
-object: /io/github/dgsasha/Remembrance/Service3
+object: /io/github/remindersdevs/Reminders/Service
 
 Currently this is only packaged with Reminders and anyone who wants to use it will have to have the full Reminders app installed. The reason this exists is to allow integrating the Reminders app with desktop environments through extensions.
 

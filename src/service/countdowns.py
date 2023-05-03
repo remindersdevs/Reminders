@@ -15,7 +15,7 @@
 
 from gi.repository import GLib, Gio
 
-from remembrance import info
+from reminders import info
 from time import time
 from logging import getLogger
 

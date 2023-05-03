@@ -16,7 +16,7 @@
 from gi.repository import Gtk, Adw, GLib, Gio
 from gettext import gettext as _
 
-from remembrance import info
+from reminders import info
 from logging import getLogger
 
 logger = getLogger(info.app_executable)
@@ -28,7 +28,7 @@ class ListRow(Adw.ActionRow):
         self.add_suffix(self.check)
         self.connect('activated', lambda *args: self.check.set_active(not self.check.get_active()))
 
-@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/export_lists_window.ui')
+@Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/export_lists_window.ui')
 class ExportListsWindow(Adw.Window):
     __gtype_name__ = 'ExportListsWindow'
 

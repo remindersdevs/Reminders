@@ -23,14 +23,14 @@ require_version('Adw', '1')
 
 from gi.repository import Gtk, Adw, GLib, Gio, Gdk
 
-from remembrance import info
-from remembrance.browser.error_dialog import ErrorDialog
-from remembrance.browser.main_window import MainWindow
-from remembrance.browser.about import about_window
-from remembrance.browser.preferences import PreferencesWindow
-from remembrance.browser.shortcuts_window import ShortcutsWindow
-from remembrance.browser.export_lists_window import ExportListsWindow
-from remembrance.browser.import_lists_window import ImportListsWindow
+from reminders import info
+from reminders.browser.error_dialog import ErrorDialog
+from reminders.browser.main_window import MainWindow
+from reminders.browser.about import about_window
+from reminders.browser.preferences import PreferencesWindow
+from reminders.browser.shortcuts_window import ShortcutsWindow
+from reminders.browser.export_lists_window import ExportListsWindow
+from reminders.browser.import_lists_window import ImportListsWindow
 from gettext import gettext as _
 from pkg_resources import parse_version
 from traceback import format_exception
@@ -151,7 +151,7 @@ class Remembrance(Adw.Application):
     def do_activate(self):
         Adw.Application.do_activate(self)
         self.provider = Gtk.CssProvider()
-        self.provider.load_from_resource('/io/github/dgsasha/remembrance/stylesheet.css')
+        self.provider.load_from_resource('/io/github/remindersdevs/Reminders/stylesheet.css')
 
         if win := self.get_active_window():
             self.win = win

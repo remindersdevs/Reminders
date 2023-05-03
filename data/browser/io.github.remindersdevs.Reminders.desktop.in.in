@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Reminders
-Comment=Set reminders for yourself
+Comment=Set reminders and manage tasks
 Exec=@BINDIR@/@APP_EXECUTABLE@ %U
 Icon=@APP_ID@
 Terminal=false

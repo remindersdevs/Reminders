@@ -17,8 +17,8 @@ import datetime
 
 from gi.repository import Secret, GLib
 
-from remembrance import info
-from remembrance.service.reminder import Reminder
+from reminders import info
+from reminders.service.reminder import Reminder
 from msal import PublicClientApplication, SerializableTokenCache
 from requests import request, HTTPError, ConnectionError, Timeout
 from logging import getLogger

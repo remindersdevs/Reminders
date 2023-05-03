@@ -15,7 +15,7 @@
 
 from gi.repository import Gtk, Adw
 
-@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/dnd_reminder.ui')
+@Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/dnd_reminder.ui')
 class DNDReminder(Adw.ActionRow):
     __gtype_name__ = 'DNDReminder'
 

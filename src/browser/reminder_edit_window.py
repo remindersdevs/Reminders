@@ -18,8 +18,8 @@ import datetime
 from gi.repository import Gtk, Adw, GLib, Gio
 from gettext import gettext as _
 
-from remembrance import info
-from remembrance.browser.reminder import Reminder
+from reminders import info
+from reminders.browser.reminder import Reminder
 from ctypes import c_double
 from logging import getLogger
 
@@ -32,7 +32,7 @@ DEFAULT_OPTIONS.pop('created-timestamp')
 DEFAULT_OPTIONS.pop('completed-timestamp')
 DEFAULT_OPTIONS.pop('completed-date')
 
-@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/reminder_edit_window.ui')
+@Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/reminder_edit_window.ui')
 class ReminderEditWindow(Adw.Window):
     __gtype_name__ = 'ReminderEditWindow'
 

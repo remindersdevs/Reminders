@@ -17,8 +17,8 @@ import datetime
 
 from gi.repository import Secret
 
-from remembrance import info
-from remembrance.service.reminder import Reminder
+from reminders import info
+from reminders.service.reminder import Reminder
 from logging import getLogger
 from json import loads, dumps
 from requests import HTTPError, Timeout, ConnectionError

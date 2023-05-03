@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="@APP_EXECUTABLE@">
-  <enum id="io.github.dgsasha.Remembrance.TimeFormat">
+  <enum id="io.github.remindersdevs.Reminders.TimeFormat">
     <value value="0" nick="locale"/>
     <value value="1" nick="12h"/>
     <value value="2" nick="24h"/>
   </enum>
-  <enum id="io.github.dgsasha.Remembrance.SortBy">
+  <enum id="io.github.remindersdevs.Reminders.SortBy">
     <value value="0" nick="time"/>
     <value value="1" nick="title"/>
     <value value="2" nick="created"/>
     <value value="3" nick="updated"/>
   </enum>
-  <enum id="io.github.dgsasha.Remembrance.RefreshFrequency">
+  <enum id="io.github.remindersdevs.Reminders.RefreshFrequency">
     <value value="0" nick="5m"/>
     <value value="1" nick="15m"/>
     <value value="2" nick="30m"/>
     <value value="3" nick="60m"/>
   </enum>
-  <schema id="io.github.dgsasha.Remembrance" path="/io/github/dgsasha/remembrance/">
-    <key name="time-format" enum="io.github.dgsasha.Remembrance.TimeFormat">
+  <schema id="io.github.remindersdevs.Reminders" path="/io/github/remindersdevs/Reminders/">
+    <key name="time-format" enum="io.github.remindersdevs.Reminders.TimeFormat">
       <default>'locale'</default>
       <summary>Time format</summary>
       <description>What format to display the time in</description>
     </key>
-    <key name="sort" enum="io.github.dgsasha.Remembrance.SortBy">
+    <key name="sort" enum="io.github.remindersdevs.Reminders.SortBy">
       <default>'time'</default>
       <summary>Sort by</summary>
       <description>How to sort the reminders</description>
     </key>
-    <key name="refresh-frequency" enum="io.github.dgsasha.Remembrance.RefreshFrequency">
+    <key name="refresh-frequency" enum="io.github.remindersdevs.Reminders.RefreshFrequency">
       <default>'15m'</default>
       <summary>Auto refresh frequency</summary>
       <description>How often the reminders are refreshed (minutes)</description>

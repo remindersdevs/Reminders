@@ -6,10 +6,11 @@ from gi.repository import GLib
 
 version = '@VERSION@'
 app_name = _('Reminders')
+project_name = '@PROJECT_NAME@'
 base_app_id = '@BASE_APP_ID@'
 app_id = '@APP_ID@'
 app_executable = '@APP_EXECUTABLE@'
-app_path = '@APP_PATH@'
+app_object = '@APP_OBJECT@'
 
 service_executable = '@SERVICE_EXECUTABLE@'
 service_id = '@SERVICE_ID@'
@@ -22,6 +23,8 @@ portals_enabled = literal_eval('@PORTALS_ENABLED@')
 client_id = '@CLIENT_ID@'
 
 data_dir = f'{GLib.get_user_data_dir()}/{app_executable}'
+
+old_data_dir = f'{GLib.get_user_data_dir()}/remembrance'
 
 interface_file = f'@INTERFACES_DIR@/{service_interface}.xml'
 

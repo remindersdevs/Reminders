@@ -17,8 +17,8 @@ import logging
 import sys
 
 from gi.repository import Gio, GLib
-from remembrance import info
-from remembrance.service.backend import Reminders
+from reminders import info
+from reminders.service.backend import Reminders
 
 class RemembranceService(Gio.Application):
     '''Background service for working with reminders'''
@@ -82,7 +82,7 @@ class RemembranceService(Gio.Application):
             Gio.DBusProxyFlags.NONE,
             None,
             info.app_id,
-            info.app_path,
+            info.app_object,
             'org.gtk.Actions',
             None
         )

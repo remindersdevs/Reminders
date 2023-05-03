@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from remembrance import info
+from reminders import info
 from gi.repository import Adw, Gtk
 from gettext import gettext as _
 
@@ -47,11 +47,11 @@ def about_window(win):
         application_icon = info.app_id,
         license_type = Gtk.License.GPL_3_0,
         version = info.version,
-        developer_name = 'Sasha Hale',
-        copyright = _('Copyright 2023 Sasha Hale'),
-        website = 'https://github.com/dgsasha/remembrance',
-        developers = ['Sasha Hale https://github.com/dgsasha'],
-        issue_url = 'https://github.com/dgsasha/remembrance/issues',
+        developer_name = _('Reminders Developers'),
+        copyright = _('Copyright 2023 Reminders Developers'),
+        website = 'https://github.com/remindersdevs/reminders',
+        developers = ['dgsasha https://github.com/dgsasha'],
+        issue_url = 'https://github.com/remindersdevs/reminders/issues',
         release_notes = RELEASE_NOTES,
         release_notes_version = info.version,
         # Translators: Do not translate this, instead put your name and email here.

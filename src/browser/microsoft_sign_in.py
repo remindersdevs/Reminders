@@ -15,7 +15,7 @@
 
 import gi
 
-from remembrance import info
+from reminders import info
 
 gi.require_version('WebKit', '6.0')
 from gi.repository import Gtk, Adw, WebKit
@@ -24,7 +24,7 @@ from logging import getLogger
 
 logger = getLogger(info.app_executable)
 
-@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/microsoft_sign_in.ui')
+@Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/microsoft_sign_in.ui')
 class MicrosoftSignIn(Adw.Window):
     __gtype_name__ = 'MicrosoftSignIn'
 

@@ -15,14 +15,14 @@
 
 from gi.repository import Gtk, Adw, GLib
 from gettext import gettext as _
-from remembrance import info
-from remembrance.browser.error_dialog import ErrorDialog
+from reminders import info
+from reminders.browser.error_dialog import ErrorDialog
 from traceback import format_exception
 from logging import getLogger
 
 logger = getLogger(info.app_executable)
 
-@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/import_lists_window.ui')
+@Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/import_lists_window.ui')
 class ImportListsWindow(Adw.Window):
     __gtype_name__ = 'ImportListsWindow'
 

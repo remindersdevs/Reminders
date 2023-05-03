@@ -17,8 +17,8 @@ import datetime
 
 from gi.repository import Gtk, Adw, GLib, GObject, Gdk
 
-from remembrance import info
-from remembrance.browser.dnd_reminder import DNDReminder
+from reminders import info
+from reminders.browser.dnd_reminder import DNDReminder
 from time import time
 from logging import getLogger
 from gettext import gettext as _
@@ -26,7 +26,7 @@ from math import floor
 
 logger = getLogger(info.app_executable)
 
-@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/reminder.ui')
+@Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/reminder.ui')
 class Reminder(Adw.ExpanderRow):
     '''Ui for each reminder'''
     __gtype_name__ = 'Reminder'

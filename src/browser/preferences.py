@@ -15,16 +15,16 @@
 
 from gettext import gettext as _
 
-from remembrance import info
-from remembrance.browser.caldav_sign_in import CalDAVSignIn
-from remembrance.browser.microsoft_sign_in import MicrosoftSignIn
+from reminders import info
+from reminders.browser.caldav_sign_in import CalDAVSignIn
+from reminders.browser.microsoft_sign_in import MicrosoftSignIn
 
 from gi.repository import Gtk, Adw, GLib, Gio, Pango
 from logging import getLogger
 
 logger = getLogger(info.app_executable)
 
-@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/preferences.ui')
+@Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/preferences.ui')
 class PreferencesWindow(Adw.PreferencesWindow):
     '''Settings Window'''
     __gtype_name__ = 'PreferencesWindow'
@@ -163,7 +163,7 @@ class PreferencesWindow(Adw.PreferencesWindow):
     def caldav_sign_in(self, row = None):
         CalDAVSignIn(self)
 
-@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/preferences_user_row.ui')
+@Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/preferences_user_row.ui')
 class PreferencesUserRow(Adw.ExpanderRow):
     __gtype_name__ = 'PreferencesUserRow'
     task_list_grid = Gtk.Template.Child()

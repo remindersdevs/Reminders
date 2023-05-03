@@ -1,5 +1,5 @@
 project(
-    'remembrance',
+    'reminders',
     version: '5.0',
     meson_version: '>= 0.59',
     default_options: ['prefix=/usr']
@@ -8,17 +8,16 @@ project(
 dependency('glib-2.0')
 dependency('pygobject-3.0')
 dependency('libadwaita-1')
-dependency('gsound')
 
 release_type = get_option('release-type')
 
-app_executable = 'remembrance'
+app_executable = meson.project_name()
 
-base_app_id = 'io.github.dgsasha.Remembrance'
+base_app_id = 'io.github.remindersdevs.Reminders'
 beta_app_id = base_app_id + '.Beta'
 devel_app_id = base_app_id + '.Devel'
 
-base_path = '/io/github/dgsasha/Remembrance'
+base_path = '/io/github/remindersdevs/Reminders'
 beta_path = base_path + '/Beta'
 devel_path = base_path + '/Devel'
 
@@ -33,10 +32,10 @@ else
     path = base_path
 endif
 
-service_executable = 'remembrance-service'
-service_id = app_id + '.Service3'
-service_interface = service_id + '.Reminders'
-service_object = path + '/Service3'
+service_executable = app_executable + '-service'
+service_id = app_id + '.Service'
+service_interface = service_id
+service_object = path + '/Service'
 
 i18n = import('i18n')
 localedir = get_option('localedir')

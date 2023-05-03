@@ -21,12 +21,12 @@ require_version('Adw', '1')
 
 from gi.repository import Gtk, Adw, GLib, Gio, GObject, Gdk
 
-from remembrance import info
-from remembrance.browser.reminder import Reminder
-from remembrance.browser.calendar import Calendar
-from remembrance.browser.edit_lists_window import EditListsWindow
-from remembrance.browser.reminder_edit_window import ReminderEditWindow
-from remembrance.browser.move_reminders_window import MoveRemindersWindow
+from reminders import info
+from reminders.browser.reminder import Reminder
+from reminders.browser.calendar import Calendar
+from reminders.browser.edit_lists_window import EditListsWindow
+from reminders.browser.reminder_edit_window import ReminderEditWindow
+from reminders.browser.move_reminders_window import MoveRemindersWindow
 from time import time, strftime
 from logging import getLogger
 from gettext import gettext as _
@@ -35,7 +35,7 @@ from math import floor, ceil
 
 logger = getLogger(info.app_executable)
 
-@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/task_list_row.ui')
+@Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/task_list_row.ui')
 class TaskListRow(Gtk.ListBoxRow):
     __gtype_name__ = 'TaskListRow'
     label = Gtk.Template.Child()
@@ -57,7 +57,7 @@ class TaskListRow(Gtk.ListBoxRow):
         self.count_label.set_visible(count != 0)
         self.count_label.set_label(str(count))
 
-@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/main_window.ui')
+@Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/main_window.ui')
 class MainWindow(Adw.ApplicationWindow):
     '''Main application Window'''
     __gtype_name__ = 'MainWindow'
@@ -409,17 +409,17 @@ class MainWindow(Adw.ApplicationWindow):
             if repeat_frequency == 1:
                 type_name = _('minute')
             else:
-                type_name = repeat_frequency + ' ' + _('minutes')
+                type_name = str(repeat_frequency) + ' ' + _('minutes')
         elif repeat_type == info.RepeatType.HOUR:
             if repeat_frequency == 1:
                 type_name = _('hour')
             else:
-                type_name = repeat_frequency + ' ' + _('hours')
+                type_name = str(repeat_frequency) + ' ' + _('hours')
         elif repeat_type == info.RepeatType.DAY:
             if repeat_frequency == 1:
                 type_name = _('day')
             else:
-                type_name = repeat_frequency + ' ' + _('days')
+                type_name = str(repeat_frequency) + ' ' + _('days')
         elif repeat_type == info.RepeatType.WEEK:
             days = []
             for day, flag in (
@@ -452,12 +452,12 @@ class MainWindow(Adw.ApplicationWindow):
             if repeat_frequency == 1:
                 type_name = _('month')
             else:
-                type_name = repeat_frequency + ' ' + _('months')
+                type_name = str(repeat_frequency) + ' ' + _('months')
         elif repeat_type == info.RepeatType.YEAR:
             if repeat_frequency == 1:
                 type_name = _('year')
             else:
-                type_name = repeat_frequency + ' ' + _('years')
+                type_name = str(repeat_frequency) + ' ' + _('years')
         if repeat_until > 0:
             date = GLib.DateTime.new_from_unix_local(repeat_until).format('%x')
             suffix += ' ' + _('until') + ' ' + date

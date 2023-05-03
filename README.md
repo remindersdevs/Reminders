@@ -1,7 +1,7 @@
 <div align="center">
 
-![Reminders](data/icons/io.github.dgsasha.Remembrance.svg)
-# Reminders, a simple reminder app for Linux
+![Reminders](data/icons/io.github.remindersdevs.Reminders.svg)
+# Reminders, an open source reminder/to-do app
 
 <a href="https://flathub.org/apps/details/io.github.dgsasha.Remembrance">
     <img src="https://flathub.org/assets/badges/flathub-badge-i-en.png" width="300px" height="100" alt="Download on Flathub"/>
@@ -41,10 +41,10 @@ You will also need `flatpak-builder`
 
 ### Building (Flatpak):
 ```
-flatpak-builder --user --install --force-clean build-dir flatpak/io.github.dgsasha.Remembrance.yml
+flatpak-builder --user --install --force-clean build-dir flatpak/io.github.remindersdevs.Reminders.yml
 ```
 ```
-flatpak run io.github.dgsasha.Remembrance.Devel --restart-service
+flatpak run io.github.remindersdevs.Reminders.Devel --restart-service
 ```
 
 ### Dependencies (generic):
@@ -80,7 +80,7 @@ remembrance --restart-service
 If you want to contribute anything, just open a pull request. Depending on what you are going to contribute, you might want to [email me](mailto:dgsasha04@gmail.com) first. This will let me help you get started and it will also help me make sure that multiple people aren't working on the same feature without knowing it.
 
 ## Reminders DBus Service Documentation
-The documentation can be found [here](REMEMBRANCE_SERVICE.md). You probably will want to select the tag for the latest release of Reminders when looking at the documentation.
+The documentation can be found [here](REMINDERS_SERVICE.md). You probably will want to select the tag for the latest release of Reminders when looking at the documentation.
 
 ## Copying
 Reminders is licensed under the terms of the [GNU General Public License, version 3 or later](https://www.gnu.org/licenses/gpl-3.0.txt).

@@ -1,9 +1,10 @@
 conf = configuration_data()
 conf.set('APP_EXECUTABLE', app_executable)
 conf.set('APP_ID', app_id)
+conf.set('SERVICE_ID', service_id)
 
 appstream_file = configure_file(
-    input: 'io.github.dgsasha.Remembrance.metainfo.xml.in.in',
+    input: 'io.github.remindersdevs.Reminders.metainfo.xml.in.in',
     output: '@0@.metainfo.xml.in'.format(app_id),
     configuration: conf,
 )
@@ -26,7 +27,7 @@ if appstreamcli.found()
 endif
 
 configure_file(
-    input: 'io.github.dgsasha.Remembrance.gschema.xml.in',
+    input: 'io.github.remindersdevs.Reminders.gschema.xml.in',
     output: '@0@..gschema.xml'.format(app_id),
     install: true,
     install_dir: join_paths(get_option('datadir'), 'glib-2.0/schemas'),

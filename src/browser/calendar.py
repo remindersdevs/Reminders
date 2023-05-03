@@ -17,7 +17,7 @@ import datetime
 
 from gi.repository import GLib, Gio
 
-from remembrance import info
+from reminders import info
 from logging import getLogger
 from time import time
 from threading import Thread

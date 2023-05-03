@@ -15,8 +15,8 @@
 
 import datetime
 
-from remembrance import info
-from remembrance.service.reminder import Reminder
+from reminders import info
+from reminders.service.reminder import Reminder
 
 from gi.repository import GLib
 from os import path, mkdir

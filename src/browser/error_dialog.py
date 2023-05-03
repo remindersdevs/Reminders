@@ -15,7 +15,7 @@
 
 from gi.repository import Gtk, Adw
 
-@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/error_dialog.ui')
+@Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/error_dialog.ui')
 class ErrorDialog(Adw.Window):
     __gtype_name__ = 'ErrorDialog'
 

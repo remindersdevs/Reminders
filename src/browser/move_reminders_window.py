@@ -15,13 +15,13 @@
 
 from gi.repository import Gtk, Adw, GLib
 
-from remembrance import info
+from reminders import info
 from gettext import gettext as _
 from logging import getLogger
 
 logger = getLogger(info.app_executable)
 
-@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/move_reminders_window.ui')
+@Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/move_reminders_window.ui')
 class MoveRemindersWindow(Adw.Window):
     __gtype_name__ = 'MoveRemindersWindow'
 

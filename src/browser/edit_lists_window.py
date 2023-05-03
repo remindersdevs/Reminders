@@ -16,14 +16,14 @@
 from gi.repository import Gtk, Adw
 from gettext import gettext as _
 
-from remembrance import info
+from reminders import info
 from logging import getLogger
 
 DEFAULT_LIST_TITLE = _('New List')
 
 logger = getLogger(info.app_executable)
 
-@Gtk.Template(resource_path='/io/github/dgsasha/remembrance/ui/edit_lists_window.ui')
+@Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/edit_lists_window.ui')
 class EditListsWindow(Adw.Window):
     __gtype_name__ = 'EditListsWindow'
 
