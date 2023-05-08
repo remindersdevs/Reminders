@@ -7,7 +7,7 @@ object: /io/github/remindersdevs/Reminders/Service
 
 Currently this is only packaged with Reminders and anyone who wants to use it will have to have the full Reminders app installed. The reason this exists is to allow integrating the Reminders app with desktop environments through extensions.
 
-At some point I might seperate this from Reminders and offer it as a standalone library, but until then you probably shouldn't use it if you are making your own reminder app.
+At some point I might separate this from Reminders and offer it as a standalone library, but until then you probably shouldn't use it if you are making your own reminder app.
 
 This service will have some breaking changes made to it at times, so make sure you use the GetVersion method to check that the right version is installed.
 
