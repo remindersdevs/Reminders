@@ -48,6 +48,9 @@ class MoveRemindersWindow(Adw.Window):
 
         self.present()
 
+        if info.on_windows:
+            self.win.app.center_win_on_parent(self)
+
     def do_save(self):
         try:
             selected = self.lists.get_selected_rows()[0]
@@ -114,4 +117,9 @@ class MoveRemindersWindow(Adw.Window):
         confirm_dialog.set_default_response('cancel')
         confirm_dialog.set_close_response('cancel')
         confirm_dialog.connect('response::yes', lambda *args: self.do_save())
+
         confirm_dialog.present()
+
+        if info.on_windows:
+            self.win.app.center_win_on_parent(confirm_dialog)
+

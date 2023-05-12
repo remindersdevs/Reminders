@@ -21,10 +21,11 @@ from requests import Timeout, HTTPError, ConnectionError
 from threading import Thread
 from json import load, dump
 from os.path import isfile
+from os import sep
 
 logger = getLogger(info.service_executable)
 
-QUEUE_FILE = f'{info.data_dir}/queue.json'
+QUEUE_FILE = f'{info.data_dir}{sep}queue.json'
 
 DEFAULT = {
     'reminders': {
@@ -494,5 +495,5 @@ class QueueThread(Thread):
         except Exception as error:
             logger.exception(error)
             self.queue.put(self.val)
-            if except_cb is not None:
+            if self.except_cb is not None:
                 self.except_cb()

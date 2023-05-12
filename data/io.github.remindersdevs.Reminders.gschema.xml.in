@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schemalist gettext-domain="@APP_EXECUTABLE@">
+<schemalist gettext-domain="@PROJECT_NAME@">
   <enum id="io.github.remindersdevs.Reminders.TimeFormat">
     <value value="0" nick="locale"/>
     <value value="1" nick="12h"/>

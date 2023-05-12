@@ -94,7 +94,7 @@
             <property name="flap">
               <object class="GtkScrolledWindow">
                 <property name="vexpand">true</property>
-                <property name="width-request">240</property>
+                <property name="width-request">250</property>
                 <child>
                   <object class="GtkBox">
                     <style>
@@ -124,6 +124,7 @@
                                     <property name="halign">start</property>
                                     <property name="hexpand">true</property>
                                     <property name="label" translatable="yes">All Reminders</property>
+                                    <property name="ellipsize">end</property>
                                   </object>
                                 </child>
                                 <child>
@@ -156,6 +157,7 @@
                                     <property name="halign">start</property>
                                     <property name="hexpand">true</property>
                                     <property name="label" translatable="yes">Upcoming Reminders</property>
+                                    <property name="ellipsize">end</property>
                                   </object>
                                 </child>
                                   <child>
@@ -188,6 +190,7 @@
                                     <property name="halign">start</property>
                                     <property name="hexpand">true</property>
                                     <property name="label" translatable="yes">Past Reminders</property>
+                                    <property name="ellipsize">end</property>
                                   </object>
                                 </child>
                                 <child>
@@ -220,6 +223,7 @@
                                     <property name="halign">start</property>
                                     <property name="hexpand">true</property>
                                     <property name="label" translatable="yes">Completed Reminders</property>
+                                    <property name="ellipsize">end</property>
                                   </object>
                                 </child>
                                 <child>

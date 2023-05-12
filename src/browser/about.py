@@ -14,7 +14,7 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from reminders import info
-from gi.repository import Adw, Gtk
+from gi.repository import Adw, Gtk, GLib
 from gettext import gettext as _
 
 RELEASE_NOTES = '''
@@ -40,7 +40,7 @@ RELEASE_NOTES = '''
 '''
 
 def about_window(win):
-    win = Adw.AboutWindow(
+    abt_win = Adw.AboutWindow(
         modal = True,
         transient_for=win,
         application_name = info.app_name,
@@ -54,9 +54,14 @@ def about_window(win):
         issue_url = 'https://github.com/remindersdevs/reminders/issues',
         release_notes = RELEASE_NOTES,
         release_notes_version = info.version,
+        debug_info = _(f'You can find application logs at {info.app_log} and {info.service_log}, submit these with your bug report.'),
         # Translators: Do not translate this, instead put your name and email here.
         # name <email>
         translator_credits = _("translator-credits")
     )
-    win.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: win.close())))
-    win.present()
+    abt_win.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: abt_win.close())))
+
+    abt_win.present()
+
+    if info.on_windows:
+        win.app.center_win_on_parent(abt_win)

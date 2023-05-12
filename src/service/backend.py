@@ -15,11 +15,7 @@
 
 import datetime
 
-from gi import require_version
-require_version('GSound', '1.0')
-require_version('Secret', '1')
-
-from gi.repository import GLib, Gio, GSound, Secret
+from gi.repository import GLib, Gio
 from reminders import info
 from reminders.service.ms_to_do import MSToDo
 from reminders.service.caldav import CalDAV
@@ -27,6 +23,16 @@ from reminders.service.queue import ReminderQueue
 from reminders.service.countdowns import Countdowns
 from reminders.service.icalendar import iCalendar
 from reminders.service.reminder import Reminder
+
+if not info.on_windows:
+    from gi import require_version
+
+    require_version('GSound', '1.0')
+
+    from gi.repository import GSound
+else:
+    import winsdk.windows.ui.notifications as notifications
+    import winsdk.windows.data.xml.dom as dom
 
 from gettext import gettext as _
 from math import floor
@@ -37,29 +43,33 @@ from uuid import uuid1
 from traceback import format_exception
 from logging import getLogger
 from time import time
-from os import path, mkdir, remove, getpid
+from os import path, mkdir, remove, getpid, environ, sep
 from json import load as load_json
 from csv import DictReader, DictWriter
 from requests import HTTPError, Timeout, ConnectionError
 from shutil import move
 
-REMINDERS_FILE = f'{info.data_dir}/reminders.csv'
-LISTS_FILE = f'{info.data_dir}/lists.csv'
+REMINDERS_FILE = f'{info.data_dir}{sep}reminders.csv'
+LISTS_FILE = f'{info.data_dir}{sep}lists.csv'
 
 # these are no longer used
-MS_REMINDERS_FILE = f'{info.data_dir}/ms_reminders.csv'
-TASK_LISTS_FILE = f'{info.data_dir}/task_lists.json'
-TASK_LIST_IDS_FILE = f'{info.data_dir}/task_list_ids.csv'
+MS_REMINDERS_FILE = f'{info.data_dir}{sep}ms_reminders.csv'
+TASK_LISTS_FILE = f'{info.data_dir}{sep}task_lists.json'
+TASK_LIST_IDS_FILE = f'{info.data_dir}{sep}task_list_ids.csv'
+
+COMPLETE_BTN_TEXT = _('Mark as completed')
 
 VERSION = info.version
 PID = getpid()
 
 logger = getLogger(info.service_executable)
 
+environ['KEYRING_PROPERTY_APPID'] = info.app_id
+
 if not path.isdir(info.data_dir) and path.isdir(info.old_data_dir):
     move(info.old_data_dir, info.data_dir)
 
-with open(info.interface_file, newline='') as f:
+with open(environ['REMINDERS_SERVICE_XML'], newline='') as f:
     INTERFACE_XML = f.read()
 
 class Reminders():
@@ -69,11 +79,6 @@ class Reminders():
         self.connection = Gio.bus_get_sync(Gio.BusType.SESSION, None)
         self.app = app
         self.reminders = self.lists = {}
-        self.schema = Secret.Schema.new(
-            info.app_id,
-            Secret.SchemaFlags.NONE,
-            { 'name': Secret.SchemaAttributeType.STRING }
-        )
         self.refreshing = False
         self._regid = None
         self.playing_sound = False
@@ -84,8 +89,12 @@ class Reminders():
         self.queue = ReminderQueue(self)
         self.synced_changed = self.app.settings.connect('changed::synced-lists', lambda *args: self._synced_task_list_changed())
         self.reminders, self.lists = self._get_reminders(migrate_old=True)
-        self.sound = GSound.Context()
-        self.sound.init()
+        if not info.on_windows:
+            self.sound = GSound.Context()
+            self.sound.init()
+        else:
+            self.notif_manager = notifications.ToastNotificationManager
+            self.notifier = self.notif_manager.create_toast_notifier(info.app_id)
         self.countdowns = Countdowns()
         self.refresh_time = int(self.app.settings.get_string('refresh-frequency').strip('m'))
         self.app.settings.connect('changed::refresh-frequency', lambda *args: self._refresh_time_changed())
@@ -588,7 +597,7 @@ class Reminders():
                 if self._regid is not None:
                     self.connection.unregister_object(self._regid)
                 invocation.return_value(None)
-                self.app.quit()
+                self.app.quit_service()
                 return
 
             method = self._methods[method]
@@ -633,21 +642,66 @@ class Reminders():
         self.countdowns.add_countdown(reminder['timestamp'], do_show_notification, reminder_id)
 
     def show_notification(self, reminder_id):
-        notification = Gio.Notification.new(self.reminders[reminder_id]['title'])
-        notification.set_body(self.reminders[reminder_id]['description'])
-        notification.add_button_with_target(_('Mark as completed'), 'app.reminder-completed', GLib.Variant('s', reminder_id))
-        notification.set_default_action('app.notification-clicked')
+        if info.on_windows:
+            self._create_notification_windows(reminder_id)
+        else:
+            self._create_notification_linux(reminder_id)
 
-        self.app.send_notification(reminder_id, notification)
-        if self.app.settings.get_boolean('notification-sound') and not self.playing_sound:
-            self.playing_sound = True
-            if self.app.settings.get_boolean('included-notification-sound'):
-                self.sound.play_full({GSound.ATTR_MEDIA_FILENAME: f'{GLib.get_system_data_dirs()[0]}/sounds/{info.app_executable}/notification.ogg'}, None, self._sound_cb)
-            else:
-                self.sound.play_full({GSound.ATTR_EVENT_ID: 'bell'}, None, self._sound_cb)
         self._shown(reminder_id)
         self.do_emit('ReminderShown', GLib.Variant('(s)', (reminder_id,)))
         self.countdowns.dict[reminder_id]['id'] = 0
+
+    def _unsend_notification(self, reminder_id):
+        if info.on_windows:
+            self.notif_manager.history.remove(reminder_id)
+        else:
+            self.app.withdraw_notification(reminder_id)
+
+    def _create_notification_linux(self, reminder_id):
+        reminder = self.reminders[reminder_id]
+        notification = Gio.Notification.new(reminder['title'])
+        notification.set_body(reminder['description'])
+        notification.add_button_with_target(COMPLETE_BTN_TEXT, 'app.reminder-completed', GLib.Variant('s', reminder_id))
+        notification.set_default_action('app.notification-clicked')
+
+        self.app.send_notification(reminder_id, notification)
+
+        if self.app.settings.get_boolean('notification-sound') and not self.playing_sound:
+            self.playing_sound = True
+            if self.app.settings.get_boolean('included-notification-sound'):
+                self.sound.play_full({GSound.ATTR_MEDIA_FILENAME: f'{GLib.get_system_data_dirs()[0]}{sep}sounds{sep}{info.project_name}{sep}notification.ogg'}, None, self._sound_cb)
+            else:
+                self.sound.play_full({GSound.ATTR_EVENT_ID: 'bell'}, None, self._sound_cb)
+
+    def _create_notification_windows(self, reminder_id):
+        reminder = self.reminders[reminder_id]
+        xml_string = f'''
+        <toast
+            duration="long"
+            scenario="reminder"
+            displayTimestamp="{self._timestamp_to_rfc(reminder['timestamp'])}"
+            launch="--action=notification-clicked"
+            activationType="foreground">
+            <visual>
+                <binding template="ToastGeneric">
+                    <text>{reminder['title']}</text>
+                    <text>{reminder['description']}</text>
+                </binding>
+            </visual>
+            <actions>
+                <action
+                    content="{COMPLETE_BTN_TEXT}"
+                    arguments="--action=reminder-completed --params={reminder_id}"
+                    activationType="foreground"/>
+            </actions>
+        </toast>
+        '''
+        xml = dom.XmlDocument()
+        xml.load_xml(xml_string)
+        notification = notifications.ToastNotification(xml)
+        notification.tag = reminder_id
+
+        self.notifier.show(notification)
 
     def _sound_cb(self, context, result):
         try:
@@ -1125,7 +1179,7 @@ class Reminders():
                 GLib.idle_add(lambda *args: self._do_remote_update_completed(reminder_id, reminder_dict))
 
             if completed:
-                self.app.withdraw_notification(reminder_id)
+                self._unsend_notification(reminder_id)
                 self._remove_countdown(reminder_id)
                 if user_id == 'local' and reminder_dict['repeat-type'] != 0 and reminder_dict['repeat-times'] != 0:
                     try:
@@ -1179,7 +1233,7 @@ class Reminders():
         return GLib.Variant('(asuu)', (completed_ids, now, today))
 
     def remove_reminder(self, app_id: str, reminder_id: str, save = True):
-        self.app.withdraw_notification(reminder_id)
+        self._unsend_notification(reminder_id)
         self._remove_countdown(reminder_id)
 
         if reminder_id in self.reminders:

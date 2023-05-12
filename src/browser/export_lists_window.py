@@ -53,6 +53,9 @@ class ExportListsWindow(Adw.Window):
 
         self.present()
 
+        if info.on_windows:
+            self.app.center_win_on_parent(self)
+
     def launch_folder(self, uri):
         Gio.AppInfo.launch_default_for_uri(uri, None)
         self.close()
@@ -85,6 +88,10 @@ class ExportListsWindow(Adw.Window):
                 dialog.set_close_response('cancel')
                 dialog.connect('response::close', lambda *args: self.close())
                 dialog.connect('response::yes', lambda *args: self.launch_folder(uri))
+
                 dialog.present()
+
+                if info.on_windows:
+                    self.app.center_win_on_parent(dialog)
             except Exception as error:
                 logger.exception(error)

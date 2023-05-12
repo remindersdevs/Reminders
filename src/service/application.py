@@ -19,8 +19,13 @@ import sys
 from gi.repository import Gio, GLib
 from reminders import info
 from reminders.service.backend import Reminders
+from os import environ, sep
+from gettext import gettext as _
 
-class RemembranceService(Gio.Application):
+if info.on_windows:
+    from subprocess import Popen, CREATE_NEW_CONSOLE
+
+class RemindersService(Gio.Application):
     '''Background service for working with reminders'''
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -28,6 +33,14 @@ class RemembranceService(Gio.Application):
         try:
             self.sandboxed = False
             self.portal = None
+            self.watcher_id = None
+            self.add_main_option(
+                'action', ord('a'),
+                GLib.OptionFlags.NONE,
+                GLib.OptionArg.STRING,
+                _('Run an action'),
+                None
+            )
 
             self.logger.info(f'Starting {info.service_executable} version {info.version}')
             self.settings = Gio.Settings(info.base_app_id)
@@ -40,7 +53,7 @@ class RemembranceService(Gio.Application):
                 self.portal = Xdp.Portal()
                 self.portal.request_background(
                     None, None,
-                    [info.service_path],
+                    [environ['SERVICE_PATH'] + sep + info.service_executable],
                     Xdp.BackgroundFlags.AUTOSTART,
                     None,
                     None,
@@ -63,6 +76,39 @@ class RemembranceService(Gio.Application):
             self.logger.exception(error)
             raise error
 
+    def do_command_line(self, command):
+        commands = command.get_options_dict()
+
+        if commands.contains('restart-service'):
+            self.restart = True
+
+        if commands.contains('version'):
+            print(info.version)
+            sys.exit(0)
+
+        if commands.contains('page'):
+            value = commands.lookup_value('page').get_string()
+            if value in ('upcoming', 'past', 'completed'):
+                self.page = value
+            else:
+                print(f'{value} is not a valid page')
+
+        self.do_activate()
+
+        if commands.contains('action'):
+            action = commands.lookup_value('action').get_string()
+            params = commands.lookup_value('params').get_string() if commands.contains('params') else None
+            try:
+                self.activate_action(action, GLib.Variant('s', params) if params is not None else params)
+            except Exception as error:
+                self.logger.exception(error)
+
+        files = commands.lookup_value(GLib.OPTION_REMAINING)
+        if files:
+            self.open_files(files)
+
+        return 0
+
     def do_startup(self):
         Gio.Application.do_startup(self)
         self.reminders.start_countdowns()
@@ -77,6 +123,25 @@ class RemembranceService(Gio.Application):
         self.add_action(action)
 
     def launch_browser(self, action = None, variant = None):
+        if info.on_windows:
+            if info.app_executable.endswith('exe'):
+                Popen([environ['SERVICE_PATH'] + sep + info.app_executable], creationflags=CREATE_NEW_CONSOLE)
+            else:
+                Popen([sys.executable, environ['SERVICE_PATH'] + sep + info.app_executable], creationflags=CREATE_NEW_CONSOLE)
+            self.watcher_id = Gio.bus_watch_name(
+                Gio.BusType.SESSION,
+                info.app_id,
+                Gio.BusNameWatcherFlags.NONE,
+                lambda *args: self.do_launch_browser(),
+                None
+            )
+        else:
+            self.do_launch_browser()
+
+    def do_launch_browser(self):
+        if self.watcher_id is not None:
+            Gio.bus_unwatch_name(self.watcher_id)
+            self.watcher_id = None
         browser = Gio.DBusProxy.new_for_bus_sync(
             Gio.BusType.SESSION,
             Gio.DBusProxyFlags.NONE,
@@ -106,16 +171,18 @@ class RemembranceService(Gio.Application):
         handler.setFormatter(formatter)
         self.logger = logging.getLogger(info.service_executable)
         self.logger.setLevel(logging.INFO)
+        file_handler = logging.FileHandler(info.service_log, 'w')
         self.logger.addHandler(handler)
+        self.logger.addHandler(file_handler)
 
     def quit_service(self, action, data):
         self.quit()
 
 def main():
     try:
-        app = RemembranceService(
+        app = RemindersService(
             application_id=info.service_id,
-            flags=Gio.ApplicationFlags.DEFAULT_FLAGS
+            flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE
         )
         return app.run(sys.argv)
     except Exception as error:

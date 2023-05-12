@@ -19,7 +19,7 @@ from reminders import info
 from reminders.service.reminder import Reminder
 
 from gi.repository import GLib
-from os import path, mkdir
+from os import path, mkdir, sep
 from math import floor
 from logging import getLogger
 from time import time
@@ -36,7 +36,7 @@ class iCalendar():
         self.reminders = reminders
 
     def to_ical(self, lists):
-        folder = DOWNLOADS_DIR + '/' + f'Reminders {datetime.datetime.now().strftime("%c")}'
+        folder = DOWNLOADS_DIR + sep + f'Reminders {datetime.datetime.now().strftime("%c")}'
 
         calendars = {}
         for list_id in lists:
@@ -70,7 +70,7 @@ class iCalendar():
         mkdir(folder)
 
         for list_id, calendar in calendars.items():
-            base_filename = folder + '/' + calendar['X-WR-CALNAME']
+            base_filename = folder + sep + calendar['X-WR-CALNAME']
             filename = f'{base_filename}.ical'
             count = 1
             while path.exists(filename):

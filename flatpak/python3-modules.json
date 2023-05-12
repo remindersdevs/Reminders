@@ -2,7 +2,7 @@
     "name": "python3-modules",
     "buildsystem": "simple",
     "build-commands": [
-        "pip3 install --verbose --ignore-installed --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} --no-build-isolation caldav certifi cffi charset-normalizer cryptography icalendar idna lxml msal pycparser pyjwt python-dateutil pytz pytz-deprecation-shim recurring-ical-events requests six tzdata tzlocal urllib3 vobject x-wr-timezone"
+        "pip3 install --verbose --ignore-installed --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} --no-build-isolation caldav certifi cffi charset-normalizer cryptography icalendar idna importlib-metadata jaraco-classes jeepney keyring lxml more-itertools msal pycparser pyjwt python-dateutil pytz pytz-deprecation-shim recurring-ical-events requests secretstorage six tzdata tzlocal urllib3 vobject x-wr-timezone zipp"
     ],
     "sources": [
         {
@@ -53,6 +53,26 @@
         },
         {
             "type": "file",
+            "url": "https://files.pythonhosted.org/packages/30/bb/bf2944b8b88c65b797acc2c6a2cb0fb817f7364debf0675792e034013858/importlib_metadata-6.6.0-py3-none-any.whl",
+            "sha256": "43dd286a2cd8995d5eaef7fee2066340423b818ed3fd70adf0bad5f1fac53fed"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/60/28/220d3ae0829171c11e50dded4355d17824d60895285631d7eb9dee0ab5e5/jaraco.classes-3.2.3-py3-none-any.whl",
+            "sha256": "2353de3288bc6b82120752201c6b1c1a14b058267fa424ed5ce5984e3b922158"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/ae/72/2a1e2290f1ab1e06f71f3d0f1646c9e4634e70e1d37491535e19266e8dc9/jeepney-0.8.0-py3-none-any.whl",
+            "sha256": "c0a454ad016ca575060802ee4d590dd912e35c122fa04e70306de3d076cce755"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/62/db/0e9a09b2b95986dcd73ac78be6ed2bd73ebe8bac65cba7add5b83eb9d899/keyring-23.13.1-py3-none-any.whl",
+            "sha256": "771ed2a91909389ed6148631de678f82ddc73737d85a927f382a8a1b157898cd"
+        },
+        {
+            "type": "file",
             "url": "https://files.pythonhosted.org/packages/46/f5/3f61ae971a41c993ce3365e92354090ebf661426cb96fdc826108a9c31a2/lxml-4.9.2-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.manylinux_2_24_aarch64.whl",
             "sha256": "8340225bd5e7a701c0fa98284c849c9b9fc9238abf53a0ebd90900f25d39a4e4",
             "only-arches": [
@@ -74,6 +94,11 @@
             "only-arches": [
                 "aarch64"
             ]
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/85/01/e2678ee4e0d7eed4fd6be9e5b043fff9d22d245d06c8c91def8ced664189/more_itertools-9.1.0-py3-none-any.whl",
+            "sha256": "d2bc7f02446e86a68911e58ded76d6561eea00cddfb2a91e7019bbb586c799f3"
         },
         {
             "type": "file",
@@ -117,6 +142,11 @@
         },
         {
             "type": "file",
+            "url": "https://files.pythonhosted.org/packages/54/24/b4293291fa1dd830f353d2cb163295742fa87f179fcc8a20a306a81978b7/SecretStorage-3.3.3-py3-none-any.whl",
+            "sha256": "f356e6628222568e3af06f2eba8df495efa13b3b63081dafd4f7d9a7b7bc9f99"
+        },
+        {
+            "type": "file",
             "url": "https://files.pythonhosted.org/packages/d9/5a/e7c31adbe875f2abbb91bd84cf2dc52d792b5a01506781dbcf25c91daf11/six-1.16.0-py2.py3-none-any.whl",
             "sha256": "8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"
         },
@@ -144,6 +174,11 @@
             "type": "file",
             "url": "https://files.pythonhosted.org/packages/c6/38/05bcb43df0db48922426845380eeaea88875807050b9ac4aff099d775ae5/x_wr_timezone-0.0.5-py3-none-any.whl",
             "sha256": "e438b27b96635f5f712a4fb5dda4c82597a53a412fe834c9fe8409fddb3fc2b1"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/5b/fa/c9e82bbe1af6266adf08afb563905eb87cab83fde00a0a08963510621047/zipp-3.15.0-py3-none-any.whl",
+            "sha256": "48904fc76a60e542af151aded95726c1a5c34ed43ab4134b597665c86d7ad556"
         }
     ]
 }

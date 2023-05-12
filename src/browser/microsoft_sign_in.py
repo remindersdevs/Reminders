@@ -13,12 +13,12 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import gi
+from gi import require_version
 
 from reminders import info
 
-gi.require_version('WebKit', '6.0')
-from gi.repository import Gtk, Adw, WebKit
+require_version('WebKit', '6.0')
+from gi.repository import Gtk, Adw, WebKit, GLib
 
 from logging import getLogger
 
@@ -40,8 +40,7 @@ class MicrosoftSignIn(Adw.Window):
         self.web.set_vexpand(True)
         url = self.app.run_service_method('MSGetLoginURL', None).unpack()[0]
 
-        self.app.service.connect('g-signal::MSSignedIn', lambda *args: self.destroy())
-
         self.web.load_uri(url)
         self.main.append(self.web)
+
         self.present()

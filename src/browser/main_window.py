@@ -375,8 +375,11 @@ class MainWindow(Adw.ApplicationWindow):
     def new_edit_win(self, reminder = None):
         if self.reminder_edit_win is None:
             self.reminder_edit_win = ReminderEditWindow(self, self.app, reminder)
-            self.reminder_edit_win.present()
             self.reminder_edit_win.connect('close-request', self.close_edit_win)
+            self.reminder_edit_win.present()
+
+            if info.on_windows:
+                self.app.center_win_on_parent(self.reminder_edit_win)
         else:
             self.reminder_edit_win.setup(reminder)
             self.reminder_edit_win.set_visible(True)
@@ -394,7 +397,11 @@ class MainWindow(Adw.ApplicationWindow):
             confirm_dialog.set_default_response('cancel')
             confirm_dialog.set_close_response('cancel')
             confirm_dialog.connect('response::yes', lambda *args: self.reminder_edit_win.set_visible(False))
+
             confirm_dialog.present()
+
+            if info.on_windows:
+                self.app.center_win_on_parent(confirm_dialog)
             return True
         else:
             self.reminder_edit_win.set_visible(False)
@@ -532,7 +539,11 @@ class MainWindow(Adw.ApplicationWindow):
     def edit_lists(self):
         if self.edit_lists_window is None:
             self.edit_lists_window = EditListsWindow(self)
+
             self.edit_lists_window.present()
+
+            if info.on_windows:
+                self.app.center_win_on_parent(self.edit_lists_window)
         else:
             self.edit_lists_window.set_visible(True)
 
@@ -1288,7 +1299,11 @@ class MainWindow(Adw.ApplicationWindow):
         confirm_dialog.set_default_response('cancel')
         confirm_dialog.set_close_response('cancel')
         confirm_dialog.connect('response::yes', lambda *args: self.selected_change_completed(True))
+
         confirm_dialog.present()
+
+        if info.on_windows:
+            self.app.center_win_on_parent(confirm_dialog)
 
     @Gtk.Template.Callback()
     def selected_incomplete(self, btn):
@@ -1303,7 +1318,11 @@ class MainWindow(Adw.ApplicationWindow):
         confirm_dialog.set_default_response('cancel')
         confirm_dialog.set_close_response('cancel')
         confirm_dialog.connect('response::yes', lambda *args: self.selected_change_completed(False))
+
         confirm_dialog.present()
+
+        if info.on_windows:
+            self.app.center_win_on_parent(confirm_dialog)
 
     @Gtk.Template.Callback()
     def move_selected(self, btn):
@@ -1322,7 +1341,11 @@ class MainWindow(Adw.ApplicationWindow):
         confirm_dialog.set_default_response('cancel')
         confirm_dialog.set_close_response('cancel')
         confirm_dialog.connect('response::yes', lambda *args: self.selected_change_important(True))
+
         confirm_dialog.present()
+
+        if info.on_windows:
+            self.app.center_win_on_parent(confirm_dialog)
 
     @Gtk.Template.Callback()
     def selected_unimportant(self, btn):
@@ -1337,7 +1360,11 @@ class MainWindow(Adw.ApplicationWindow):
         confirm_dialog.set_default_response('cancel')
         confirm_dialog.set_close_response('cancel')
         confirm_dialog.connect('response::yes', lambda *args: self.selected_change_important(False))
+
         confirm_dialog.present()
+
+        if info.on_windows:
+            self.app.center_win_on_parent(confirm_dialog)
 
     @Gtk.Template.Callback()
     def selected_remove(self, btn = None):
@@ -1352,4 +1379,8 @@ class MainWindow(Adw.ApplicationWindow):
         confirm_dialog.set_default_response('cancel')
         confirm_dialog.set_close_response('cancel')
         confirm_dialog.connect('response::yes', lambda *args: self.selected_remove_reminders())
+
         confirm_dialog.present()
+
+        if info.on_windows:
+            self.app.center_win_on_parent(confirm_dialog)

@@ -1,9 +1,9 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
-data/browser/io.github.dgsasha.Remembrance.desktop.in.in
-data/service/io.github.dgsasha.Remembrance.Service3.desktop.in.in
-data/io.github.dgsasha.Remembrance.gschema.xml.in
-data/io.github.dgsasha.Remembrance.metainfo.xml.in.in
+data/browser/io.github.remindersdevs.Reminders.desktop.in.in
+data/service/io.github.remindersdevs.Reminders.Service.desktop.in.in
+data/io.github.remindersdevs.Reminders.gschema.xml.in
+data/io.github.remindersdevs.Reminders.metainfo.xml.in.in
 src/browser/resources/ui/caldav_sign_in.ui
 src/browser/resources/ui/edit_lists_window.ui
 src/browser/resources/ui/error_dialog.ui

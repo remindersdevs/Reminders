@@ -1,0 +1,108 @@
+# -*- mode: python ; coding: utf-8 -*-
+
+block_cipher = None
+
+a = Analysis(
+    ['@REMINDERS@'],
+    pathex=[],
+    binaries=[],
+    datas=[('@LIB@/girepository-1.0/GdkWin32-4.0.typelib', 'gi_typelibs'), ('@LIB@/girepository-1.0/win32-1.0.typelib', 'gi_typelibs')],
+    hiddenimports=[],
+    hookspath=[],
+	hooksconfig={
+		'gi': {
+			'icons': ['Adwaita', 'hicolor'],
+			'themes': ['Adwaita'],
+			'module-versions': {
+				'Gtk': '4.0'
+			}
+		}
+	},
+    runtime_hooks=[],
+    excludes=[],
+    win_no_prefer_redirects=False,
+    win_private_assemblies=False,
+    cipher=block_cipher,
+    noarchive=False,
+)
+
+a2 = Analysis(
+    ['@REMINDERS_SERVICE@'],
+    pathex=[],
+    binaries=[],
+    datas=[],
+    hiddenimports=[],
+    hookspath=[],
+	hooksconfig={},
+    runtime_hooks=[],
+    excludes=[],
+    win_no_prefer_redirects=False,
+    win_private_assemblies=False,
+    cipher=block_cipher,
+    noarchive=False,
+)
+
+MERGE( (a, 'reminders', 'Reminders'), (a2, 'reminders-service', 'Reminders Service') )
+
+pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
+
+pyz2 = PYZ(a2.pure, a2.zipped_data, cipher=block_cipher)
+
+exe = EXE(
+    pyz,
+    a.scripts,
+    [],
+    name='Reminders',
+    debug=False,
+    bootloader_ignore_signals=False,
+    strip=False,
+    exclude_binaries=True,
+    upx=False,
+    upx_exclude=[],
+    runtime_tmpdir=None,
+    console=False,
+    disable_windowed_traceback=False,
+    argv_emulation=False,
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
+    version='@VERSION@',
+    icon=['@ICON@'],
+)
+
+exe2 = EXE(
+    pyz2,
+    a2.scripts,
+    [],
+    name='Reminders Service',
+    debug=False,
+    bootloader_ignore_signals=False,
+    strip=False,
+    exclude_binaries=True,
+    upx=False,
+    upx_exclude=[],
+    runtime_tmpdir=None,
+    console=False,
+    disable_windowed_traceback=False,
+    argv_emulation=False,
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
+    version='@SERVICE_VERSION@',
+    icon=['@ICON@'],
+)
+
+coll = COLLECT(
+    exe,
+    a.binaries,
+    a.zipfiles,
+    a.datas,
+    exe2,
+    a2.binaries,
+    a2.zipfiles,
+    a2.datas,
+    strip=False,
+    upx=False,
+    upx_exclude=[],
+    name='Reminders'
+)

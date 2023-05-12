@@ -99,7 +99,11 @@ class EditListsWindow(Adw.Window):
             confirm_dialog.set_default_response('cancel')
             confirm_dialog.set_close_response('cancel')
             confirm_dialog.connect('response::yes', lambda *args: self.do_close())
+
             confirm_dialog.present()
+
+            if info.on_windows:
+                self.win.app.center_win_on_parent(confirm_dialog)
         else:
             self.do_close()
 
@@ -203,7 +207,11 @@ class ListRow(Adw.EntryRow):
         confirm_dialog.set_default_response('cancel')
         confirm_dialog.set_response_appearance('remove', Adw.ResponseAppearance.DESTRUCTIVE)
         confirm_dialog.connect('response::remove', lambda *args: self.delete())
+
         confirm_dialog.present()
+
+        if info.on_windows:
+            self.win.app.center_win_on_parent(confirm_dialog)
 
     def delete(self):
         try:

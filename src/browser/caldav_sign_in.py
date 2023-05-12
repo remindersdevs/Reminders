@@ -33,7 +33,11 @@ class CalDAVSignIn(Adw.Window):
         self.app = preferences.app
         self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: self.close())))
 
+
         self.present()
+
+        if info.on_windows:
+            self.app.center_win_on_parent(self)
 
     def caldav_sign_in(self, name, url, username, password):
         try:

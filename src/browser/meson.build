@@ -1,7 +1,3 @@
-conf = configuration_data()
-conf.set('PYTHON_PATH', python.full_path())
-conf.set('LOCALE_DIR', get_option('prefix') / get_option('localedir'))
-
 source_files = files(
   '__init__.py',
   'about.py',
@@ -29,7 +25,7 @@ install_data(
 
 configure_file(
     input: 'reminders.py',
-    output: app_executable,
+    output: app_file,
     configuration: conf,
     install: true,
     install_dir: get_option('prefix') / get_option('bindir')

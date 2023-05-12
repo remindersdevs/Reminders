@@ -1,7 +1,3 @@
-conf = configuration_data()
-conf.set('PYTHON_PATH', python.full_path())
-conf.set('LOCALE_DIR', get_option('prefix') / get_option('localedir'))
-
 source_files = files(
   '__init__.py',
   'backend.py',
@@ -21,8 +17,8 @@ install_data(
 
 configure_file(
     input: 'reminders-service.py',
-    output: service_executable,
+    output: service_file,
     configuration: conf,
     install: true,
-    install_dir: get_option('prefix') / get_option('libexecdir')
+    install_dir: get_option('prefix') / get_option('bindir')
 )

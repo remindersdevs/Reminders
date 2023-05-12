@@ -1,7 +1,8 @@
 [Desktop Entry]
 Type=Application
-Name=Remembrance Service
-Exec=@LIBEXECDIR@/@SERVICE_EXECUTABLE@
+Name=Reminders Service
+Comment=DBus service for managing reminders and tasks
+Exec=@SERVICE_EXEC@
 Icon=@APP_ID@
 Terminal=false
 NoDisplay=true

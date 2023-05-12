@@ -18,10 +18,10 @@ resources = files(
 )
 
 gnome.compile_resources(
-    app_executable,
+    meson.project_name(),
     'reminders.gresource.xml',
     install: true,
-    install_dir: python.get_install_dir() / meson.project_name() / 'browser',
+    install_dir: get_option('prefix') / get_option('datadir') / meson.project_name(),
     dependencies: resources,
     gresource_bundle: true,
 )

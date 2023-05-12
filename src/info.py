@@ -1,6 +1,9 @@
 from ast import literal_eval
 from gettext import gettext as _
 from enum import IntFlag, IntEnum, auto
+from platform import system
+from os import sep, mkdir
+from os.path import isdir
 
 from gi.repository import GLib
 
@@ -16,17 +19,22 @@ service_executable = '@SERVICE_EXECUTABLE@'
 service_id = '@SERVICE_ID@'
 service_interface = '@SERVICE_INTERFACE@'
 service_object = '@SERVICE_OBJECT@'
-service_path = '@SERVICE_PATH@'
-
-portals_enabled = literal_eval('@PORTALS_ENABLED@')
 
 client_id = '@CLIENT_ID@'
 
-data_dir = f'{GLib.get_user_data_dir()}/{app_executable}'
+data_dir = f'{GLib.get_user_data_dir()}{sep}{project_name}'
 
-old_data_dir = f'{GLib.get_user_data_dir()}/remembrance'
+if not isdir(data_dir):
+    mkdir(data_dir)
 
-interface_file = f'@INTERFACES_DIR@/{service_interface}.xml'
+app_log = f'{data_dir}{sep}{project_name}.log'
+service_log = f'{data_dir}{sep}{project_name}-service.log'
+
+old_data_dir = f'{GLib.get_user_data_dir()}{sep}remembrance'
+
+on_windows = system() == 'Windows'
+
+portals_enabled = literal_eval('@PORTALS_ENABLED@') if not on_windows else False
 
 reminder_defaults = {
     'title': '',

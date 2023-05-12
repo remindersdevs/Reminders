@@ -416,6 +416,9 @@ class Reminder(Adw.ExpanderRow):
         confirm_dialog.connect('response::remove', lambda *args: self.remove())
         confirm_dialog.present()
 
+        if info.on_windows:
+            self.app.center_win_on_parent(confirm_dialog)
+
     @Gtk.Template.Callback()
     def edit(self, button = None):
         self.win.new_edit_win(self)

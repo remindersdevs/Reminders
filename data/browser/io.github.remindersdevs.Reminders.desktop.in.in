@@ -2,7 +2,7 @@
 Type=Application
 Name=Reminders
 Comment=Set reminders and manage tasks
-Exec=@BINDIR@/@APP_EXECUTABLE@ %U
+Exec=@EXEC@ %U
 Icon=@APP_ID@
 Terminal=false
 StartupWMClass=@APP_ID@

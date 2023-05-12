@@ -13,7 +13,9 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk, Adw
+from gi.repository import Gtk, Adw, GLib
+
+from reminders import info
 
 @Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/error_dialog.ui')
 class ErrorDialog(Adw.Window):
@@ -27,6 +29,8 @@ class ErrorDialog(Adw.Window):
         self.set_title(title)
         self.body.set_label(body)
         self.error.set_buffer(Gtk.TextBuffer(text=error))
+        self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: self.close())))
+
         if app.win is not None:
             if parent_window is None:
                 parent_window = app.win
@@ -38,9 +42,13 @@ class ErrorDialog(Adw.Window):
                     parent_window = app.win.edit_lists_window
             self.set_transient_for(parent_window)
             self.set_modal(True)
+
+            self.present()
+
+            if info.on_windows:
+                app.center_win_on_parent(self)
         else:
             Gtk.StyleContext.add_provider_for_display(self.get_display(), app.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
             self.set_application(app)
+            self.present()
 
-        self.present()
-        self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: self.close())))

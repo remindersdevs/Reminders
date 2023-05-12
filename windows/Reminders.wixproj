@@ -1,0 +1,33 @@
+﻿<Project DefaultTargets="build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Devel</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <ProjectGuid>bc613a1f-6484-4ef8-b8b1-157ef38122a4</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputType>Package</OutputType>
+    <Cultures>en-us</Cultures>
+    <SuppressIces>ICE69</SuppressIces>
+    <OutputPath>..\out\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputName Condition=" '$(Configuration)' == 'Devel' ">Reminders Installer $(Platform) (Devel)</OutputName>
+    <OutputName Condition=" '$(Configuration)' == 'Release' ">Reminders Installer $(Platform)</OutputName>
+    <IntermediateOutputPath>..\obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(USERPROFILE)\.nuget\packages\wixtoolset.sdk\4.0.0\tools\wix.targets</WixTargetsPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Product.wxs"/>
+    <EmbeddedResource Include="localization\en-US.wxl"/>
+    <HarvestDirectory Include="..\build\$(Platform)\reminders">
+      <DirectoryRefID>APPLICATIONFOLDER</DirectoryRefID>
+      <ComponentGroupName>Data</ComponentGroupName>
+      <SuppressRootDirectory>true</SuppressRootDirectory>
+      <SuppressRegistry>true</SuppressRegistry>
+    </HarvestDirectory>
+    <BindInputPaths Include="..\build\$(Platform)\reminders" />
+    <PackageReference Include="Wixtoolset.Heat" Version="4.0.0" />
+    <PackageReference Include="Wixtoolset.UI.wixext" Version="4.0.0" />
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" />
+  <Target Name = "Clean">
+      <RemoveDir Directories="$(builtdir)" />
+  </Target>
+</Project>

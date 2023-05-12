@@ -17,10 +17,13 @@ from gettext import gettext as _
 
 from reminders import info
 from reminders.browser.caldav_sign_in import CalDAVSignIn
-from reminders.browser.microsoft_sign_in import MicrosoftSignIn
+
+if not info.on_windows:
+    from reminders.browser.microsoft_sign_in import MicrosoftSignIn
 
 from gi.repository import Gtk, Adw, GLib, Gio, Pango
 from logging import getLogger
+from webbrowser import open_new
 
 logger = getLogger(info.app_executable)
 
@@ -157,7 +160,11 @@ class PreferencesWindow(Adw.PreferencesWindow):
 
     @Gtk.Template.Callback()
     def ms_sign_in(self, row = None):
-        MicrosoftSignIn(self)
+        if info.on_windows:
+            url = self.app.run_service_method('MSGetLoginURL', None).unpack()[0]
+            open_new(url)
+        else:
+            MicrosoftSignIn(self)
 
     @Gtk.Template.Callback()
     def caldav_sign_in(self, row = None):
@@ -276,7 +283,13 @@ class PreferencesUserRow(Adw.ExpanderRow):
             confirm_dialog.set_default_response('cancel')
             confirm_dialog.set_response_appearance('logout', Adw.ResponseAppearance.DESTRUCTIVE)
             confirm_dialog.connect('response::logout', lambda *args: self.preferences.app.win.sign_out(self.user_id))
-            confirm_dialog.present()
+            if info.on_windows:
+                confirm_dialog.present()
+                # goofy hack to make sure window is centered
+                GLib.idle_add(lambda *args: confirm_dialog.set_visible(False))
+                GLib.idle_add(lambda *args: confirm_dialog.set_visible(True))
+            else:
+                confirm_dialog.present()
         except Exception as error:
             logger.exception(error)
 

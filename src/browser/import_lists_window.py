@@ -44,6 +44,9 @@ class ImportListsWindow(Adw.Window):
 
         self.present()
 
+        if info.on_windows:
+            self.app.center_win_on_parent(self)
+
     def do_save(self):
         if self.expander.get_enable_expansion():
             task_list = self.win.task_list_ids[self.task_list_row.get_selected()]
@@ -74,4 +77,8 @@ class ImportListsWindow(Adw.Window):
         confirm_dialog.set_default_response('cancel')
         confirm_dialog.set_close_response('cancel')
         confirm_dialog.connect('response::yes', lambda *args: self.do_save())
+
         confirm_dialog.present()
+
+        if info.on_windows:
+            self.app.center_win_on_parent(confirm_dialog)

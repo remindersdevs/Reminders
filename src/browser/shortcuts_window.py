@@ -14,6 +14,7 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from gi.repository import Gtk
+from reminders import info
 
 @Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/shortcuts_window.ui')
 class ShortcutsWindow(Gtk.ShortcutsWindow):
@@ -23,5 +24,8 @@ class ShortcutsWindow(Gtk.ShortcutsWindow):
         super().__init__(*args, **kwargs)
         self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: self.close())))
         self.set_transient_for(win)
+
         self.present()
 
+        if info.on_windows:
+            win.app.center_win_on_parent(self)

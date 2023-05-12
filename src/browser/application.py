@@ -18,6 +18,7 @@ import logging
 
 from gi import require_version
 
+require_version('Gdk', '4.0')
 require_version('Gtk', '4.0')
 require_version('Adw', '1')
 
@@ -34,15 +35,29 @@ from reminders.browser.import_lists_window import ImportListsWindow
 from gettext import gettext as _
 from pkg_resources import parse_version
 from traceback import format_exception
+from os import environ, sep
+
+if info.on_windows:
+    from time import sleep
+    from subprocess import Popen, CREATE_NEW_CONSOLE
+
+    import ctypes
+
+    user32 = ctypes.windll.user32
+    GetWindowRect = user32.GetWindowRect
+    SetWindowPos = user32.SetWindowPos
+    OffsetRect = user32.OffsetRect
+    CopyRect = user32.CopyRect
+    gdk_win32_surface_get_handle = ctypes.WinDLL('libgtk-4-1.dll').gdk_win32_surface_get_handle
 
 # Always update this when new features are added that require the service to restart
 MIN_SERVICE_VERSION = '5.0'
 
-class Remembrance(Adw.Application):
+class Reminders(Adw.Application):
     '''Application for the frontend'''
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.restart = False
+        self.configure_logging()
         self.sandboxed = False
         self.preferences = None
         self.win = None
@@ -57,18 +72,32 @@ class Remembrance(Adw.Application):
             None
         )
         self.add_main_option(
+            'no-activate', ord('n'),
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.NONE,
+            _("Don't activate app, this might cause issues"),
+            None
+        )
+        self.add_main_option(
+            'action', ord('a'),
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.STRING,
+            _('Run an action'),
+            None
+        )
+        self.add_main_option(
+            'params', ord('p'),
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.STRING,
+            _('String parameter for the action if required'),
+            None
+        )
+        self.add_main_option(
             'restart-service', ord('r'),
             GLib.OptionFlags.NONE,
             GLib.OptionArg.NONE,
             _('Restart service before starting app'),
             None
-        )
-        self.add_main_option(
-            'page', ord('p'),
-            GLib.OptionFlags.NONE,
-            GLib.OptionArg.STRING,
-            _('Start on a different page'),
-            '(upcoming|past|completed)',
         )
         self.add_main_option(
             GLib.OPTION_REMAINING,
@@ -82,21 +111,22 @@ class Remembrance(Adw.Application):
     def do_command_line(self, command):
         commands = command.get_options_dict()
 
-        if commands.contains('restart-service'):
-            self.restart = True
-
         if commands.contains('version'):
             print(info.version)
             sys.exit(0)
 
-        if commands.contains('page'):
-            value = commands.lookup_value('page').get_string()
-            if value in ('upcoming', 'past', 'completed'):
-                self.page = value
-            else:
-                print(f'{value} is not a valid page')
+        self.restart = commands.contains('restart-service')
 
-        self.do_activate()
+        if not commands.contains('no-activate'):
+            self.do_activate()
+
+        if commands.contains('action'):
+            action = commands.lookup_value('action').get_string()
+            params = commands.lookup_value('params').get_string() if commands.contains('params') else None
+            try:
+                self.activate_action(action, GLib.Variant('s', params) if params is not None else params)
+            except Exception as error:
+                self.logger.exception(error)
 
         files = commands.lookup_value(GLib.OPTION_REMAINING)
         if files:
@@ -106,7 +136,6 @@ class Remembrance(Adw.Application):
 
     def do_startup(self):
         Adw.Application.do_startup(self)
-        self.configure_logging()
         self.refreshing = False
 
         if info.portals_enabled:
@@ -117,7 +146,7 @@ class Remembrance(Adw.Application):
             if portal.running_under_sandbox():
                 self.sandboxed = True
 
-        if self.sandboxed:
+        if self.sandboxed or info.on_windows:
             # xdg-desktop-portal will try to run the actions from the backend here when the notification is interacted with
             # for now, we can just add the action here if the app is sandboxed
             # later I will probably make the frontend of the app the owner of the notification to simplify things
@@ -150,14 +179,14 @@ class Remembrance(Adw.Application):
 
     def do_activate(self):
         Adw.Application.do_activate(self)
-        self.provider = Gtk.CssProvider()
-        self.provider.load_from_resource('/io/github/remindersdevs/Reminders/stylesheet.css')
-
         if win := self.get_active_window():
             self.win = win
             self.win.activate_action(f'win.{self.page}', None)
             self.win.present()
             return
+
+        self.provider = Gtk.CssProvider()
+        self.provider.load_from_resource('/io/github/remindersdevs/Reminders/stylesheet.css')
 
         self.connect_to_service()
         self.check_service_version()
@@ -321,6 +350,45 @@ class Remembrance(Adw.Application):
             self.win.invalidate_filter()
 
     def connect_to_service(self):
+        if info.on_windows:
+            # Can't autostart dbus services on windows
+            if info.service_executable.endswith('exe'):
+                Popen([environ['REMINDERS_PATH'] + sep + info.service_executable], creationflags=CREATE_NEW_CONSOLE)
+            else:
+                Popen([sys.executable, environ['REMINDERS_PATH'] + sep + info.service_executable], creationflags=CREATE_NEW_CONSOLE)
+            self.found = False
+            def cb():
+                self.found = True
+            timeout = GLib.timeout_add_seconds(10, self.timeout_error)
+            context = GLib.MainContext.new()
+            context.push_thread_default()
+            watcher_id = self.watch(cb)
+            while not self.found:
+                sleep(0.5)
+                context.iteration(True)
+            context.pop_thread_default()
+            GLib.source_remove(timeout)
+            self.do_connect(watcher_id)
+        else:
+            self.do_connect()
+
+    def timeout_error(self):
+        self.logger.error('Failed to connect to service')
+        sys.exit(1)
+
+    def watch(self, cb):
+        watcher_id = Gio.bus_watch_name(
+            Gio.BusType.SESSION,
+            info.service_id,
+            Gio.BusNameWatcherFlags.NONE,
+            lambda *args: cb(),
+            None
+        )
+        return watcher_id
+
+    def do_connect(self, watcher_id = None):
+        if watcher_id is not None:
+            Gio.bus_unwatch_name(watcher_id)
         self.service = Gio.DBusProxy.new_for_bus_sync(
             Gio.BusType.SESSION,
             Gio.DBusProxyFlags.NONE,
@@ -333,7 +401,7 @@ class Remembrance(Adw.Application):
         if self.service is not None:
             self.logger.info('Connected to service')
         else:
-            self.logger.error('Faled to start proxy to connect to service')
+            self.logger.error('Failed to start proxy to connect to service')
             sys.exit(1)
 
     def run_service_method(self, method, parameters, sync = True, callback = None, retry = True, show_error_dialog = True):
@@ -408,6 +476,8 @@ class Remembrance(Adw.Application):
         filters.append(file_filter)
         dialog.set_filters(filters)
         dialog.open_multiple(self.win, None, self.open_cb)
+        if info.on_windows:
+            self.center_win_on_parent(dialog)
 
     def open_cb(self, dialog, result, data = None):
         try:
@@ -423,10 +493,40 @@ class Remembrance(Adw.Application):
     def open_files(self, files):
         ImportListsWindow(self, files)
 
+    def center_win_on_parent(self, window, data=None):
+        ctypes.pythonapi.PyCapsule_GetPointer.restype = ctypes.c_void_p
+        ctypes.pythonapi.PyCapsule_GetPointer.argtypes = [ctypes.py_object]
+        pointer = ctypes.pythonapi.PyCapsule_GetPointer(window.get_native().get_surface().__gpointer__, None)
+        parent_pointer = ctypes.pythonapi.PyCapsule_GetPointer(window.get_transient_for().get_native().get_surface().__gpointer__, None)
+        gdk_win32_surface_get_handle.argtypes = [ctypes.c_void_p]
+        window_handle = gdk_win32_surface_get_handle(pointer)
+        parent_window_handle = gdk_win32_surface_get_handle(parent_pointer)
+
+        RECT = (ctypes.c_long * 4)
+        parent_rect = RECT()
+        GetWindowRect(parent_window_handle, ctypes.byref(parent_rect))
+
+        window_rect = RECT()
+        GetWindowRect(window_handle, ctypes.byref(window_rect))
+
+        parent_rect_copy = RECT()
+        CopyRect(ctypes.byref(parent_rect_copy), ctypes.byref(parent_rect))
+
+        OffsetRect(ctypes.byref(window_rect), ctypes.c_int(window_rect[0] * -1), ctypes.c_int(window_rect[1] * -1))
+        OffsetRect(ctypes.byref(parent_rect_copy), ctypes.c_int(parent_rect_copy[0] * -1), ctypes.c_int(parent_rect_copy[1] * -1))
+        OffsetRect(ctypes.byref(parent_rect_copy), ctypes.c_int(window_rect[2] * -1), ctypes.c_int(window_rect[3] * -1))
+
+        new_x = parent_rect[0] + (parent_rect_copy[2] // 2)
+        new_y = parent_rect[1] + (parent_rect_copy[3] // 2)
+
+        SetWindowPos(window_handle, 0, ctypes.c_int(new_x), ctypes.c_int(new_y), 0, 0, 0x0001 | 0x0004)  # SWP_NOSIZE | SWP_NOZORDER
+
     def show_preferences(self, action, data):
         if self.preferences is None:
             self.preferences = PreferencesWindow(self)
             self.preferences.present()
+            if info.on_windows:
+                self.center_win_on_parent(self.preferences)
         else:
             self.preferences.set_visible(True)
 
@@ -437,7 +537,9 @@ class Remembrance(Adw.Application):
         handler.setFormatter(formatter)
         self.logger = logging.getLogger(info.app_executable)
         self.logger.setLevel(logging.INFO)
+        file_handler = logging.FileHandler(info.app_log, 'w')
         self.logger.addHandler(handler)
+        self.logger.addHandler(file_handler)
 
     def refresh_reminders(self, action = None, data = None):
         if not self.refreshing:
@@ -461,7 +563,7 @@ class Remembrance(Adw.Application):
 
 def main():
     try:
-        app = Remembrance(application_id=info.app_id, flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
+        app = Reminders(application_id=info.app_id, flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
         return app.run(sys.argv)
     except:
         sys.exit(1)

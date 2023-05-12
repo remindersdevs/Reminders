@@ -15,7 +15,7 @@
 
 import datetime
 
-from gi.repository import Secret, GLib
+from gi.repository import GLib
 
 from reminders import info
 from reminders.service.reminder import Reminder
@@ -27,6 +27,11 @@ from json import dumps, loads
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import parse_qs
 from threading import Thread
+from keyring import get_password, set_password, delete_password, set_keyring
+from keyring.backends import SecretService
+
+if not info.on_windows:
+    set_keyring(SecretService)
 
 GRAPH = 'https://graph.microsoft.com/v1.0'
 
@@ -67,7 +72,6 @@ class MSToDo():
         self.users = {}
         self.reminders = reminders
         self.cache = SerializableTokenCache()
-        self.schema = reminders.schema
         self.flows = {}
 
         atexit_register(self.store)
@@ -147,11 +151,7 @@ class MSToDo():
         except (ConnectionError, HTTPError, Timeout) as error:
             try:
                 self.users = loads(
-                    Secret.password_lookup_sync(
-                        self.schema,
-                        { 'name': 'microsoft-users' },
-                        None
-                    )
+                    get_password('microsoft-users', 'users')
                 )
                 for i, value in self.users.items():
                     for key in ('email', 'local-id'):
@@ -167,31 +167,13 @@ class MSToDo():
 
     def store(self):
         if self.app is not None and len(self.users.keys()) > 0:
-            Secret.password_store_sync(
-                self.schema,
-                { 'name': 'microsoft-cache' },
-                None,
-                'cache',
-                self.cache.serialize(),
-                None
-            )
-            Secret.password_store_sync(
-                self.schema,
-                { 'name': 'microsoft-users' },
-                None,
-                'users',
-                dumps(self.users),
-                None
-            )
+            set_password('microsoft-cache', 'cache', self.cache.serialize())
+            set_password('microsoft-users', 'users', dumps(self.users))
 
     def read_cache(self):
         try:
             self.cache.deserialize(
-                Secret.password_lookup_sync(
-                    self.schema,
-                    { 'name': 'microsoft-cache' },
-                    None
-                )
+                get_password('microsoft-cache', 'cache')
             )
         except:
             self.logout_all()
@@ -236,18 +218,14 @@ class MSToDo():
                 pass
             self.tokens = {}
             self.users = {}
-            Secret.password_clear(
-                self.schema,
-                { 'name': 'microsoft-cache' },
-                None,
-                None
-            )
-            Secret.password_clear(
-                self.schema,
-                { 'name': 'microsoft-users' },
-                None,
-                None
-            )
+            try:
+                delete_password('microsoft-cache', 'cache')
+            except:
+                pass
+            try:
+                delete_password('microsoft-users', 'users')
+            except:
+                pass
 
         except Exception as error:
             logger.exception(error)
@@ -269,18 +247,14 @@ class MSToDo():
             if user_id in self.users:
                 self.users.pop(user_id)
             if self.users == {}:
-                Secret.password_clear(
-                    self.schema,
-                    { 'name': 'microsoft-cache' },
-                    None,
-                    None
-                )
-                Secret.password_clear(
-                    self.schema,
-                    { 'name': 'microsoft-users' },
-                    None,
-                    None
-                )
+                try:
+                    delete_password('microsoft-cache', 'cache')
+                except:
+                    pass
+                try:
+                    delete_password('microsoft-users', 'users')
+                except:
+                    pass
             else:
                 self.store()
 

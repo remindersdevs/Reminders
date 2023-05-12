@@ -75,7 +75,7 @@
     </screenshot>
   </screenshots>
 
-  <translation type="gettext">@APP_EXECUTABLE@</translation>
+  <translation type="gettext">@PROJECT_NAME@</translation>
 
   <url type="translate">https://hosted.weblate.org/engage/reminders</url>
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
