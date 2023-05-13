@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-16 19:17-0400\n"
-"PO-Revision-Date: 2023-04-17 22:33+0000\n"
-"Last-Translator: Jose Manuel Sánchez <josemas@gmail.com>\n"
+"PO-Revision-Date: 2023-05-14 06:52+0000\n"
+"Last-Translator: Ronald Cantillo <rooyca@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/reminders/"
 "reminders/es/>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:4
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:9
@@ -592,176 +592,176 @@ msgstr "Establecer una fecha/hora"
 #: src/browser/resources/ui/reminder_edit_window.ui:96
 #: src/browser/resources/ui/reminder_edit_window.ui:422
 msgid "Select date"
-msgstr ""
+msgstr "Seleccionar fecha"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:131
 msgid "Hour"
-msgstr ""
+msgstr "Hora"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:162
 msgid "Minute"
-msgstr ""
+msgstr "Minuto"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:208
 msgid "Send a notification"
-msgstr ""
+msgstr "Enviar una notificación"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:227
 msgid "Repeat the reminder"
-msgstr ""
+msgstr "Repetir el recordatorio"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:242
 msgid "Repeat every"
-msgstr ""
+msgstr "Repetir cada"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:285
 msgid "Mon"
-msgstr ""
+msgstr "Lun"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:286
 msgid "Monday"
-msgstr ""
+msgstr "Lunes"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:297
 msgid "Tue"
-msgstr ""
+msgstr "Mar"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:298
 msgid "Tuesday"
-msgstr ""
+msgstr "Martes"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:309
 msgid "Wed"
-msgstr ""
+msgstr "Mie"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:310
 msgid "Wednesday"
-msgstr ""
+msgstr "Miércoles"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:321
 msgid "Thu"
-msgstr ""
+msgstr "Jue"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:322
 msgid "Thursday"
-msgstr ""
+msgstr "Jueves"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:333
 msgid "Fri"
-msgstr ""
+msgstr "Vie"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:334
 msgid "Friday"
-msgstr ""
+msgstr "Viernes"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:345
 msgid "Sat"
-msgstr ""
+msgstr "Sáb"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:346
 msgid "Saturday"
-msgstr ""
+msgstr "Sábado"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:357
 msgid "Sun"
-msgstr ""
+msgstr "Dom"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:358
 msgid "Sunday"
-msgstr ""
+msgstr "Domingo"
 
 #. Translators: This is a noun, preceded by a number to represent the number of occurrences of something
 #: src/browser/resources/ui/reminder_edit_window.ui:407
 msgid "time(s)"
-msgstr ""
+msgstr "vez(veces)"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:480
 msgid "Save"
-msgstr ""
+msgstr "Guardar"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:495
 msgid "minute(s)"
-msgstr ""
+msgstr "minuto(s)"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:496
 msgid "hour(s)"
-msgstr ""
+msgstr "hora(s)"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:497
 msgid "day(s)"
-msgstr ""
+msgstr "día(s)"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:498
 msgid "week(s)"
-msgstr ""
+msgstr "semana(s)"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:503
 msgid "Repeat forever"
-msgstr ""
+msgstr "Repetir por siempre"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:504
 msgid "Display a total of"
-msgstr ""
+msgstr "Mostrar un total de"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:505
 msgid "Repeat until"
-msgstr ""
+msgstr "Repetir hasta"
 
 #: src/browser/resources/ui/shortcuts_window.ui:11
 msgid "Application"
-msgstr ""
+msgstr "Aplicación"
 
 #: src/browser/resources/ui/shortcuts_window.ui:15
 msgid "Show menu"
-msgstr ""
+msgstr "Mostrar el menú"
 
 #: src/browser/resources/ui/shortcuts_window.ui:27
 msgid "Keyboard shortcuts"
-msgstr ""
+msgstr "Atajos del teclado"
 
 #: src/browser/resources/ui/shortcuts_window.ui:33
 msgid "Quit"
-msgstr ""
+msgstr "Salir"
 
 #: src/browser/resources/ui/shortcuts_window.ui:40
 msgid "Navigation"
-msgstr ""
+msgstr "Navegación"
 
 #: src/browser/resources/ui/shortcuts_window.ui:44
 msgid "Move left"
-msgstr ""
+msgstr "Mover a la izquierda"
 
 #: src/browser/resources/ui/shortcuts_window.ui:50
 msgid "Move up"
-msgstr ""
+msgstr "Mover hacia arriba"
 
 #: src/browser/resources/ui/shortcuts_window.ui:56
 msgid "Move right"
-msgstr ""
+msgstr "Mover a la derecha"
 
 #: src/browser/resources/ui/shortcuts_window.ui:62
 msgid "Move down"
-msgstr ""
+msgstr "Mover hacia abajo"
 
 #: src/browser/resources/ui/shortcuts_window.ui:69
 msgid "Main Window"
-msgstr ""
+msgstr "Ventana principal"
 
 #: src/browser/resources/ui/shortcuts_window.ui:79
 msgid "New reminder"
-msgstr ""
+msgstr "Nuevo recordatorio"
 
 #: src/browser/resources/ui/shortcuts_window.ui:85
 msgid "Refresh reminders"
-msgstr ""
+msgstr "Recargar recordatorios"
 
 #: src/browser/resources/ui/shortcuts_window.ui:91
 msgid "Select all reminders"
-msgstr ""
+msgstr "Seleccionar todos los recordatorios"
 
 #: src/browser/resources/ui/shortcuts_window.ui:97
 msgid "Unselect all reminders"
-msgstr ""
+msgstr "Deseleccionar todos los recordatorios"
 
 #: src/browser/resources/ui/shortcuts_window.ui:103
 msgid "Hold to select multiple reminders"
@@ -773,198 +773,201 @@ msgstr ""
 
 #: src/browser/resources/ui/shortcuts_window.ui:114
 msgid "Save changes"
-msgstr ""
+msgstr "Guardar cambios"
 
 #: src/browser/resources/ui/shortcuts_window.ui:121
 msgid "Child Windows"
-msgstr ""
+msgstr "Ventanas secundarias"
 
 #: src/browser/resources/ui/shortcuts_window.ui:125
 msgid "Close window"
-msgstr ""
+msgstr "Cerrar ventana"
 
 #: src/browser/about.py:36
 msgid "Copyright 2023 Sasha Hale"
-msgstr ""
+msgstr "Copyright 2023 Sasha Hale"
 
 #. Translators: Do not translate this, instead put your name and email here.
 #. name <email>
 #: src/browser/about.py:44
 msgid "translator-credits"
-msgstr ""
+msgstr "Ronald rooyca@gmail.com"
 
 #: src/browser/application.py:51
 msgid "Print the version of the app"
-msgstr ""
+msgstr "Ver versión de la app"
 
 #: src/browser/application.py:58
 msgid "Restart service before starting app"
-msgstr ""
+msgstr "Reiniciar servicio antes de iniciar el app"
 
 #: src/browser/application.py:65
 msgid "Start on a different page"
-msgstr ""
+msgstr "Comenzar en una página diferente"
 
 #: src/browser/application.py:168 src/browser/application.py:304
 msgid "Something went wrong"
-msgstr ""
+msgstr "Algo salió mal"
 
 #: src/browser/application.py:168 src/browser/application.py:304
 msgid "Changes were not saved. This bug should be reported."
-msgstr ""
+msgstr "Los cambios no se guardaron. Este error debería ser reportado."
 
 #: src/browser/application.py:299
 msgid "Reminders failed to start"
-msgstr ""
+msgstr "Los recordatorios fallaron en iniciar"
 
 #: src/browser/application.py:299
 msgid ""
 "If this is your first time running Reminders, you will probably have to log "
 "out and log back in before using it. This is due to a bug in Flatpak."
 msgstr ""
+"Si esta es tu primera vez usando Reminders probablemente necesites salir y "
+"volver a ingresar antes de empezar a usarlo. Esto se debe a un error con "
+"Flatpak."
 
 #: src/browser/edit_lists_window.py:23 src/browser/edit_lists_window.py:103
 msgid "New List"
-msgstr ""
+msgstr "Nueva Lista"
 
 #: src/browser/edit_lists_window.py:76 src/browser/main_window.py:230
 msgid "You have unsaved changes"
-msgstr ""
+msgstr "Tienes cambios sin guardar"
 
 #: src/browser/edit_lists_window.py:77 src/browser/main_window.py:231
 msgid "Are you sure you want to close the window?"
-msgstr ""
+msgstr "¿Estás seguro que quieres cerrar la ventana?"
 
 #: src/browser/edit_lists_window.py:80 src/browser/main_window.py:234
 #: src/browser/main_window.py:906 src/browser/main_window.py:920
 #: src/browser/main_window.py:938 src/browser/main_window.py:952
 #: src/browser/main_window.py:967 src/browser/move_reminders_window.py:111
 msgid "Yes"
-msgstr ""
+msgstr "Sí"
 
 #: src/browser/edit_lists_window.py:97 src/browser/main_window.py:434
 #: src/browser/move_reminders_window.py:46
 msgid "Local"
-msgstr ""
+msgstr "Local"
 
 #: src/browser/edit_lists_window.py:138
 msgid "What should the list be called?"
-msgstr ""
+msgstr "¿Cómo debería llamarse la lista?"
 
 #: src/browser/edit_lists_window.py:185
 msgid "Remove list?"
-msgstr ""
+msgstr "¿Eliminar lista?"
 
 #: src/browser/edit_lists_window.py:186
 #, python-brace-format
 msgid "This will remove {list_name} and cannot be undone."
-msgstr ""
+msgstr "Esta lista {list_name} será eliminada y no se podrá recuperar."
 
 #: src/browser/main_window.py:38
 msgid "All Lists"
-msgstr ""
+msgstr "Todas las Listas"
 
 #: src/browser/main_window.py:75
 msgid "Nothing to see here!"
-msgstr ""
+msgstr "¡Aquí no hay nada para ver!"
 
 #: src/browser/main_window.py:76
 msgid "Press the plus button below to add a reminder"
-msgstr ""
+msgstr "Preciosa el botón de Más, abajo, para agregar un recordatorio"
 
 #: src/browser/main_window.py:79
 msgid "No reminders match your search"
-msgstr ""
+msgstr "Ningún recordatorio coincide con tu búsqueda"
 
 #: src/browser/main_window.py:249
 msgid "Does not repeat"
-msgstr ""
+msgstr "No se repite"
 
 #: src/browser/main_window.py:252
 msgid "minute"
-msgstr ""
+msgstr "minuto"
 
 #: src/browser/main_window.py:254
 msgid "minutes"
-msgstr ""
+msgstr "minutos"
 
 #: src/browser/main_window.py:257
 msgid "hour"
-msgstr ""
+msgstr "hora"
 
 #: src/browser/main_window.py:259
 msgid "hours"
-msgstr ""
+msgstr "horas"
 
 #: src/browser/main_window.py:262
 msgid "day"
-msgstr ""
+msgstr "día"
 
 #: src/browser/main_window.py:264
 msgid "days"
-msgstr ""
+msgstr "días"
 
 #. Translators: This is an abbreviation for Monday
 #: src/browser/main_window.py:269
 msgid "M"
-msgstr ""
+msgstr "L"
 
 #. Translators: This is an abbreviation for Tuesday
 #: src/browser/main_window.py:271
 msgid "Tu"
-msgstr ""
+msgstr "M"
 
 #. Translators: This is an abbreviation for Wednesday
 #: src/browser/main_window.py:273
 msgid "W"
-msgstr ""
+msgstr "X"
 
 #. Translators: This is an abbreviation for Thursday
 #: src/browser/main_window.py:275
 msgid "Th"
-msgstr ""
+msgstr "J"
 
 #. Translators: This is an abbreviation for Friday
 #: src/browser/main_window.py:277
 msgid "F"
-msgstr ""
+msgstr "V"
 
 #. Translators: This is an abbreviation for Saturday
 #: src/browser/main_window.py:279
 msgid "Sa"
-msgstr ""
+msgstr "S"
 
 #. Translators: This is an abbreviation for Sunday
 #: src/browser/main_window.py:281
 msgid "Su"
-msgstr ""
+msgstr "D"
 
 #: src/browser/main_window.py:287
 msgid "week"
-msgstr ""
+msgstr "semana"
 
 #: src/browser/main_window.py:289
 msgid "weeks"
-msgstr ""
+msgstr "semanas"
 
 #: src/browser/main_window.py:295
 msgid "until"
-msgstr ""
+msgstr "hasta"
 
 #. Translators: This is a noun, preceded by a number to represent the number of occurrences of something
 #: src/browser/main_window.py:298
 msgid "time"
-msgstr ""
+msgstr "vez"
 
 #. Translators: This is a noun, preceded by a number to represent the number of occurrences of something
 #: src/browser/main_window.py:301
 msgid "times"
-msgstr ""
+msgstr "veces"
 
 #. Translators: This is a adjective, followed by a number to represent how often something occurs
 #: src/browser/main_window.py:306
 msgid "Every"
-msgstr ""
+msgstr "Cada"
 
 #: src/browser/main_window.py:342
 msgid "Today"
@@ -976,39 +979,45 @@ msgstr "Mañana"
 
 #: src/browser/main_window.py:346
 msgid "Yesterday"
-msgstr ""
+msgstr "Ayer"
 
 #: src/browser/main_window.py:878
 #, python-brace-format
 msgid "Searching '{text}'"
-msgstr ""
+msgstr "Buscando '{text}'"
 
 #: src/browser/main_window.py:885
 msgid "Start typing to search"
-msgstr ""
+msgstr "Empieza a escribir para buscar"
 
 #: src/browser/main_window.py:903
 msgid ""
 "Are you sure you want to mark the currently selected reminder(s) as complete?"
 msgstr ""
+"¿Seguro que quieres marcar como completado el recordatorio(s) seleccionado?"
 
 #: src/browser/main_window.py:917
 msgid ""
 "Are you sure you want to mark the currently selected reminder(s) as "
 "incomplete?"
 msgstr ""
+"¿Seguro que quieres marcar como no completado el recordatorio(s) "
+"seleccionado?"
 
 #: src/browser/main_window.py:935
 msgid ""
 "Are you sure you want to mark the currently selected reminder(s) as "
 "important?"
 msgstr ""
+"¿Seguro que quieres marcar como importante el recordatorio(s) seleccionado?"
 
 #: src/browser/main_window.py:949
 msgid ""
 "Are you sure you want to mark the currently selected reminder(s) as "
 "unimportant?"
 msgstr ""
+"¿Seguro que quieres marcar como 'sin importancia' el recordatorio(s) "
+"seleccionado?"
 
 #: src/browser/main_window.py:963
 msgid "Are you sure you want to remove the currently selected reminder(s)?"
@@ -1020,11 +1029,11 @@ msgstr ""
 
 #: src/browser/move_reminders_window.py:108
 msgid "Are you sure you want to move the currently selected reminder(s)?"
-msgstr ""
+msgstr "¿Seguro que quieres mover el recordatorio(s) seleccionado?"
 
 #: src/browser/preferences.py:221
 msgid "Are you sure you want to sign out?"
-msgstr ""
+msgstr "¿Estás seguro/a de que quieres cerrar sesión?"
 
 #: src/browser/preferences.py:222
 #, python-brace-format
@@ -1033,12 +1042,12 @@ msgstr ""
 
 #: src/browser/reminder.py:340
 msgid "Remove reminder?"
-msgstr ""
+msgstr "¿Quitar recordatorio?"
 
 #: src/browser/reminder.py:341
 #, python-brace-format
 msgid "This will remove {reminder} and cannot be undone."
-msgstr ""
+msgstr "Esto eliminará {reminder} y no se podrá recuperar."
 
 #: src/browser/reminder_edit_window.py:124
 msgid "Edit Reminder"
@@ -1046,17 +1055,17 @@ msgstr "Editar Recordatorio"
 
 #: src/browser/reminder_edit_window.py:126
 msgid "New Reminder"
-msgstr ""
+msgstr "Nuevo Recordatorio"
 
 #: src/browser/reminder_edit_window.py:272
 #: src/browser/reminder_edit_window.py:292
 msgid "PM"
-msgstr ""
+msgstr "PM"
 
 #: src/browser/reminder_edit_window.py:276
 #: src/browser/reminder_edit_window.py:296
 msgid "AM"
-msgstr ""
+msgstr "AM"
 
 #: src/browser/reminder_edit_window.py:404
 msgid "Not saving"
@@ -1078,8 +1087,8 @@ msgstr ""
 
 #: src/service/backend.py:721
 msgid "Mark as completed"
-msgstr ""
+msgstr "Marcar como completado"
 
 #: src/service/backend.py:1003
 msgid "Local Reminders"
-msgstr ""
+msgstr "Recordatorio local"
