@@ -23,20 +23,16 @@ from requests import HTTPError, Timeout, ConnectionError
 from caldav.davclient import DAVClient
 from caldav.elements.dav import DisplayName
 from caldav.objects import Todo
-from keyring import get_password, set_password, delete_password, set_keyring
-from keyring.backends import SecretService
 
 DAYS = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']
 logger = getLogger(info.service_executable)
 
-if not info.on_windows:
-    set_keyring(SecretService)
-
 class CalDAV():
-    def __init__(self, reminders):
+    def __init__(self, reminders, credentials):
         self.users = {}
         self.principals = {}
         self.reminders = reminders
+        self.credentials = credentials
         self.load_users()
         try:
             self.get_principals()
@@ -61,11 +57,11 @@ class CalDAV():
 
     def store(self):
         if len(self.users.keys()) > 0:
-            set_password('caldav', 'users', dumps(self.users))
+            self.credentials.add_password('caldav-users', dumps(self.users))
 
     def load_users(self):
         try:
-            self.users = loads(get_password('caldav', 'users'))
+            self.users = loads(self.credentials.lookup_password('caldav-users'))
             for i, value in self.users.items():
                 for key in ('name', 'url', 'username', 'password'):
                     if key not in value.keys():
@@ -99,7 +95,10 @@ class CalDAV():
             pass
 
         if self.users == {}:
-            delete_password('caldav', 'users')
+            try:
+                self.credentials.remove_password('caldav-users')
+            except:
+                pass
         else:
             self.store()
 

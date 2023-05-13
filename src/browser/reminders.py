@@ -30,6 +30,7 @@ else:
     REMINDERS_PATH = str(path.realpath(path.dirname(__file__)))
 
 environ['REMINDERS_PATH'] = REMINDERS_PATH
+environ['GSK_RENDERER'] = 'cairo'
 
 if __name__ == '__main__':
     from reminders import info

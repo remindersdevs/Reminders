@@ -36,7 +36,6 @@ pacman --noconfirm -S --needed \
     mingw-w64-${ARCH}-python3 \
     mingw-w64-${ARCH}-python3-gobject \
     mingw-w64-${ARCH}-python-cryptography \
-    mingw-w64-${ARCH}-python-keyring \
     mingw-w64-${ARCH}-python-lxml \
     mingw-w64-${ARCH}-python-markupsafe \
     mingw-w64-${ARCH}-python-pip \
@@ -93,8 +92,6 @@ cp -rf /${PREFIX}/tmp/out/Reminders/certifi bin
 cp -rf /${PREFIX}/tmp/out/Reminders/cryptography* bin
 cp -rf /${PREFIX}/tmp/out/Reminders/gi bin
 cp -rf /${PREFIX}/tmp/out/Reminders/gi_typelibs bin
-cp -rf /${PREFIX}/tmp/out/Reminders/importlib* bin
-cp -rf /${PREFIX}/tmp/out/Reminders/keyring* bin
 cp -rf /${PREFIX}/tmp/out/Reminders/lib-dynload bin
 cp -rf /${PREFIX}/tmp/out/Reminders/lxml bin
 cp -rf /${PREFIX}/tmp/out/Reminders/pytz bin

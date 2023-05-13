@@ -83,7 +83,11 @@ class EditListsWindow(Adw.Window):
 
         self.unsaved = []
 
-        self.set_visible(False)
+        if info.on_windows:
+            self.destroy()
+            self.win.edit_lists_window = None
+        else:
+            self.set_visible(False)
 
     @Gtk.Template.Callback()
     def on_close(self, window = None):

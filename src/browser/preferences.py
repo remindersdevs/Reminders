@@ -98,7 +98,11 @@ class PreferencesWindow(Adw.PreferencesWindow):
             except Exception as error:
                 logger.exception(error)
 
-        self.set_visible(False)
+        if info.on_windows:
+            self.destroy()
+            self.app.preferences = None
+        else:
+            self.set_visible(False)
         return True
 
     def on_ms_signed_in(self, user_id, username):

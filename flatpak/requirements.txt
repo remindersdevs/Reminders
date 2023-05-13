@@ -16,7 +16,6 @@ cryptography==40.0.2
     # via
     #   msal
     #   pyjwt
-    #   secretstorage
 icalendar==5.0.5
     # via
     #   caldav
@@ -24,20 +23,8 @@ icalendar==5.0.5
     #   x-wr-timezone
 idna==3.4
     # via requests
-importlib-metadata==6.6.0
-    # via keyring
-jaraco-classes==3.2.3
-    # via keyring
-jeepney==0.8.0
-    # via
-    #   keyring
-    #   secretstorage
-keyring==23.13.1
-    # via -r requirements.in
 lxml==4.9.2
     # via caldav
-more-itertools==9.1.0
-    # via jaraco-classes
 msal==1.22.0
     # via -r requirements.in
 pycparser==2.21
@@ -64,8 +51,6 @@ requests==2.28.2
     #   -r requirements.in
     #   caldav
     #   msal
-secretstorage==3.3.3
-    # via keyring
 six==1.16.0
     # via python-dateutil
 tzdata==2023.3
@@ -78,8 +63,6 @@ vobject==0.9.6.1
     # via caldav
 x-wr-timezone==0.0.5
     # via recurring-ical-events
-zipp==3.15.0
-    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

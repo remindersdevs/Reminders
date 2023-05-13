@@ -3,6 +3,7 @@ source_files = files(
   'backend.py',
   'caldav.py',
   'countdowns.py',
+  'credentials.py',
   'icalendar.py',
   'application.py',
   'ms_to_do.py',

@@ -83,7 +83,6 @@ Options:
 - `python3-caldav`
 - `python3-icalendar`
 - `python3-setuptools`
-- `python3-keyring`
 - `GSound`
 - `WebKitGTK`
 - `Libsecret`

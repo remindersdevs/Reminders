@@ -329,7 +329,6 @@
                                 <child>
                                   <object class="GtkBox">
                                     <property name="orientation">vertical</property>
-                                    <property name="spacing">2</property>
                                     <style>
                                       <class name="page-heading-box"/>
                                     </style>

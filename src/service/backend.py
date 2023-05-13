@@ -23,6 +23,7 @@ from reminders.service.queue import ReminderQueue
 from reminders.service.countdowns import Countdowns
 from reminders.service.icalendar import iCalendar
 from reminders.service.reminder import Reminder
+from reminders.service.credentials import Credentials
 
 if not info.on_windows:
     from gi import require_version
@@ -64,8 +65,6 @@ PID = getpid()
 
 logger = getLogger(info.service_executable)
 
-environ['KEYRING_PROPERTY_APPID'] = info.app_id
-
 if not path.isdir(info.data_dir) and path.isdir(info.old_data_dir):
     move(info.old_data_dir, info.data_dir)
 
@@ -83,8 +82,9 @@ class Reminders():
         self._regid = None
         self.playing_sound = False
         self.synced_ids = self.app.settings.get_value('synced-lists').unpack()
-        self.to_do = MSToDo(self)
-        self.caldav = CalDAV(self)
+        self.credentials = Credentials()
+        self.to_do = MSToDo(self, self.credentials)
+        self.caldav = CalDAV(self, self.credentials)
         self.ical = iCalendar(self)
         self.queue = ReminderQueue(self)
         self.synced_changed = self.app.settings.connect('changed::synced-lists', lambda *args: self._synced_task_list_changed())
@@ -653,7 +653,10 @@ class Reminders():
 
     def _unsend_notification(self, reminder_id):
         if info.on_windows:
-            self.notif_manager.history.remove(reminder_id)
+            group = self.reminders[reminder_id]['list-id']
+            for i in self.notif_manager.history.get_history(info.app_id):
+                if reminder_id == i.tag and group == i.group:
+                    self.notif_manager.history.remove(reminder_id, group, info.app_id)
         else:
             self.app.withdraw_notification(reminder_id)
 
@@ -700,6 +703,7 @@ class Reminders():
         xml.load_xml(xml_string)
         notification = notifications.ToastNotification(xml)
         notification.tag = reminder_id
+        notification.group = reminder['list-id']
 
         self.notifier.show(notification)
 
