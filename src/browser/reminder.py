@@ -184,7 +184,7 @@ class Reminder(Adw.ExpanderRow):
                     selecting = True
                 else:
                     set_selecting_false = True
-            if selecting:
+            if selecting and row.get_sensitive():
                 row.set_selectable(True)
                 self.win.reminders_list.select_row(row)
             else:

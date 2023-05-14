@@ -60,7 +60,7 @@ class MoveRemindersWindow(Adw.Window):
                 options[reminder.id] = reminder.options.copy()
                 opts = options[reminder.id]
                 opts['list-id'] = self.rows[selected]
-                if reminder.get_visible() and reminder.options['list-id'] != opts['list-id']:
+                if reminder.get_sensitive() and reminder.options['list-id'] != opts['list-id']:
                     if self.win.synced_lists[opts['list-id']]['user-id'] in self.win.ms_users.keys():
                         if opts['repeat-type'] in (1, 2):
                             opts['repeat-type'] = 0

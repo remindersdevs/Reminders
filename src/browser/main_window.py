@@ -342,7 +342,7 @@ class MainWindow(Adw.ApplicationWindow):
         self.set_selecting(True)
         for reminder in self.reminder_lookup_dict.values():
             reminder.set_selectable(True)
-            if reminder.get_visible():
+            if reminder.get_sensitive():
                 self.reminders_list.select_row(reminder)
 
     def selected_changed(self, list_box = None):
@@ -928,7 +928,7 @@ class MainWindow(Adw.ApplicationWindow):
             return task_list == selected_list_id
 
     def no_filter(self, reminder):
-        #reminder.set_sensitive(True)
+        reminder.set_sensitive(True)
         reminder.set_no_strikethrough(True)
         return True
 
@@ -936,7 +936,7 @@ class MainWindow(Adw.ApplicationWindow):
         retval = self.task_list_filter(reminder, list_id)
         if not just_filter:
             reminder.set_no_strikethrough(False)
-            #reminder.set_sensitive(retval)
+            reminder.set_sensitive(retval)
             if not retval:
                 self.reminders_list.unselect_row(reminder)
                 reminder.set_selectable(False)
@@ -949,7 +949,7 @@ class MainWindow(Adw.ApplicationWindow):
         else:
             retval = False
         if not just_filter:
-            #reminder.set_sensitive(retval)
+            reminder.set_sensitive(retval)
             if not retval:
                 self.reminders_list.unselect_row(reminder)
                 reminder.set_selectable(False)
@@ -963,7 +963,7 @@ class MainWindow(Adw.ApplicationWindow):
         else:
             retval = False
         if not just_filter:
-            #reminder.set_sensitive(retval)
+            reminder.set_sensitive(retval)
             if not retval:
                 self.reminders_list.unselect_row(reminder)
                 reminder.set_selectable(False)
@@ -977,7 +977,7 @@ class MainWindow(Adw.ApplicationWindow):
         else:
             retval = False
         if not just_filter:
-            #reminder.set_sensitive(retval)
+            reminder.set_sensitive(retval)
             if not retval:
                 self.reminders_list.unselect_row(reminder)
                 reminder.set_selectable(False)
@@ -1125,7 +1125,7 @@ class MainWindow(Adw.ApplicationWindow):
         if retval:
             reminder.set_no_strikethrough(True)
 
-        #reminder.set_sensitive(retval)
+        reminder.set_sensitive(retval)
         if not retval:
             self.reminders_list.unselect_row(reminder)
             reminder.set_selectable(False)
@@ -1163,7 +1163,7 @@ class MainWindow(Adw.ApplicationWindow):
         try:
             reminder_ids = []
             for reminder in self.reminders_list.get_selected_rows():
-                if reminder.get_visible():
+                if reminder.get_sensitive():
                     reminder_ids.append(reminder.id)
 
             results = self.app.run_service_method(
@@ -1188,7 +1188,7 @@ class MainWindow(Adw.ApplicationWindow):
         try:
             variants = []
             for reminder in self.reminders_list.get_selected_rows():
-                if reminder.get_visible() and reminder.options['important'] != important:
+                if reminder.get_sensitive() and reminder.options['important'] != important:
                     variants.append(
                         {
                             'id': GLib.Variant('s', reminder.id),
@@ -1224,7 +1224,7 @@ class MainWindow(Adw.ApplicationWindow):
         try:
             reminder_ids = []
             for reminder in self.reminders_list.get_selected_rows():
-                if reminder.get_visible() and reminder.completed != completed:
+                if reminder.get_sensitive() and reminder.completed != completed:
                     reminder_ids.append(reminder.id)
 
             results = self.app.run_service_method(
