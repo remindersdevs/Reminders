@@ -104,7 +104,7 @@ class Reminders(Adw.Application):
         if files:
             for file in files:
                 # handling for windows URL protocol activation
-                prefix = f'{info.app_id}:'
+                prefix = f'{info.app_id}.open:'.lower()
                 if file.startswith(prefix):
                     args = file[len(prefix):]
                     args = args.split(';')

@@ -683,7 +683,7 @@ class Reminders():
             duration="long"
             scenario="reminder"
             displayTimestamp="{self._timestamp_to_rfc(reminder['timestamp'])}"
-            launch="{info.app_id}:action=notification-clicked"
+            launch="{info.app_id}.Open:action=notification-clicked"
             activationType="protocol">
             <visual>
                 <binding template="ToastGeneric">
@@ -694,7 +694,7 @@ class Reminders():
             <actions>
                 <action
                     content="{COMPLETE_BTN_TEXT}"
-                    arguments="{info.app_id}:no-activate;action=reminder-completed;param={reminder_id}"
+                    arguments="{info.app_id}.Open:no-activate;action=reminder-completed;param={reminder_id}"
                     activationType="protocol"/>
             </actions>
             <audio silent="{'false' if self.app.settings.get_boolean('notification-sound') else 'true'}"/>
