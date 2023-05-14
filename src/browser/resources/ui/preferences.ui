@@ -106,7 +106,7 @@
           </object>
         </child>
         <child>
-          <object class="AdwPreferencesGroup">
+          <object class="AdwPreferencesGroup" id="general">
             <property name="title" translatable="yes">General</property>
             <child>
               <object class="AdwComboRow" id="time_format_row">
@@ -126,7 +126,7 @@
               </object>
             </child>
             <child>
-              <object class="AdwExpanderRow" id="sound_switch">
+              <object class="AdwExpanderRow" id="sound_row">
                 <property name="title" translatable="yes">Play sound with notification</property>
                 <property name="show-enable-switch">true</property>
                 <child>
@@ -139,6 +139,17 @@
                         <property name="valign">center</property>
                       </object>
                     </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwActionRow" id="sound_row_win">
+                <property name="title" translatable="yes">Play sound with notification</property>
+                <property name="activatable-widget">sound_switch</property>
+                <child>
+                  <object class="GtkSwitch" id="sound_switch">
+                    <property name="valign">center</property>
                   </object>
                 </child>
               </object>

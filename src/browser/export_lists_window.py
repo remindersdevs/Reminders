@@ -34,11 +34,12 @@ class ExportListsWindow(Adw.Window):
 
     lists = Gtk.Template.Child()
 
-    def __init__(self, app, *args, **kwargs):
+    def __init__(self, app, folder, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.app = app
         self.win = app.win
         self.rows = {}
+        self.folder = folder
         self.set_transient_for(self.win)
 
         for list_id, value in self.win.synced_lists.items():
@@ -73,9 +74,7 @@ class ExportListsWindow(Adw.Window):
 
         if len(lists) > 0:
             try:
-                result = self.app.run_service_method('ExportLists', GLib.Variant('(as)', (lists,)))
-                folder = result.unpack()[0]
-                uri = GLib.filename_to_uri(folder, None)
+                self.app.run_service_method('ExportLists', GLib.Variant('(sas)', (self.folder.get_path(), lists)))
                 dialog = Adw.MessageDialog(
                     transient_for=self,
                     heading=_('Success!'),
@@ -87,7 +86,7 @@ class ExportListsWindow(Adw.Window):
                 dialog.set_default_response('cancel')
                 dialog.set_close_response('cancel')
                 dialog.connect('response::close', lambda *args: self.close())
-                dialog.connect('response::yes', lambda *args: self.launch_folder(uri))
+                dialog.connect('response::yes', lambda *args: self.launch_folder(self.folder.get_uri()))
 
                 dialog.present()
 

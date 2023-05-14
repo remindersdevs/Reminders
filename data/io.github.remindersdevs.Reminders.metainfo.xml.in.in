@@ -6,10 +6,10 @@
   <developer_name translatable="yes">Reminders Developers</developer_name>
   <update_contact>dgsasha04_at_gmail.com</update_contact>
 
-  <name>Reminders</name>
-  <summary>Set reminders and manage tasks</summary>
+  <name translatable="yes">Reminders</name>
+  <summary translatable="yes">Set reminders and manage tasks</summary>
 
-  <description>
+  <description translatable="yes">
     <p>What you can do with Reminders:</p>
     <ul>
       <li>Set recurring reminders</li>
@@ -80,10 +80,11 @@
   <url type="translate">https://hosted.weblate.org/engage/reminders</url>
   <url type="homepage">https://github.com/dgsasha/remembrance</url>
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
-  <releases>
+  <releases translatable="no">
     <release version="5.0" date="2023-05-03">
       <description>
         <ul>
+          <li>Windows port</li>
           <li>UI improvements</li>
           <li>Added support for making the week start on sunday</li>
           <li>Added indicators that show how many incomplete reminders are in each list/group</li>

@@ -27,3 +27,4 @@ src/browser/reminder.py
 src/browser/reminder_edit_window.py
 src/info.py
 src/service/backend.py
+src/service/ms_to_do.py

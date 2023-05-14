@@ -40,7 +40,7 @@ You will also need `flatpak-builder`
 
 ### Building (Flatpak):
 ```
-flatpak-builder --user --install --force-clean build-dir flatpak/io.github.remindersdevs.Reminders.yml
+flatpak-builder --user --install --force-clean build-dir flatpak/io.github.remindersdevs.Reminders.Devel.yml
 ```
 ```
 flatpak run io.github.remindersdevs.Reminders.Devel --restart-service
@@ -66,7 +66,7 @@ MSYS2 will be used to build the app in a unix environment (Arch based), and all 
 ```
 Usage: build_windows.ps1 [options...]
 Options:
-        -arches <arcn...> Can be x86, x64, or arm64. Comma separated list, default is amd64.
+        -arches <arcn...> Can be x86, x64, or arm64. Comma separated list, default is x64.
         -root <path>      MSYS2 root path, default is 'C:\msys64'.
         -msi              Build an msi installer
         -help             Display this message.

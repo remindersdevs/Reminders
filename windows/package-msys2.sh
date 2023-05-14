@@ -25,7 +25,6 @@ export PATH="/${PREFIX}/bin:$PATH"
 pacman --noconfirm -Syu
 
 pacman --noconfirm -S --needed \
-    mingw-w64-${ARCH}-cantarell-fonts \
     mingw-w64-${ARCH}-gcc \
     mingw-w64-${ARCH}-glib2 \
     mingw-w64-${ARCH}-gobject-introspection \

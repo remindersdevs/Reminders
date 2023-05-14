@@ -14,11 +14,12 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from reminders import info
-from gi.repository import Adw, Gtk, GLib
+from gi.repository import Adw, Gtk
 from gettext import gettext as _
 
 RELEASE_NOTES = '''
 <ul>
+    <li>Windows port</li>
     <li>UI improvements</li>
     <li>Added support for making the week start on sunday</li>
     <li>Added indicators that show how many incomplete reminders are in each list/group</li>

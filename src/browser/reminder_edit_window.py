@@ -474,8 +474,8 @@ class ReminderEditWindow(Adw.Window):
             self.win.reminders_list.invalidate_sort()
 
             if info.on_windows:
-                self.close()
-                self.win.reminder_edit_window = None
+                self.destroy()
+                self.win.reminder_edit_win = None
             else:
                 self.set_visible(False)
 
@@ -658,7 +658,7 @@ class ReminderEditWindow(Adw.Window):
 
     @Gtk.Template.Callback()
     def on_cancel(self, button = None):
-        self.win.close_edit_win()
+        self.win.close_request_cb()
 
     @Gtk.Template.Callback()
     def on_save(self, button = None):

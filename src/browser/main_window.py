@@ -375,7 +375,7 @@ class MainWindow(Adw.ApplicationWindow):
     def new_edit_win(self, reminder = None):
         if self.reminder_edit_win is None:
             self.reminder_edit_win = ReminderEditWindow(self, self.app, reminder)
-            self.reminder_edit_win.connect('close-request', self.close_edit_win)
+            self.reminder_edit_win.connect('close-request', self.close_request_cb)
             self.reminder_edit_win.present()
 
             if info.on_windows:
@@ -384,7 +384,7 @@ class MainWindow(Adw.ApplicationWindow):
             self.reminder_edit_win.setup(reminder)
             self.reminder_edit_win.set_visible(True)
 
-    def close_edit_win(self, window = None):
+    def close_request_cb(self, window = None):
         if self.reminder_edit_win.check_changed(self.reminder_edit_win.get_options()):
             confirm_dialog = Adw.MessageDialog(
                 transient_for=self.reminder_edit_win,
@@ -396,13 +396,21 @@ class MainWindow(Adw.ApplicationWindow):
             confirm_dialog.set_response_appearance('yes', Adw.ResponseAppearance.DESTRUCTIVE)
             confirm_dialog.set_default_response('cancel')
             confirm_dialog.set_close_response('cancel')
-            confirm_dialog.connect('response::yes', lambda *args: self.reminder_edit_win.set_visible(False))
+            confirm_dialog.connect('response::yes', lambda *args: self.close_edit_win())
 
             confirm_dialog.present()
 
             if info.on_windows:
                 self.app.center_win_on_parent(confirm_dialog)
-            return True
+        else:
+            self.close_edit_win()
+
+        return True
+
+    def close_edit_win(self):
+        if info.on_windows:
+            self.reminder_edit_win.destroy()
+            self.reminder_edit_win = None
         else:
             self.reminder_edit_win.set_visible(False)
 

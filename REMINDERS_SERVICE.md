@@ -330,22 +330,21 @@ Log out of a remote account, once logged out the reminders will be refreshed
         - Type: s
 
 ### ExportLists
-Export lists to ical/ics file
+Export lists to ical/ics file, you shouldn't use this because of flatpak sandboxing limitations
 - Parameters (as)
+    - folder
+        - Type: s
+        - The folder you want to export to
     - list-ids
         - Type: as
         - An array of list ids that represent the lists to export
 
-- Returns (s)
-    - folder
-        - Type: s
-
 ### ImportLists
-Import lists from an ical/ics file
+Import lists from an ical/ics file, you shouldn't use this because of flatpak sandboxing limitations
 - Parameters (ass)
     - ical-files
         - Type: as
-        - An array of files ids to import
+        - An array of files to import
     - list-id
         - Type: s
         - The list to import the files to, or 'auto' if you want to create new lists

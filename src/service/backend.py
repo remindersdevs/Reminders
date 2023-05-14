@@ -683,8 +683,8 @@ class Reminders():
             duration="long"
             scenario="reminder"
             displayTimestamp="{self._timestamp_to_rfc(reminder['timestamp'])}"
-            launch="--action=notification-clicked"
-            activationType="foreground">
+            launch="{info.app_id}:action=notification-clicked"
+            activationType="protocol">
             <visual>
                 <binding template="ToastGeneric">
                     <text>{reminder['title']}</text>
@@ -694,9 +694,10 @@ class Reminders():
             <actions>
                 <action
                     content="{COMPLETE_BTN_TEXT}"
-                    arguments="--action=reminder-completed --params={reminder_id}"
-                    activationType="foreground"/>
+                    arguments="{info.app_id}:no-activate;action=reminder-completed;param={reminder_id}"
+                    activationType="protocol"/>
             </actions>
+            <audio silent="{'false' if self.app.settings.get_boolean('notification-sound') else 'true'}"/>
         </toast>
         '''
         xml = dom.XmlDocument()
@@ -1748,9 +1749,8 @@ class Reminders():
 
         return GLib.Variant('(a{sa{ss}})', (usernames,))
 
-    def export_lists(self, lists):
-        folder = self.ical.to_ical(lists)
-        return GLib.Variant('(s)', (folder,))
+    def export_lists(self, folder, lists):
+        self.ical.to_ical(folder, lists)
 
     def import_lists(self, files, list_id):
         if list_id == 'auto':

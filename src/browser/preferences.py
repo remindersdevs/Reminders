@@ -31,6 +31,9 @@ logger = getLogger(info.app_executable)
 class PreferencesWindow(Adw.PreferencesWindow):
     '''Settings Window'''
     __gtype_name__ = 'PreferencesWindow'
+    general = Gtk.Template.Child()
+    sound_row = Gtk.Template.Child()
+    sound_row_win = Gtk.Template.Child()
     sound_switch = Gtk.Template.Child()
     sound_theme_switch = Gtk.Template.Child()
     time_format_row = Gtk.Template.Child()
@@ -49,8 +52,6 @@ class PreferencesWindow(Adw.PreferencesWindow):
         self.settings = app.settings
         self.set_transient_for(self.app.win)
         self.settings.bind('week-starts-sunday', self.week_switch, 'active', Gio.SettingsBindFlags.DEFAULT)
-        self.settings.bind('notification-sound', self.sound_switch, 'enable-expansion', Gio.SettingsBindFlags.DEFAULT)
-        self.settings.bind('included-notification-sound', self.sound_theme_switch, 'active', Gio.SettingsBindFlags.DEFAULT)
         self.settings.connect('changed::time-format', lambda *args: self.update_time_dropdown())
         self.settings.connect('changed::refresh-frequency', lambda *args: self.update_refresh_dropdown())
         self.settings.connect('changed::synced-lists', lambda *args: self.synced_lists_updated())
@@ -62,6 +63,14 @@ class PreferencesWindow(Adw.PreferencesWindow):
         self.connect('close-request', self.on_close)
         self.synced = self.settings.get_value('synced-lists').unpack()
         self.user_rows = {}
+
+        if info.on_windows:
+            self.settings.bind('notification-sound', self.sound_switch, 'active', Gio.SettingsBindFlags.DEFAULT)
+            self.general.remove(self.sound_row)
+        else:
+            self.settings.bind('notification-sound', self.sound_row, 'enable-expansion', Gio.SettingsBindFlags.DEFAULT)
+            self.settings.bind('included-notification-sound', self.sound_theme_switch, 'active', Gio.SettingsBindFlags.DEFAULT)
+            self.general.remove(self.sound_row_win)
 
         for user_id, username in self.app.win.ms_users.items():
             self.on_ms_signed_in(user_id, username)

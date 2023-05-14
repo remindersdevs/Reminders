@@ -35,9 +35,7 @@ class iCalendar():
     def __init__(self, reminders):
         self.reminders = reminders
 
-    def to_ical(self, lists):
-        folder = DOWNLOADS_DIR + sep + f'Reminders {datetime.datetime.now().strftime("%c")}'
-
+    def to_ical(self, folder, lists):
         calendars = {}
         for list_id in lists:
             list_names = self.reminders.lists
@@ -67,7 +65,8 @@ class iCalendar():
             except:
                 pass
 
-        mkdir(folder)
+        if not path.isdir(folder):
+            mkdir(folder)
 
         for list_id, calendar in calendars.items():
             base_filename = folder + sep + calendar['X-WR-CALNAME']
@@ -79,8 +78,6 @@ class iCalendar():
 
             with open(filename, 'w') as f:
                 f.write(calendar.to_ical().decode('UTF-8'))
-
-        return folder
 
     def from_ical(self, files, list_id = None):
         for file in files:

@@ -35,7 +35,7 @@ from reminders.browser.import_lists_window import ImportListsWindow
 from gettext import gettext as _
 from pkg_resources import parse_version
 from traceback import format_exception
-from os import environ, sep
+from os import environ, sep, path
 
 if info.on_windows:
     from time import sleep
@@ -72,27 +72,6 @@ class Reminders(Adw.Application):
             None
         )
         self.add_main_option(
-            'no-activate', ord('n'),
-            GLib.OptionFlags.NONE,
-            GLib.OptionArg.NONE,
-            _("Don't activate app, this might cause issues"),
-            None
-        )
-        self.add_main_option(
-            'action', ord('a'),
-            GLib.OptionFlags.NONE,
-            GLib.OptionArg.STRING,
-            _('Run an action'),
-            None
-        )
-        self.add_main_option(
-            'params', ord('p'),
-            GLib.OptionFlags.NONE,
-            GLib.OptionArg.STRING,
-            _('String parameter for the action if required'),
-            None
-        )
-        self.add_main_option(
             'restart-service', ord('r'),
             GLib.OptionFlags.NONE,
             GLib.OptionArg.NONE,
@@ -110,6 +89,9 @@ class Reminders(Adw.Application):
 
     def do_command_line(self, command):
         commands = command.get_options_dict()
+        no_activate = False
+        action = None
+        param = None
 
         if commands.contains('version'):
             print(info.version)
@@ -117,20 +99,36 @@ class Reminders(Adw.Application):
 
         self.restart = commands.contains('restart-service')
 
-        if not commands.contains('no-activate'):
+        files = commands.lookup_value(GLib.OPTION_REMAINING)
+        imports = []
+        if files:
+            for file in files:
+                # handling for windows URL protocol activation
+                prefix = f'{info.app_id}:'
+                if file.startswith(prefix):
+                    args = file[len(prefix):]
+                    args = args.split(';')
+                    for arg in args:
+                        if arg == 'no-activate':
+                            no_activate = True
+                        elif '=' in arg:
+                            arg = arg.split('=', 1)
+                            if arg[0] == 'action':
+                                action = arg[1]
+                            if arg[0] == 'param':
+                                param = GLib.Variant('s', arg[1])
+                    self.do_activate
+                elif path.exists(file):
+                    imports.append(file)
+
+        if not no_activate:
             self.do_activate()
 
-        if commands.contains('action'):
-            action = commands.lookup_value('action').get_string()
-            params = commands.lookup_value('params').get_string() if commands.contains('params') else None
-            try:
-                self.activate_action(action, GLib.Variant('s', params) if params is not None else params)
-            except Exception as error:
-                self.logger.exception(error)
+        if action is not None:
+            self.activate_action(action, param)
 
-        files = commands.lookup_value(GLib.OPTION_REMAINING)
-        if files:
-            self.open_files(files)
+        if len(imports) > 0:
+            self.open_files(imports)
 
         return 0
 
@@ -466,18 +464,30 @@ class Reminders(Adw.Application):
         ShortcutsWindow(self.win)
 
     def export(self, action, data):
-        ExportListsWindow(self)
+        dialog = Gtk.FileDialog.new()
+
+        dialog.select_folder(self.win, None, self.export_cb)
+
+    def export_cb(self, dialog, result, data = None):
+        try:
+            folder = dialog.select_folder_finish(result)
+        except:
+            return
+
+        ExportListsWindow(self, folder)
 
     def import_lists(self, action, data):
         dialog = Gtk.FileDialog.new()
         filters = Gio.ListStore.new(Gtk.FileFilter)
         file_filter = Gtk.FileFilter.new()
-        file_filter.add_mime_type('text/calendar')
+        if info.on_windows:
+            file_filter.add_pattern('*.ics')
+            file_filter.add_pattern('*.ical')
+        else:
+            file_filter.add_mime_type('text/calendar')
         filters.append(file_filter)
         dialog.set_filters(filters)
         dialog.open_multiple(self.win, None, self.open_cb)
-        if info.on_windows:
-            self.center_win_on_parent(dialog)
 
     def open_cb(self, dialog, result, data = None):
         try:

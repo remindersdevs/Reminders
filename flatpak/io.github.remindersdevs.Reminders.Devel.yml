@@ -1,4 +1,4 @@
-app-id: io.github.remindersdevs.Reminders
+app-id: io.github.remindersdevs.Reminders.Devel
 runtime: org.gnome.Platform
 runtime-version: '44'
 sdk: org.gnome.Sdk
@@ -13,6 +13,7 @@ finish-args:
   - --system-talk-name=org.freedesktop.login1
   - --talk-name=org.freedesktop.secrets
   - --socket=pulseaudio
+  - --filesystem=xdg-download
 
 modules:
   - shared-modules/intltool/intltool-0.51.json
@@ -49,7 +50,7 @@ modules:
     buildsystem: meson
     config-opts:
       - -Denable-portals=true
-      - -Drelease-type=stable
+      - -Drelease-type=devel
     sources:
       - type: dir
         path: '../'

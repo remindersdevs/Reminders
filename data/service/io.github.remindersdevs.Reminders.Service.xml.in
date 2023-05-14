@@ -118,8 +118,8 @@
       <arg name="user-id" type="s"/>
     </method>
     <method name="ExportLists">
+      <arg name="folder" type="s"/>
       <arg name="list-ids" type="as"/>
-      <arg name="folder" direction="out" type="s"/>
     </method>
     <method name="ImportLists">
       <arg name="ical-files" type="as"/>

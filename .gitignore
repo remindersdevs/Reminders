@@ -1,5 +1,7 @@
 build
 build-dir
 .flatpak-builder
+bin
 out
 obj
+.vs
