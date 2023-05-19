@@ -8,23 +8,26 @@ msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 16:55-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2023-05-20 11:53+0000\n"
+"Last-Translator: Daniel Uhrinyi <daniel.uhrinyi@gmail.com>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/reminders/"
+"reminders/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:4
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:9
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:66 src/info.py:8
 msgid "Reminders"
-msgstr ""
+msgstr "Emlékeztetők"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:5
 msgid "Set reminders for yourself"
-msgstr ""
+msgstr "Állíts be emlékeztetőt magadnak"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:13
 msgid ""
@@ -39,65 +42,65 @@ msgstr ""
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:23
 #: src/browser/resources/ui/preferences.ui:113
 msgid "Time format"
-msgstr ""
+msgstr "Idő formátum"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:24
 msgid "What format to display the time in"
-msgstr ""
+msgstr "Milyen formátumban jelenjen meg az idő"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:28
 #: src/browser/resources/ui/main_window.ui:62
 msgid "Sort by"
-msgstr ""
+msgstr "Rendezés"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:29
 msgid "How to sort the reminders"
-msgstr ""
+msgstr "Az emlékeztetők rendezése"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:33
 #: src/browser/resources/ui/preferences.ui:94
 msgid "Auto refresh frequency"
-msgstr ""
+msgstr "Automatikus frissítési gyakoriság"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:34
 msgid "How often the reminders are refreshed (minutes)"
-msgstr ""
+msgstr "Az emlékeztetők frissítésének gyakorisága (perc)"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:38
 msgid "Notification Sound"
-msgstr ""
+msgstr "Értesítés hangja"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:39
 msgid "Whether or not to play a notification sound"
-msgstr ""
+msgstr "Lejátsszon értesítési hangot vagy sem"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:43
 msgid "Use included notification sound"
-msgstr ""
+msgstr "Használja a mellékelt értesítési hangot"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:44
 msgid "Whether to use the included notification sound"
-msgstr ""
+msgstr "Használja a mellékelt értesítési hangot vagy sem"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:48
 msgid "Descending sort"
-msgstr ""
+msgstr "Csökkenő sorrend"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:49
 msgid "If reminders sort should be descending"
-msgstr ""
+msgstr "Ha az emlékeztetők rendezése csökkenő legyen"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:53
 msgid "Week starts on sunday"
-msgstr ""
+msgstr "A hét vasárnap kezdődik"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:54
 msgid "If week should start on sunday"
-msgstr ""
+msgstr "Ha a hét vasárnap kezdődik"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:67
 msgid "Remote lists that should be synced"
-msgstr ""
+msgstr "Távoli listák, amelyeket szinkronizálni kell"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:68
 msgid ""
