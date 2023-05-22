@@ -8,447 +8,480 @@ msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 16:55-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2023-05-22 15:00+0000\n"
+"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/reminders/"
+"reminders/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:4
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:9
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:66 src/info.py:8
 msgid "Reminders"
-msgstr ""
+msgstr "Anımsatıcılar"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:5
 msgid "Set reminders for yourself"
-msgstr ""
+msgstr "Kendiniz için anımsatıcı ve hatırlatıcılar ayarlayın"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:13
 msgid ""
 "Todo;Productivity;Task;Planning;Planner;Time;Management;Reminder;Remembrance;"
 "Reminders;"
 msgstr ""
+"Yapılacaklar;Todo;Üretkenlik;Productivity;Task;Görev;Planning;Planlama;Planne"
+"r;Planlayıcı;Zaman;Süre;Yönetim;Anımsatıcı;Hatırlatıcı;Anımsama;Hatırlatma;"
 
 #: data/service/io.github.dgsasha.Remembrance.Service3.desktop.in.in:4
 msgid "Remembrance Service"
-msgstr ""
+msgstr "Hatırlatma Servisi"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:23
 #: src/browser/resources/ui/preferences.ui:113
 msgid "Time format"
-msgstr ""
+msgstr "Saat biçimi"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:24
 msgid "What format to display the time in"
-msgstr ""
+msgstr "Zamanın görüntülenme biçimi"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:28
 #: src/browser/resources/ui/main_window.ui:62
 msgid "Sort by"
-msgstr ""
+msgstr "Sıralama ölçütü"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:29
 msgid "How to sort the reminders"
-msgstr ""
+msgstr "Anımsatıcılar nasıl sıralansın"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:33
 #: src/browser/resources/ui/preferences.ui:94
 msgid "Auto refresh frequency"
-msgstr ""
+msgstr "Kendiliğinden yenileme sıklığı"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:34
 msgid "How often the reminders are refreshed (minutes)"
-msgstr ""
+msgstr "Anımsatıcıların yenilenme sıklığı (dakika)"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:38
 msgid "Notification Sound"
-msgstr ""
+msgstr "Bildirim Sesi"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:39
 msgid "Whether or not to play a notification sound"
-msgstr ""
+msgstr "Bildirim sesinin çalınma durumu"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:43
 msgid "Use included notification sound"
-msgstr ""
+msgstr "Eklenen bildirim sesini kullan"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:44
 msgid "Whether to use the included notification sound"
-msgstr ""
+msgstr "Eklenen bildirim sesinin kullanılma durumu"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:48
 msgid "Descending sort"
-msgstr ""
+msgstr "Azalan sıralama"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:49
 msgid "If reminders sort should be descending"
-msgstr ""
+msgstr "Anımsatıcı sıralaması azalan mı"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:53
 msgid "Week starts on sunday"
-msgstr ""
+msgstr "Hafta Pazar gününden başlar"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:54
 msgid "If week should start on sunday"
-msgstr ""
+msgstr "Hafta Pazar gününden başlıyor mu"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:67
 msgid "Remote lists that should be synced"
-msgstr ""
+msgstr "Eşzamanlanacak uzak listeler"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:68
 msgid ""
 "Add a user id if you want to sync all of the lists on a user, or any list id "
 "on the user"
 msgstr ""
+"Bir kullanıcıdaki tüm listeleri ya da kullanıcıdaki herhangi bir liste "
+"kimliğini eşzamanlamak istiyorsanız bir kullanıcı kimliği ekleyin"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:72
 msgid "Selected list"
-msgstr ""
+msgstr "Siçili liste"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:73
 msgid "list ids can be 'all', 'local', or an actual id"
 msgstr ""
+"liste kimlikleri 'all' (tümü), 'local' (yerel) ya da gerçek bir kimlik "
+"olabilir"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:77
 msgid "[DEPRECATED] Task lists that should be synced"
-msgstr ""
+msgstr "[KALDIRILDI] Eşzamanlanacak görev listeleri"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:78
 msgid ""
 "{user_id: [task_list_ids]}, task_list_ids can be 'all' or an array of ids"
 msgstr ""
+"{user_id: [task_list_ids]}, task_list_ids 'all' (tümü) ya da kimlik dizisi "
+"olabilir"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:82
 msgid "[DEPRECATED] Task lists that should be visible"
-msgstr ""
+msgstr "[KALDIRILDI] Görünür olacak görev listeleri"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:83
 msgid "(user_id, task_id) ids can be 'all', 'local', or an actual id"
 msgstr ""
+"(user_id, task_id) kimlikler 'all' (tümü), 'local' (yerel), ya da gerçek bir "
+"kimlik olabilir"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:10
 msgid "Set reminders and manage tasks"
-msgstr ""
+msgstr "Anımsatıcılar ekle ve görevleri yönet"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:13
 msgid "What you can do with Reminders:"
-msgstr ""
+msgstr "Anımsatıcılar ile yapabilecekleriniz:"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:15
 msgid "Set recurring reminders"
-msgstr ""
+msgstr "Yinelenen anımsatıcılar ayarlama"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:16
 msgid "Schedule notifications"
-msgstr ""
+msgstr "Zamanlanmış bildirimler"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:17
 msgid "Sort, filter, and search for reminders"
-msgstr ""
+msgstr "Anımsatıcıları sıralama, süzme ve arama"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:18
 msgid "Mark reminders as important or complete"
-msgstr ""
+msgstr "Anımsatıcıları önemli ya da tamamlanmış işaretleme"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:19
 msgid "Organize reminders using lists"
-msgstr ""
+msgstr "Listeleri kullanarak anımsatıcıları organize etme"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:20
 msgid "Optionally play a sound when notifications are sent"
-msgstr ""
+msgstr "Bildirim gönderildiğinde isteğe bağlı olarak ses çalma"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:21
 msgid "Optionally sync with Microsoft To Do"
-msgstr ""
+msgstr "Microsoft To Do ile isteğe bağlı eşzamanlama"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:22
 msgid "Optionally sync with CalDAV servers"
-msgstr ""
+msgstr "CalDAV sunucularıyla isteğe bağlı eşzamanlama"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:23
 msgid "Import and export ical/ics files"
-msgstr ""
+msgstr "ical/ics dosyalarını içe aktarma ya da dışa aktarma"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:57
 msgid "Todo"
-msgstr ""
+msgstr "Yapılacak"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:58
 msgid "Productivity"
-msgstr ""
+msgstr "Üretkenlik"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:59
 msgid "Task"
-msgstr ""
+msgstr "Görev"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:60
 msgid "Planning"
-msgstr ""
+msgstr "Planlama"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:61
 msgid "Planner"
-msgstr ""
+msgstr "Planlayıcı"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:62
 #: src/browser/resources/ui/reminder_edit_window.ui:87
 msgid "Time"
-msgstr ""
+msgstr "Zaman"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:63
 msgid "Management"
-msgstr ""
+msgstr "Yönetim"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:64
 msgid "Reminder"
-msgstr ""
+msgstr "Anımsatıcı"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:65
 msgid "Remembrance"
-msgstr ""
+msgstr "Hatırlatma"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:87
 msgid "UI improvements"
-msgstr ""
+msgstr "Arayüz iyileştirmeleri"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:88
 msgid "Added support for making the week start on sunday"
-msgstr ""
+msgstr "Haftanın pazar günü başlaması desteği eklendi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:89
 msgid ""
 "Added indicators that show how many incomplete reminders are in each list/"
 "group"
 msgstr ""
+"Her listede/grupta kaç tane tamamlanmamış anımsatıcı olduğunu gösteren "
+"belirteçler eklendi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:90
 msgid "Added support for syncing with CalDAV servers"
-msgstr ""
+msgstr "CalDAV sunucularıyla eşzamanlama desteği eklendi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:91
 msgid ""
 "Added support for selecting multiple reminders in one click by holding shift"
 msgstr ""
+"Shift tuşunu basılı tutarak tek tıklamayla birden fazla anımsatıcı seçme "
+"desteği eklendi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:92
 msgid "Added support for dragging and dropping reminders between lists"
-msgstr ""
+msgstr "Listeler arasında anımsatıcıları sürükleme ve bırakma desteği eklendi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:93
 msgid "Added support for importing and exporting ical/ics files"
-msgstr ""
+msgstr "ical/ics dosyalarını içe ve dışa aktarma desteği eklendi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:94
 msgid "Added more multithreading to significantly speed up certain operations"
 msgstr ""
+"Belirli işlemleri önemli ölçüde hızlandırmak için daha fazla çoklu iş "
+"parçacığı eklendi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:95
 msgid "Added support for syncing recurring reminders with Microsoft To Do"
 msgstr ""
+"Yinelenen anımsatıcıları Microsoft To Do ile eşzamanlama desteği eklendi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:96
 msgid "Added support for creating monthly and yearly repeating reminders"
-msgstr ""
+msgstr "Aylık ve yıllık yinelenen anımsatıcılar oluşturma desteği eklendi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:97
 msgid ""
 "Version numbers are now handled in a logical way (as in they aren't just "
 "doubles)"
 msgstr ""
+"Sürüm numaraları artık mantıklı bir şekilde ele alınıyor (sadece çift "
+"olmadıkları gibi)"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:98
 msgid ""
 "Microsoft sign in window now appears in the app instead of in the browser"
 msgstr ""
+"Microsoft oturum açma penceresi artık tarayıcı yerine uygulamada görünüyor"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:99
 msgid "Significantly improve how recurring reminders function"
-msgstr ""
+msgstr "Yinelenen anımsatıcıları işleyişi önemli ölçüde iyileştirildi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:100
 msgid "Fix date/time text wrapping awkwardly"
-msgstr ""
+msgstr "Tarih/saat metninin garip bir şekilde sarılması düzeltildi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:101
 msgid "Improvements to handling of network errors"
-msgstr ""
+msgstr "Ağ hatalarını işleme iyileştirildi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:102
 msgid "Fix some other minor issues"
-msgstr ""
+msgstr "Diğer bazı küçük sorunlar düzeltildi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:103
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:207
 msgid "Bump API version"
-msgstr ""
+msgstr "API sürümü yükseltildi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:110
 msgid "Fix versioning by bumping to 4.0"
-msgstr ""
+msgstr "Sürümleme 4.0'a yükselterek düzeltildi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:117
 msgid "Remove warning about cloud syncing being in beta"
-msgstr ""
+msgstr "Bulut eşzamanlamanın beta aşamasında olduğuna dair uyarı kaldırıldı"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:118
 msgid "Fix issue where you could make reminder recurring when it shouldn't be"
 msgstr ""
+"Anımsatıcının olmaması gerektiği halde yinelenmesine neden olan sorun "
+"düzeltildi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:125
 msgid "Change delete icon"
-msgstr ""
+msgstr "Sil simgesini değiştir"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:126
 msgid "Fix some ui bugs"
-msgstr ""
+msgstr "Bazı kullanıcı arayüzü hataları düzeltildi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:127
 msgid "Some tiny performance improvements"
-msgstr ""
+msgstr "Kimi küçük performans iyileştirmeleri"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:128
 msgid "Improve logging"
-msgstr ""
+msgstr "Günlükleme iyileştirildi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:135
 msgid "UI Improvements to sidebar"
-msgstr ""
+msgstr "Kenar çubuğunda arayüz iyileştirmeleri"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:136
 msgid "Fix issues when moving reminders between lists"
-msgstr ""
+msgstr "Anımsatıcıları listeler arasında taşırken yaşanan sorunlar düzeltildi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:137
 msgid "Fix issue with error dialogs"
-msgstr ""
+msgstr "Hata iletişim kutularıyla ilgili sorun düzeltildi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:144
 msgid "Fix issue when deleting lists"
-msgstr ""
+msgstr "Listeleri silerken yaşanan sorun düzeltildi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:151
 msgid "Fix issue when removing selected reminders"
-msgstr ""
+msgstr "Seçili anımsatıcıları kaldırma sorunu düzeltildi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:158
 msgid "Performance improvements"
-msgstr ""
+msgstr "Performans iyileştirmeleri"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:159
 msgid "Don't freeze UI when updating MS reminders"
 msgstr ""
+"MS anımsatıcıları güncellerken kullanıcı arayüzünün donması sorunu düzeltildi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:160
 msgid "Automatically refresh reminders after waking from suspend"
 msgstr ""
+"Askıya alma işleminden uyandıktan sonra hatırlatıcıları kendiliğinden yenile"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:161
 msgid "Fix issues with deleting lists"
-msgstr ""
+msgstr "Liste silme hataları düzeltildi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:162
 msgid "Fix issues when queueing remote changes while internet is disconnected"
 msgstr ""
+"İnternet bağlantısı kesilmişken uzaktan değişiklikleri sıraya alma sorunları "
+"düzeltildi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:169
 msgid "Stop showing completed reminders on upcoming page"
-msgstr ""
+msgstr "Tamamlanan anımsatıcıların yaklaşan sayfada gösterilmesi düzeltildi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:170
 msgid "Cross out completed reminders on all reminders page"
-msgstr ""
+msgstr "Tüm anımsatıcılar sayfasında tamamlanan anımsatıcıların üzerini çiz"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:177
 msgid "Add support for setting due dates without sending notifications"
-msgstr ""
+msgstr "Bildirim göndermeden son tarih belirleme desteği eklendi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:178
 msgid ""
 "Add support for selecting and editing multiple reminders (Start selecting "
 "with Ctrl + LMB or by pressing and holding a reminder)"
 msgstr ""
+"Birden fazla anımsatıcı seçme ve düzenleme desteği eklendi (Ctrl + LMB ile "
+"veya bir anımsatıcıya basılı tutarak seçmeye başlayın)"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:179
 msgid "Slightly improve error handling"
-msgstr ""
+msgstr "Hata işleme biraz iyileştirildi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:186
 msgid "Fix issue when setting reminders in another year"
-msgstr ""
+msgstr "Başka bir yılda hatırlatıcı ayarlarken yaşanan sorun düzeltildi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:193
 msgid "Fix issue when saving Microsoft To Do Reminders"
-msgstr ""
+msgstr "Microsoft To Do Anımsatıcılarını kaydederken yaşanan sorun düzeltildi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:200
 msgid "New notification sound"
-msgstr ""
+msgstr "Yeni bildirim sesi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:201
 msgid "Allow sorting reminders by created time and last updated time"
 msgstr ""
+"Anımsatıcıları oluşturulma zamanına ve son güncellenme zamanına göre "
+"sıralamaya izin verildi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:202
 msgid "Allow marking reminders as important"
-msgstr ""
+msgstr "Anımsatıcıları önemli olarak imlemeye izin verildi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:203
 msgid "Slightly improved UI"
-msgstr ""
+msgstr "Küçük arayüz iyileştirmesi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:204
 msgid "Added keyboard shortcuts page"
-msgstr ""
+msgstr "Klavye kısayolları sayfası eklendi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:205
 msgid "Added more keyboard shortcuts"
-msgstr ""
+msgstr "Daha fazla klavye kısayolu eklendi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:206
 msgid "Lots of bugfixes"
-msgstr ""
+msgstr "Bir çok hata düzeltme"
 
 #: src/browser/resources/ui/caldav_sign_in.ui:23
 msgid "CalDAV Sync"
-msgstr ""
+msgstr "CalDAV Eşzamanlama"
 
 #: src/browser/resources/ui/caldav_sign_in.ui:47
 #: src/browser/resources/ui/preferences_user_row.ui:23
 msgid "Display Name"
-msgstr ""
+msgstr "Görünen Ad"
 
 #: src/browser/resources/ui/caldav_sign_in.ui:53
 msgid "Server URL"
-msgstr ""
+msgstr "Sunucu URL"
 
 #: src/browser/resources/ui/caldav_sign_in.ui:59
 msgid "Username"
-msgstr ""
+msgstr "Kullanıcı Adı"
 
 #: src/browser/resources/ui/caldav_sign_in.ui:65
 msgid "Password"
-msgstr ""
+msgstr "Parola"
 
 #: src/browser/resources/ui/caldav_sign_in.ui:72
 msgid "Sign In"
-msgstr ""
+msgstr "Oturum Aç"
 
 #: src/browser/resources/ui/edit_lists_window.ui:20
 #: src/browser/resources/ui/main_window.ui:285
 msgid "Edit Lists"
-msgstr ""
+msgstr "Listeleri Düzenle"
 
 #: src/browser/resources/ui/error_dialog.ui:48
 msgid "View Error"
-msgstr ""
+msgstr "Hatayı Görüntüle"
 
 #: src/browser/resources/ui/export_lists_window.ui:20
 msgid "Export Lists"
-msgstr ""
+msgstr "Listeleri Dışa Aktar"
 
 #: src/browser/resources/ui/export_lists_window.ui:78
 #: src/browser/resources/ui/import_lists_window.ui:92
@@ -462,783 +495,796 @@ msgstr ""
 #: src/browser/move_reminders_window.py:111 src/browser/preferences.py:274
 #: src/browser/reminder.py:412
 msgid "Cancel"
-msgstr ""
+msgstr "İptal"
 
 #: src/browser/resources/ui/export_lists_window.ui:93
 #: src/browser/resources/ui/shortcuts_window.ui:37
 msgid "Export"
-msgstr ""
+msgstr "Dışa Aktar"
 
 #: src/browser/resources/ui/import_lists_window.ui:20
 msgid "Import Lists"
-msgstr ""
+msgstr "Listeleri İçe Aktar"
 
 #: src/browser/resources/ui/import_lists_window.ui:56
 msgid "Import to specific list"
-msgstr ""
+msgstr "Belirli listeleri içe aktar"
 
 #: src/browser/resources/ui/import_lists_window.ui:57
 msgid "Otherwise new lists will be created"
-msgstr ""
+msgstr "Aksi takdirde yeni liste oluşturulacak"
 
 #: src/browser/resources/ui/import_lists_window.ui:63
 msgid "Select a list"
-msgstr ""
+msgstr "Liste seç"
 
 #: src/browser/resources/ui/import_lists_window.ui:107
 #: src/browser/resources/ui/shortcuts_window.ui:43
 msgid "Import"
-msgstr ""
+msgstr "İçe Aktar"
 
 #: src/browser/resources/ui/main_window.ui:50
 msgid "Show sidebar"
-msgstr ""
+msgstr "Kenar çubuğunu göster"
 
 #: src/browser/resources/ui/main_window.ui:61
 msgid "Sort direction"
-msgstr ""
+msgstr "Sıralama yönü"
 
 #: src/browser/resources/ui/main_window.ui:75
 #: src/browser/resources/ui/shortcuts_window.ui:101
 msgid "Search"
-msgstr ""
+msgstr "Ara"
 
 #: src/browser/resources/ui/main_window.ui:83
 msgid "App menu"
-msgstr ""
+msgstr "Uygulama menüsü"
 
 #: src/browser/resources/ui/main_window.ui:126
 #: src/browser/resources/ui/main_window.ui:340 src/browser/main_window.py:1048
 msgid "All Reminders"
-msgstr ""
+msgstr "Tüm Anımsatıcılar"
 
 #: src/browser/resources/ui/main_window.ui:158 src/browser/main_window.py:1059
 msgid "Upcoming Reminders"
-msgstr ""
+msgstr "Yaklaşan Anımsatıcılar"
 
 #: src/browser/resources/ui/main_window.ui:190 src/browser/main_window.py:1070
 msgid "Past Reminders"
-msgstr ""
+msgstr "Geçmiş Anımsatıcılar"
 
 #: src/browser/resources/ui/main_window.ui:222 src/browser/main_window.py:1081
 msgid "Completed Reminders"
-msgstr ""
+msgstr "Tamamlanan Anımsatıcılar"
 
 #: src/browser/resources/ui/main_window.ui:448 src/browser/reminder.py:346
 msgid "Complete"
-msgstr ""
+msgstr "Tamamlandı"
 
 #: src/browser/resources/ui/main_window.ui:474 src/browser/reminder.py:342
 msgid "Incomplete"
-msgstr ""
+msgstr "Eksik"
 
 #: src/browser/resources/ui/main_window.ui:500
 #: src/browser/resources/ui/reminder_edit_window.ui:66
 msgid "Important"
-msgstr ""
+msgstr "Önemli"
 
 #: src/browser/resources/ui/main_window.ui:526
 msgid "Unimportant"
-msgstr ""
+msgstr "Önemsiz"
 
 #: src/browser/resources/ui/main_window.ui:551
 #: src/browser/resources/ui/move_reminders_window.ui:93
 msgid "Move"
-msgstr ""
+msgstr "Taşı"
 
 #: src/browser/resources/ui/main_window.ui:573
 #: src/browser/resources/ui/reminder.ui:100
 #: src/browser/edit_lists_window.py:202 src/browser/reminder.py:413
 msgid "Remove"
-msgstr ""
+msgstr "Kaldır"
 
 #: src/browser/resources/ui/main_window.ui:595
 #: src/browser/resources/ui/main_window.ui:603
 msgid "Add a reminder"
-msgstr ""
+msgstr "Anımsatıcı ekle"
 
 #: src/browser/resources/ui/main_window.ui:625
 msgid "_Refresh"
-msgstr ""
+msgstr "_Yenile"
 
 #: src/browser/resources/ui/main_window.ui:629
 msgid "_Export Lists"
-msgstr ""
+msgstr "Listeleri _Dışa Aktar"
 
 #: src/browser/resources/ui/main_window.ui:633
 msgid "_Import Lists"
-msgstr ""
+msgstr "_Listeleri İçe Aktar"
 
 #: src/browser/resources/ui/main_window.ui:639
 msgid "_Preferences"
-msgstr ""
+msgstr "_Tercihler"
 
 #: src/browser/resources/ui/main_window.ui:643
 msgid "_Keyboard Shortcuts"
-msgstr ""
+msgstr "_Klavye Kısayolları"
 
 #: src/browser/resources/ui/main_window.ui:647
 msgid "_About Reminders"
-msgstr ""
+msgstr "Anımsatıcılar _Hakkında"
 
 #: src/browser/resources/ui/main_window.ui:654
 msgid "Sort By"
-msgstr ""
+msgstr "Sıralama Ölçütü"
 
 #: src/browser/resources/ui/main_window.ui:656
 msgid "_Time"
-msgstr ""
+msgstr "_Zaman"
 
 #: src/browser/resources/ui/main_window.ui:661
 msgid "_Alphabetical"
-msgstr ""
+msgstr "_Alfabetik"
 
 #: src/browser/resources/ui/main_window.ui:666
 msgid "_Created"
-msgstr ""
+msgstr "_Oluşturulma"
 
 #: src/browser/resources/ui/main_window.ui:671
 msgid "_Last Updated"
-msgstr ""
+msgstr "_Son Güncellenme"
 
 #: src/browser/resources/ui/microsoft_sign_in.ui:23
 msgid "Microsoft To Do Sync"
-msgstr ""
+msgstr "Microsoft To Do Eşsamanlama"
 
 #: src/browser/resources/ui/move_reminders_window.ui:20
 msgid "Move Selected Reminder(s)"
-msgstr ""
+msgstr "Seçilen Anımsatıcıları Taşı"
 
 #: src/browser/resources/ui/preferences.ui:20
 #: src/browser/resources/ui/shortcuts_window.ui:49
 msgid "Preferences"
-msgstr ""
+msgstr "Tercihler"
 
 #: src/browser/resources/ui/preferences.ui:29
 msgid "Syncing"
-msgstr ""
+msgstr "Eşzamanlama"
 
 #: src/browser/resources/ui/preferences.ui:38
 msgid "Microsoft To Do"
-msgstr ""
+msgstr "Microsoft To Do"
 
 #: src/browser/resources/ui/preferences.ui:50
 #: src/browser/resources/ui/preferences.ui:78
 msgid "Add Account"
-msgstr ""
+msgstr "Hesap Ekle"
 
 #: src/browser/resources/ui/preferences.ui:66
 msgid "CalDAV"
-msgstr ""
+msgstr "CalDAV"
 
 #: src/browser/resources/ui/preferences.ui:98
 msgid "Refresh"
-msgstr ""
+msgstr "Yenile"
 
 #: src/browser/resources/ui/preferences.ui:110
 #: src/browser/resources/ui/reminder_edit_window.ui:52
 msgid "General"
-msgstr ""
+msgstr "Genel"
 
 #: src/browser/resources/ui/preferences.ui:119
 msgid "Week starts on Sunday"
-msgstr ""
+msgstr "Hafta Pazar gününden başlar"
 
 #: src/browser/resources/ui/preferences.ui:130
 msgid "Play sound with notification"
-msgstr ""
+msgstr "Bildirimle ses çal"
 
 #: src/browser/resources/ui/preferences.ui:134
 msgid "Use the included notification sound"
-msgstr ""
+msgstr "Eklenen bildirim sesini kullan"
 
 #: src/browser/resources/ui/preferences.ui:135
 msgid "Otherwise the bell sound from the enabled sound theme will be used"
-msgstr ""
+msgstr "Aksi takdirde, etkinleştirilen ses temasındaki zil sesi kullanılacak"
 
 #: src/browser/resources/ui/preferences.ui:153
 msgid "Use locale default"
-msgstr ""
+msgstr "Yerel varsayılanı kullan"
 
 #: src/browser/resources/ui/preferences.ui:154
 msgid "12 hour time"
-msgstr ""
+msgstr "12 saat biçimi"
 
 #: src/browser/resources/ui/preferences.ui:155
 msgid "24 hour time"
-msgstr ""
+msgstr "24 saat biçimi"
 
 #: src/browser/resources/ui/preferences.ui:160
 msgid "5 mins"
-msgstr ""
+msgstr "5 dakika"
 
 #: src/browser/resources/ui/preferences.ui:161
 msgid "15 mins"
-msgstr ""
+msgstr "15 dakika"
 
 #: src/browser/resources/ui/preferences.ui:162
 msgid "30 mins"
-msgstr ""
+msgstr "30 dakika"
 
 #: src/browser/resources/ui/preferences.ui:163
 msgid "60 mins"
-msgstr ""
+msgstr "60 dakika"
 
 #: src/browser/resources/ui/preferences_user_row.ui:52
 msgid "All"
-msgstr ""
+msgstr "Tümü"
 
 #: src/browser/resources/ui/preferences_user_row.ui:75
 #: src/browser/preferences.py:275
 msgid "Sign Out"
-msgstr ""
+msgstr "Oturumu Kapat"
 
 #: src/browser/resources/ui/reminder.ui:131
 msgid "Edit"
-msgstr ""
+msgstr "Düzenle"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:55
 msgid "What should the reminder be called?"
-msgstr ""
+msgstr "Anımsatıcının adı ne olmalı?"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:61
 msgid "Short description of the reminder (Optional)"
-msgstr ""
+msgstr "Anımsatıcının kısa açıklaması (İsteğe bağlı)"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:67
 msgid "This will make the reminder display first in the list"
-msgstr ""
+msgstr "Bu, anımsatıcının listede ilk sırada görüntülenmesini sağlar"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:79
 msgid "Location"
-msgstr ""
+msgstr "Konum"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:90
 msgid "Set a date/time"
-msgstr ""
+msgstr "Tarih/Saat ayarla"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:112
 #: src/browser/resources/ui/reminder_edit_window.ui:447
 msgid "Select date"
-msgstr ""
+msgstr "Tarih seç"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:147
 msgid "Hour"
-msgstr ""
+msgstr "Saat"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:178
 msgid "Minute"
-msgstr ""
+msgstr "Dakika"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:224
 msgid "Send a notification"
-msgstr ""
+msgstr "Bildirim gönder"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:243
 msgid "Repeat the reminder"
-msgstr ""
+msgstr "Anımsatıcıyı yinele"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:244
 msgid "The reminder will be updated when you complete it"
-msgstr ""
+msgstr "Anımsatıcı, tamamladığınızda güncellenecek"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:259
 msgid "Repeat every"
-msgstr ""
+msgstr "Yineleme aralığı"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:310
 msgid "Mon"
-msgstr ""
+msgstr "Pzt"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:311
 msgid "Monday"
-msgstr ""
+msgstr "Pazartesi"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:322
 msgid "Tue"
-msgstr ""
+msgstr "Sal"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:323
 msgid "Tuesday"
-msgstr ""
+msgstr "Salı"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:334
 msgid "Wed"
-msgstr ""
+msgstr "Çar"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:335
 msgid "Wednesday"
-msgstr ""
+msgstr "Çarşamba"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:346
 msgid "Thu"
-msgstr ""
+msgstr "Per"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:347
 msgid "Thursday"
-msgstr ""
+msgstr "Perşembe"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:358
 msgid "Fri"
-msgstr ""
+msgstr "Cum"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:359
 msgid "Friday"
-msgstr ""
+msgstr "Cuma"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:370
 msgid "Sat"
-msgstr ""
+msgstr "Cmt"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:371
 msgid "Saturday"
-msgstr ""
+msgstr "Cumartesi"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:382
 msgid "Sun"
-msgstr ""
+msgstr "Paz"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:383
 msgid "Sunday"
-msgstr ""
+msgstr "Pazar"
 
 #. Translators: This is a noun, preceded by a number to represent the number of occurrences of something
 #: src/browser/resources/ui/reminder_edit_window.ui:432
 msgid "time(s)"
-msgstr ""
+msgstr "zaman"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:505
 msgid "Save"
-msgstr ""
+msgstr "Kaydet"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:520
 msgid "minute(s)"
-msgstr ""
+msgstr "dakika"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:521
 msgid "hour(s)"
-msgstr ""
+msgstr "saat"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:522
 #: src/browser/resources/ui/reminder_edit_window.ui:530
 msgid "day(s)"
-msgstr ""
+msgstr "gün"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:523
 #: src/browser/resources/ui/reminder_edit_window.ui:531
 msgid "week(s)"
-msgstr ""
+msgstr "hafta"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:524
 #: src/browser/resources/ui/reminder_edit_window.ui:532
 msgid "months(s)"
-msgstr ""
+msgstr "ay"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:525
 #: src/browser/resources/ui/reminder_edit_window.ui:533
 msgid "years(s)"
-msgstr ""
+msgstr "yıl"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:538
 msgid "Repeat forever"
-msgstr ""
+msgstr "Daima yinele"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:539
 msgid "Display a total of"
-msgstr ""
+msgstr "Toplam"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:540
 msgid "Repeat until"
-msgstr ""
+msgstr "Şuna dek yinele"
 
 #: src/browser/resources/ui/shortcuts_window.ui:27
 msgid "Application"
-msgstr ""
+msgstr "Uygulama"
 
 #: src/browser/resources/ui/shortcuts_window.ui:31
 msgid "Show menu"
-msgstr ""
+msgstr "Menüyü göster"
 
 #: src/browser/resources/ui/shortcuts_window.ui:55
 msgid "Keyboard shortcuts"
-msgstr ""
+msgstr "Klavye kısayolları"
 
 #: src/browser/resources/ui/shortcuts_window.ui:61
 msgid "Quit"
-msgstr ""
+msgstr "Çık"
 
 #: src/browser/resources/ui/shortcuts_window.ui:68
 msgid "Navigation"
-msgstr ""
+msgstr "Gezinme"
 
 #: src/browser/resources/ui/shortcuts_window.ui:72
 msgid "Move left"
-msgstr ""
+msgstr "Sola taşı"
 
 #: src/browser/resources/ui/shortcuts_window.ui:78
 msgid "Move up"
-msgstr ""
+msgstr "Yukarı taşı"
 
 #: src/browser/resources/ui/shortcuts_window.ui:84
 msgid "Move right"
-msgstr ""
+msgstr "Sağa taşı"
 
 #: src/browser/resources/ui/shortcuts_window.ui:90
 msgid "Move down"
-msgstr ""
+msgstr "Aşağı taşı"
 
 #: src/browser/resources/ui/shortcuts_window.ui:97
 msgid "Main Window"
-msgstr ""
+msgstr "Ana Pencere"
 
 #: src/browser/resources/ui/shortcuts_window.ui:107
 msgid "New reminder"
-msgstr ""
+msgstr "Yeni anımsatıcı"
 
 #: src/browser/resources/ui/shortcuts_window.ui:113
 msgid "Refresh reminders"
-msgstr ""
+msgstr "Anımsatıcıları yenile"
 
 #: src/browser/resources/ui/shortcuts_window.ui:119
 msgid "Select all reminders"
-msgstr ""
+msgstr "Tüm anımsatıcıları seç"
 
 #: src/browser/resources/ui/shortcuts_window.ui:125
 msgid "Hold to start selecting reminders"
-msgstr ""
+msgstr "Anımsatıcıları seçmeye başlamak için basılı tutun"
 
 #: src/browser/resources/ui/shortcuts_window.ui:131
 msgid "Unselect all reminders"
-msgstr ""
+msgstr "Tüm anımsatıcıların seçimini kaldır"
 
 #: src/browser/resources/ui/shortcuts_window.ui:137
 msgid "Remove selected reminders"
-msgstr ""
+msgstr "Seçilen anımsatıcıları kaldır"
 
 #: src/browser/resources/ui/shortcuts_window.ui:144
 msgid "Child Windows"
-msgstr ""
+msgstr "Alt Pencereler"
 
 #: src/browser/resources/ui/shortcuts_window.ui:148
 msgid "Close window"
-msgstr ""
+msgstr "Pencereyi kapat"
 
 #: src/browser/resources/ui/shortcuts_window.ui:154
 msgid "Save changes"
-msgstr ""
+msgstr "Değişiklikleri kaydet"
 
 #: src/browser/about.py:51
 msgid "Copyright 2023 Sasha Hale"
-msgstr ""
+msgstr "Telif Hakkı © 2023 Sasha Hale"
 
 #. Translators: Do not translate this, instead put your name and email here.
 #. name <email>
 #: src/browser/about.py:59
 msgid "translator-credits"
-msgstr ""
+msgstr "Sabri Ünal <libreajans@gmail.com>"
 
 #: src/browser/application.py:56
 msgid "Print the version of the app"
-msgstr ""
+msgstr "Uygulama sürümünü yazdır"
 
 #: src/browser/application.py:63
 msgid "Restart service before starting app"
-msgstr ""
+msgstr "Uygulamayı başlatmadan önce hizmeti yeniden başlat"
 
 #: src/browser/application.py:70
 msgid "Start on a different page"
-msgstr ""
+msgstr "Farklı sayfada başlat"
 
 #: src/browser/application.py:195 src/browser/application.py:375
 msgid "Something went wrong"
-msgstr ""
+msgstr "Bir şeyler yanlış gitti"
 
 #: src/browser/application.py:195 src/browser/application.py:375
 msgid "Changes were not saved. This bug should be reported."
-msgstr ""
+msgstr "Değişiklikler kaydedilmedi. Lütfen bu hatayı bildirin."
 
 #: src/browser/application.py:367
 msgid "Reminders failed to start"
-msgstr ""
+msgstr "Anımsatıcılar başlatılamadı"
 
 #: src/browser/application.py:367
 msgid ""
 "If this is your first time running Reminders, you will probably have to log "
 "out and log back in before using it. This is due to a bug in Flatpak."
 msgstr ""
+"Anımsatıcıları ilk kez çalıştırıyorsanız, muhtemelen kullanmadan önce "
+"oturumu kapatıp tekrar açmanız gerekecektir. Bunun nedeni Flatpak ile ilgili "
+"bir hatadır."
 
 #: src/browser/edit_lists_window.py:22 src/browser/edit_lists_window.py:118
 msgid "New List"
-msgstr ""
+msgstr "Yeni Liste"
 
 #: src/browser/edit_lists_window.py:93 src/browser/main_window.py:388
 msgid "You have unsaved changes"
-msgstr ""
+msgstr "Kaydedilmemiş değişikliklikler var"
 
 #: src/browser/edit_lists_window.py:94 src/browser/main_window.py:389
 msgid "Are you sure you want to close the window?"
-msgstr ""
+msgstr "Pencereyi kapatmak istediğinize emin misiniz?"
 
 #: src/browser/edit_lists_window.py:97 src/browser/main_window.py:392
 #: src/browser/main_window.py:1286 src/browser/main_window.py:1301
 #: src/browser/main_window.py:1320 src/browser/main_window.py:1335
 #: src/browser/main_window.py:1350 src/browser/move_reminders_window.py:112
 msgid "Yes"
-msgstr ""
+msgstr "Evet"
 
 #: src/browser/edit_lists_window.py:153
 msgid "What should the list be called?"
-msgstr ""
+msgstr "Listenin adı ne olmalı?"
 
 #: src/browser/edit_lists_window.py:197
 msgid "Remove list?"
-msgstr ""
+msgstr "Liste kaldırılsın mı?"
 
 #: src/browser/edit_lists_window.py:198
 #, python-brace-format
 msgid "This will remove {list_name} and cannot be undone."
-msgstr ""
+msgstr "Bu, {list_name} listesini kaldıracak ve bu işlem geri alınamaz."
 
 #: src/browser/main_window.py:99
 msgid "Nothing to see here!"
-msgstr ""
+msgstr "Gösterilecek hiç bir şey yok!"
 
 #: src/browser/main_window.py:100
 msgid "Press the plus button below to add a reminder"
-msgstr ""
+msgstr "Anımsatıcı eklemek için aşağıdaki artı düğmesine basın"
 
 #: src/browser/main_window.py:104
 msgid "No reminders match your search"
-msgstr ""
+msgstr "Aramanızla eşleyen anımsatıcı yok"
 
 #: src/browser/main_window.py:407
 msgid "Does not repeat"
-msgstr ""
+msgstr "Yineleme"
 
 #: src/browser/main_window.py:410
 msgid "minute"
-msgstr ""
+msgstr "dakika"
 
 #: src/browser/main_window.py:412
 msgid "minutes"
-msgstr ""
+msgstr "dakika"
 
 #: src/browser/main_window.py:415
 msgid "hour"
-msgstr ""
+msgstr "saat"
 
 #: src/browser/main_window.py:417
 msgid "hours"
-msgstr ""
+msgstr "saat"
 
 #: src/browser/main_window.py:420
 msgid "day"
-msgstr ""
+msgstr "gün"
 
 #: src/browser/main_window.py:422
 msgid "days"
-msgstr ""
+msgstr "gün"
 
 #. Translators: This is an abbreviation for Monday
 #: src/browser/main_window.py:427
 msgid "M"
-msgstr ""
+msgstr "Pt"
 
 #. Translators: This is an abbreviation for Tuesday
 #: src/browser/main_window.py:429
 msgid "Tu"
-msgstr ""
+msgstr "Sa"
 
 #. Translators: This is an abbreviation for Wednesday
 #: src/browser/main_window.py:431
 msgid "W"
-msgstr ""
+msgstr "Ç"
 
 #. Translators: This is an abbreviation for Thursday
 #: src/browser/main_window.py:433
 msgid "Th"
-msgstr ""
+msgstr "Pe"
 
 #. Translators: This is an abbreviation for Friday
 #: src/browser/main_window.py:435
 msgid "F"
-msgstr ""
+msgstr "C"
 
 #. Translators: This is an abbreviation for Saturday
 #: src/browser/main_window.py:437
 msgid "Sa"
-msgstr ""
+msgstr "Ct"
 
 #. Translators: This is an abbreviation for Sunday
 #: src/browser/main_window.py:439
 msgid "Su"
-msgstr ""
+msgstr "Pz"
 
 #: src/browser/main_window.py:445
 msgid "week"
-msgstr ""
+msgstr "hafta"
 
 #: src/browser/main_window.py:447
 msgid "weeks"
-msgstr ""
+msgstr "hafta"
 
 #: src/browser/main_window.py:453
 msgid "month"
-msgstr ""
+msgstr "ay"
 
 #: src/browser/main_window.py:455
 msgid "months"
-msgstr ""
+msgstr "ay"
 
 #: src/browser/main_window.py:458
 msgid "year"
-msgstr ""
+msgstr "yıl"
 
 #: src/browser/main_window.py:460
 msgid "years"
-msgstr ""
+msgstr "yıl"
 
 #: src/browser/main_window.py:463
 msgid "until"
-msgstr ""
+msgstr "şu zamana kadar"
 
 #. Translators: This is a noun, preceded by a number to represent the number of occurrences of something
 #: src/browser/main_window.py:466
 msgid "time"
-msgstr ""
+msgstr "saat"
 
 #. Translators: This is a noun, preceded by a number to represent the number of occurrences of something
 #: src/browser/main_window.py:469
 msgid "times"
-msgstr ""
+msgstr "saat"
 
 #. Translators: This is a adjective, followed by a number to represent how often something occurs
 #: src/browser/main_window.py:474
 msgid "Every"
-msgstr ""
+msgstr "Her"
 
 #: src/browser/main_window.py:510
 msgid "Today"
-msgstr ""
+msgstr "Bugün"
 
 #: src/browser/main_window.py:512
 msgid "Tomorrow"
-msgstr ""
+msgstr "Yarın"
 
 #: src/browser/main_window.py:514
 msgid "Yesterday"
-msgstr ""
+msgstr "Dün"
 
 #: src/browser/main_window.py:736
 msgid "All Lists"
-msgstr ""
+msgstr "Tüm Listeler"
 
 #: src/browser/main_window.py:1257
 #, python-brace-format
 msgid "Searching '{text}'"
-msgstr ""
+msgstr "'{text}' aranıyor"
 
 #: src/browser/main_window.py:1264
 msgid "Start typing to search"
-msgstr ""
+msgstr "Aramak için yazmaya başlayın"
 
 #: src/browser/main_window.py:1282
 msgid "Mark reminders as complete?"
-msgstr ""
+msgstr "Anımsatıcılar tamamlanmış olarak imlensin mi?"
 
 #: src/browser/main_window.py:1283
 msgid ""
 "Are you sure you want to mark the currently selected reminder(s) as complete?"
 msgstr ""
+"Şu anda seçili olan anımsatıcıları tamamlandı olarak imlemek istediğinizden "
+"emin misiniz?"
 
 #: src/browser/main_window.py:1297
 msgid "Mark reminders as incomplete?"
-msgstr ""
+msgstr "Anımsatıcılar tamamlanmamış olarak imlensin mi?"
 
 #: src/browser/main_window.py:1298
 msgid ""
 "Are you sure you want to mark the currently selected reminder(s) as "
 "incomplete?"
 msgstr ""
+"Şu anda seçili olan anımsatıcıları tamamlanmamış olarak imlemek "
+"istediğinizden emin misiniz?"
 
 #: src/browser/main_window.py:1316
 msgid "Mark reminders as important?"
-msgstr ""
+msgstr "Anımsatıcılar önemli olarak imlensin mi?"
 
 #: src/browser/main_window.py:1317
 msgid ""
 "Are you sure you want to mark the currently selected reminder(s) as "
 "important?"
 msgstr ""
+"Şu anda seçili olan anımsatıcıları önemli olarak imlemek istediğinizden emin "
+"misiniz?"
 
 #: src/browser/main_window.py:1331
 msgid "Mark reminders as unimportant?"
-msgstr ""
+msgstr "Anımsatıcılar önemsiz olarak imlensin mi?"
 
 #: src/browser/main_window.py:1332
 msgid ""
 "Are you sure you want to mark the currently selected reminder(s) as "
 "unimportant?"
 msgstr ""
+"Şu anda seçili olan anımsatıcıları önemsiz olarak imlemek istediğinizden "
+"emin misiniz?"
 
 #: src/browser/main_window.py:1346
 msgid "Remove reminders?"
-msgstr ""
+msgstr "Anımsatıcılar kaldırılsın mı?"
 
 #: src/browser/main_window.py:1347
 msgid ""
 "Are you sure you want to remove the currently selected reminder(s)? This "
 "cannot be undone."
 msgstr ""
+"Şu anda seçili olan anımsatıcıları kaldırmak istediğinizden emin misiniz? Bu "
+"işlem geri alınamaz."
 
 #: src/browser/move_reminders_window.py:109
 msgid "Are you sure you want to move the currently selected reminder(s)?"
-msgstr ""
+msgstr "Ş uanda seçili olan anımsatıcıyı taşımak istediğinizden emin misiniz?"
 
 #: src/browser/preferences.py:270
 msgid "Are you sure you want to sign out?"
-msgstr ""
+msgstr "Oturumu kapatmak istediğinizden emin misiniz?"
 
 #: src/browser/preferences.py:271
 #, python-brace-format
 msgid "This will sign out <b>{self.username}</b>"
-msgstr ""
+msgstr "<b>{self.username}</b> oturumu kapatılacak"
 
 #: src/browser/reminder.py:408
 msgid "Remove reminder?"
-msgstr ""
+msgstr "Anımsatıcı kaldırılsın mı?"
 
 #: src/browser/reminder.py:409
 #, python-brace-format
 msgid "This will remove {reminder} and cannot be undone."
-msgstr ""
+msgstr "Bu, {reminder} anımsatıcısını kaldıracak ve bu işlem geri alınamaz."
 
 #: src/browser/reminder_edit_window.py:123
 msgid "Edit Reminder"
-msgstr ""
+msgstr "Anımsatıcıyı Düzenle"
 
 #: src/browser/reminder_edit_window.py:125
 msgid "New Reminder"
-msgstr ""
+msgstr "Yeni Anımsatıcı"
 
 #: src/browser/reminder_edit_window.py:278
 #: src/browser/reminder_edit_window.py:298
 msgid "PM"
-msgstr ""
+msgstr "ÖS"
 
 #: src/browser/reminder_edit_window.py:282
 #: src/browser/reminder_edit_window.py:302
 msgid "AM"
-msgstr ""
+msgstr "ÖÖ"
 
 #: src/service/backend.py:634
 msgid "Mark as completed"
-msgstr ""
+msgstr "Tamamlanmadı olarak işaretle"
 
 #: src/service/backend.py:1015
 msgid "Local Reminders"
-msgstr ""
+msgstr "Yerel Anımsatıcılar"
 
 #: src/service/backend.py:1676
 msgid "Local"
-msgstr ""
+msgstr "Yerel"
