@@ -6,20 +6,21 @@ resources = files(
     'ui/export_lists_window.ui',
     'ui/import_lists_window.ui',
     'ui/main_window.ui',
+    'ui/main_window_win32.ui',
     'ui/microsoft_sign_in.ui',
     'ui/move_reminders_window.ui',
     'ui/preferences.ui',
     'ui/preferences_user_row.ui',
     'ui/reminder.ui',
-    'ui/reminder_edit_window.ui',
+    'ui/reminder_edit_page.ui',
     'ui/shortcuts_window.ui',
     'ui/task_list_row.ui',
-    'stylesheet.css'
+    'style.css'
 )
 
 gnome.compile_resources(
     meson.project_name(),
-    'reminders.gresource.xml',
+    'retainer.gresource.xml',
     install: true,
     install_dir: get_option('prefix') / get_option('datadir') / meson.project_name(),
     dependencies: resources,

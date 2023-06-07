@@ -1,31 +1,24 @@
 # caldav_sign_in.py
 # Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
 #
-# This program is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
-# Foundation, either version 3 of the License, or (at your option) any later
-# version.
-#
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of  MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# this program.  If not, see <http://www.gnu.org/licenses/>.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-from reminders import info
-from gi.repository import Gtk, Adw, GLib
+from retainer import info
+from gi.repository import Gtk, GLib
 from logging import getLogger
 
 logger = getLogger(info.app_executable)
 
-@Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/caldav_sign_in.ui')
-class CalDAVSignIn(Adw.Window):
+@Gtk.Template(resource_path='/io/github/retainerdevs/Retainer/ui/caldav_sign_in.ui')
+class CalDAVSignIn(Gtk.Window):
     __gtype_name__ = 'CaldavSignIn'
     name_entry = Gtk.Template.Child()
     url_entry = Gtk.Template.Child()
     username_entry = Gtk.Template.Child()
     password_entry = Gtk.Template.Child()
+    main = Gtk.Template.Child()
 
     def __init__(self, preferences, **kwargs):
         super().__init__(**kwargs)
@@ -33,11 +26,13 @@ class CalDAVSignIn(Adw.Window):
         self.app = preferences.app
         self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: self.close())))
 
+        if info.on_windows:
+            self.set_titlebar(None)
+            sep = Gtk.Separator()
+            sep.add_css_class('titlebar-separator')
+            self.main.prepend(sep)
 
         self.present()
-
-        if info.on_windows:
-            self.app.center_win_on_parent(self)
 
     def caldav_sign_in(self, name, url, username, password):
         try:

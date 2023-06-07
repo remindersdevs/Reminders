@@ -1,5 +1,5 @@
 desktop_file = configure_file(
-    input: 'io.github.remindersdevs.Reminders.desktop.in.in',
+    input: 'io.github.retainerdevs.Retainer.desktop.in.in',
     output: '@0@.desktop.in'.format(app_id),
     configuration: conf,
 )
@@ -21,7 +21,7 @@ desktop_utils = find_program('desktop-file-validate', required: false)
 endif
 
 configure_file(
-    input: 'io.github.remindersdevs.Reminders.service.in',
+    input: 'io.github.retainerdevs.Retainer.service.in',
     output: '@0@.service'.format(app_id),
     install: true,
     install_dir: get_option('datadir') / 'dbus-1' / 'services',

@@ -1,29 +1,21 @@
 # backend.py
 # Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
 #
-# This program is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
-# Foundation, either version 3 of the License, or (at your option) any later
-# version.
-#
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of  MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# this program.  If not, see <http://www.gnu.org/licenses/>.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 import datetime
 
 from gi.repository import GLib, Gio
-from reminders import info
-from reminders.service.ms_to_do import MSToDo
-from reminders.service.caldav import CalDAV
-from reminders.service.queue import ReminderQueue
-from reminders.service.countdowns import Countdowns
-from reminders.service.icalendar import iCalendar
-from reminders.service.reminder import Reminder
-from reminders.service.credentials import Credentials
+from retainer import info
+from retainer.service.ms_to_do import MSToDo
+from retainer.service.caldav import CalDAV
+from retainer.service.queue import ReminderQueue
+from retainer.service.countdowns import Countdowns
+from retainer.service.icalendar import iCalendar
+from retainer.service.reminder import Reminder
+from retainer.service.credentials import Credentials
 
 if not info.on_windows:
     from gi import require_version
@@ -65,18 +57,17 @@ PID = getpid()
 
 logger = getLogger(info.service_executable)
 
-if not path.isdir(info.data_dir) and path.isdir(info.old_data_dir):
-    move(info.old_data_dir, info.data_dir)
-
-with open(environ['REMINDERS_SERVICE_XML'], newline='') as f:
+with open(environ['RETAINER_SERVICE_XML'], newline='') as f:
     INTERFACE_XML = f.read()
 
 class Reminders():
     def __init__(self, app):
         if not path.isdir(info.data_dir):
             mkdir(info.data_dir)
-        self.connection = Gio.bus_get_sync(Gio.BusType.SESSION, None)
+        self.connections = []
         self.app = app
+        self.app.server.connect('new-connection', self.on_new_connection)
+        self.node_info = Gio.DBusNodeInfo.new_for_xml(INTERFACE_XML)
         self.reminders = self.lists = {}
         self.refreshing = False
         self._regid = None
@@ -94,7 +85,7 @@ class Reminders():
             self.sound.init()
         else:
             self.notif_manager = notifications.ToastNotificationManager
-            self.notifier = self.notif_manager.create_toast_notifier(info.app_id)
+            self.notifier = self.notif_manager.create_toast_notifier(info.win_id)
         self.countdowns = Countdowns()
         self.refresh_time = int(self.app.settings.get_string('refresh-frequency').strip('m'))
         self.app.settings.connect('changed::refresh-frequency', lambda *args: self._refresh_time_changed())
@@ -135,7 +126,18 @@ class Reminders():
             'Refresh': self.refresh,
             'GetVersion': self.get_version
         }
-        self._register()
+
+    def on_new_connection(self, server: Gio.DBusServer, connection: Gio.DBusConnection) -> bool:
+        self.connections.append(connection)
+        connection.register_object(
+            info.service_object,
+            self.node_info.interfaces[0],
+            self._on_method_call,
+            None,
+            None
+        )
+        connection.connect('closed', lambda *args: self.connections.remove(connection))
+        return True
 
     def emit_error(self, error):
         logger.error("".join(format_exception(error)))
@@ -154,13 +156,15 @@ class Reminders():
         self.countdowns.add_timeout(self.refresh_time, self._refresh_cb, 'refresh')
 
     def do_emit(self, signal_name, parameters):
-        self.connection.emit_signal(
-            None,
-            info.service_object,
-            info.service_interface,
-            signal_name,
-            parameters
-        )
+        for connection in self.connections:
+            if not connection.is_closed():
+                connection.emit_signal(
+                    None,
+                    info.service_object,
+                    info.service_interface,
+                    signal_name,
+                    parameters
+                )
 
     def _refresh_cb(self):
         self.countdowns.dict['refresh']['id'] = 0
@@ -191,16 +195,16 @@ class Reminders():
             'id': GLib.Variant('s', reminder_id),
             'title': GLib.Variant('s', reminder['title']),
             'description': GLib.Variant('s', reminder['description']),
-            'timestamp': GLib.Variant('u', reminder['timestamp']),
-            'due-date': GLib.Variant('u', reminder['due-date']),
+            'timestamp': GLib.Variant('t', reminder['timestamp']),
+            'due-date': GLib.Variant('t', reminder['due-date']),
             'important': GLib.Variant('b', reminder['important']),
             'repeat-type': GLib.Variant('q', reminder['repeat-type']),
             'repeat-frequency': GLib.Variant('q', reminder['repeat-frequency']),
             'repeat-days': GLib.Variant('q', reminder['repeat-days']),
             'repeat-times': GLib.Variant('n', reminder['repeat-times']),
-            'repeat-until': GLib.Variant('u', reminder['repeat-until']),
-            'created-timestamp': GLib.Variant('u', reminder['created-timestamp']),
-            'updated-timestamp': GLib.Variant('u', reminder['updated-timestamp']),
+            'repeat-until': GLib.Variant('t', reminder['repeat-until']),
+            'created-timestamp': GLib.Variant('t', reminder['created-timestamp']),
+            'updated-timestamp': GLib.Variant('t', reminder['updated-timestamp']),
             'list-id': GLib.Variant('s', reminder['list-id'])
         }
 
@@ -577,26 +581,15 @@ class Reminders():
         else:
             self.caldav.incomplete_task(user_id, list_uid, task_id)
 
-    def _register(self):
-        if self._regid is not None:
-            self.connection.unregister_object(self._regid)
-
-        node_info = Gio.DBusNodeInfo.new_for_xml(INTERFACE_XML)
-        self._regid = self.connection.register_object(
-            info.service_object,
-            node_info.interfaces[0],
-            self._on_method_call,
-            None,
-            None
-        )
-
     def _on_method_call(self, connection, sender, path, interface, method, parameters, invocation):
         try:
             # These methods need special code to function properly
             if method == 'Quit':
-                if self._regid is not None:
-                    self.connection.unregister_object(self._regid)
-                invocation.return_value(None)
+                for connection in self.connections:
+                    try:
+                        connection.close_sync(None)
+                    except:
+                        pass
                 self.app.quit_service()
                 return
 
@@ -642,6 +635,10 @@ class Reminders():
         self.countdowns.add_countdown(reminder['timestamp'], do_show_notification, reminder_id)
 
     def show_notification(self, reminder_id):
+        # I've considered switching to scheduled toasts but they don't support callbacks and will cause issues if I later choose to support win32 again
+        # This could technically be optimized some, I doubt it currently uses much resources/battery but it could be improved
+        # to only set timeouts for notifications that are scheduled for that day, and then every 24 hours it will set new timeouts as needed
+        # this might not be beneficial if the timeout apis im using are already very efficient, and I have a feeling they are because nobody has complained, but honestly I haven't really tested
         if info.on_windows:
             self._create_notification_windows(reminder_id)
         else:
@@ -654,9 +651,9 @@ class Reminders():
     def _unsend_notification(self, reminder_id):
         if info.on_windows:
             group = self.reminders[reminder_id]['list-id']
-            for i in self.notif_manager.history.get_history(info.app_id):
+            for i in self.notif_manager.history.get_history(info.win_id):
                 if reminder_id == i.tag and group == i.group:
-                    self.notif_manager.history.remove(reminder_id, group, info.app_id)
+                    self.notif_manager.history.remove(reminder_id, group, info.win_id)
         else:
             self.app.withdraw_notification(reminder_id)
 
@@ -683,7 +680,7 @@ class Reminders():
             duration="long"
             scenario="reminder"
             displayTimestamp="{self._timestamp_to_rfc(reminder['timestamp'])}"
-            launch="{info.app_id}.Open:action=notification-clicked"
+            launch="{info.win_id}:no-activate;action=notification-clicked"
             activationType="protocol">
             <visual>
                 <binding template="ToastGeneric">
@@ -694,7 +691,7 @@ class Reminders():
             <actions>
                 <action
                     content="{COMPLETE_BTN_TEXT}"
-                    arguments="{info.app_id}.Open:no-activate;action=reminder-completed;param={reminder_id}"
+                    arguments="{info.win_id}:no-activate;action=reminder-completed;param={reminder_id}"
                     activationType="protocol"/>
             </actions>
             <audio silent="{'false' if self.app.settings.get_boolean('notification-sound') else 'true'}"/>
@@ -1201,10 +1198,10 @@ class Reminders():
                 self._set_countdown(reminder_id)
 
             if save:
-                self.do_emit('CompletedUpdated', GLib.Variant('(ssbuu)', (app_id, reminder_id, completed, now, today)))
+                self.do_emit('CompletedUpdated', GLib.Variant('(ssbtt)', (app_id, reminder_id, completed, now, today)))
                 self._save_reminders()
 
-        return GLib.Variant('(uu)', (now, today))
+        return GLib.Variant('(tt)', (now, today))
 
     def update_completedv(self, app_id: str, reminder_ids: list, completed: bool):
         now = floor(time())
@@ -1229,13 +1226,13 @@ class Reminders():
 
         if len(completed_ids) == 1:
             reminder_id = completed_ids[0]
-            self.do_emit('CompletedUpdated', GLib.Variant('(ssbuu)', (app_id, reminder_id, completed, now, today)))
+            self.do_emit('CompletedUpdated', GLib.Variant('(ssbtt)', (app_id, reminder_id, completed, now, today)))
         elif len(completed_ids) > 1:
-            self.do_emit('RemindersCompleted', GLib.Variant('(sasbuu)', (app_id, completed_ids, completed, now, today)))
+            self.do_emit('RemindersCompleted', GLib.Variant('(sasbtt)', (app_id, completed_ids, completed, now, today)))
 
         self._save_reminders()
 
-        return GLib.Variant('(asuu)', (completed_ids, now, today))
+        return GLib.Variant('(astt)', (completed_ids, now, today))
 
     def remove_reminder(self, app_id: str, reminder_id: str, save = True):
         self._unsend_notification(reminder_id)
@@ -1337,7 +1334,7 @@ class Reminders():
 
         GLib.idle_add(lambda *args: self._do_remote_create_reminder(reminder_id, location))
 
-        return GLib.Variant('(su)', (reminder_id, now))
+        return GLib.Variant('(st)', (reminder_id, now))
 
     def update_reminder(self, app_id: str, now = None, save = True, **kwargs):
         reminder_id = str(kwargs['id'])
@@ -1416,7 +1413,7 @@ class Reminders():
 
         GLib.idle_add(lambda *args: self._do_remote_update_reminder(reminder_id, location, old_user_id, old_list_uid, old_uid, updating, old_list_id, save))
 
-        return GLib.Variant('(u)', (now,))
+        return GLib.Variant('(t)', (now,))
 
     def update_reminderv(self, app_id: str, reminders: list):
         now = floor(time())
@@ -1451,7 +1448,7 @@ class Reminders():
 
         self._save_reminders()
 
-        return GLib.Variant('(asu)', (updated_ids, now))
+        return GLib.Variant('(ast)', (updated_ids, now))
 
     def get_reminders_in_list(self, list_id: str):
         array = []
@@ -1463,8 +1460,8 @@ class Reminders():
                 'id': GLib.Variant('s', reminder_id),
                 'title': GLib.Variant('s', reminder['title']),
                 'description': GLib.Variant('s', reminder['description']),
-                'due-date': GLib.Variant('u', reminder['due-date']),
-                'timestamp': GLib.Variant('u', reminder['timestamp']),
+                'due-date': GLib.Variant('t', reminder['due-date']),
+                'timestamp': GLib.Variant('t', reminder['timestamp']),
                 'shown': GLib.Variant('b', reminder['shown']),
                 'completed': GLib.Variant('b', reminder['completed']),
                 'important': GLib.Variant('b', reminder['important']),
@@ -1472,10 +1469,10 @@ class Reminders():
                 'repeat-frequency': GLib.Variant('q', reminder['repeat-frequency']),
                 'repeat-days': GLib.Variant('q', reminder['repeat-days']),
                 'repeat-times': GLib.Variant('n', reminder['repeat-times']),
-                'repeat-until': GLib.Variant('u', reminder['repeat-until']),
-                'created-timestamp': GLib.Variant('u', reminder['created-timestamp']),
-                'updated-timestamp': GLib.Variant('u', reminder['updated-timestamp']),
-                'completed-date': GLib.Variant('u', reminder['completed-date']),
+                'repeat-until': GLib.Variant('t', reminder['repeat-until']),
+                'created-timestamp': GLib.Variant('t', reminder['created-timestamp']),
+                'updated-timestamp': GLib.Variant('t', reminder['updated-timestamp']),
+                'completed-date': GLib.Variant('t', reminder['completed-date']),
                 'list-id': GLib.Variant('s', reminder['list-id'])
             })
 
@@ -1493,8 +1490,8 @@ class Reminders():
                 'id': GLib.Variant('s', reminder_id),
                 'title': GLib.Variant('s', reminder['title']),
                 'description': GLib.Variant('s', reminder['description']),
-                'due-date': GLib.Variant('u', reminder['due-date']),
-                'timestamp': GLib.Variant('u', reminder['timestamp']),
+                'due-date': GLib.Variant('t', reminder['due-date']),
+                'timestamp': GLib.Variant('t', reminder['timestamp']),
                 'shown': GLib.Variant('b', reminder['shown']),
                 'completed': GLib.Variant('b', reminder['completed']),
                 'important': GLib.Variant('b', reminder['important']),
@@ -1502,10 +1499,10 @@ class Reminders():
                 'repeat-frequency': GLib.Variant('q', reminder['repeat-frequency']),
                 'repeat-days': GLib.Variant('q', reminder['repeat-days']),
                 'repeat-times': GLib.Variant('n', reminder['repeat-times']),
-                'repeat-until': GLib.Variant('u', reminder['repeat-until']),
-                'created-timestamp': GLib.Variant('u', reminder['created-timestamp']),
-                'updated-timestamp': GLib.Variant('u', reminder['updated-timestamp']),
-                'completed-date': GLib.Variant('u', reminder['completed-date']),
+                'repeat-until': GLib.Variant('t', reminder['repeat-until']),
+                'created-timestamp': GLib.Variant('t', reminder['created-timestamp']),
+                'updated-timestamp': GLib.Variant('t', reminder['updated-timestamp']),
+                'completed-date': GLib.Variant('t', reminder['completed-date']),
                 'list-id': GLib.Variant('s', reminder['list-id'])
             })
 
@@ -1522,8 +1519,8 @@ class Reminders():
             dictionary[reminder_id] = {
                 'title': GLib.Variant('s', reminder['title']),
                 'description': GLib.Variant('s', reminder['description']),
-                'due-date': GLib.Variant('u', reminder['due-date']),
-                'timestamp': GLib.Variant('u', reminder['timestamp']),
+                'due-date': GLib.Variant('t', reminder['due-date']),
+                'timestamp': GLib.Variant('t', reminder['timestamp']),
                 'shown': GLib.Variant('b', reminder['shown']),
                 'completed': GLib.Variant('b', reminder['completed']),
                 'important': GLib.Variant('b', reminder['important']),
@@ -1531,10 +1528,10 @@ class Reminders():
                 'repeat-frequency': GLib.Variant('q', reminder['repeat-frequency']),
                 'repeat-days': GLib.Variant('q', reminder['repeat-days']),
                 'repeat-times': GLib.Variant('n', reminder['repeat-times']),
-                'repeat-until': GLib.Variant('u', reminder['repeat-until']),
-                'created-timestamp': GLib.Variant('u', reminder['created-timestamp']),
-                'updated-timestamp': GLib.Variant('u', reminder['updated-timestamp']),
-                'completed-date': GLib.Variant('u', reminder['completed-date']),
+                'repeat-until': GLib.Variant('t', reminder['repeat-until']),
+                'created-timestamp': GLib.Variant('t', reminder['created-timestamp']),
+                'updated-timestamp': GLib.Variant('t', reminder['updated-timestamp']),
+                'completed-date': GLib.Variant('t', reminder['completed-date']),
                 'list-id': GLib.Variant('s', reminder['list-id'])
             }
 

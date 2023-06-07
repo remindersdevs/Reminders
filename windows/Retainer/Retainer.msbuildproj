@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
+  
+ This Source Code Form is subject to the terms of the Mozilla Public
+ License, v. 2.0. If a copy of the MPL was not distributed with this
+ file, You can obtain one at https://mozilla.org/MPL/2.0/.
+-->
+<Project Sdk="Microsoft.Build.NoTargets/3.7.0">
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Devel</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+		<TargetFramework>net6.0-windows</TargetFramework>
+        <ProjectGuid>3782b125-7cee-4c7e-b750-f00f01f907d1</ProjectGuid>
+        <Configurations>Devel;Release</Configurations>
+        <Platforms>x86;x64;ARM64</Platforms>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" />
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'" />
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Devel|ARM64'" />
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Devel|x64'" />
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Devel|x86'" />
+
+    <ItemGroup>
+        <Content Include="..\..\build\$(Configuration)\$(Platform)\**">
+            <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <Target Name="BuildApp" BeforeTargets="AfterBuild">
+        <PropertyGroup>
+            <PowerShellExe Condition=" '$(PowerShellExe)'=='' ">%WINDIR%\System32\WindowsPowerShell\v1.0\powershell.exe</PowerShellExe>
+            <MSYSRoot Condition=" '$(MSYSRoot)'=='' ">%SystemDrive%\msys64</MSYSRoot>
+            <PSScript>.\build_windows.ps1 -arches $(Platform) -root $(MSYSRoot) -configuration $(Configuration)</PSScript>
+        </PropertyGroup>
+        <Exec Command="$(PowerShellExe) -NonInteractive -executionpolicy Unrestricted -command &quot;&amp; { $(PSScript) } &quot;" ContinueOnError="True" WorkingDirectory="$(MSBuildProjectDirectory)" />
+    </Target>
+</Project>

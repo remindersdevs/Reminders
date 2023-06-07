@@ -1,17 +1,9 @@
 # main_window.py
 # Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
 #
-# This program is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
-# Foundation, either version 3 of the License, or (at your option) any later
-# version.
-#
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of  MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# this program.  If not, see <http://www.gnu.org/licenses/>.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 import datetime
 
@@ -21,12 +13,12 @@ require_version('Adw', '1')
 
 from gi.repository import Gtk, Adw, GLib, Gio, GObject, Gdk
 
-from reminders import info
-from reminders.browser.reminder import Reminder
-from reminders.browser.calendar import Calendar
-from reminders.browser.edit_lists_window import EditListsWindow
-from reminders.browser.reminder_edit_window import ReminderEditWindow
-from reminders.browser.move_reminders_window import MoveRemindersWindow
+from retainer import info
+from retainer.browser.reminder import Reminder
+from retainer.browser.calendar import Calendar
+from retainer.browser.edit_lists_window import EditListsWindow
+from retainer.browser.reminder_edit_page import ReminderEditPage
+from retainer.browser.move_reminders_window import MoveRemindersWindow
 from time import time, strftime
 from logging import getLogger
 from gettext import gettext as _
@@ -35,7 +27,9 @@ from math import floor, ceil
 
 logger = getLogger(info.app_executable)
 
-@Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/task_list_row.ui')
+UI = 'main_window_win32' if info.on_windows else 'main_window'
+
+@Gtk.Template(resource_path='/io/github/retainerdevs/Retainer/ui/task_list_row.ui')
 class TaskListRow(Gtk.ListBoxRow):
     __gtype_name__ = 'TaskListRow'
     label = Gtk.Template.Child()
@@ -57,11 +51,16 @@ class TaskListRow(Gtk.ListBoxRow):
         self.count_label.set_visible(count != 0)
         self.count_label.set_label(str(count))
 
-@Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/main_window.ui')
-class MainWindow(Adw.ApplicationWindow):
+
+@Gtk.Template(resource_path=f'/io/github/retainerdevs/Retainer/ui/{UI}.ui')
+class MainWindow(Gtk.ApplicationWindow):
     '''Main application Window'''
     __gtype_name__ = 'MainWindow'
 
+    refresh_button = Gtk.Template.Child()
+    search_bar = Gtk.Template.Child()
+    leaflet = Gtk.Template.Child()
+    main = Gtk.Template.Child()
     page_label = Gtk.Template.Child()
     page_sub_label = Gtk.Template.Child()
     app_menu_button = Gtk.Template.Child()
@@ -73,13 +72,12 @@ class MainWindow(Adw.ApplicationWindow):
     upcoming_row = Gtk.Template.Child()
     past_row = Gtk.Template.Child()
     completed_row = Gtk.Template.Child()
+    sort_button_box = Gtk.Template.Child()
     sort_button = Gtk.Template.Child()
     flap = Gtk.Template.Child()
     flap_button_revealer = Gtk.Template.Child()
-    search_revealer = Gtk.Template.Child()
     search_entry = Gtk.Template.Child()
     task_lists_list = Gtk.Template.Child()
-    label_revealer = Gtk.Template.Child()
     spinner = Gtk.Template.Child()
     add_reminder_revealer = Gtk.Template.Child()
     multiple_select_revealer = Gtk.Template.Child()
@@ -108,11 +106,11 @@ class MainWindow(Adw.ApplicationWindow):
         self.set_title(info.app_name)
         self.set_icon_name(info.app_id)
         self.dropdown_connection = None
-        self.reminder_edit_win = None
         self.edit_lists_window = None
         self.expanded = None
         self.last_selected_row = None
         self.selected = None
+        self.reminder_edit_page = None
 
         self.row_filter_pairs = (
             (self.all_row, self.all_filter, self.all_count_label),
@@ -131,11 +129,10 @@ class MainWindow(Adw.ApplicationWindow):
         self.create_action('upcoming', lambda *args: self.upcoming_reminders())
         self.create_action('past', lambda *args: self.past_reminders())
         self.create_action('completed', lambda *args: self.completed_reminders())
-        self.create_action('search', lambda *args: self.search_revealer.set_reveal_child(True), accels=['<Ctrl>f'])
+        self.create_action('search', lambda *args: self.search_bar.set_search_mode(True), accels=['<Ctrl>f'])
         self.create_action('edit-task-lists', lambda *args: self.edit_lists(), accels=['<Ctrl>l'])
         self.create_action('new-reminder', lambda *args: self.new_reminder(), accels=['<Ctrl>n'])
         self.create_action('select-all', lambda *args: self.select_all(), accels=['<Ctrl>a'])
-        self.search_entry.connect('stop-search', lambda *args: self.search_revealer.set_reveal_child(False))
         self.settings_create_action('sort')
         self.settings_create_action('descending-sort')
         self.settings_create_action('selected-list')
@@ -170,15 +167,20 @@ class MainWindow(Adw.ApplicationWindow):
         self.set_synced_ids()
         self.set_task_lists()
 
+        self.reminder_edit_page = ReminderEditPage(self, self.app)
+        self.edit_leaflet_page = self.leaflet.append(self.reminder_edit_page)
+
         reminders = self.app.run_service_method('GetReminders', None).unpack()[0]
         self.unpack_reminders(reminders)
 
         self.reminders_list.connect('selected-rows-changed', self.selected_changed)
 
         key_pressed = Gtk.EventControllerKey()
-        key_pressed.connect('key-released', self.key_released)
+        key_pressed.connect('key-pressed', self.key_pressed)
         self.add_controller(key_pressed)
         self.setup_dnd()
+
+        self.connect('close-request', self.on_close)
 
         self.task_lists_list.set_sort_func(self.task_lists_sort_func)
         self.app.settings.connect('changed::time-format', lambda *args: self.set_time_format())
@@ -193,6 +195,26 @@ class MainWindow(Adw.ApplicationWindow):
     @time_format.setter
     def time_format(self, value):
         self._time_format = value
+
+    def on_close(self, window):
+        if self.reminder_edit_page.check_changed(self.reminder_edit_page.get_options()):
+            confirm_dialog = Adw.MessageDialog(
+                transient_for=self,
+                heading=_('You have unsaved changes'),
+                body=_('Are you sure you want to close the window?'),
+            )
+            confirm_dialog.add_response('cancel', _('Cancel'))
+            confirm_dialog.add_response('yes', _('Yes'))
+            confirm_dialog.set_response_appearance('yes', Adw.ResponseAppearance.DESTRUCTIVE)
+            confirm_dialog.set_default_response('cancel')
+            confirm_dialog.set_close_response('cancel')
+            confirm_dialog.connect('response::yes', lambda *args: self.destroy())
+
+            confirm_dialog.present()
+        else:
+            self.destroy()
+
+        return True
 
     def invalidate_filter(self):
         self.reminders_list.invalidate_filter()
@@ -220,6 +242,32 @@ class MainWindow(Adw.ApplicationWindow):
                     if result:
                         count += 1
             row.set_count(count)
+
+    def remove_reminder(self, reminder, remove_backend=True):
+        if reminder.id is not None:
+            if remove_backend:
+                self.app.run_service_method(
+                    'RemoveReminder',
+                    GLib.Variant('(ss)', (info.app_id, reminder.id))
+                )
+            if reminder.id in self.reminder_lookup_dict:
+                self.reminder_lookup_dict.pop(reminder.id)
+        if reminder is self.reminder_edit_page.reminder:
+            self.reminder_edit_page.unfocus(False)
+        self.reminders_list.remove(reminder)
+
+    def remove_reminder_id(self, reminder_id, remove_backend=True):
+        if remove_backend:
+            self.app.run_service_method(
+                'RemoveReminder',
+                GLib.Variant('(ss)', (info.app_id, reminder_id))
+            )
+        if reminder_id in self.reminder_lookup_dict:
+            reminder = self.reminder_lookup_dict[reminder_id]
+            if reminder is self.reminder_edit_page.reminder:
+                self.reminder_edit_page.unfocus(False)
+            self.reminders_list.remove(reminder)
+            self.reminder_lookup_dict.pop(reminder_id)
 
     def setup_dnd(self):
         drop_target = Gtk.DropTarget.new(GObject.TYPE_STRV, Gdk.DragAction.MOVE)
@@ -281,7 +329,7 @@ class MainWindow(Adw.ApplicationWindow):
                     'repeat-frequency': GLib.Variant('q', opts['repeat-frequency']),
                     'repeat-days': GLib.Variant('q', opts['repeat-days']),
                     'repeat-times': GLib.Variant('n', opts['repeat-times']),
-                    'repeat-until': GLib.Variant('u', opts['repeat-until']),
+                    'repeat-until': GLib.Variant('t', opts['repeat-until']),
                     'list-id': GLib.Variant('s', opts['list-id'])
                 })
             reminder.show()
@@ -313,9 +361,12 @@ class MainWindow(Adw.ApplicationWindow):
         for reminder in self.reminder_lookup_dict.values():
             reminder.set_time_label()
 
-    def key_released(self, event, keyval, keycode, state):
+    def key_pressed(self, event, keyval, keycode, state):
         if keyval == Gdk.KEY_Escape:
-            self.set_selecting(False)
+            if self.reminders_list.get_property('selection-mode') != Gtk.SelectionMode.NONE:
+                self.set_selecting(False)
+            elif not self.search_entry.has_focus():
+                self.reminder_edit_page.unfocus()
         if keyval == Gdk.KEY_Delete:
             if self.reminders_list.get_property('selection-mode') != Gtk.SelectionMode.NONE:
                 self.selected_remove()
@@ -372,47 +423,12 @@ class MainWindow(Adw.ApplicationWindow):
         self.unimportant_revealer.set_hexpand(self.unimportant_revealer.props.reveal_child)
         self.important_revealer.set_hexpand(self.important_revealer.props.reveal_child)
 
-    def new_edit_win(self, reminder = None):
-        if self.reminder_edit_win is None:
-            self.reminder_edit_win = ReminderEditWindow(self, self.app, reminder)
-            self.reminder_edit_win.connect('close-request', self.close_request_cb)
-            self.reminder_edit_win.present()
-
-            if info.on_windows:
-                self.app.center_win_on_parent(self.reminder_edit_win)
-        else:
-            self.reminder_edit_win.setup(reminder)
-            self.reminder_edit_win.set_visible(True)
-
-    def close_request_cb(self, window = None):
-        if self.reminder_edit_win.check_changed(self.reminder_edit_win.get_options()):
-            confirm_dialog = Adw.MessageDialog(
-                transient_for=self.reminder_edit_win,
-                heading=_('You have unsaved changes'),
-                body=_('Are you sure you want to close the window?'),
-            )
-            confirm_dialog.add_response('cancel', _('Cancel'))
-            confirm_dialog.add_response('yes', _('Yes'))
-            confirm_dialog.set_response_appearance('yes', Adw.ResponseAppearance.DESTRUCTIVE)
-            confirm_dialog.set_default_response('cancel')
-            confirm_dialog.set_close_response('cancel')
-            confirm_dialog.connect('response::yes', lambda *args: self.close_edit_win())
-
-            confirm_dialog.present()
-
-            if info.on_windows:
-                self.app.center_win_on_parent(confirm_dialog)
-        else:
-            self.close_edit_win()
-
-        return True
-
     def close_edit_win(self):
         if info.on_windows:
-            self.reminder_edit_win.destroy()
-            self.reminder_edit_win = None
+            self.reminder_edit_page.destroy()
+            self.reminder_edit_page = None
         else:
-            self.reminder_edit_win.set_visible(False)
+            self.reminder_edit_page.set_visible(False)
 
     def get_repeat_label(self, repeat_type, repeat_frequency, repeat_days, repeat_until, repeat_times):
         repeat_days_flag = info.RepeatDays(repeat_days)
@@ -549,9 +565,6 @@ class MainWindow(Adw.ApplicationWindow):
             self.edit_lists_window = EditListsWindow(self)
 
             self.edit_lists_window.present()
-
-            if info.on_windows:
-                self.app.center_win_on_parent(self.edit_lists_window)
         else:
             self.edit_lists_window.set_visible(True)
 
@@ -793,8 +806,8 @@ class MainWindow(Adw.ApplicationWindow):
                 self.string_list.append(f"{name} ({self.usernames[user_id]})")
             self.task_list_ids.append(list_id)
 
-        if self.reminder_edit_win is not None:
-            self.reminder_edit_win.set_task_list_dropdown()
+        if self.reminder_edit_page is not None:
+            self.reminder_edit_page.set_task_list_dropdown()
 
         self.move_revealer.set_reveal_child(len(self.task_list_ids) > 1)
         self.move_revealer.set_hexpand(self.move_revealer.props.reveal_child)
@@ -928,9 +941,14 @@ class MainWindow(Adw.ApplicationWindow):
             return task_list == selected_list_id
 
     def no_filter(self, reminder):
-        reminder.set_sensitive(True)
-        reminder.set_no_strikethrough(True)
-        return True
+        retval = self.task_list_filter(reminder)
+        if retval:
+            reminder.set_no_strikethrough(True)
+        reminder.set_sensitive(retval)
+        if not retval:
+            self.reminders_list.unselect_row(reminder)
+            reminder.set_selectable(False)
+        return retval
 
     def all_filter(self, reminder, list_id = None, just_filter = False):
         retval = self.task_list_filter(reminder, list_id)
@@ -1106,14 +1124,13 @@ class MainWindow(Adw.ApplicationWindow):
 
     def stop_search(self):
         self.search_entry.set_text('')
-        self.flap.set_fold_policy(Adw.FlapFoldPolicy.AUTO)
         self.reminders_list.set_placeholder(self.placeholder)
         self.reminders_list.set_sort_func(self.sort_func)
         self.selected.emit('activate')
-        self.label_revealer.set_reveal_child(True)
+        self.sidebar_list.set_sensitive(True)
 
     def search_filter(self, reminder):
-        retval = True
+        retval = self.task_list_filter(reminder)
         text = self.search_entry.get_text().lower()
         words = text.split()
         reminder_text = reminder.options['title'].lower() + ' ' + reminder.options['description'].lower()
@@ -1153,8 +1170,7 @@ class MainWindow(Adw.ApplicationWindow):
 
     def start_search(self):
         self.searching = True
-        self.sort_button.set_sensitive(False)
-
+        self.sort_button_box.set_sensitive(False)
         self.reminders_list.set_placeholder(self.search_placeholder)
         self.reminders_list.set_filter_func(self.search_filter)
         self.reminders_list.set_sort_func(self.search_sort_func)
@@ -1175,9 +1191,7 @@ class MainWindow(Adw.ApplicationWindow):
 
             removed_reminder_ids = results.unpack()[0]
             for reminder_id in removed_reminder_ids:
-                reminder = self.reminder_lookup_dict[reminder_id]
-                self.reminder_lookup_dict.pop(reminder_id)
-                self.reminders_list.remove(reminder)
+                self.remove_reminder_id(reminder_id, False)
         except Exception as error:
             logger.exception(error)
 
@@ -1249,19 +1263,18 @@ class MainWindow(Adw.ApplicationWindow):
 
     @Gtk.Template.Callback()
     def show_flap_button(self, flap = None, data = None):
-        if self.search_revealer.get_reveal_child():
+        if self.search_bar.get_search_mode():
             self.flap_button_revealer.set_reveal_child(False)
         else:
             self.flap_button_revealer.set_reveal_child(self.flap.get_folded())
 
     @Gtk.Template.Callback()
     def search_enabled_cb(self, entry, data):
-        self.show_flap_button()
-        if self.search_revealer.get_reveal_child():
+        if self.search_bar.get_search_mode():
             self.search_changed_cb()
             self.search_entry.grab_focus()
-            self.flap.set_fold_policy(Adw.FlapFoldPolicy.ALWAYS)
-            self.flap.set_reveal_flap(False)
+            if self.flap.get_folded():
+                self.flap.set_reveal_flap(False)
         else:
             self.stop_search()
 
@@ -1274,21 +1287,21 @@ class MainWindow(Adw.ApplicationWindow):
             self.reminders_list.invalidate_filter()
             self.reminders_list.invalidate_sort()
             self.page_label.set_label(_(f"Searching '{text}'"))
-            self.label_revealer.set_reveal_child(False)
+            self.sidebar_list.set_sensitive(False)
         else:
             self.searching = False
-            self.sort_button.set_sensitive(True)
+            self.sort_button_box.set_sensitive(True)
             self.reminders_list.set_filter_func(self.no_filter)
             self.reminders_list.set_sort_func(self.sort_func)
             self.page_label.set_label(_('Start typing to search'))
-            self.label_revealer.set_reveal_child(False)
+            self.sidebar_list.set_sensitive(False)
 
     @Gtk.Template.Callback()
     def new_reminder(self, button = None):
-        self.search_revealer.set_reveal_child(False)
+        self.search_bar.set_search_mode(False)
         self.selected = self.all_row
         self.selected.emit('activate')
-        self.new_edit_win()
+        self.reminder_edit_page.new_reminder()
 
     @Gtk.Template.Callback()
     def on_cancel(self, btn):
@@ -1310,9 +1323,6 @@ class MainWindow(Adw.ApplicationWindow):
 
         confirm_dialog.present()
 
-        if info.on_windows:
-            self.app.center_win_on_parent(confirm_dialog)
-
     @Gtk.Template.Callback()
     def selected_incomplete(self, btn):
         confirm_dialog = Adw.MessageDialog(
@@ -1328,9 +1338,6 @@ class MainWindow(Adw.ApplicationWindow):
         confirm_dialog.connect('response::yes', lambda *args: self.selected_change_completed(False))
 
         confirm_dialog.present()
-
-        if info.on_windows:
-            self.app.center_win_on_parent(confirm_dialog)
 
     @Gtk.Template.Callback()
     def move_selected(self, btn):
@@ -1352,9 +1359,6 @@ class MainWindow(Adw.ApplicationWindow):
 
         confirm_dialog.present()
 
-        if info.on_windows:
-            self.app.center_win_on_parent(confirm_dialog)
-
     @Gtk.Template.Callback()
     def selected_unimportant(self, btn):
         confirm_dialog = Adw.MessageDialog(
@@ -1371,9 +1375,6 @@ class MainWindow(Adw.ApplicationWindow):
 
         confirm_dialog.present()
 
-        if info.on_windows:
-            self.app.center_win_on_parent(confirm_dialog)
-
     @Gtk.Template.Callback()
     def selected_remove(self, btn = None):
         confirm_dialog = Adw.MessageDialog(
@@ -1389,6 +1390,3 @@ class MainWindow(Adw.ApplicationWindow):
         confirm_dialog.connect('response::yes', lambda *args: self.selected_remove_reminders())
 
         confirm_dialog.present()
-
-        if info.on_windows:
-            self.app.center_win_on_parent(confirm_dialog)

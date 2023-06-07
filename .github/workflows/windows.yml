@@ -18,11 +18,7 @@ jobs:
       - uses: msys2/setup-msys2@v2
         with:
           update: true
-      - uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version:
-            7.x
+      - uses: microsoft/setup-msbuild@v1.1
       - name: Build
         run: |
-          dotnet tool install --global wix --version 4.0.0
-          windows/build_windows.ps1 -msi
+          msbuild Retainer.sln -property:Platform=x64 -property:Configuration=Devel

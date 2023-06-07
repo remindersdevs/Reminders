@@ -14,7 +14,7 @@ source_files = files(
   'move_reminders_window.py',
   'preferences.py',
   'reminder.py',
-  'reminder_edit_window.py',
+  'reminder_edit_page.py',
   'shortcuts_window.py'
 )
 
@@ -24,7 +24,7 @@ install_data(
 )
 
 configure_file(
-    input: 'reminders.py',
+    input: 'retainer.py',
     output: app_file,
     configuration: conf,
     install: true,

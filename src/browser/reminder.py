@@ -1,24 +1,16 @@
 # reminder.py
 # Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
 #
-# This program is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
-# Foundation, either version 3 of the License, or (at your option) any later
-# version.
-#
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of  MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# this program.  If not, see <http://www.gnu.org/licenses/>.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 import datetime
 
 from gi.repository import Gtk, Adw, GLib, GObject, Gdk
 
-from reminders import info
-from reminders.browser.dnd_reminder import DNDReminder
+from retainer import info
+from retainer.browser.dnd_reminder import DNDReminder
 from time import time
 from logging import getLogger
 from gettext import gettext as _
@@ -26,7 +18,7 @@ from math import floor
 
 logger = getLogger(info.app_executable)
 
-@Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/reminder.ui')
+@Gtk.Template(resource_path='/io/github/retainerdevs/Retainer/ui/reminder.ui')
 class Reminder(Adw.ExpanderRow):
     '''Ui for each reminder'''
     __gtype_name__ = 'Reminder'
@@ -228,7 +220,7 @@ class Reminder(Adw.ExpanderRow):
                 self.set_text()
 
     def update(self, options):
-        edit_win = self.win.reminder_edit_win
+        edit_win = self.win.reminder_edit_page
         if edit_win is not None and edit_win.id == self.id:
             if self.options['title'] != options['title']:
                 edit_win.title_entry.set_text(options['title'])
@@ -277,7 +269,7 @@ class Reminder(Adw.ExpanderRow):
         if self.options['repeat-times'] != times:
             self.options['repeat-times'] = times
             self.set_repeat_label()
-        edit_win = self.win.reminder_edit_win
+        edit_win = self.win.reminder_edit_page
         if edit_win is not None and edit_win.id == self.id:
             edit_win.set_repeat_times(times)
 
@@ -356,14 +348,7 @@ class Reminder(Adw.ExpanderRow):
 
     def remove(self):
         try:
-            if self.id is not None:
-                self.app.run_service_method(
-                    'RemoveReminder',
-                    GLib.Variant('(ss)', (info.app_id, self.id))
-                )
-                if self.id in self.win.reminder_lookup_dict:
-                    self.win.reminder_lookup_dict.pop(self.id)
-            self.win.reminders_list.remove(self)
+            self.win.remove_reminder(self)
             self.win.invalidate_filter()
         except Exception as error:
             logger.exception(error)
@@ -393,6 +378,8 @@ class Reminder(Adw.ExpanderRow):
             if self.win.expanded is not None:
                 self.win.expanded.set_expanded(False)
             self.win.expanded = self
+            if self.win.reminder_edit_page.reminder is not self:
+                self.win.reminder_edit_page.setup(self, force=False)
         elif self.win.expanded == self:
                 self.win.expanded = None
 
@@ -416,9 +403,8 @@ class Reminder(Adw.ExpanderRow):
         confirm_dialog.connect('response::remove', lambda *args: self.remove())
         confirm_dialog.present()
 
-        if info.on_windows:
-            self.app.center_win_on_parent(confirm_dialog)
-
     @Gtk.Template.Callback()
     def edit(self, button = None):
-        self.win.new_edit_win(self)
+        if self.win.reminder_edit_page.reminder is not self:
+            self.win.reminder_edit_page.setup(self)
+        self.win.reminder_edit_page.focus()

@@ -1,23 +1,19 @@
 # export_lists_window.py
 # Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
 #
-# This program is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
-# Foundation, either version 3 of the License, or (at your option) any later
-# version.
-#
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of  MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# this program.  If not, see <http://www.gnu.org/licenses/>.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 from gi.repository import Gtk, Adw, GLib, Gio
 from gettext import gettext as _
 
-from reminders import info
+from retainer import info
 from logging import getLogger
+
+if info.on_windows:
+    from winsdk.windows.system import Launcher
+    from winsdk.windows.foundation import Uri
 
 logger = getLogger(info.app_executable)
 
@@ -28,11 +24,12 @@ class ListRow(Adw.ActionRow):
         self.add_suffix(self.check)
         self.connect('activated', lambda *args: self.check.set_active(not self.check.get_active()))
 
-@Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/export_lists_window.ui')
-class ExportListsWindow(Adw.Window):
+@Gtk.Template(resource_path='/io/github/retainerdevs/Retainer/ui/export_lists_window.ui')
+class ExportListsWindow(Gtk.Window):
     __gtype_name__ = 'ExportListsWindow'
 
     lists = Gtk.Template.Child()
+    main = Gtk.Template.Child()
 
     def __init__(self, app, folder, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -52,13 +49,19 @@ class ExportListsWindow(Adw.Window):
         self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>s'), Gtk.CallbackAction.new(lambda *args: self.on_save())))
         self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: self.close())))
 
+        if info.on_windows:
+            self.set_titlebar(None)
+            sep = Gtk.Separator()
+            sep.add_css_class('titlebar-separator')
+            self.main.prepend(sep)
+
         self.present()
 
-        if info.on_windows:
-            self.app.center_win_on_parent(self)
-
     def launch_folder(self, uri):
-        Gio.AppInfo.launch_default_for_uri(uri, None)
+        if info.on_windows:
+            Launcher.launch_uri_async(Uri(uri))
+        else:
+            Gio.AppInfo.launch_default_for_uri(uri, None)
         self.close()
 
     @Gtk.Template.Callback()
@@ -89,8 +92,5 @@ class ExportListsWindow(Adw.Window):
                 dialog.connect('response::yes', lambda *args: self.launch_folder(self.folder.get_uri()))
 
                 dialog.present()
-
-                if info.on_windows:
-                    self.app.center_win_on_parent(dialog)
             except Exception as error:
                 logger.exception(error)

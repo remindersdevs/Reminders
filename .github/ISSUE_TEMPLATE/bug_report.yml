@@ -1,5 +1,5 @@
 name: Bug Report
-description: Help improve Reminders by filing a bug report
+description: Help improve Retainer by filing a bug report
 title: "[Bug]: "
 labels: ["bug"]
 body:
@@ -8,26 +8,27 @@ body:
       value: |
         ## System information
 
-        Make sure you have tested the Flatpak release of Reminders through Flathub before opening a bug report. If the bug is not present in the Flatpak open the report with the package maintainer.
+        If on Linux, make sure you have tested the Flatpak release of Retainer through Flathub before opening a bug report. If the bug is not present in the Flatpak open the report with the package maintainer.
 
   - type: dropdown
     id: package
     attributes:
       label: Package
       description: |
-        Where did you install Reminders from?
+        Where did you install Retainer from?
       options:
         - Flathub
         - Flathub Beta
+        - Windows Store
     validations:
       required: true
 
   - type: input
     id: distro
     attributes:
-      label: Distribution
+      label: OS
       description: What distribution are you currently using?
-      placeholder: Fedora 37, Ubuntu 22.04, Arch Linux...
+      placeholder: Fedora 37, Ubuntu 22.04, Windows 10...
     validations:
       required: true
 
@@ -63,7 +64,9 @@ body:
     attributes:
       label: Logs
       description: |
-        If you saw an error dialog, click view error and copy the text here. Otherwise you can run something like `sudo journalctl --boot | grep remembrance | grep -i error` in the terminal to see the errors and copy that here.
+        If you can access the about page, you can also view logs by going to About > Troubleshooting > Debugging Information.
+        On Windows you can find these logs by pressing `Windows Key + r` and entering `%LOCALAPPDATA%`, and then navigating to `retainerdevs.Retainer_8mcfc8dhbzctc\LocalState\retainer`.
+        On Linux the logs are at `~/.var/app/io.github.retainerdevs.Retainer/data/retainer`.
       render: shell
     validations:
       required: false

@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+# update_potfile_msys.sh
+# Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 set -e
 set -x
@@ -23,4 +29,4 @@ pacman --noconfirm -S --needed \
 
 cd "${SCRIPT_DIR}/../"
 
-/${PREFIX}/bin/xgettext -f "${SCRIPT_DIR}/POTFILES" -o "${SCRIPT_DIR}/reminders.pot" --keyword=_ --add-comments=Translators --from-code=UTF-8 --package-name=reminders
+/${PREFIX}/bin/xgettext -f "${SCRIPT_DIR}/POTFILES" -o "${SCRIPT_DIR}/retainer.pot" --keyword=_ --add-comments=Translators --from-code=UTF-8 --package-name=retainer

@@ -1,6 +1,6 @@
 if not on_windows
     appstream_file = configure_file(
-        input: 'io.github.remindersdevs.Reminders.metainfo.xml.in.in',
+        input: 'io.github.retainerdevs.Retainer.metainfo.xml.in.in',
         output: '@0@.metainfo.xml.in'.format(app_id),
         configuration: conf,
     )
@@ -26,7 +26,7 @@ if not on_windows
 endif
 
 configure_file(
-    input: 'io.github.remindersdevs.Reminders.gschema.xml.in',
+    input: 'io.github.retainerdevs.Retainer.gschema.xml.in',
     output: '@0@.gschema.xml'.format(app_id),
     install: true,
     install_dir: join_paths(get_option('datadir'), 'glib-2.0' / 'schemas'),

@@ -1,0 +1,556 @@
+From af8fba3068f5b7726a28281647ca050a5d6994fd Mon Sep 17 00:00:00 2001
+From: dgsasha <dgsasha04@gmail.com>
+Date: Sat, 27 May 2023 21:21:34 -0400
+Subject: [PATCH 1/4] win32: Improve appearance of titlebars in Windows 10+
+
+Adds GDK_WIN32_IMMERSIVE_TITLEBAR and GDK_WIN32_TRANSPARENT_TITLEBAR environment
+variables, and support for immersive dark mode.
+---
+ gdk/gdksurfacecssnode.c        | 148 ++++++++++++++++++++++++
+ gdk/gdksurfacecssnodeprivate.h |  58 ++++++++++
+ gdk/meson.build                |   2 +
+ gdk/win32/gdksurface-win32.c   | 205 ++++++++++++++++++++++++++++++++-
+ gdk/win32/gdksurface-win32.h   |  11 ++
+ 5 files changed, 423 insertions(+), 1 deletion(-)
+ create mode 100644 gdk/gdksurfacecssnode.c
+ create mode 100644 gdk/gdksurfacecssnodeprivate.h
+
+diff --git a/gdk/gdksurfacecssnode.c b/gdk/gdksurfacecssnode.c
+new file mode 100644
+index 0000000000..470f6a47c1
+--- /dev/null
++++ b/gdk/gdksurfacecssnode.c
+@@ -0,0 +1,148 @@
++/* GTK - The GIMP Toolkit
++ * Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
++ * Copyright (C) 2014 Benjamin Otte <otte@gnome.org>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library. If not, see <http://www.gnu.org/licenses/>.
++ */
++
++#include "config.h"
++
++#include "gdksurfacecssnodeprivate.h"
++
++#include "gtk/gtkcssanimatedstyleprivate.h"
++#include "gtk/gtksettingsprivate.h"
++
++G_DEFINE_TYPE (GdkSurfaceCssNode, gdk_surface_css_node, GTK_TYPE_CSS_NODE)
++
++static GdkFrameClock *
++gdk_surface_css_node_get_frame_clock (GtkCssNode *node)
++{
++  GdkSurfaceCssNode *surface_node = GDK_SURFACE_CSS_NODE (node);
++
++  if (surface_node->surface == NULL)
++    return NULL;
++
++  if (!gtk_settings_get_enable_animations (gtk_settings_get_for_display (gdk_surface_get_display (surface_node->surface))))
++    return NULL;
++
++  return gdk_surface_get_frame_clock (surface_node->surface);
++}
++
++
++static void
++gdk_surface_css_node_queue_callback (GdkFrameClock  *frame_clock,
++                                     gpointer       user_data)
++{
++  GtkCssNode *node = user_data;
++  gtk_css_node_invalidate_frame_clock (node, TRUE);
++  gtk_css_node_validate (node);
++}
++
++static void
++gdk_surface_css_node_queue_validate (GtkCssNode *node)
++{
++  GdkSurfaceCssNode *surface_node = GDK_SURFACE_CSS_NODE (node);
++  GdkFrameClock *frame_clock = gdk_surface_css_node_get_frame_clock (node);
++
++  if (frame_clock)
++    {
++      surface_node->validate_cb_id = g_signal_connect (frame_clock, "update",
++                                                       G_CALLBACK (gdk_surface_css_node_queue_callback),
++                                                       node);
++      gdk_frame_clock_begin_updating (frame_clock);
++    }
++  else
++    {
++      gtk_css_node_validate (node);
++    }
++}
++
++static void
++gdk_surface_css_node_dequeue_validate (GtkCssNode *node)
++{
++  GdkSurfaceCssNode *surface_node = GDK_SURFACE_CSS_NODE (node);
++  GdkFrameClock *frame_clock = gdk_surface_css_node_get_frame_clock (node);
++
++  if (frame_clock && surface_node->validate_cb_id != 0)
++    {
++      g_signal_handler_disconnect (frame_clock, surface_node->validate_cb_id);
++      surface_node->validate_cb_id = 0;
++    }
++}
++
++
++static GtkStyleProvider *
++gdk_surface_css_node_get_style_provider (GtkCssNode *node)
++{
++  GdkSurfaceCssNode *surface_node = GDK_SURFACE_CSS_NODE (node);
++  GtkStyleCascade *cascade;
++
++  if (surface_node->surface == NULL)
++    return NULL;
++
++  cascade = _gtk_settings_get_style_cascade (gtk_settings_get_for_display (gdk_surface_get_display (surface_node->surface)),
++                                             gdk_surface_get_scale_factor (surface_node->surface));
++  return GTK_STYLE_PROVIDER (cascade);
++}
++
++static void
++gdk_surface_css_node_class_init (GdkSurfaceCssNodeClass *klass)
++{
++  GtkCssNodeClass *node_class = GTK_CSS_NODE_CLASS (klass);
++
++  node_class->queue_validate = gdk_surface_css_node_queue_validate;
++  node_class->dequeue_validate = gdk_surface_css_node_dequeue_validate;
++  node_class->get_style_provider = gdk_surface_css_node_get_style_provider;
++  node_class->get_frame_clock = gdk_surface_css_node_get_frame_clock;
++}
++
++GtkCssNode *
++gdk_surface_css_node_new (GdkSurface *surface)
++{
++  GdkSurfaceCssNode *result;
++
++  g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
++
++  result = g_object_new (GDK_TYPE_SURFACE_CSS_NODE, NULL);
++  result->surface = surface;
++
++  return GTK_CSS_NODE (result);
++}
++
++static void
++gdk_surface_css_node_init (GdkSurfaceCssNode *node)
++{
++  node->validate_cb_id = 0;
++}
++
++void
++gdk_surface_css_node_surface_destroyed (GdkSurfaceCssNode *node)
++{
++  g_return_if_fail (GDK_IS_SURFACE_CSS_NODE (node));
++  g_return_if_fail (node->surface != NULL);
++
++  node->surface = NULL;
++  /* Contents of this node are now undefined.
++   * So we don't clear the style or anything.
++   */
++}
++
++GdkSurface *
++gdk_surface_css_node_get_surface (GdkSurfaceCssNode *node)
++{
++  g_return_val_if_fail (GDK_IS_SURFACE_CSS_NODE (node), NULL);
++
++  return node->surface;
++}
++
+diff --git a/gdk/gdksurfacecssnodeprivate.h b/gdk/gdksurfacecssnodeprivate.h
+new file mode 100644
+index 0000000000..b236e4b5e7
+--- /dev/null
++++ b/gdk/gdksurfacecssnodeprivate.h
+@@ -0,0 +1,58 @@
++/* GTK - The GIMP Toolkit
++ * Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
++ * Copyright (C) 2014 Benjamin Otte <otte@gnome.org>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library. If not, see <http://www.gnu.org/licenses/>.
++ */
++
++#pragma once
++
++#include "gtk/gtkcssnodeprivate.h"
++#include "gdk/gdksurface.h"
++
++G_BEGIN_DECLS
++
++#define GDK_TYPE_SURFACE_CSS_NODE           (gdk_surface_css_node_get_type ())
++#define GDK_SURFACE_CSS_NODE(obj)           (G_TYPE_CHECK_INSTANCE_CAST (obj, GDK_TYPE_SURFACE_CSS_NODE, GdkSurfaceCssNode))
++#define GDK_SURFACE_CSS_NODE_CLASS(cls)     (G_TYPE_CHECK_CLASS_CAST (cls, GDK_TYPE_SURFACE_CSS_NODE, GdkSurfaceCssNodeClass))
++#define GDK_IS_SURFACE_CSS_NODE(obj)        (G_TYPE_CHECK_INSTANCE_TYPE (obj, GDK_TYPE_SURFACE_CSS_NODE))
++#define GDK_IS_SURFACE_CSS_NODE_CLASS(obj)  (G_TYPE_CHECK_CLASS_TYPE (obj, GDK_TYPE_SURFACE_CSS_NODE))
++#define GDK_SURFACE_CSS_NODE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SURFACE_CSS_NODE, GdkSurfaceCssNodeClass))
++
++typedef struct _GdkSurfaceCssNode           GdkSurfaceCssNode;
++typedef struct _GdkSurfaceCssNodeClass      GdkSurfaceCssNodeClass;
++
++struct _GdkSurfaceCssNode
++{
++  GtkCssNode node;
++
++  guint validate_cb_id;
++  GdkSurface *surface;
++};
++
++struct _GdkSurfaceCssNodeClass
++{
++  GtkCssNodeClass node_class;
++};
++
++GType                   gdk_surface_css_node_get_type           (void) G_GNUC_CONST;
++
++GtkCssNode *            gdk_surface_css_node_new                (GdkSurface           *surface);
++
++void                    gdk_surface_css_node_surface_destroyed  (GdkSurfaceCssNode    *node);
++
++GdkSurface *            gdk_surface_css_node_get_surface        (GdkSurfaceCssNode    *node);
++
++G_END_DECLS
++
+diff --git a/gdk/meson.build b/gdk/meson.build
+index 3f97ac16fb..3ed4b826b5 100644
+--- a/gdk/meson.build
++++ b/gdk/meson.build
+@@ -46,6 +46,7 @@ gdk_public_sources = files([
+   'gdktexturedownloader.c',
+   'gdkvulkancontext.c',
+   'gdksurface.c',
++  'gdksurfacecssnode.c',
+   'gdkpopuplayout.c',
+   'gdkprofiler.c',
+   'gdkpopup.c',
+@@ -117,6 +118,7 @@ gdk_private_h_sources = files([
+   'gdkhslaprivate.h',
+   'gdkmonitorprivate.h',
+   'gdkseatdefaultprivate.h',
++  'gdksurfacecssnodeprivate.h',
+   'gdktoplevelsizeprivate.h',
+ ])
+ 
+diff --git a/gdk/win32/gdksurface-win32.c b/gdk/win32/gdksurface-win32.c
+index f8fcf9a13b..4666891fd7 100644
+--- a/gdk/win32/gdksurface-win32.c
++++ b/gdk/win32/gdksurface-win32.c
+@@ -41,6 +41,7 @@
+ #include "gdkpopupprivate.h"
+ #include "gdkseatprivate.h"
+ #include "gdksurfaceprivate.h"
++#include "gdksurfacecssnodeprivate.h"
+ #include "gdktoplevelprivate.h"
+ #include "gdkwin32surface.h"
+ #include "gdkwin32cursor.h"
+@@ -51,10 +52,28 @@
+ #include "gdkdevice-win32.h"
+ #include "gdkcairocontext-win32.h"
+ 
++#include "gtk/gtkcsscolorvalueprivate.h"
++#include "gtk/gtksettings.h"
++
+ #include <cairo-win32.h>
+ #include <dwmapi.h>
+ #include <math.h>
+ 
++enum {
++  WIN32_DWMWA_USE_IMMERSIVE_DARK_MODE_BEFORE_20H1 = 19,
++  WIN32_DWMWA_USE_IMMERSIVE_DARK_MODE = 20,
++  WIN32_DWMWA_CAPTION_COLOR = 35,
++  WIN32_DWMWA_SYSTEMBACKDROP_TYPE = 38,
++  WIN32_DWMSBT_AUTO = 0,
++  WIN32_DWMSBT_NONE = 1
++};
++
++enum GET_WINDOW_ATTRIBUTE_RESULT {
++  WA_FAILED,
++  WA_SUCCESS,
++  WA_UNSET
++};
++
+ static void gdk_surface_win32_finalize (GObject *object);
+ static void compute_toplevel_size      (GdkSurface *surface,
+                                         gboolean    update_geometry,
+@@ -311,6 +330,161 @@ _gdk_win32_surface_enable_transparency (GdkSurface *window)
+   return SUCCEEDED (call_result);
+ }
+ 
++static int
++get_immersive_dark_mode (HWND handle, BOOL is_dark)
++{
++  const HRESULT result =
++    SUCCEEDED(DwmGetWindowAttribute (handle, WIN32_DWMWA_USE_IMMERSIVE_DARK_MODE, &is_dark, sizeof (is_dark)))
++    || SUCCEEDED (DwmGetWindowAttribute (handle, WIN32_DWMWA_USE_IMMERSIVE_DARK_MODE_BEFORE_20H1, &is_dark, sizeof (is_dark)));
++
++  if (result == E_INVALIDARG)
++    return WA_UNSET;
++  else if (SUCCEEDED (result))
++    return WA_SUCCESS;
++
++  return WA_FAILED;
++}
++
++static BOOL
++set_immersive_dark_mode(HWND handle, BOOL is_dark)
++{
++  const BOOL success =
++    SUCCEEDED (DwmSetWindowAttribute(handle, WIN32_DWMWA_USE_IMMERSIVE_DARK_MODE, &is_dark, sizeof (is_dark)))
++    || SUCCEEDED (DwmSetWindowAttribute(handle, WIN32_DWMWA_USE_IMMERSIVE_DARK_MODE_BEFORE_20H1, &is_dark, sizeof (is_dark)));
++
++  return success;
++}
++
++static int
++get_titlebar_color (HWND handle, COLORREF colorref)
++{
++  const HRESULT result =
++    DwmGetWindowAttribute (handle, WIN32_DWMWA_CAPTION_COLOR, &colorref, sizeof (colorref));
++
++  if (result == E_INVALIDARG)
++    return WA_UNSET;
++  else if (SUCCEEDED (result))
++    return WA_SUCCESS;
++
++  return WA_FAILED;
++}
++
++static BOOL
++set_titlebar_color (GdkSurface *window, GtkCssStyle *style)
++{
++  if (!GTK_IS_CSS_STYLE (style))
++    return FALSE;
++
++  HWND handle = GDK_SURFACE_HWND (window);
++  GtkCssValue *value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_COLOR);
++
++  if (value == NULL)
++    return FALSE;
++
++  const GdkRGBA *rgba = gtk_css_color_value_get_rgba (value);
++
++  const COLORREF colorref =
++    RGB ((int)(0.5 + CLAMP (rgba->red, 0., 1.) * 255.),
++          (int)(0.5 + CLAMP (rgba->green, 0., 1.) * 255.),
++          (int)(0.5 + CLAMP (rgba->blue, 0., 1.) * 255.));
++
++  return SUCCEEDED (DwmSetWindowAttribute (handle, WIN32_DWMWA_CAPTION_COLOR, &colorref, sizeof (colorref)));
++}
++
++static void
++node_style_changed_cb (GtkCssNode        *node,
++                       GtkCssStyleChange *change,
++                       GdkSurface        *window)
++{
++  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_BACKGROUND))
++    {
++      if (set_titlebar_color (window, gtk_css_style_change_get_new_style (change)))
++        {
++          HWND handle = GDK_SURFACE_HWND (window);
++          SendMessageW (handle, WM_NCPAINT, 0, 0);
++        }
++    }
++}
++
++static void
++theme_changed_cb (GtkCssNode *node,
++                  GParamSpec *pspec,
++                  GdkSurface *window)
++{
++  HWND handle = GDK_SURFACE_HWND (window);
++  gboolean dark_theme_requested;
++
++  g_object_get (gtk_settings_get_for_display (gdk_surface_get_display (window)),
++                "gtk-application-prefer-dark-theme", &dark_theme_requested,
++                NULL);
++
++  if (set_immersive_dark_mode (handle, dark_theme_requested ? TRUE : FALSE))
++    {
++      GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
++      if (impl->headerbar_node != NULL)
++        {
++          gtk_css_node_invalidate_style_provider (impl->headerbar_node);
++        }
++      SendMessageW (handle, WM_NCPAINT, 0, 0);
++    }
++}
++
++void
++_gdk_win32_surface_set_immersive_titlebar (GdkSurface *window)
++{
++  GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
++  HWND handle = GDK_SURFACE_HWND (window);
++  COLORREF color = 0x00000000;
++  const int color_result = get_titlebar_color (handle, color);
++  if (color_result != WA_FAILED || color_result == WA_UNSET)
++    {
++      impl->headerbar_node = gdk_surface_css_node_new (window);
++      gtk_css_node_set_name (impl->headerbar_node, g_quark_from_static_string ("headerbar"));
++      set_titlebar_color (window, gtk_css_node_get_style (impl->headerbar_node));
++      g_signal_connect (impl->headerbar_node, "style-changed",
++                        G_CALLBACK (node_style_changed_cb), window);
++    }
++}
++
++void
++_gdk_win32_surface_set_titlebar_theme_variant (GdkSurface *window)
++{
++  BOOL is_dark = FALSE;
++
++  HWND handle = GDK_SURFACE_HWND (window);
++
++  const int is_dark_result = get_immersive_dark_mode (handle, is_dark);
++
++  if (is_dark_result != WA_FAILED || is_dark_result == WA_UNSET)
++    {
++      GtkSettings *settings = gtk_settings_get_for_display (gdk_surface_get_display (window));
++      g_signal_connect (settings,
++                        "notify::gtk-application-prefer-dark-theme",
++                        G_CALLBACK (theme_changed_cb), window);
++
++      gboolean dark_theme_requested;
++
++      g_object_get (settings,
++                    "gtk-application-prefer-dark-theme", &dark_theme_requested,
++                    NULL);
++
++      set_immersive_dark_mode (handle, dark_theme_requested ? TRUE : FALSE);
++    }
++}
++
++BOOL
++_gdk_win32_surface_set_transparent_titlebar (GdkSurface *window, bool is_transparent)
++{
++  HWND handle = GDK_SURFACE_HWND (window);
++  if (is_transparent)
++    return SUCCEEDED (DwmSetWindowAttribute (handle, WIN32_DWMWA_SYSTEMBACKDROP_TYPE, &(DWORD) { WIN32_DWMSBT_AUTO }, sizeof (WIN32_DWMSBT_AUTO))) ? TRUE : FALSE;
++  else
++    {
++      DwmSetWindowAttribute (handle, WIN32_DWMWA_SYSTEMBACKDROP_TYPE, &(DWORD) { WIN32_DWMSBT_NONE }, sizeof (WIN32_DWMSBT_NONE));
++      return FALSE;
++    }
++}
++
+ static const char *
+ get_default_title (void)
+ {
+@@ -4942,12 +5116,22 @@ gdk_win32_toplevel_get_property (GObject    *object,
+ static void
+ gdk_win32_toplevel_finalize (GObject *object)
+ {
++  GdkSurface *window = GDK_SURFACE (object);
+   GdkWin32Surface *self = GDK_WIN32_SURFACE (object);
+ 
+   g_signal_handlers_disconnect_by_func (self,
+                                         gdk_win32_toplevel_state_callback,
+                                         NULL);
+ 
++  g_signal_handlers_disconnect_by_func (gtk_settings_get_for_display (gdk_surface_get_display (window)),
++                                        theme_changed_cb,
++                                        window);
++
++  if (self->headerbar_node != NULL)
++    g_signal_handlers_disconnect_by_func (self->headerbar_node,
++                                          node_style_changed_cb,
++                                          window);
++
+   G_OBJECT_CLASS (gdk_win32_toplevel_parent_class)->finalize (object);
+ }
+ 
+@@ -4984,6 +5168,17 @@ gdk_win32_toplevel_present (GdkToplevel       *toplevel,
+   compute_toplevel_size (surface, FALSE, &width, &height);
+   gdk_win32_surface_resize (surface, width, height);
+ 
++  if (impl->decorate_all)
++    {
++      _gdk_win32_surface_set_titlebar_theme_variant (surface);
++      const bool should_be_transparent = g_strcmp0 (g_getenv ("GDK_WIN32_TRANSPARENT_TITLEBAR"), "1") == 0;
++      const BOOL is_transparent =
++        _gdk_win32_surface_set_transparent_titlebar (surface,
++                                                     should_be_transparent);
++      if (!is_transparent && g_strcmp0 (g_getenv ("GDK_WIN32_IMMERSIVE_TITLEBAR"), "1") == 0)
++        _gdk_win32_surface_set_immersive_titlebar (surface);
++    }
++
+   if (gdk_toplevel_layout_get_maximized (layout, &maximize))
+     {
+       if (maximize)
+@@ -5090,8 +5285,16 @@ gdk_win32_toplevel_restore_system_shortcuts (GdkToplevel *toplevel)
+ static void
+ gdk_win32_toplevel_state_callback (GdkSurface *surface)
+ {
++  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
++
+   if (surface->state & GDK_TOPLEVEL_STATE_FOCUSED)
+-    return;
++    {
++      if (impl->headerbar_node != NULL)
++        gtk_css_node_set_state (impl->headerbar_node, GTK_STATE_FLAG_NORMAL);
++      return;
++    }
++  else if (impl->headerbar_node != NULL)
++    gtk_css_node_set_state (impl->headerbar_node, GTK_STATE_FLAG_BACKDROP);
+ 
+   if (surface->shortcuts_inhibited)
+     gdk_win32_toplevel_restore_system_shortcuts (GDK_TOPLEVEL (surface));
+diff --git a/gdk/win32/gdksurface-win32.h b/gdk/win32/gdksurface-win32.h
+index 22daa8faa7..765eb24ecf 100644
+--- a/gdk/win32/gdksurface-win32.h
++++ b/gdk/win32/gdksurface-win32.h
+@@ -31,6 +31,8 @@
+ #include "gdk/gdksurfaceprivate.h"
+ #include "gdk/gdkcursor.h"
+ 
++#include "gtk/gtkcssnodeprivate.h"
++
+ #include <windows.h>
+ #include <directmanipulation.h>
+ 
+@@ -296,6 +298,9 @@ struct _GdkWin32Surface
+ 
+   GdkW32DragMoveResizeContext drag_move_resize_context;
+ 
++  /* Css node for getting headerbar color with server side decorations */
++  GtkCssNode *headerbar_node;
++
+   /* Remembers where the window was snapped.
+    * Some snap operations change their meaning if
+    * the window is already snapped.
+@@ -355,6 +360,12 @@ void  _gdk_win32_get_window_client_area_rect (GdkSurface *window,
+                                               int         scale,
+                                               RECT       *rect);
+ 
++BOOL  _gdk_win32_surface_set_transparent_titlebar   (GdkSurface *window, bool is_transparent);
++
++void  _gdk_win32_surface_set_immersive_titlebar     (GdkSurface *window);
++
++void  _gdk_win32_surface_set_titlebar_theme_variant (GdkSurface *window);
++
+ void gdk_win32_surface_move (GdkSurface *surface,
+                              int         x,
+                              int         y);
+-- 
+2.33.0.windows.2
+

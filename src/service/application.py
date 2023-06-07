@@ -1,37 +1,40 @@
 # application.py
 # Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
 #
-# This program is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
-# Foundation, either version 3 of the License, or (at your option) any later
-# version.
-#
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of  MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# this program.  If not, see <http://www.gnu.org/licenses/>.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import logging
 import sys
 
 from gi.repository import Gio, GLib
-from reminders import info
-from reminders.service.backend import Reminders
+from retainer import info
+from retainer.service.backend import Reminders
 from os import environ, sep
-from gettext import gettext as _
+from logging import getLogger
+from traceback import format_exception
 
-class RemindersService(Gio.Application):
+logger = getLogger(info.service_executable)
+
+INTERFACE_XML = f'''
+<node>
+    <interface name='{info.service_interface}'>
+        <method name='GetPrivateAddress'>
+            <arg type='s' name='dbus-address' direction='out'/>
+        </method>
+    </interface>
+</node>
+'''
+
+class RetainerService(Gio.Application):
     '''Background service for working with reminders'''
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.configure_logging()
         try:
             self.sandboxed = False
             self.portal = None
 
-            self.logger.info(f'Starting {info.service_executable} version {info.version}')
+            logger.info(f'Starting {info.service_executable} version {info.version}')
             self.settings = Gio.Settings(info.base_app_id)
 
             if info.portals_enabled:
@@ -42,7 +45,7 @@ class RemindersService(Gio.Application):
                 self.portal = Xdp.Portal()
                 self.portal.request_background(
                     None, None,
-                    [environ['SERVICE_PATH'] + sep + info.service_executable],
+                    [environ['INSTALL_DIR'] + sep + 'bin' + sep + info.service_executable],
                     Xdp.BackgroundFlags.AUTOSTART,
                     None,
                     None,
@@ -59,11 +62,56 @@ class RemindersService(Gio.Application):
 
             self.create_action('quit', self.quit_service, None)
 
-            self.reminders = Reminders(self)
+            self.setup_server()
+
         except Exception as error:
             self.quit()
-            self.logger.exception(error)
+            logger.exception(error)
             raise error
+
+    def setup_server(self):
+        if info.on_windows:
+            try:
+                from winsdk.windows.storage import ApplicationData
+                tmp_dir = ApplicationData.current.temporary_folder.path
+            except:
+                tmp_dir = GLib.get_tmp_dir()
+        else:
+            tmp_dir = GLib.get_tmp_dir()
+
+        self.server = Gio.DBusServer.new_sync(
+            f'unix:tmpdir={tmp_dir}',
+            Gio.DBusServerFlags.NONE if info.on_windows else Gio.DBusServerFlags.AUTHENTICATION_REQUIRE_SAME_USER,
+            Gio.dbus_generate_guid(),
+            None,
+            None
+        )
+        if self.server is None:
+            logger.error(f'Failed to create dbus server')
+            sys.exit(1)
+        self.server.start()
+        self.reminders = Reminders(self)
+        logger.info(f'Started private dbus server at {self.server.get_client_address()}')
+
+    def do_dbus_register(self, connection: Gio.DBusConnection, object_path: str) -> bool:
+        if Gio.Application.do_dbus_register(self, connection, object_path):
+            node_info = Gio.DBusNodeInfo.new_for_xml(INTERFACE_XML)
+            connection.register_object(
+                info.service_object,
+                node_info.interfaces[0],
+                self._on_method_call,
+                None,
+                None
+            )
+            return True
+        return False
+
+    def _on_method_call(self, connection, sender, path, interface, method, parameters, invocation):
+        try:
+            if method == 'GetPrivateAddress':
+                invocation.return_value(GLib.Variant('(s)', (self.server.get_client_address(),)))
+        except Exception as error:
+            invocation.return_dbus_error('org.freedesktop.DBus.Error.Failed', f'{error} - Method {method} failed to execute\n{"".join(format_exception(error))}')
 
     def do_startup(self):
         Gio.Application.do_startup(self)
@@ -104,26 +152,15 @@ class RemindersService(Gio.Application):
         reminder_id = variant.get_string()
         self.reminders.set_completed(info.service_id, reminder_id, True)
 
-    def configure_logging(self):
-        handler = logging.StreamHandler()
-        handler.setLevel(logging.INFO)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(funcName)s - %(message)s')
-        handler.setFormatter(formatter)
-        self.logger = logging.getLogger(info.service_executable)
-        self.logger.setLevel(logging.INFO)
-        file_handler = logging.FileHandler(info.service_log, 'w')
-        self.logger.addHandler(handler)
-        self.logger.addHandler(file_handler)
-
     def quit_service(self, action, data):
         self.quit()
 
 def main():
     try:
-        app = RemindersService(
+        app = RetainerService(
             application_id=info.service_id,
-            flags=Gio.ApplicationFlags.DEFAULT_FLAGS
+            flags=Gio.ApplicationFlags.IS_SERVICE
         )
-        return app.run(sys.argv)
+        return app.run()
     except Exception as error:
         sys.exit(error)

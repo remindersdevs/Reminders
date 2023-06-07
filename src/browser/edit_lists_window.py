@@ -1,33 +1,26 @@
 # edit_lists_window.py
 # Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
 #
-# This program is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
-# Foundation, either version 3 of the License, or (at your option) any later
-# version.
-#
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of  MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# this program.  If not, see <http://www.gnu.org/licenses/>.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 from gi.repository import Gtk, Adw
 from gettext import gettext as _
 
-from reminders import info
+from retainer import info
 from logging import getLogger
 
 DEFAULT_LIST_TITLE = _('New List')
 
 logger = getLogger(info.app_executable)
 
-@Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/edit_lists_window.ui')
-class EditListsWindow(Adw.Window):
+@Gtk.Template(resource_path='/io/github/retainerdevs/Retainer/ui/edit_lists_window.ui')
+class EditListsWindow(Gtk.Window):
     __gtype_name__ = 'EditListsWindow'
 
     box = Gtk.Template.Child()
+    main = Gtk.Template.Child()
 
     def __init__(self, win, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -48,6 +41,12 @@ class EditListsWindow(Adw.Window):
                 self.users[user_id].add_child(name, list_id)
             except:
                 pass
+
+        if info.on_windows:
+            self.set_titlebar(None)
+            sep = Gtk.Separator()
+            sep.add_css_class('titlebar-separator')
+            self.main.prepend(sep)
 
     def list_updated(self, user_id, list_id, list_name):
         if user_id not in self.users.keys():
@@ -105,9 +104,6 @@ class EditListsWindow(Adw.Window):
             confirm_dialog.connect('response::yes', lambda *args: self.do_close())
 
             confirm_dialog.present()
-
-            if info.on_windows:
-                self.win.app.center_win_on_parent(confirm_dialog)
         else:
             self.do_close()
 
@@ -213,9 +209,6 @@ class ListRow(Adw.EntryRow):
         confirm_dialog.connect('response::remove', lambda *args: self.delete())
 
         confirm_dialog.present()
-
-        if info.on_windows:
-            self.win.app.center_win_on_parent(confirm_dialog)
 
     def delete(self):
         try:

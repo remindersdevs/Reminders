@@ -17,7 +17,7 @@ install_data(
 )
 
 configure_file(
-    input: 'reminders-service.py',
+    input: 'retainer-service.py',
     output: service_file,
     configuration: conf,
     install: true,

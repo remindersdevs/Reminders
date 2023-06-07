@@ -1,6 +1,6 @@
 if not on_windows
     desktop_file = configure_file(
-        input: 'io.github.remindersdevs.Reminders.Service.desktop.in.in',
+        input: 'io.github.retainerdevs.Retainer.Service.desktop.in.in',
         output: '@0@.desktop.in'.format(service_id),
         configuration: conf,
     )
@@ -33,7 +33,7 @@ if not on_windows
     )
 
     configure_file(
-        input: 'io.github.remindersdevs.Reminders.Service.service.in',
+        input: 'io.github.retainerdevs.Retainer.Service.service.in',
         output: '@0@.service'.format(service_id),
         install: true,
         install_dir: get_option('datadir') / 'dbus-1' / 'services',
@@ -42,7 +42,7 @@ if not on_windows
 endif
 
 configure_file(
-    input: 'io.github.remindersdevs.Reminders.Service.xml.in',
+    input: 'io.github.retainerdevs.Retainer.Service.xml.in',
     output: '@0@.xml'.format(service_interface),
     install: true,
     install_dir: get_option('prefix') / get_option('datadir') / meson.project_name(),

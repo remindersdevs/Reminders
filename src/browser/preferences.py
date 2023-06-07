@@ -1,34 +1,28 @@
 # preferences.py
 # Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
 #
-# This program is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
-# Foundation, either version 3 of the License, or (at your option) any later
-# version.
-#
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of  MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# this program.  If not, see <http://www.gnu.org/licenses/>.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 from gettext import gettext as _
 
-from reminders import info
-from reminders.browser.caldav_sign_in import CalDAVSignIn
+from retainer import info
+from retainer.browser.caldav_sign_in import CalDAVSignIn
 
 if not info.on_windows:
-    from reminders.browser.microsoft_sign_in import MicrosoftSignIn
+    from retainer.browser.microsoft_sign_in import MicrosoftSignIn
+else:
+    from winsdk.windows.system import Launcher
+    from winsdk.windows.foundation import Uri
 
 from gi.repository import Gtk, Adw, GLib, Gio, Pango
 from logging import getLogger
-from webbrowser import open_new
 
 logger = getLogger(info.app_executable)
 
-@Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/preferences.ui')
-class PreferencesWindow(Adw.PreferencesWindow):
+@Gtk.Template(resource_path='/io/github/retainerdevs/Retainer/ui/preferences.ui')
+class PreferencesWindow(Gtk.Window):
     '''Settings Window'''
     __gtype_name__ = 'PreferencesWindow'
     general = Gtk.Template.Child()
@@ -45,6 +39,7 @@ class PreferencesWindow(Adw.PreferencesWindow):
     refresh_time_row = Gtk.Template.Child()
     spinner = Gtk.Template.Child()
     week_switch = Gtk.Template.Child()
+    main = Gtk.Template.Child()
 
     def __init__(self, app, **kwargs):
         super().__init__(**kwargs)
@@ -79,6 +74,12 @@ class PreferencesWindow(Adw.PreferencesWindow):
 
         self.synced_lists_updated()
         self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: self.close())))
+
+        if info.on_windows:
+            self.set_titlebar(None)
+            sep = Gtk.Separator()
+            sep.add_css_class('titlebar-separator')
+            self.main.prepend(sep)
 
     def username_updated(self, user_id, username):
         if user_id in self.user_rows.keys():
@@ -175,7 +176,10 @@ class PreferencesWindow(Adw.PreferencesWindow):
     def ms_sign_in(self, row = None):
         if info.on_windows:
             url = self.app.run_service_method('MSGetLoginURL', None).unpack()[0]
-            open_new(url)
+            try:
+                Launcher.launch_uri_async(Uri(url))
+            except:
+                pass
         else:
             MicrosoftSignIn(self)
 
@@ -183,7 +187,7 @@ class PreferencesWindow(Adw.PreferencesWindow):
     def caldav_sign_in(self, row = None):
         CalDAVSignIn(self)
 
-@Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/preferences_user_row.ui')
+@Gtk.Template(resource_path='/io/github/retainerdevs/Retainer/ui/preferences_user_row.ui')
 class PreferencesUserRow(Adw.ExpanderRow):
     __gtype_name__ = 'PreferencesUserRow'
     task_list_grid = Gtk.Template.Child()
@@ -296,13 +300,7 @@ class PreferencesUserRow(Adw.ExpanderRow):
             confirm_dialog.set_default_response('cancel')
             confirm_dialog.set_response_appearance('logout', Adw.ResponseAppearance.DESTRUCTIVE)
             confirm_dialog.connect('response::logout', lambda *args: self.preferences.app.win.sign_out(self.user_id))
-            if info.on_windows:
-                confirm_dialog.present()
-                # goofy hack to make sure window is centered
-                GLib.idle_add(lambda *args: confirm_dialog.set_visible(False))
-                GLib.idle_add(lambda *args: confirm_dialog.set_visible(True))
-            else:
-                confirm_dialog.present()
+            confirm_dialog.present()
         except Exception as error:
             logger.exception(error)
 
