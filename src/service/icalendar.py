@@ -1,25 +1,17 @@
 # icalendar.py
 # Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
 #
-# This program is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
-# Foundation, either version 3 of the License, or (at your option) any later
-# version.
-#
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of  MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# this program.  If not, see <http://www.gnu.org/licenses/>.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 import datetime
 
-from reminders import info
-from reminders.service.reminder import Reminder
+from retainer import info
+from retainer.service.reminder import Reminder
 
 from gi.repository import GLib
-from os import path, mkdir
+from os import path, mkdir, sep
 from math import floor
 from logging import getLogger
 from time import time
@@ -35,9 +27,7 @@ class iCalendar():
     def __init__(self, reminders):
         self.reminders = reminders
 
-    def to_ical(self, lists):
-        folder = DOWNLOADS_DIR + '/' + f'Reminders {datetime.datetime.now().strftime("%c")}'
-
+    def to_ical(self, folder, lists):
         calendars = {}
         for list_id in lists:
             list_names = self.reminders.lists
@@ -67,10 +57,11 @@ class iCalendar():
             except:
                 pass
 
-        mkdir(folder)
+        if not path.isdir(folder):
+            mkdir(folder)
 
         for list_id, calendar in calendars.items():
-            base_filename = folder + '/' + calendar['X-WR-CALNAME']
+            base_filename = folder + sep + calendar['X-WR-CALNAME']
             filename = f'{base_filename}.ical'
             count = 1
             while path.exists(filename):
@@ -79,8 +70,6 @@ class iCalendar():
 
             with open(filename, 'w') as f:
                 f.write(calendar.to_ical().decode('UTF-8'))
-
-        return folder
 
     def from_ical(self, files, list_id = None):
         for file in files:

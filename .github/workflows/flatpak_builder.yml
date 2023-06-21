@@ -1,11 +1,17 @@
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'data/**'
+      - 'flatpak/**'
+      - 'meson.build'
   pull_request:
-name: CI
+
+name: Flatpak
 jobs:
   flatpak:
-    name: "Flatpak"
     runs-on: ubuntu-latest
     container:
       image: bilelmoussaoui/flatpak-github-actions:gnome-44
@@ -14,6 +20,6 @@ jobs:
     - uses: actions/checkout@v3
     - uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@v6.1
       with:
-        bundle: Reminders.flatpak
-        manifest-path: flatpak/io.github.remindersdevs.Reminders.yml
+        bundle: Retainer.flatpak
+        manifest-path: flatpak/io.github.retainerdevs.Retainer.Devel.yml
         cache-key: flatpak-builder-${{ github.sha }}

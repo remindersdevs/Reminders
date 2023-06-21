@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33627.172
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{13B669BE-BB05-4DDF-9536-439F39A36129}") = "Retainer", "windows\Retainer\Retainer.msbuildproj", "{3782B125-7CEE-4C7E-B750-F00F01F907D1}"
+EndProject
+Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "RetainerPackage", "windows\RetainerPackage\RetainerPackage.wapproj", "{5D29BE7E-2E95-4693-984E-E0E61D5C04BB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Devel|ARM64 = Devel|ARM64
+		Devel|x64 = Devel|x64
+		Devel|x86 = Devel|x86
+		Release|ARM64 = Release|ARM64
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3782B125-7CEE-4C7E-B750-F00F01F907D1}.Devel|ARM64.ActiveCfg = Devel|ARM64
+		{3782B125-7CEE-4C7E-B750-F00F01F907D1}.Devel|ARM64.Build.0 = Devel|ARM64
+		{3782B125-7CEE-4C7E-B750-F00F01F907D1}.Devel|x64.ActiveCfg = Devel|x64
+		{3782B125-7CEE-4C7E-B750-F00F01F907D1}.Devel|x64.Build.0 = Devel|x64
+		{3782B125-7CEE-4C7E-B750-F00F01F907D1}.Devel|x86.ActiveCfg = Devel|x86
+		{3782B125-7CEE-4C7E-B750-F00F01F907D1}.Devel|x86.Build.0 = Devel|x86
+		{3782B125-7CEE-4C7E-B750-F00F01F907D1}.Release|ARM64.ActiveCfg = Release|ARM64
+		{3782B125-7CEE-4C7E-B750-F00F01F907D1}.Release|ARM64.Build.0 = Release|ARM64
+		{3782B125-7CEE-4C7E-B750-F00F01F907D1}.Release|x64.ActiveCfg = Release|x64
+		{3782B125-7CEE-4C7E-B750-F00F01F907D1}.Release|x64.Build.0 = Release|x64
+		{3782B125-7CEE-4C7E-B750-F00F01F907D1}.Release|x86.ActiveCfg = Release|x86
+		{3782B125-7CEE-4C7E-B750-F00F01F907D1}.Release|x86.Build.0 = Release|x86
+		{5D29BE7E-2E95-4693-984E-E0E61D5C04BB}.Devel|ARM64.ActiveCfg = Devel|ARM64
+		{5D29BE7E-2E95-4693-984E-E0E61D5C04BB}.Devel|ARM64.Build.0 = Devel|ARM64
+		{5D29BE7E-2E95-4693-984E-E0E61D5C04BB}.Devel|ARM64.Deploy.0 = Devel|ARM64
+		{5D29BE7E-2E95-4693-984E-E0E61D5C04BB}.Devel|x64.ActiveCfg = Devel|x64
+		{5D29BE7E-2E95-4693-984E-E0E61D5C04BB}.Devel|x64.Build.0 = Devel|x64
+		{5D29BE7E-2E95-4693-984E-E0E61D5C04BB}.Devel|x64.Deploy.0 = Devel|x64
+		{5D29BE7E-2E95-4693-984E-E0E61D5C04BB}.Devel|x86.ActiveCfg = Devel|x86
+		{5D29BE7E-2E95-4693-984E-E0E61D5C04BB}.Devel|x86.Build.0 = Devel|x86
+		{5D29BE7E-2E95-4693-984E-E0E61D5C04BB}.Devel|x86.Deploy.0 = Devel|x86
+		{5D29BE7E-2E95-4693-984E-E0E61D5C04BB}.Release|ARM64.ActiveCfg = Release|ARM64
+		{5D29BE7E-2E95-4693-984E-E0E61D5C04BB}.Release|ARM64.Build.0 = Release|ARM64
+		{5D29BE7E-2E95-4693-984E-E0E61D5C04BB}.Release|ARM64.Deploy.0 = Release|ARM64
+		{5D29BE7E-2E95-4693-984E-E0E61D5C04BB}.Release|x64.ActiveCfg = Release|x64
+		{5D29BE7E-2E95-4693-984E-E0E61D5C04BB}.Release|x64.Build.0 = Release|x64
+		{5D29BE7E-2E95-4693-984E-E0E61D5C04BB}.Release|x64.Deploy.0 = Release|x64
+		{5D29BE7E-2E95-4693-984E-E0E61D5C04BB}.Release|x86.ActiveCfg = Release|x86
+		{5D29BE7E-2E95-4693-984E-E0E61D5C04BB}.Release|x86.Build.0 = Release|x86
+		{5D29BE7E-2E95-4693-984E-E0E61D5C04BB}.Release|x86.Deploy.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B96EB3E7-CEA5-4829-A070-5F4808273A41}
+	EndGlobalSection
+EndGlobal

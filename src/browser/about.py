@@ -1,24 +1,18 @@
 # about.py
 # Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
 #
-# This program is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
-# Foundation, either version 3 of the License, or (at your option) any later
-# version.
-#
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of  MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# this program.  If not, see <http://www.gnu.org/licenses/>.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-from reminders import info
+from retainer import info
 from gi.repository import Adw, Gtk
 from gettext import gettext as _
+from os.path import isfile
 
 RELEASE_NOTES = '''
 <ul>
+    <li>Windows port</li>
     <li>UI improvements</li>
     <li>Added support for making the week start on sunday</li>
     <li>Added indicators that show how many incomplete reminders are in each list/group</li>
@@ -40,23 +34,37 @@ RELEASE_NOTES = '''
 '''
 
 def about_window(win):
-    win = Adw.AboutWindow(
+    if isfile(info.app_log):
+        with open(info.app_log, 'r') as f:
+            app_log = f.read()
+    else:
+        app_log = ''
+
+    if isfile(info.service_log):
+        with open(info.service_log, 'r') as f:
+            service_log = f.read()
+    else:
+        service_log = ''
+
+    abt_win = Adw.AboutWindow(
         modal = True,
         transient_for=win,
         application_name = info.app_name,
         application_icon = info.app_id,
         license_type = Gtk.License.GPL_3_0,
         version = info.version,
-        developer_name = _('Reminders Developers'),
-        copyright = _('Copyright 2023 Reminders Developers'),
+        developer_name = _('Retainer Developers'),
+        copyright = _('Copyright 2023 Retainer Developers'),
         website = 'https://github.com/remindersdevs/reminders',
         developers = ['dgsasha https://github.com/dgsasha'],
         issue_url = 'https://github.com/remindersdevs/reminders/issues',
         release_notes = RELEASE_NOTES,
         release_notes_version = info.version,
+        debug_info = app_log + '\n\n' + service_log,
         # Translators: Do not translate this, instead put your name and email here.
         # name <email>
         translator_credits = _("translator-credits")
     )
-    win.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: win.close())))
-    win.present()
+    abt_win.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: abt_win.close())))
+
+    abt_win.present()

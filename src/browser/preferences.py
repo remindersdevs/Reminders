@@ -1,33 +1,33 @@
 # preferences.py
 # Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
 #
-# This program is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
-# Foundation, either version 3 of the License, or (at your option) any later
-# version.
-#
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of  MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# this program.  If not, see <http://www.gnu.org/licenses/>.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 from gettext import gettext as _
 
-from reminders import info
-from reminders.browser.caldav_sign_in import CalDAVSignIn
-from reminders.browser.microsoft_sign_in import MicrosoftSignIn
+from retainer import info
+from retainer.browser.caldav_sign_in import CalDAVSignIn
+
+if not info.on_windows:
+    from retainer.browser.microsoft_sign_in import MicrosoftSignIn
+else:
+    from winsdk.windows.system import Launcher
+    from winsdk.windows.foundation import Uri
 
 from gi.repository import Gtk, Adw, GLib, Gio, Pango
 from logging import getLogger
 
 logger = getLogger(info.app_executable)
 
-@Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/preferences.ui')
-class PreferencesWindow(Adw.PreferencesWindow):
+@Gtk.Template(resource_path='/io/github/retainerdevs/Retainer/ui/preferences.ui')
+class PreferencesWindow(Gtk.Window):
     '''Settings Window'''
     __gtype_name__ = 'PreferencesWindow'
+    general = Gtk.Template.Child()
+    sound_row = Gtk.Template.Child()
+    sound_row_win = Gtk.Template.Child()
     sound_switch = Gtk.Template.Child()
     sound_theme_switch = Gtk.Template.Child()
     time_format_row = Gtk.Template.Child()
@@ -39,6 +39,7 @@ class PreferencesWindow(Adw.PreferencesWindow):
     refresh_time_row = Gtk.Template.Child()
     spinner = Gtk.Template.Child()
     week_switch = Gtk.Template.Child()
+    main = Gtk.Template.Child()
 
     def __init__(self, app, **kwargs):
         super().__init__(**kwargs)
@@ -46,8 +47,6 @@ class PreferencesWindow(Adw.PreferencesWindow):
         self.settings = app.settings
         self.set_transient_for(self.app.win)
         self.settings.bind('week-starts-sunday', self.week_switch, 'active', Gio.SettingsBindFlags.DEFAULT)
-        self.settings.bind('notification-sound', self.sound_switch, 'enable-expansion', Gio.SettingsBindFlags.DEFAULT)
-        self.settings.bind('included-notification-sound', self.sound_theme_switch, 'active', Gio.SettingsBindFlags.DEFAULT)
         self.settings.connect('changed::time-format', lambda *args: self.update_time_dropdown())
         self.settings.connect('changed::refresh-frequency', lambda *args: self.update_refresh_dropdown())
         self.settings.connect('changed::synced-lists', lambda *args: self.synced_lists_updated())
@@ -60,6 +59,14 @@ class PreferencesWindow(Adw.PreferencesWindow):
         self.synced = self.settings.get_value('synced-lists').unpack()
         self.user_rows = {}
 
+        if info.on_windows:
+            self.settings.bind('notification-sound', self.sound_switch, 'active', Gio.SettingsBindFlags.DEFAULT)
+            self.general.remove(self.sound_row)
+        else:
+            self.settings.bind('notification-sound', self.sound_row, 'enable-expansion', Gio.SettingsBindFlags.DEFAULT)
+            self.settings.bind('included-notification-sound', self.sound_theme_switch, 'active', Gio.SettingsBindFlags.DEFAULT)
+            self.general.remove(self.sound_row_win)
+
         for user_id, username in self.app.win.ms_users.items():
             self.on_ms_signed_in(user_id, username)
         for user_id, username in self.app.win.caldav_users.items():
@@ -67,6 +74,12 @@ class PreferencesWindow(Adw.PreferencesWindow):
 
         self.synced_lists_updated()
         self.add_shortcut(Gtk.Shortcut.new(Gtk.ShortcutTrigger.parse_string('<Ctrl>w'), Gtk.CallbackAction.new(lambda *args: self.close())))
+
+        if info.on_windows:
+            self.set_titlebar(None)
+            sep = Gtk.Separator()
+            sep.add_css_class('titlebar-separator')
+            self.main.prepend(sep)
 
     def username_updated(self, user_id, username):
         if user_id in self.user_rows.keys():
@@ -95,7 +108,11 @@ class PreferencesWindow(Adw.PreferencesWindow):
             except Exception as error:
                 logger.exception(error)
 
-        self.set_visible(False)
+        if info.on_windows:
+            self.destroy()
+            self.app.preferences = None
+        else:
+            self.set_visible(False)
         return True
 
     def on_ms_signed_in(self, user_id, username):
@@ -157,13 +174,20 @@ class PreferencesWindow(Adw.PreferencesWindow):
 
     @Gtk.Template.Callback()
     def ms_sign_in(self, row = None):
-        MicrosoftSignIn(self)
+        if info.on_windows:
+            url = self.app.run_service_method('MSGetLoginURL', None).unpack()[0]
+            try:
+                Launcher.launch_uri_async(Uri(url))
+            except:
+                pass
+        else:
+            MicrosoftSignIn(self)
 
     @Gtk.Template.Callback()
     def caldav_sign_in(self, row = None):
         CalDAVSignIn(self)
 
-@Gtk.Template(resource_path='/io/github/remindersdevs/Reminders/ui/preferences_user_row.ui')
+@Gtk.Template(resource_path='/io/github/retainerdevs/Retainer/ui/preferences_user_row.ui')
 class PreferencesUserRow(Adw.ExpanderRow):
     __gtype_name__ = 'PreferencesUserRow'
     task_list_grid = Gtk.Template.Child()

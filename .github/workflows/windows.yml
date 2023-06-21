@@ -1,0 +1,24 @@
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'data/**'
+      - 'windows/**'
+      - 'meson.build'
+  pull_request:
+
+name: Windows
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: msys2/setup-msys2@v2
+        with:
+          update: true
+      - uses: microsoft/setup-msbuild@v1.1
+      - name: Build
+        run: |
+          msbuild Retainer.sln -property:Platform=x64 -property:Configuration=Devel

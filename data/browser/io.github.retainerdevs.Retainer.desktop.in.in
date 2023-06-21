@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Name=Retainer
+Comment=Set reminders and manage tasks
+Exec=@EXEC@ %U
+Icon=@APP_ID@
+Terminal=false
+StartupWMClass=@APP_ID@
+StartupNotify=true
+X-SingleMainWindow=true
+Categories=GNOME;GTK;Office;ProjectManagement;
+Keywords=Todo;Productivity;Task;Planning;Planner;Time;Management;Reminder;Reminders;Retainer;
+MimeType=text/calendar;
+X-GNOME-UsesNotifications=true

@@ -1,148 +1,179 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
-
- This program is free software: you can redistribute it and/or modify it under
- the terms of the GNU General Public License as published by the Free Software
- Foundation, either version 3 of the License, or (at your option) any later
- version.
-
- This program is distributed in the hope that it will be useful, but WITHOUT
- ANY WARRANTY; without even the implied warranty of  MERCHANTABILITY or FITNESS
- FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License along with
- this program.  If not, see <http://www.gnu.org/licenses/>.
+  
+ This Source Code Form is subject to the terms of the Mozilla Public
+ License, v. 2.0. If a copy of the MPL was not distributed with this
+ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 -->
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <template class="PreferencesWindow" parent="AdwPreferencesWindow">
+  <template class="PreferencesWindow" parent="GtkWindow">
     <property name="title" translatable="yes">Preferences</property>
     <property name="default-width">450</property>
     <property name="width-request">360</property>
+    <property name="modal">true</property>
     <property name="default-height">600</property>
     <property name="destroy-with-parent">true</property>
+    <child type="titlebar">
+      <object class="AdwHeaderBar">
+        <style>
+          <class name="flat"/>
+        </style>
+      </object>
+    </child>
     <child>
-      <object class="AdwPreferencesPage">
+      <object class="GtkBox" id="main">
+        <property name="orientation">vertical</property>
         <child>
-          <object class="AdwPreferencesGroup" id="cloud_syncing">
-            <property name="title" translatable="yes">Syncing</property>
-            <property name="header-suffix">
-              <object class="GtkSpinner" id="spinner"/>
-            </property>
-            <style>
-              <class name="ms-accounts"/>
-            </style>
-            <child>
-              <object class="AdwExpanderRow" id="ms_sync_row">
-                <property name="title" translatable="yes">Microsoft To Do</property>
-                <child>
-                  <object class="AdwActionRow" id="ms_add_account">
+          <object class="GtkScrolledWindow">
+            <property name="hscrollbar-policy">never</property>
+            <property name="propagate-natural-height">True</property>
+            <property name="vexpand">True</property>
+            <property name="child">
+              <object class="AdwClamp">
+                <property name="child">
+                  <object class="GtkBox">
                     <style>
-                      <class name="row-button"/>
-                      <class name="suggested-action"/>
+                      <class name="main-box"/>
                     </style>
-                    <property name="activatable">true</property>
-                    <child type="prefix">
-                      <object class="GtkLabel">
-                        <property name="valign">center</property>
-                        <property name="halign">center</property>
-                        <property name="label" translatable="yes">Add Account</property>
-                      </object>
-                    </child>
-                    <child type="prefix">
-                      <object class="GtkBox">
-                        <property name="hexpand">true</property>
-                        <property name="halign">start</property>
-                      </object>
-                    </child>
-                    <signal name="activated" handler="ms_sign_in" swapped="no"/>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="AdwExpanderRow" id="caldav_sync_row">
-                <property name="title" translatable="yes">CalDAV</property>
-                <child>
-                  <object class="AdwActionRow" id="caldav_add_account">
-                    <style>
-                      <class name="row-button"/>
-                      <class name="suggested-action"/>
-                    </style>
-                    <property name="activatable">true</property>
-                    <child type="prefix">
-                      <object class="GtkLabel">
-                        <property name="valign">center</property>
-                        <property name="halign">center</property>
-                        <property name="label" translatable="yes">Add Account</property>
-                      </object>
-                    </child>
-                    <child type="prefix">
-                      <object class="GtkBox">
-                        <property name="hexpand">true</property>
-                        <property name="halign">start</property>
-                      </object>
-                    </child>
-                    <signal name="activated" handler="caldav_sign_in" swapped="no"/>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="AdwComboRow" id="refresh_time_row">
-                <property name="title" translatable="yes">Auto refresh frequency</property>
-                <property name="model">refresh_frequency</property>
-                <child type="suffix">
-                  <object class="GtkButton" id="refresh_button">
-                    <property name="label" translatable="yes">Refresh</property>
-                    <style>
-                      <class name="refresh"/>
-                    </style>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="AdwPreferencesGroup">
-            <property name="title" translatable="yes">General</property>
-            <child>
-              <object class="AdwComboRow" id="time_format_row">
-                <property name="title" translatable="yes">Time format</property>
-                <property name="model">time_formats</property>
-              </object>
-            </child>
-            <child>
-              <object class="AdwActionRow">
-                <property name="title" translatable="yes">Week starts on Sunday</property>
-                <property name="activatable-widget">week_switch</property>
-                <child>
-                  <object class="GtkSwitch" id="week_switch">
-                    <property name="valign">center</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="AdwExpanderRow" id="sound_switch">
-                <property name="title" translatable="yes">Play sound with notification</property>
-                <property name="show-enable-switch">true</property>
-                <child>
-                  <object class="AdwActionRow">
-                    <property name="title" translatable="yes">Use the included notification sound</property>
-                    <property name="subtitle" translatable="yes">Otherwise the bell sound from the enabled sound theme will be used</property>
-                    <property name="activatable-widget">sound_theme_switch</property>
+                    <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkSwitch" id="sound_theme_switch">
-                        <property name="valign">center</property>
+                      <object class="AdwPreferencesGroup" id="cloud_syncing">
+                        <property name="title" translatable="yes">Syncing</property>
+                        <property name="header-suffix">
+                          <object class="GtkSpinner" id="spinner"/>
+                        </property>
+                        <style>
+                          <class name="ms-accounts"/>
+                        </style>
+                        <child>
+                          <object class="AdwExpanderRow" id="ms_sync_row">
+                            <property name="title" translatable="yes">Microsoft To Do</property>
+                            <child>
+                              <object class="AdwActionRow" id="ms_add_account">
+                                <style>
+                                  <class name="row-button"/>
+                                  <class name="suggested-action"/>
+                                </style>
+                                <property name="activatable">true</property>
+                                <child type="prefix">
+                                  <object class="GtkLabel">
+                                    <property name="valign">center</property>
+                                    <property name="halign">center</property>
+                                    <property name="label" translatable="yes">Add Account</property>
+                                  </object>
+                                </child>
+                                <child type="prefix">
+                                  <object class="GtkBox">
+                                    <property name="hexpand">true</property>
+                                    <property name="halign">start</property>
+                                  </object>
+                                </child>
+                                <signal name="activated" handler="ms_sign_in" swapped="no"/>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwExpanderRow" id="caldav_sync_row">
+                            <property name="title" translatable="yes">CalDAV</property>
+                            <child>
+                              <object class="AdwActionRow" id="caldav_add_account">
+                                <style>
+                                  <class name="row-button"/>
+                                  <class name="suggested-action"/>
+                                </style>
+                                <property name="activatable">true</property>
+                                <child type="prefix">
+                                  <object class="GtkLabel">
+                                    <property name="valign">center</property>
+                                    <property name="halign">center</property>
+                                    <property name="label" translatable="yes">Add Account</property>
+                                  </object>
+                                </child>
+                                <child type="prefix">
+                                  <object class="GtkBox">
+                                    <property name="hexpand">true</property>
+                                    <property name="halign">start</property>
+                                  </object>
+                                </child>
+                                <signal name="activated" handler="caldav_sign_in" swapped="no"/>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwComboRow" id="refresh_time_row">
+                            <property name="title" translatable="yes">Auto refresh frequency</property>
+                            <property name="model">refresh_frequency</property>
+                            <child type="suffix">
+                              <object class="GtkButton" id="refresh_button">
+                                <property name="label" translatable="yes">Refresh</property>
+                                <style>
+                                  <class name="refresh"/>
+                                </style>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwPreferencesGroup" id="general">
+                        <property name="title" translatable="yes">General</property>
+                        <child>
+                          <object class="AdwComboRow" id="time_format_row">
+                            <property name="title" translatable="yes">Time format</property>
+                            <property name="model">time_formats</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwActionRow">
+                            <property name="title" translatable="yes">Week starts on Sunday</property>
+                            <property name="activatable-widget">week_switch</property>
+                            <child>
+                              <object class="GtkSwitch" id="week_switch">
+                                <property name="valign">center</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwExpanderRow" id="sound_row">
+                            <property name="title" translatable="yes">Play sound with notification</property>
+                            <property name="show-enable-switch">true</property>
+                            <child>
+                              <object class="AdwActionRow">
+                                <property name="title" translatable="yes">Use the included notification sound</property>
+                                <property name="subtitle" translatable="yes">Otherwise the bell sound from the enabled sound theme will be used</property>
+                                <property name="activatable-widget">sound_theme_switch</property>
+                                <child>
+                                  <object class="GtkSwitch" id="sound_theme_switch">
+                                    <property name="valign">center</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwActionRow" id="sound_row_win">
+                            <property name="title" translatable="yes">Play sound with notification</property>
+                            <property name="activatable-widget">sound_switch</property>
+                            <child>
+                              <object class="GtkSwitch" id="sound_switch">
+                                <property name="valign">center</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
-                </child>
+                </property>
               </object>
-            </child>
+            </property>
           </object>
         </child>
       </object>

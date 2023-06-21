@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
+  
+ This Source Code Form is subject to the terms of the Mozilla Public
+ License, v. 2.0. If a copy of the MPL was not distributed with this
+ file, You can obtain one at https://mozilla.org/MPL/2.0/.
+-->
+<Package
+	xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  	xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+	xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+	xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
+	xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5"
+	xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
+	xmlns:desktop2="http://schemas.microsoft.com/appx/manifest/desktop/windows10/2"
+	xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+	IgnorableNamespaces="mp rescap desktop2 uap3">
+
+	<Identity
+		Name="retainerdevs.Retainer"
+		Version="5.0.0.0"
+		Publisher="CN=Retainer Developers"/>
+
+	<Properties>
+		<DisplayName>ms-resource:AppName</DisplayName>
+		<PublisherDisplayName>ms-resource:Publisher</PublisherDisplayName>
+		<Description>ms-resource:AppDesc</Description>
+		<Logo>Images\StoreLogo.png</Logo>
+	</Properties>
+
+	<Dependencies>
+		<TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.22621.0" />
+	</Dependencies>
+
+	<Resources>
+		<Resource Language="x-generate"/>
+	</Resources>
+
+	<Capabilities>
+		<Capability Name="internetClient" />
+		<rescap:Capability Name="runFullTrust" />
+	</Capabilities>
+
+	<Applications>
+		<Application
+			Id="retainerdevs.Retainer"
+			Executable="Retainer\bin\retainer.exe"
+			EntryPoint="windows.FullTrustApplication">
+			<uap:VisualElements
+				DisplayName="ms-resource:AppName"
+				Description="ms-resource:AppDesc"
+				BackgroundColor="#a56f6a"
+				Square150x150Logo="Images\Square150x150Logo.png"
+				Square44x44Logo="Images\Square44x44Logo.png">
+				<uap:SplashScreen BackgroundColor="#a56f6a"
+								  Image="Images\SplashScreen.png"/>
+				<uap:DefaultTile
+					Wide310x150Logo="Images\Wide310x150Logo.png"
+					Square71x71Logo="Images\SmallTile.png"
+					Square310x310Logo="Images\LargeTile.png"
+					ShortName="ms-resource:AppName">
+					<uap:ShowNameOnTiles>
+						<uap:ShowOn Tile="square150x150Logo"/>
+						<uap:ShowOn Tile="wide310x150Logo"/>
+						<uap:ShowOn Tile="square310x310Logo"/>
+					</uap:ShowNameOnTiles>
+				</uap:DefaultTile>
+			</uap:VisualElements>
+
+			<Extensions>
+				<uap3:Extension
+					Category="windows.appExecutionAlias"
+					Executable="Retainer\bin\retainer.exe"
+					EntryPoint="Windows.FullTrustApplication">
+					<uap3:AppExecutionAlias>
+						<desktop:ExecutionAlias Alias="retainer.exe" />
+					</uap3:AppExecutionAlias>
+				</uap3:Extension>
+
+				<uap:Extension
+					Category="windows.fileTypeAssociation"
+					Executable="Retainer\bin\retainer.exe"
+					EntryPoint="windows.FullTrustApplication">
+					<uap:FileTypeAssociation Name="ics">
+						<uap:Logo>Images\Square150x150Logo.png</uap:Logo>
+						<uap:SupportedFileTypes>
+							<uap:FileType ContentType="text/calendar">.ics</uap:FileType>
+							<uap:FileType ContentType="text/calendar">.ical</uap:FileType>
+						</uap:SupportedFileTypes>
+					</uap:FileTypeAssociation>
+				</uap:Extension>
+
+				<uap:Extension
+					Category="windows.protocol"
+				    Executable="Retainer\bin\retainer.exe"
+					EntryPoint="windows.FullTrustApplication">
+					<uap:Protocol
+						Name="retainerdevs.retainer"/>
+				</uap:Extension>
+
+				<uap:Extension
+					Category="windows.protocol"
+				    Executable="Retainer\bin\retainer-service.exe"
+					EntryPoint="windows.FullTrustApplication">
+					<uap:Protocol
+						Name="retainerdevs.retainer.service"/>
+				</uap:Extension>
+
+				<uap5:Extension
+					Category="windows.startupTask"
+					Executable="Retainer\bin\retainer-service.exe"
+					EntryPoint="windows.FullTrustApplication">
+					<uap5:StartupTask
+						TaskId="retainer-service"
+						Enabled="true"
+						DisplayName="ms-resource:ServiceName" />
+				</uap5:Extension>
+			</Extensions>
+		</Application>
+	</Applications>
+</Package>

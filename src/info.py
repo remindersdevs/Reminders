@@ -1,11 +1,30 @@
-from ast import literal_eval
+# info.py
+# Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
 from gettext import gettext as _
 from enum import IntFlag, IntEnum, auto
+from os import sep, mkdir
+from os.path import isdir
 
 from gi.repository import GLib
 
+on_windows = @ON_WINDOWS@
+
+if on_windows:
+    try:
+        from winsdk.windows.storage import ApplicationData
+        user_data_dir = ApplicationData.current.local_folder.path
+    except:
+        user_data_dir = GLib.get_user_data_dir()
+else:
+    user_data_dir = GLib.get_user_data_dir()
+
 version = '@VERSION@'
-app_name = _('Reminders')
+app_name = _('Retainer')
 project_name = '@PROJECT_NAME@'
 base_app_id = '@BASE_APP_ID@'
 app_id = '@APP_ID@'
@@ -16,17 +35,21 @@ service_executable = '@SERVICE_EXECUTABLE@'
 service_id = '@SERVICE_ID@'
 service_interface = '@SERVICE_INTERFACE@'
 service_object = '@SERVICE_OBJECT@'
-service_path = '@SERVICE_PATH@'
 
-portals_enabled = literal_eval('@PORTALS_ENABLED@')
+win_id = app_id[len('io.github.'):].lower()
+win_service_id = service_id[len('io.github.'):].lower()
 
 client_id = '@CLIENT_ID@'
 
-data_dir = f'{GLib.get_user_data_dir()}/{app_executable}'
+data_dir = f'{user_data_dir}{sep}{project_name}'
 
-old_data_dir = f'{GLib.get_user_data_dir()}/remembrance'
+if not isdir(data_dir):
+    mkdir(data_dir)
 
-interface_file = f'@INTERFACES_DIR@/{service_interface}.xml'
+app_log = f'{data_dir}{sep}{project_name}.log'
+service_log = f'{data_dir}{sep}{project_name}-service.log'
+
+portals_enabled = @PORTALS_ENABLED@ if not on_windows else False
 
 reminder_defaults = {
     'title': '',

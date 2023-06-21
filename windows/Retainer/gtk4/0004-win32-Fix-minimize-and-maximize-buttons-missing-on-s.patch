@@ -1,0 +1,69 @@
+From 4c5257a9a3f8e71d44ce4e70cc1a761d48320faa Mon Sep 17 00:00:00 2001
+From: dgsasha <dgsasha04@gmail.com>
+Date: Tue, 30 May 2023 21:51:42 -0400
+Subject: [PATCH 4/4] win32: Fix minimize and maximize buttons missing on ssd
+
+Completely fixes https://gitlab.gnome.org/GNOME/gtk/-/issues/5142
+---
+ gdk/win32/gdkevents-win32.c  | 13 ++++++++++++-
+ gdk/win32/gdksurface-win32.c |  9 +--------
+ 2 files changed, 13 insertions(+), 9 deletions(-)
+
+diff --git a/gdk/win32/gdkevents-win32.c b/gdk/win32/gdkevents-win32.c
+index 54995313fa..f2817f19c1 100644
+--- a/gdk/win32/gdkevents-win32.c
++++ b/gdk/win32/gdkevents-win32.c
+@@ -2858,7 +2858,10 @@ gdk_event_translate (MSG *msg,
+       break;
+ 
+     case WM_SYSCOMMAND:
+-      switch (msg->wParam)
++      /* From: https://learn.microsoft.com/en-us/windows/win32/menurc/wm-syscommand?redirectedfrom=MSDN
++       * To obtain the correct result when testing the value of wParam,
++       * an application must combine the value 0xFFF0 with the wParam value by using the bitwise AND operator. */
++      switch (msg->wParam & 0xFFF0)
+ 	{
+ 	case SC_MINIMIZE:
+ 	case SC_RESTORE:
+@@ -2965,6 +2968,14 @@ gdk_event_translate (MSG *msg,
+                   windowpos = (WINDOWPOS *) msg->lParam;
+                   windowpos->cx = our_mmi.ptMaxSize.x;
+                   windowpos->cy = our_mmi.ptMaxSize.y;
++
++                  if (!_gdk_win32_surface_lacks_wm_decorations (window) &&
++                      !(windowpos->flags & SWP_NOCLIENTSIZE) &&
++                      window->width == impl->next_layout.configured_width &&
++                      window->height == impl->next_layout.configured_height)
++                    {
++                      impl->inhibit_configure = TRUE;
++                    }
+                 }
+ 
+               impl->maximizing = FALSE;
+diff --git a/gdk/win32/gdksurface-win32.c b/gdk/win32/gdksurface-win32.c
+index 6d8a181b8d..713bdce903 100644
+--- a/gdk/win32/gdksurface-win32.c
++++ b/gdk/win32/gdksurface-win32.c
+@@ -1536,18 +1536,11 @@ get_effective_window_decorations (GdkSurface       *window,
+ 
+       *decoration |= GDK_DECOR_MINIMIZE;
+ 
+-      return TRUE;
+-    }
+-  else if (impl->hint_flags & GDK_HINT_MAX_SIZE)
+-    {
+-      *decoration = GDK_DECOR_ALL | GDK_DECOR_MAXIMIZE;
+-      *decoration |= GDK_DECOR_MINIMIZE;
+-
+       return TRUE;
+     }
+   else
+     {
+-      *decoration = (GDK_DECOR_ALL | GDK_DECOR_MINIMIZE | GDK_DECOR_MAXIMIZE);
++      *decoration = GDK_DECOR_ALL;
+       return TRUE;
+     }
+ 
+-- 
+2.33.0.windows.2
+

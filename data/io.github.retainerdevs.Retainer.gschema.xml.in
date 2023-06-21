@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="@PROJECT_NAME@">
+  <enum id="io.github.retainerdevs.Retainer.TimeFormat">
+    <value value="0" nick="locale"/>
+    <value value="1" nick="12h"/>
+    <value value="2" nick="24h"/>
+  </enum>
+  <enum id="io.github.retainerdevs.Retainer.SortBy">
+    <value value="0" nick="time"/>
+    <value value="1" nick="title"/>
+    <value value="2" nick="created"/>
+    <value value="3" nick="updated"/>
+  </enum>
+  <enum id="io.github.retainerdevs.Retainer.RefreshFrequency">
+    <value value="0" nick="5m"/>
+    <value value="1" nick="15m"/>
+    <value value="2" nick="30m"/>
+    <value value="3" nick="60m"/>
+  </enum>
+  <schema id="io.github.retainerdevs.Retainer" path="/io/github/retainerdevs/Retainer/">
+    <key name="time-format" enum="io.github.retainerdevs.Retainer.TimeFormat">
+      <default>'locale'</default>
+      <summary>Time format</summary>
+      <description>What format to display the time in</description>
+    </key>
+    <key name="sort" enum="io.github.retainerdevs.Retainer.SortBy">
+      <default>'time'</default>
+      <summary>Sort by</summary>
+      <description>How to sort the reminders</description>
+    </key>
+    <key name="refresh-frequency" enum="io.github.retainerdevs.Retainer.RefreshFrequency">
+      <default>'15m'</default>
+      <summary>Auto refresh frequency</summary>
+      <description>How often the reminders are refreshed (minutes)</description>
+    </key>
+    <key type="b" name="notification-sound">
+      <default>true</default>
+      <summary>Notification Sound</summary>
+      <description>Whether or not to play a notification sound</description>
+    </key>
+    <key type="b" name="included-notification-sound">
+      <default>true</default>
+      <summary>Use included notification sound</summary>
+      <description>Whether to use the included notification sound</description>
+    </key>
+    <key type="b" name="descending-sort">
+      <default>false</default>
+      <summary>Descending sort</summary>
+      <description>If reminders sort should be descending</description>
+    </key>
+    <key type="b" name="week-starts-sunday">
+      <default>false</default>
+      <summary>Week starts on sunday</summary>
+      <description>If week should start on sunday</description>
+    </key>
+    <key name="width" type="i">
+      <default>800</default>
+    </key>
+    <key name="height" type="i">
+      <default>700</default>
+    </key>
+    <key name="is-maximized" type="b">
+      <default>false</default>
+    </key>
+    <key name="synced-lists" type="as">
+      <default>[]</default>
+      <summary>Remote lists that should be synced</summary>
+      <description>Add a user id if you want to sync all of the lists on a user, or any list id on the user</description>
+    </key>
+    <key name="selected-list" type="s">
+      <default>'all'</default>
+      <summary>Selected list</summary>
+      <description>list ids can be 'all', 'local', or an actual id</description>
+    </key>
+    <key name="dbus-address" type="s">
+      <default>''</default>
+      <summary>Selected list</summary>
+      <description>list ids can be 'all', 'local', or an actual id</description>
+    </key>
+    <key name="synced-task-lists" type="a{sas}">
+      <default>[]</default>
+      <summary>[DEPRECATED] Task lists that should be synced</summary>
+      <description>{user_id: [task_list_ids]}, task_list_ids can be 'all' or an array of ids</description>
+    </key>
+    <key name="selected-task-list" type="(ss)">
+      <default>('all', 'all')</default>
+      <summary>[DEPRECATED] Task lists that should be visible</summary>
+      <description>(user_id, task_id) ids can be 'all', 'local', or an actual id</description>
+    </key>
+  </schema>
+</schemalist>

@@ -1,24 +1,17 @@
 # ms_to_do.py
 # Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
 #
-# This program is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
-# Foundation, either version 3 of the License, or (at your option) any later
-# version.
-#
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of  MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# this program.  If not, see <http://www.gnu.org/licenses/>.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
 
 import datetime
 
-from gi.repository import Secret, GLib
+from gi.repository import GLib
 
-from reminders import info
-from reminders.service.reminder import Reminder
+from retainer import info
+from retainer.service.reminder import Reminder
 from msal import PublicClientApplication, SerializableTokenCache
 from requests import request, HTTPError, ConnectionError, Timeout
 from logging import getLogger
@@ -27,6 +20,7 @@ from json import dumps, loads
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import parse_qs
 from threading import Thread
+from gettext import gettext as _
 
 GRAPH = 'https://graph.microsoft.com/v1.0'
 
@@ -53,6 +47,9 @@ class Redirect(BaseHTTPRequestHandler):
         if 'error' not in results:
             self.callback(results)
             self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write(bytes(_('Authentication complete. You can close this window now.'), 'UTF-8'))
         else:
             self.send_response(301)
             redirect = self.error_callback()
@@ -60,14 +57,14 @@ class Redirect(BaseHTTPRequestHandler):
             self.end_headers()
 
 class MSToDo():
-    def __init__(self, reminders):
+    def __init__(self, reminders, credentials):
         self.app = None
         self.flow = None
         self.tokens = {}
         self.users = {}
         self.reminders = reminders
+        self.credentials = credentials
         self.cache = SerializableTokenCache()
-        self.schema = reminders.schema
         self.flows = {}
 
         atexit_register(self.store)
@@ -78,7 +75,7 @@ class MSToDo():
         except:
             pass
 
-        server = HTTPServer(('', 0), lambda *args: Redirect(self.login, self.get_login_url, *args))
+        server = HTTPServer(('localhost', 0), lambda *args: Redirect(self.login, self.get_login_url, *args))
         self.port = server.server_port
         thread = Thread(target=self.start_server, args=(server,), daemon=True)
         thread.start()
@@ -147,11 +144,7 @@ class MSToDo():
         except (ConnectionError, HTTPError, Timeout) as error:
             try:
                 self.users = loads(
-                    Secret.password_lookup_sync(
-                        self.schema,
-                        { 'name': 'microsoft-users' },
-                        None
-                    )
+                    self.credentials.lookup_password('microsoft-users')
                 )
                 for i, value in self.users.items():
                     for key in ('email', 'local-id'):
@@ -167,31 +160,13 @@ class MSToDo():
 
     def store(self):
         if self.app is not None and len(self.users.keys()) > 0:
-            Secret.password_store_sync(
-                self.schema,
-                { 'name': 'microsoft-cache' },
-                None,
-                'cache',
-                self.cache.serialize(),
-                None
-            )
-            Secret.password_store_sync(
-                self.schema,
-                { 'name': 'microsoft-users' },
-                None,
-                'users',
-                dumps(self.users),
-                None
-            )
+            self.credentials.add_password('microsoft-cache', self.cache.serialize())
+            self.credentials.add_password('microsoft-users', dumps(self.users))
 
     def read_cache(self):
         try:
             self.cache.deserialize(
-                Secret.password_lookup_sync(
-                    self.schema,
-                    { 'name': 'microsoft-cache' },
-                    None
-                )
+                self.credentials.lookup_password('microsoft-cache')
             )
         except:
             self.logout_all()
@@ -236,18 +211,14 @@ class MSToDo():
                 pass
             self.tokens = {}
             self.users = {}
-            Secret.password_clear(
-                self.schema,
-                { 'name': 'microsoft-cache' },
-                None,
-                None
-            )
-            Secret.password_clear(
-                self.schema,
-                { 'name': 'microsoft-users' },
-                None,
-                None
-            )
+            try:
+                self.credentials.remove_password('microsoft-cache')
+            except:
+                pass
+            try:
+                self.credentials.remove_password('microsoft-users')
+            except:
+                pass
 
         except Exception as error:
             logger.exception(error)
@@ -269,18 +240,14 @@ class MSToDo():
             if user_id in self.users:
                 self.users.pop(user_id)
             if self.users == {}:
-                Secret.password_clear(
-                    self.schema,
-                    { 'name': 'microsoft-cache' },
-                    None,
-                    None
-                )
-                Secret.password_clear(
-                    self.schema,
-                    { 'name': 'microsoft-users' },
-                    None,
-                    None
-                )
+                try:
+                    self.credentials.remove_password('microsoft-cache')
+                except:
+                    pass
+                try:
+                    self.credentials.remove_password('microsoft-users')
+                except:
+                    pass
             else:
                 self.store()
 

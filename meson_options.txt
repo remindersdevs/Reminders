@@ -1,3 +1,3 @@
-option('enable-portals', type: 'boolean', value: 'false', description: 'enable libportal, used by the flatpak')
-option('release-type', type : 'combo', choices: ['stable', 'beta', 'devel'], value : 'stable')
-option('client-id', type : 'string', value : '75c0b88f-6c54-4679-b6bd-18ed15e7dedf')
+option('enable-portals', type: 'boolean', value: false, description: 'enable libportal, used by the flatpak')
+option('release-type', type : 'combo', choices: ['Release', 'Devel'], value : 'Release')
+option('client-id', type : 'string', value : 'fcf7f104-7e7f-4a52-9803-f901b907aaa0')

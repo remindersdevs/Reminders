@@ -1,40 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
-
- This program is free software: you can redistribute it and/or modify it under
- the terms of the GNU General Public License as published by the Free Software
- Foundation, either version 3 of the License, or (at your option) any later
- version.
-
- This program is distributed in the hope that it will be useful, but WITHOUT
- ANY WARRANTY; without even the implied warranty of  MERCHANTABILITY or FITNESS
- FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License along with
- this program.  If not, see <http://www.gnu.org/licenses/>.
+  
+ This Source Code Form is subject to the terms of the Mozilla Public
+ License, v. 2.0. If a copy of the MPL was not distributed with this
+ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 -->
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <template class="ImportListsWindow" parent="AdwWindow">
+  <template class="ImportListsWindow" parent="GtkWindow">
     <property name="title" translatable="yes">Import Lists</property>
     <property name="default-width">400</property>
     <property name="width-request">360</property>
     <property name="default-height">450</property>
     <property name="modal">true</property>
-    <style>
-      <class name="reminder-edit-window"/>
-    </style>
-    <property name="content">
-      <object class="GtkBox">
+    <child type="titlebar">
+      <object class="AdwHeaderBar">
+        <style>
+          <class name="flat"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="main">
         <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkHeaderBar">
-            <style>
-              <class name="flat"/>
-            </style>
-          </object>
-        </child>
         <child>
           <object class="GtkScrolledWindow">
             <property name="hscrollbar-policy">never</property>
@@ -84,7 +73,7 @@
           <object class="GtkBox">
             <property name="hexpand">true</property>
             <style>
-              <class name="response-area"/>
+              <class name="bottom-area"/>
             </style>
             <child>
               <object class="GtkButton" id="cancel_btn">
@@ -115,6 +104,6 @@
           </object>
         </child>
       </object>
-    </property>
+    </child>
   </template>
 </interface>

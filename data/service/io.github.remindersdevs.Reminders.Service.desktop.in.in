@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Remembrance Service
-Exec=@LIBEXECDIR@/@SERVICE_EXECUTABLE@
-Icon=@APP_ID@
-Terminal=false
-NoDisplay=true
-DBusActivatable=true
-X-GNOME-UsesNotifications=true

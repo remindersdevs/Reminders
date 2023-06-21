@@ -1,7 +1,3 @@
-conf = configuration_data()
-conf.set('PYTHON_PATH', python.full_path())
-conf.set('LOCALE_DIR', get_option('prefix') / get_option('localedir'))
-
 source_files = files(
   '__init__.py',
   'about.py',
@@ -18,7 +14,7 @@ source_files = files(
   'move_reminders_window.py',
   'preferences.py',
   'reminder.py',
-  'reminder_edit_window.py',
+  'reminder_edit_page.py',
   'shortcuts_window.py'
 )
 
@@ -28,8 +24,8 @@ install_data(
 )
 
 configure_file(
-    input: 'reminders.py',
-    output: app_executable,
+    input: 'retainer.py',
+    output: app_file,
     configuration: conf,
     install: true,
     install_dir: get_option('prefix') / get_option('bindir')

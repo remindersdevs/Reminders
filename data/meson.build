@@ -1,36 +1,35 @@
-conf = configuration_data()
-conf.set('APP_EXECUTABLE', app_executable)
-conf.set('APP_ID', app_id)
-conf.set('SERVICE_ID', service_id)
-
-appstream_file = configure_file(
-    input: 'io.github.remindersdevs.Reminders.metainfo.xml.in.in',
-    output: '@0@.metainfo.xml.in'.format(app_id),
-    configuration: conf,
-)
-
-appstream = i18n.merge_file(
-  input: appstream_file,
-  output: '@0@.metainfo.xml'.format(app_id),
-  po_dir: '../../po',
-  install: true,
-  install_dir: join_paths(get_option('datadir'), 'metainfo')
-)
-
-appstreamcli = find_program('appstreamcli', required: false)
-if appstreamcli.found()
-    test(
-        'Validate appstream file',
-        appstreamcli,
-        args: ['validate', '--no-net', appstream]
+if not on_windows
+    appstream_file = configure_file(
+        input: 'io.github.retainerdevs.Retainer.metainfo.xml.in.in',
+        output: '@0@.metainfo.xml.in'.format(app_id),
+        configuration: conf,
     )
+
+    appstream = i18n.merge_file(
+    input: appstream_file,
+    output: '@0@.metainfo.xml'.format(app_id),
+    po_dir: '../../po',
+    install: true,
+    install_dir: join_paths(get_option('datadir'), 'metainfo')
+    )
+
+    appstreamcli = find_program('appstreamcli', required: false)
+    if appstreamcli.found()
+        test(
+            'Validate appstream file',
+            appstreamcli,
+            args: ['validate', '--no-net', appstream]
+        )
+    endif
+
+    subdir('browser')
 endif
 
 configure_file(
-    input: 'io.github.remindersdevs.Reminders.gschema.xml.in',
-    output: '@0@..gschema.xml'.format(app_id),
+    input: 'io.github.retainerdevs.Retainer.gschema.xml.in',
+    output: '@0@.gschema.xml'.format(app_id),
     install: true,
-    install_dir: join_paths(get_option('datadir'), 'glib-2.0/schemas'),
+    install_dir: join_paths(get_option('datadir'), 'glib-2.0' / 'schemas'),
     configuration: conf,
 )
 
@@ -43,6 +42,5 @@ if compile_schemas.found()
     )
 endif
 
-subdir('service')
-subdir('browser')
 subdir('icons')
+subdir('service')

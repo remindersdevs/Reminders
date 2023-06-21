@@ -1,49 +1,43 @@
 # calendar.py
 # Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
 #
-# This program is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
-# Foundation, either version 3 of the License, or (at your option) any later
-# version.
-#
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of  MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# this program.  If not, see <http://www.gnu.org/licenses/>.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 import datetime
 
 from gi.repository import GLib, Gio
 
-from reminders import info
+from retainer import info
 from logging import getLogger
 from time import time
-from threading import Thread
+if info.on_windows:
+    from winsdk.windows.system.threading import ThreadPoolTimer
 
 logger = getLogger(info.app_executable)
 
-class Calendar(Thread):
+class Calendar():
     '''Updates date labels when day changes'''
     def __init__(self, win):
         self.win = win
         self.time = datetime.datetime.combine(datetime.date.today(), datetime.time())
-        self.countdown_id = 0
-        super().__init__(target=self.run_countdown)
-        self.start()
+        self.timer = 0
 
-        self.connection = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
-        self.connection.signal_subscribe(
-            'org.freedesktop.login1',
-            'org.freedesktop.login1.Manager',
-            'PrepareForSleep',
-            '/org/freedesktop/login1',
-            None,
-            Gio.DBusSignalFlags.NONE,
-            self.on_wake_from_suspend,
-            None
-        )
+        if not info.on_windows:
+            self.connection = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
+            self.connection.signal_subscribe(
+                'org.freedesktop.login1',
+                'org.freedesktop.login1.Manager',
+                'PrepareForSleep',
+                '/org/freedesktop/login1',
+                None,
+                Gio.DBusSignalFlags.NONE,
+                self.on_wake_from_suspend,
+                None
+            )
+
+        self.run_countdown()
 
     def on_wake_from_suspend(self, connection, sender, object, interface, signal, parameters, data = None):
         if parameters.unpack()[0]:
@@ -57,12 +51,17 @@ class Calendar(Thread):
             reminder.refresh_time()
         if self.win.reminder_edit_win is not None:
             self.win.reminder_edit_win.update_date_button_label()
-        self.countdown_id = 0
+        self.timer = 0
         self.run_countdown()
         return False
 
     def remove_countdown(self):
-        GLib.Source.remove(self.countdown_id)
+        if self.timer != 0 and self.timer is not None:
+            if info.on_windows:
+                self.timer.cancel()
+            else:
+                GLib.Source.remove(self.timer)
+            self.timer = 0
 
     def run_countdown(self, new_day = True):
         try:
@@ -70,14 +69,15 @@ class Calendar(Thread):
                 self.time += datetime.timedelta(days=1)
                 self.timestamp = self.time.timestamp()
 
-            if self.countdown_id != 0:
-                GLib.Source.remove(self.countdown_id)
-                self.countdown_id = 0
+            self.remove_countdown()
 
             now = time()
             wait = int(1000 * (self.timestamp - now))
             if wait > 0:
-                self.countdown_id = GLib.timeout_add(wait, self.on_countdown_done)
+                if info.on_windows:
+                    self.timer = ThreadPoolTimer.create_timer(lambda *args: self.on_countdown_done(), datetime.timedelta(milliseconds=wait))
+                else:
+                    self.timer = GLib.timeout_add(wait, self.on_countdown_done)
             else:
                 self.on_countdown_done()
         except Exception as error:

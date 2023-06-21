@@ -1,0 +1,101 @@
+# Maintainer: Christoph Reiter <reiter.christoph@gmail.com>
+
+_realname=gtk4
+pkgbase=mingw-w64-${_realname}
+pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgver=4.10.4
+pkgrel=1
+pkgdesc="GObject-based multi-platform GUI toolkit (v4) (mingw-w64)"
+arch=('any')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
+url="https://www.gtk.org"
+license=('spdx:LGPL-2.1-or-later')
+makedepends=("${MINGW_PACKAGE_PREFIX}-cc"
+             "${MINGW_PACKAGE_PREFIX}-pkg-config"
+             "${MINGW_PACKAGE_PREFIX}-gobject-introspection"
+             "${MINGW_PACKAGE_PREFIX}-sassc"
+             "${MINGW_PACKAGE_PREFIX}-meson"
+             "${MINGW_PACKAGE_PREFIX}-python-docutils"
+             "${MINGW_PACKAGE_PREFIX}-gi-docgen")
+depends=("${MINGW_PACKAGE_PREFIX}-gcc-libs"
+         "${MINGW_PACKAGE_PREFIX}-adwaita-icon-theme"
+         "${MINGW_PACKAGE_PREFIX}-cairo"
+         "${MINGW_PACKAGE_PREFIX}-gdk-pixbuf2"
+         "${MINGW_PACKAGE_PREFIX}-glib2"
+         "${MINGW_PACKAGE_PREFIX}-graphene"
+         "${MINGW_PACKAGE_PREFIX}-json-glib"
+         "${MINGW_PACKAGE_PREFIX}-libepoxy"
+         "${MINGW_PACKAGE_PREFIX}-pango"
+         "${MINGW_PACKAGE_PREFIX}-gtk-update-icon-cache"
+         "${MINGW_PACKAGE_PREFIX}-gst-plugins-bad-libs"
+         "${MINGW_PACKAGE_PREFIX}-shared-mime-info")
+source=("https://download.gnome.org/sources/gtk/${pkgver:0:4}/gtk-${pkgver}.tar.xz"
+        https://gitlab.gnome.org/GNOME/gtk/-/commit/f59c230a96168d1ddc7af1b4b2fa9fa57c1cf977.patch
+        0001-win32-Improve-appearance-of-titlebars-in-Windows-10.patch
+        0002-win32-Center-newly-created-transient-windows.patch
+        0003-win32-Focus-modal-windows-when-clicking-on-unfocused.patch
+        0004-win32-Fix-minimize-and-maximize-buttons-missing-on-s.patch)
+noextract=("gtk-${pkgver}.tar.xz")
+sha256sums=('7725400482e0685e28265e226c62847f4e73cfca9e9b416ac5838207f5377a24'
+            'e797479b2e154f4d31415d7744c05bbca8328bd168588833ff9eb21a6ee3f53d'
+            '9920c1ddf54b18fd671d8b8051e3170fbfeba324e0bceab74ec82eb151000899'
+            '0ec40d901103c5ae524ee07fb226a49ca68a7924e41c9f67c4606bda242d095c'
+            '18faaae59db67e02901bfd188dcaa0837108ae59f6472991e4f6d02d0eb0d0b7'
+            '3065e2c158b97404729b42e389cde2d084449e24b00f7705ade6018e010100c9')
+
+apply_patch_with_msg() {
+  for _patch in "$@"
+  do
+    msg2 "Applying ${_patch}"
+    patch -Np1 -i "${srcdir}/${_patch}"
+  done
+}
+
+prepare() {
+  tar -xf "gtk-${pkgver}.tar.xz" || true
+  cd "${srcdir}/gtk-${pkgver}"
+
+  apply_patch_with_msg f59c230a96168d1ddc7af1b4b2fa9fa57c1cf977.patch
+  apply_patch_with_msg 0001-win32-Improve-appearance-of-titlebars-in-Windows-10.patch
+  apply_patch_with_msg 0002-win32-Center-newly-created-transient-windows.patch
+  apply_patch_with_msg 0003-win32-Focus-modal-windows-when-clicking-on-unfocused.patch
+  apply_patch_with_msg 0004-win32-Fix-minimize-and-maximize-buttons-missing-on-s.patch
+
+}
+
+build() {
+  mkdir -p build-${MSYSTEM} && cd build-${MSYSTEM}
+
+  declare -a extra_config
+  if check_option "debug" "n"; then
+    extra_config+=("--buildtype=release")
+  else
+    extra_config+=("--buildtype=debug")
+  fi
+
+  MSYS2_ARG_CONV_EXCL="--prefix=" \
+  ${MINGW_PREFIX}/bin/meson.exe setup \
+    --prefix="${MINGW_PREFIX}" \
+    --wrap-mode=nodownload \
+    --auto-features=enabled \
+    "${extra_config[@]}" \
+    -Dbuild-examples=false \
+    -Dbuild-tests=false \
+    -Dman-pages=true \
+    -Dmacos-backend=false \
+    -Dx11-backend=false \
+    -Dwayland-backend=false \
+    -Dwin32-backend=true \
+    -Dintrospection=enabled \
+    ../gtk-${pkgver}
+
+  ${MINGW_PREFIX}/bin/meson.exe compile
+}
+
+package() {
+  cd "${srcdir}/build-${MSYSTEM}"
+
+  DESTDIR="${pkgdir}" ${MINGW_PREFIX}/bin/meson.exe install
+
+  install -Dm644 "${srcdir}/gtk-${pkgver}/COPYING" "${pkgdir}${MINGW_PREFIX}/share/licenses/${_realname}/COPYING"
+}

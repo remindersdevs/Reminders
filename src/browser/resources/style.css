@@ -1,0 +1,351 @@
+.repeat-list {
+    margin: 20px;
+}
+
+.repeat-row {
+    padding: 10px 20px;
+}
+
+.day-button {
+    padding: 2px;
+}
+
+.sidebar-separator {
+    margin: 0 6px;
+}
+
+.reminders-list row.activatable:selected,
+lists row.activatable:selected {
+    background-color: alpha(@accent_bg_color, .25);
+}
+
+.day-button:checked {
+    color: @accent_bg_color;
+}
+
+button,
+splitbutton,
+spinbutton,
+label {
+    transition-property: outline-color, outline-width, outline-offset, background, filter;
+}
+
+label {
+    transition: filter 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.reminders-list label {
+    transition: none;
+}
+
+label.time {
+    font-weight: bold;
+    margin: 0 2px;
+}
+
+spinbutton button {
+    padding: 1px;
+    min-height: 20px;
+    min-width: 20px;
+}
+
+.add-reminder {
+    min-height: 48px;
+    min-width: 48px;
+    margin: 8px;
+}
+
+.bottom-area {
+    min-height: 64px;
+}
+
+.bottom-area button.flat {
+    padding: 0 24px;
+    border-radius: 0;
+    box-shadow: none;
+    margin-top: -1px;
+    margin-right: -1px;
+    margin-left: -1px;
+}
+
+.bottom-area button.flat.suggested {
+    color: @accent_bg_color;
+}
+
+.bottom-area button.flat.complete {
+    color: @success_bg_color;
+}
+
+.bottom-area button.flat.incomplete {
+    color: @warning_bg_color;
+}
+
+.bottom-area button.flat.destructive {
+    color: @destructive_bg_color;
+}
+
+row.time {
+    padding: 5px 15px;
+}
+
+.am-pm-button {
+    margin-right: 5px;
+}
+
+.am-pm-button:dir(rtl) {
+    margin-left: 5px;
+}
+
+.edit-row {
+    padding: 10px;
+}
+
+.navigation-sidebar row {
+    padding: 3px 11px;
+}
+
+.task-lists {
+    margin: 24px;
+}
+
+.error-body {
+    margin: 10px;
+}
+
+.error-text {
+    font-size: 120%;
+}
+
+button.repeat label,
+menubutton button,
+dropdown button,
+.am-pm-button label,
+spinbutton text {
+    font-weight: 500;
+}
+
+box.header > box {
+    margin: 6px 0;
+}
+
+.reminder separator {
+    opacity: 0.6;
+    margin: 3px 0;
+}
+
+box.main {
+    padding: 12px;
+}
+
+.edit-groups {
+    border-spacing: 24px;
+}
+
+.page-heading-box {
+    margin: 0 5px;
+}
+
+.reminder-edit-page .page-heading,
+.reminder-edit-page .page-sub-heading {
+    margin: 0 5px;
+}
+
+.reminder-edit-page preferencesgroup {
+    margin: 12px 0;
+}
+
+.page-sub-heading {
+    opacity: 0.6;
+    font-weight: 650;
+}
+
+.task-list-row {
+    padding: 2px 10px;
+    min-height: 44px;
+}
+
+.ms-accounts box.header {
+    padding: 0;
+    min-height: 44px;
+}
+
+.row-button {
+    font-weight: 500;
+}
+
+.row-button.suggested-action {
+    color: @accent_bg_color;
+}
+
+.row-button.destructive-action {
+    color: @destructive_bg_color;
+}
+
+.row-button.activatable:hover {
+    background-color: alpha(currentColor, 0.07);
+}
+
+.row-button.activatable:active {
+    background-color: alpha(currentColor, 0.16);
+}
+
+button.rounded {border-radius: 99px;}
+
+button.rounded.remove {
+    background-color: alpha(@destructive_bg_color, 0.3);
+}
+
+button.rounded.complete {
+    background-color: alpha(@success_bg_color, 0.3);
+}
+
+button.rounded.incomplete {
+    background-color: alpha(@warning_bg_color, 0.3);
+}
+
+button.rounded.remove:hover {
+    background-color: alpha(@destructive_bg_color, 0.4);
+}
+
+button.rounded.complete:hover {
+    background-color: alpha(@success_bg_color, 0.4);
+}
+
+button.rounded.incomplete:hover {
+    background-color: alpha(@warning_bg_color, 0.4);
+}
+
+button.rounded.remove:active {
+    background-color: alpha(@destructive_bg_color, 0.55);
+}
+
+button.rounded.complete:active {
+    background-color: alpha(@success_bg_color, 0.55);
+}
+
+button.rounded.incomplete:active {
+    background-color: alpha(@warning_bg_color, 0.55);
+}
+
+.main-box {
+    margin: 24px 12px;
+    border-spacing: 24px;
+}
+
+button.refresh:dir(ltr)  {
+    margin-left: 6px;
+}
+
+button.refresh:dir(rtl)  {
+    margin-right: 6px;
+}
+
+/* Elaborate fix for https://gitlab.gnome.org/GNOME/gtk/-/issues/5309
+.reminders-list > row:nth-last-child(2),
+.reminders-list > row.expander:nth-last-child(2):not(:checked) > box > list > row.header,
+.reminders-list > row.expander:nth-last-child(2) > box > revealer > list.nested > row:last-child {
+    border-bottom: 0;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+.reminders-list > row.expander:nth-last-child(2) > box > revealer > list.nested {
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+.reminders-list > row:disabled+row:not(:disabled),
+.reminders-list > row:disabled+row.expander:not(:disabled) > box > list > row.header {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+*/
+
+/* Add support for nested expander */
+list.nested row.header,
+list.nested list.nested row {
+    border-radius: 0;
+}
+
+list.nested row.expander {
+    border-bottom: 0;
+}
+
+list.nested list.nested {
+    background-color: alpha(@card_shade_color, 0.3);
+    border-radius: 0;
+}
+
+.navigation-sidebar:drop(active) {
+    box-shadow: none;
+}
+
+.navigation-sidebar row:drop(active) {
+    color: @accent_bg_color;
+    box-shadow: inset 0 0 0 1px @accent_bg_color;
+}
+
+.reminders-list {background-color: transparent; box-shadow: none;}
+.reminders-list > row {margin-bottom: 12px; background-color: @card_bg_color;}
+.reminders-list > row row.header {border-top-left-radius: 12px; border-top-right-radius: 12px;}
+.reminders-list > row:not(:checked) row.header {border-radius: 12px; border-bottom: 0;}
+
+.reminder list:not(.nested) {border-radius: 12px;}
+
+.reminder list.nested {border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; background-color: alpha(@card_shade_color, 0.5);}
+.reminder list.nested row:last-child {border-bottom: 0;}
+.reminders-list > row.expander:nth-last-child(2) {
+    margin-bottom: 0;
+}
+
+.dnd-reminder {
+    margin: 6px;
+}
+
+.shortcuts {
+    border-spacing: 0;
+    padding: 6px;
+}
+
+.shortcuts button, .shortcuts menubutton {margin: 0;}
+
+.shortcuts {
+    background-color: mix(@headerbar_bg_color, @view_bg_color, 0.2);
+    box-shadow: inset -1px 0 0 0 @headerbar_shade_color;
+}
+
+.shortcuts:backdrop {
+    background-color: @headerbar_backdrop_color;
+    transition: background-color 200ms ease-out;
+}
+
+.shortcuts:backdrop > box {
+    filter: opacity(0.5);
+    transition: filter 200ms ease-out;
+}
+
+.button-separator {
+    margin: 0 6px;
+}
+
+.vertical-split-button > menubutton > button {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.vertical-split-button > button {
+    margin-bottom: -1px;
+}
+
+.vertical-split-button > menubutton > button {
+    margin-top: -1px;
+}
+
+.titlebar-separator {
+    background-image: image(@headerbar_shade_color);
+    background-color: @headerbar_bg_color;
+}
+
+.titlebar-separator:backdrop {
+    background-color: @headerbar_backdrop_color;
+}

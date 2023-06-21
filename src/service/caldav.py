@@ -1,24 +1,14 @@
 # caldav.py
 # Copyright (C) 2023 Sasha Hale <dgsasha04@gmail.com>
 #
-# This program is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
-# Foundation, either version 3 of the License, or (at your option) any later
-# version.
-#
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of  MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# this program.  If not, see <http://www.gnu.org/licenses/>.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 import datetime
 
-from gi.repository import Secret
-
-from reminders import info
-from reminders.service.reminder import Reminder
+from retainer import info
+from retainer.service.reminder import Reminder
 from logging import getLogger
 from json import loads, dumps
 from requests import HTTPError, Timeout, ConnectionError
@@ -30,11 +20,11 @@ DAYS = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']
 logger = getLogger(info.service_executable)
 
 class CalDAV():
-    def __init__(self, reminders):
+    def __init__(self, reminders, credentials):
         self.users = {}
         self.principals = {}
         self.reminders = reminders
-        self.schema = reminders.schema
+        self.credentials = credentials
         self.load_users()
         try:
             self.get_principals()
@@ -59,22 +49,11 @@ class CalDAV():
 
     def store(self):
         if len(self.users.keys()) > 0:
-            Secret.password_store_sync(
-                self.schema,
-                { 'name': 'caldav' },
-                None,
-                'users',
-                dumps(self.users),
-                None
-            )
+            self.credentials.add_password('caldav-users', dumps(self.users))
 
     def load_users(self):
         try:
-            self.users = loads(Secret.password_lookup_sync(
-                self.schema,
-                { 'name': 'caldav' },
-                None
-            ))
+            self.users = loads(self.credentials.lookup_password('caldav-users'))
             for i, value in self.users.items():
                 for key in ('name', 'url', 'username', 'password'):
                     if key not in value.keys():
@@ -108,12 +87,10 @@ class CalDAV():
             pass
 
         if self.users == {}:
-            Secret.password_clear(
-                self.schema,
-                { 'name': 'caldav' },
-                None,
-                None
-            )
+            try:
+                self.credentials.remove_password('caldav-users')
+            except:
+                pass
         else:
             self.store()
 
