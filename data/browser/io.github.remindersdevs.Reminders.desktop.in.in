@@ -12,3 +12,5 @@ Categories=GNOME;GTK;Office;ProjectManagement;
 Keywords=Todo;Productivity;Task;Planning;Planner;Time;Management;Reminder;Remembrance;Reminders;
 MimeType=text/calendar;
 X-GNOME-UsesNotifications=true
+# Translators: Do NOT translate or transliterate this text (these are enum types)!
+X-Purism-FormFactor=Workstation;Mobile;
