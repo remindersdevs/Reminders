@@ -1,9 +1,20 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
-data/browser/io.github.dgsasha.Remembrance.desktop.in.in
-data/service/io.github.dgsasha.Remembrance.Service3.desktop.in.in
-data/io.github.dgsasha.Remembrance.gschema.xml.in
-data/io.github.dgsasha.Remembrance.metainfo.xml.in.in
+data/browser/io.github.remindersdevs.Reminders.desktop.in.in
+data/service/io.github.remindersdevs.Reminders.Service.desktop.in.in
+data/io.github.remindersdevs.Reminders.gschema.xml.in
+data/io.github.remindersdevs.Reminders.metainfo.xml.in.in
+src/browser/about.py
+src/browser/application.py
+src/browser/dnd_reminder.py
+src/browser/edit_lists_window.py
+src/browser/export_lists_window.py
+src/browser/import_lists_window.py
+src/browser/main_window.py
+src/browser/move_reminders_window.py
+src/browser/preferences.py
+src/browser/reminder_edit_window.py
+src/browser/reminder.py
 src/browser/resources/ui/caldav_sign_in.ui
 src/browser/resources/ui/edit_lists_window.ui
 src/browser/resources/ui/error_dialog.ui
@@ -14,16 +25,8 @@ src/browser/resources/ui/microsoft_sign_in.ui
 src/browser/resources/ui/move_reminders_window.ui
 src/browser/resources/ui/preferences.ui
 src/browser/resources/ui/preferences_user_row.ui
-src/browser/resources/ui/reminder.ui
 src/browser/resources/ui/reminder_edit_window.ui
+src/browser/resources/ui/reminder.ui
 src/browser/resources/ui/shortcuts_window.ui
-src/browser/about.py
-src/browser/application.py
-src/browser/edit_lists_window.py
-src/browser/main_window.py
-src/browser/move_reminders_window.py
-src/browser/preferences.py
-src/browser/reminder.py
-src/browser/reminder_edit_window.py
 src/info.py
 src/service/backend.py
