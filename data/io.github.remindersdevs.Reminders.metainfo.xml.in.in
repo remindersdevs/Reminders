@@ -82,7 +82,7 @@
   <url type="bugtracker">https://github.com/dgsasha/remembrance/issues</url>
   <releases>
     <release version="5.0" date="2023-05-03">
-      <description>
+      <description translatable="no">
         <ul>
           <li>UI improvements</li>
           <li>Added support for making the week start on sunday</li>
@@ -105,14 +105,14 @@
       </description>
     </release>
     <release version="4.0" date="2023-04-18">
-      <description>
+      <description translatable="no">
         <ul>
           <li>Fix versioning by bumping to 4.0</li>
         </ul>
       </description>
     </release>
     <release version="3.10" date="2023-04-18">
-      <description>
+      <description translatable="no">
         <ul>
           <li>Remove warning about cloud syncing being in beta</li>
           <li>Fix issue where you could make reminder recurring when it shouldn't be</li>
@@ -120,7 +120,7 @@
       </description>
     </release>
     <release version="3.9" date="2023-04-18">
-      <description>
+      <description translatable="no">
         <ul>
           <li>Change delete icon</li>
           <li>Fix some ui bugs</li>
@@ -130,7 +130,7 @@
       </description>
     </release>
     <release version="3.8" date="2023-04-18">
-      <description>
+      <description translatable="no">
         <ul>
           <li>UI Improvements to sidebar</li>
           <li>Fix issues when moving reminders between lists</li>
@@ -139,21 +139,21 @@
       </description>
     </release>
     <release version="3.7" date="2023-04-15">
-      <description>
+      <description translatable="no">
         <ul>
           <li>Fix issue when deleting lists</li>
         </ul>
       </description>
     </release>
     <release version="3.6" date="2023-04-15">
-      <description>
+      <description translatable="no">
         <ul>
           <li>Fix issue when removing selected reminders</li>
         </ul>
       </description>
     </release>
     <release version="3.5" date="2023-04-15">
-      <description>
+      <description translatable="no">
         <ul>
           <li>Performance improvements</li>
           <li>Don't freeze UI when updating MS reminders</li>
@@ -164,7 +164,7 @@
       </description>
     </release>
     <release version="3.4" date="2023-04-13">
-      <description>
+      <description translatable="no">
         <ul>
           <li>Stop showing completed reminders on upcoming page</li>
           <li>Cross out completed reminders on all reminders page</li>
@@ -172,7 +172,7 @@
       </description>
     </release>
     <release version="3.3" date="2023-04-13">
-      <description>
+      <description translatable="no">
         <ul>
           <li>Add support for setting due dates without sending notifications</li>
           <li>Add support for selecting and editing multiple reminders (Start selecting with Ctrl + LMB or by pressing and holding a reminder)</li>
@@ -181,21 +181,21 @@
       </description>
     </release>
     <release version="3.2" date="2023-04-09">
-      <description>
+      <description translatable="no">
         <ul>
           <li>Fix issue when setting reminders in another year</li>
         </ul>
       </description>
     </release>
     <release version="3.1" date="2023-04-09">
-      <description>
+      <description translatable="no">
         <ul>
           <li>Fix issue when saving Microsoft To Do Reminders</li>
         </ul>
       </description>
     </release>
     <release version="3.0" date="2023-04-09">
-      <description>
+      <description translatable="no">
         <ul>
           <li>New notification sound</li>
           <li>Allow sorting reminders by created time and last updated time</li>
