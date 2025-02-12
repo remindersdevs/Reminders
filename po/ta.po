@@ -8,447 +8,479 @@ msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 16:55-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-02-13 02:02+0000\n"
+"Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
+"Language-Team: Tamil <https://hosted.weblate.org/projects/reminders/"
+"reminders/ta/>\n"
 "Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:4
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:9
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:66 src/info.py:8
 msgid "Reminders"
-msgstr ""
+msgstr "நினைவூட்டல்கள்"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:5
 msgid "Set reminders for yourself"
-msgstr ""
+msgstr "உங்களுக்காக நினைவூட்டல்களை அமைக்கவும்"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:13
 msgid ""
 "Todo;Productivity;Task;Planning;Planner;Time;Management;Reminder;Remembrance;"
 "Reminders;"
 msgstr ""
+"செய்யவேண்டிய; உற்பத்தித்திறன்; பணி; திட்டமிடல்; திட்டமிடுபவர்; நேரம்; மேலாண்மை;  "
+"நினைவூட்டல்; நினைவுகூர்தல்; நினைவூட்டல்கள்;"
 
 #: data/service/io.github.dgsasha.Remembrance.Service3.desktop.in.in:4
 msgid "Remembrance Service"
-msgstr ""
+msgstr "நினைவு பணி"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:23
 #: src/browser/resources/ui/preferences.ui:113
 msgid "Time format"
-msgstr ""
+msgstr "நேர வடிவம்"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:24
 msgid "What format to display the time in"
-msgstr ""
+msgstr "நேரத்தைக் காண்பிக்க என்ன வடிவம்"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:28
 #: src/browser/resources/ui/main_window.ui:62
 msgid "Sort by"
-msgstr ""
+msgstr "வரிசைப்படுத்தவும்"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:29
 msgid "How to sort the reminders"
-msgstr ""
+msgstr "நினைவூட்டல்களை எவ்வாறு வரிசைப்படுத்துவது"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:33
 #: src/browser/resources/ui/preferences.ui:94
 msgid "Auto refresh frequency"
-msgstr ""
+msgstr "ஆட்டோ புதுப்பிப்பு அதிர்வெண்"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:34
 msgid "How often the reminders are refreshed (minutes)"
-msgstr ""
+msgstr "நினைவூட்டல்கள் எவ்வளவு அடிக்கடி புதுப்பிக்கப்படுகின்றன (நிமிடங்கள்)"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:38
 msgid "Notification Sound"
-msgstr ""
+msgstr "அறிவிப்பு ஒலி"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:39
 msgid "Whether or not to play a notification sound"
-msgstr ""
+msgstr "அறிவிப்பு ஒலியை இயக்கலாமா வேண்டாமா"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:43
 msgid "Use included notification sound"
-msgstr ""
+msgstr "சேர்க்கப்பட்ட அறிவிப்பு ஒலியைப் பயன்படுத்தவும்"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:44
 msgid "Whether to use the included notification sound"
-msgstr ""
+msgstr "சேர்க்கப்பட்ட அறிவிப்பு ஒலியைப் பயன்படுத்த வேண்டுமா"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:48
 msgid "Descending sort"
-msgstr ""
+msgstr "இறங்கு வரிசை"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:49
 msgid "If reminders sort should be descending"
-msgstr ""
+msgstr "நினைவூட்டல்கள் வரிசை இறங்க வேண்டும் என்றால்"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:53
 msgid "Week starts on sunday"
-msgstr ""
+msgstr "வாரம் ஞாயிற்றுக்கிழமை தொடங்குகிறது"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:54
 msgid "If week should start on sunday"
-msgstr ""
+msgstr "வாரம் ஞாயிற்றுக்கிழமை தொடங்க வேண்டும்"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:67
 msgid "Remote lists that should be synced"
-msgstr ""
+msgstr "ஒத்திசைக்கப்பட வேண்டிய தொலை பட்டியல்கள்"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:68
 msgid ""
 "Add a user id if you want to sync all of the lists on a user, or any list id "
 "on the user"
 msgstr ""
+"ஒரு பயனரின் அனைத்து பட்டியல்களையும் அல்லது பயனரின் எந்த பட்டியல் ஐடியையும் ஒத்திசைக்க "
+"விரும்பினால் ஒரு பயனர் ஐடியைச் சேர்க்கவும்"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:72
 msgid "Selected list"
-msgstr ""
+msgstr "தேர்ந்தெடுக்கப்பட்ட பட்டியல்"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:73
 msgid "list ids can be 'all', 'local', or an actual id"
-msgstr ""
+msgstr "பட்டியல் ஐடிகள் 'அனைத்தும்', 'உள்ளக' அல்லது உண்மையான ஐடி ஆக இருக்கலாம்"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:77
 msgid "[DEPRECATED] Task lists that should be synced"
-msgstr ""
+msgstr "[நீக்கப்பட்டது] ஒத்திசைக்கப்பட வேண்டிய பணி பட்டியல்கள்"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:78
+#, fuzzy
 msgid ""
 "{user_id: [task_list_ids]}, task_list_ids can be 'all' or an array of ids"
 msgstr ""
+"{user_id: [task_list_ids]}, task_list_ids 'அனைத்தும்' அல்லது ஐடிஎச் வரிசையாக "
+"இருக்கலாம்"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:82
 msgid "[DEPRECATED] Task lists that should be visible"
-msgstr ""
+msgstr "[நீக்கப்பட்டது] காணப்பட வேண்டிய பணி பட்டியல்கள்"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:83
 msgid "(user_id, task_id) ids can be 'all', 'local', or an actual id"
-msgstr ""
+msgstr "(user_id, task_id) ids can be 'all', 'local', or an actual ஐடி"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:10
 msgid "Set reminders and manage tasks"
-msgstr ""
+msgstr "நினைவூட்டல்களை அமைத்து பணிகளை நிர்வகிக்கவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:13
 msgid "What you can do with Reminders:"
-msgstr ""
+msgstr "நினைவூட்டல்களுடன் நீங்கள் என்ன செய்ய முடியும்:"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:15
 msgid "Set recurring reminders"
-msgstr ""
+msgstr "தொடர்ச்சியான நினைவூட்டல்களை அமைக்கவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:16
 msgid "Schedule notifications"
-msgstr ""
+msgstr "அறிவிப்புகளை திட்டமிடுங்கள்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:17
 msgid "Sort, filter, and search for reminders"
-msgstr ""
+msgstr "வரிசைப்படுத்தவும், வடிகட்டவும், நினைவூட்டல்களைத் தேடவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:18
 msgid "Mark reminders as important or complete"
-msgstr ""
+msgstr "நினைவூட்டல்களை முக்கியமான அல்லது முழுமையானதாகக் குறிக்கவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:19
 msgid "Organize reminders using lists"
-msgstr ""
+msgstr "பட்டியல்களைப் பயன்படுத்தி நினைவூட்டல்களை ஒழுங்கமைக்கவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:20
 msgid "Optionally play a sound when notifications are sent"
-msgstr ""
+msgstr "அறிவிப்புகள் அனுப்பப்படும்போது விருப்பமாக ஒலியை இயக்கவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:21
 msgid "Optionally sync with Microsoft To Do"
-msgstr ""
+msgstr "செய்ய விருப்பமாக மைக்ரோசாப்ட் உடன் ஒத்திசைக்கவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:22
 msgid "Optionally sync with CalDAV servers"
-msgstr ""
+msgstr "விருப்பமாக கால்டாவ் சேவையகங்களுடன் ஒத்திசைக்கவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:23
 msgid "Import and export ical/ics files"
-msgstr ""
+msgstr "ICAL/ICS கோப்புகளை இறக்குமதி செய்து ஏற்றுமதி செய்க"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:57
 msgid "Todo"
-msgstr ""
+msgstr "அனைத்தும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:58
 msgid "Productivity"
-msgstr ""
+msgstr "உற்பத்தித்திறன்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:59
 msgid "Task"
-msgstr ""
+msgstr "பணி"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:60
 msgid "Planning"
-msgstr ""
+msgstr "திட்டமிடல்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:61
 msgid "Planner"
-msgstr ""
+msgstr "திட்டமிடுபவர்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:62
 #: src/browser/resources/ui/reminder_edit_window.ui:87
 msgid "Time"
-msgstr ""
+msgstr "நேரம்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:63
 msgid "Management"
-msgstr ""
+msgstr "மேலாண்மை"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:64
 msgid "Reminder"
-msgstr ""
+msgstr "நினைவூட்டல்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:65
 msgid "Remembrance"
-msgstr ""
+msgstr "நினைவு"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:87
 msgid "UI improvements"
-msgstr ""
+msgstr "இடைமுகம் மேம்பாடுகள்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:88
 msgid "Added support for making the week start on sunday"
-msgstr ""
+msgstr "ஞாயிற்றுக்கிழமை வாரத்தைத் தொடங்குவதற்கான உதவி சேர்க்கப்பட்டது"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:89
 msgid ""
 "Added indicators that show how many incomplete reminders are in each list/"
 "group"
 msgstr ""
+"ஒவ்வொரு பட்டியல்/குழுவிலும் எத்தனை முழுமையற்ற நினைவூட்டல்கள் உள்ளன என்பதைக் காட்டும் "
+"குறிகாட்டிகள் சேர்க்கப்பட்டவை"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:90
 msgid "Added support for syncing with CalDAV servers"
-msgstr ""
+msgstr "கால்டாவ் சேவையகங்களுடன் ஒத்திசைக்க உதவி சேர்க்கப்பட்டது"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:91
 msgid ""
 "Added support for selecting multiple reminders in one click by holding shift"
 msgstr ""
+"சிப்ட் வைத்திருப்பதன் மூலம் ஒரே கிளிக்கில் பல நினைவூட்டல்களைத் தேர்ந்தெடுப்பதற்கான உதவி "
+"சேர்க்கப்பட்டது"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:92
 msgid "Added support for dragging and dropping reminders between lists"
 msgstr ""
+"பட்டியல்களுக்கு இடையில் நினைவூட்டல்களை இழுத்து கைவிடுவதற்கான உதவி சேர்க்கப்பட்டது"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:93
 msgid "Added support for importing and exporting ical/ics files"
 msgstr ""
+"ICAL/ICS கோப்புகளை இறக்குமதி செய்வதற்கும் ஏற்றுமதி செய்வதற்கும் உதவி சேர்க்கப்பட்டது"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:94
 msgid "Added more multithreading to significantly speed up certain operations"
 msgstr ""
+"சில செயல்பாடுகளை கணிசமாக விரைவுபடுத்துவதற்கு மேலும் மல்டித்ரெடிங் சேர்க்கப்பட்டது"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:95
 msgid "Added support for syncing recurring reminders with Microsoft To Do"
 msgstr ""
+"செய்ய மைக்ரோசாப்ட் உடன் தொடர்ச்சியான நினைவூட்டல்களை ஒத்திசைப்பதற்கான உதவி சேர்க்கப்பட்டது"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:96
 msgid "Added support for creating monthly and yearly repeating reminders"
 msgstr ""
+"மாதாந்திர மற்றும் ஆண்டு மறுநிகழ்வு நினைவூட்டல்களை உருவாக்குவதற்கான உதவி சேர்க்கப்பட்டது"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:97
 msgid ""
 "Version numbers are now handled in a logical way (as in they aren't just "
 "doubles)"
 msgstr ""
+"பதிப்பு எண்கள் இப்போது ஒரு தர்க்கரீதியான முறையில் கையாளப்படுகின்றன (அவை இரட்டையர் அல்ல)"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:98
 msgid ""
 "Microsoft sign in window now appears in the app instead of in the browser"
 msgstr ""
+"நுண்மென் உள்நுழைவு சாளரத்தில் இப்போது உலாவிக்கு பதிலாக பயன்பாட்டில் தோன்றும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:99
 msgid "Significantly improve how recurring reminders function"
 msgstr ""
+"தொடர்ச்சியான நினைவூட்டல்கள் எவ்வாறு செயல்படுகின்றன என்பதை கணிசமாக மேம்படுத்தவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:100
 msgid "Fix date/time text wrapping awkwardly"
-msgstr ""
+msgstr "தேதி/நேர உரை அசிங்கமாக மடக்குதல்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:101
 msgid "Improvements to handling of network errors"
-msgstr ""
+msgstr "பிணைய பிழைகள் கையாள்வதில் மேம்பாடுகள்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:102
 msgid "Fix some other minor issues"
-msgstr ""
+msgstr "வேறு சில சிறிய சிக்கல்களை சரிசெய்யவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:103
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:207
 msgid "Bump API version"
-msgstr ""
+msgstr "பம்ப் பநிஇ பதிப்பு"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:110
 msgid "Fix versioning by bumping to 4.0"
-msgstr ""
+msgstr "4.0 ஆக மோதியதன் மூலம் பதிப்பை சரிசெய்யவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:117
 msgid "Remove warning about cloud syncing being in beta"
-msgstr ""
+msgstr "பீட்டாவில் இருப்பது முகில் ஒத்திசைவு பற்றிய எச்சரிக்கையை அகற்று"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:118
 msgid "Fix issue where you could make reminder recurring when it shouldn't be"
 msgstr ""
+"நினைவூட்டல் இருக்கக் கூடாது என்று நீங்கள் மறுநிகழ்வு செய்யக்கூடிய சிக்கலைச் சரிசெய்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:125
 msgid "Change delete icon"
-msgstr ""
+msgstr "ஐகானை நீக்கு"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:126
 msgid "Fix some ui bugs"
-msgstr ""
+msgstr "சில இடைமுகம் பிழைகள் சரிசெய்யவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:127
 msgid "Some tiny performance improvements"
-msgstr ""
+msgstr "சில சிறிய செயல்திறன் மேம்பாடுகள்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:128
 msgid "Improve logging"
-msgstr ""
+msgstr "பதிவு செய்வதை மேம்படுத்தவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:135
 msgid "UI Improvements to sidebar"
-msgstr ""
+msgstr "பக்கப்பட்டிக்கு இடைமுகம் மேம்பாடுகள்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:136
 msgid "Fix issues when moving reminders between lists"
 msgstr ""
+"பட்டியல்களுக்கு இடையில் நினைவூட்டல்களை நகர்த்தும்போது சிக்கல்களை சரிசெய்யவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:137
 msgid "Fix issue with error dialogs"
-msgstr ""
+msgstr "பிழை உரையாடல்களுடன் சிக்கலை சரிசெய்யவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:144
 msgid "Fix issue when deleting lists"
-msgstr ""
+msgstr "பட்டியல்களை நீக்கும்போது சிக்கலை சரிசெய்யவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:151
 msgid "Fix issue when removing selected reminders"
-msgstr ""
+msgstr "தேர்ந்தெடுக்கப்பட்ட நினைவூட்டல்களை அகற்றும்போது சிக்கலை சரிசெய்யவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:158
 msgid "Performance improvements"
-msgstr ""
+msgstr "செயல்திறன் மேம்பாடுகள்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:159
 msgid "Don't freeze UI when updating MS reminders"
-msgstr ""
+msgstr "MS நினைவூட்டல்களை புதுப்பிக்கும்போது இடைமுகம் ஐ முடக்க வேண்டாம்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:160
 msgid "Automatically refresh reminders after waking from suspend"
-msgstr ""
+msgstr "சச்பெண்டிலிருந்து எழுந்த பிறகு தானாக நினைவூட்டல்களை புதுப்பிக்கவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:161
 msgid "Fix issues with deleting lists"
-msgstr ""
+msgstr "பட்டியல்களை நீக்குவதன் மூலம் சிக்கல்களை சரிசெய்யவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:162
 msgid "Fix issues when queueing remote changes while internet is disconnected"
 msgstr ""
+"இணையம் துண்டிக்கப்படும்போது தொலைநிலை மாற்றங்களை வரிசைப்படுத்தும்போது சிக்கல்களை "
+"சரிசெய்யவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:169
 msgid "Stop showing completed reminders on upcoming page"
 msgstr ""
+"வரவிருக்கும் பக்கத்தில் நிறைவு செய்யப்பட்ட நினைவூட்டல்களைக் காண்பிப்பதை நிறுத்துங்கள்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:170
 msgid "Cross out completed reminders on all reminders page"
 msgstr ""
+"அனைத்து நினைவூட்டல்கள் பக்கத்திலும் நிறைவு செய்யப்பட்ட நினைவூட்டல்களைக் கடக்கவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:177
 msgid "Add support for setting due dates without sending notifications"
-msgstr ""
+msgstr "அறிவிப்புகளை அனுப்பாமல் சரியான தேதிகளை அமைப்பதற்கான ஆதரவைச் சேர்க்கவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:178
 msgid ""
 "Add support for selecting and editing multiple reminders (Start selecting "
 "with Ctrl + LMB or by pressing and holding a reminder)"
 msgstr ""
+"பல நினைவூட்டல்களைத் தேர்ந்தெடுப்பதற்கும் திருத்துவதற்கும் ஆதரவைச் சேர்க்கவும் (Ctrl + LMB "
+"உடன் தேர்ந்தெடுக்கத் தொடங்குங்கள் அல்லது நினைவூட்டலை அழுத்தி வைத்திருப்பதன் மூலம்)"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:179
 msgid "Slightly improve error handling"
-msgstr ""
+msgstr "பிழை கையாளுதலை சற்று மேம்படுத்தவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:186
 msgid "Fix issue when setting reminders in another year"
-msgstr ""
+msgstr "மற்றொரு வருடத்தில் நினைவூட்டல்களை அமைக்கும் போது சிக்கலை சரிசெய்யவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:193
 msgid "Fix issue when saving Microsoft To Do Reminders"
-msgstr ""
+msgstr "நினைவூட்டல்களைச் செய்ய மைக்ரோசாப்ட் சேமிக்கும்போது சிக்கலை சரிசெய்யவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:200
 msgid "New notification sound"
-msgstr ""
+msgstr "புதிய அறிவிப்பு ஒலி"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:201
 msgid "Allow sorting reminders by created time and last updated time"
 msgstr ""
+"உருவாக்கிய நேரம் மற்றும் கடைசியாக புதுப்பிக்கப்பட்ட நேரத்தின் மூலம் வரிசையாக்க "
+"நினைவூட்டல்களை அனுமதிக்கவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:202
 msgid "Allow marking reminders as important"
-msgstr ""
+msgstr "நினைவூட்டல்களைக் குறிக்கும் முக்கியமானதாக அனுமதிக்கவும்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:203
 msgid "Slightly improved UI"
-msgstr ""
+msgstr "சற்று மேம்படுத்தப்பட்ட இடைமுகம்"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:204
 msgid "Added keyboard shortcuts page"
-msgstr ""
+msgstr "விசைப்பலகை குறுக்குவழிகள் சேர்க்கப்பட்டது"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:205
 msgid "Added more keyboard shortcuts"
-msgstr ""
+msgstr "மேலும் விசைப்பலகை குறுக்குவழிகளைச் சேர்த்தது"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:206
 msgid "Lots of bugfixes"
-msgstr ""
+msgstr "பிழைத்திருத்தங்கள் நிறைய"
 
 #: src/browser/resources/ui/caldav_sign_in.ui:23
 msgid "CalDAV Sync"
-msgstr ""
+msgstr "கால்டாவ் ஒத்திசைவு"
 
 #: src/browser/resources/ui/caldav_sign_in.ui:47
 #: src/browser/resources/ui/preferences_user_row.ui:23
 msgid "Display Name"
-msgstr ""
+msgstr "காட்சி பெயர்"
 
 #: src/browser/resources/ui/caldav_sign_in.ui:53
 msgid "Server URL"
-msgstr ""
+msgstr "சேவையக முகவரி"
 
 #: src/browser/resources/ui/caldav_sign_in.ui:59
 msgid "Username"
-msgstr ""
+msgstr "பயனர்பெயர்"
 
 #: src/browser/resources/ui/caldav_sign_in.ui:65
 msgid "Password"
-msgstr ""
+msgstr "கடவுச்சொல்"
 
 #: src/browser/resources/ui/caldav_sign_in.ui:72
 msgid "Sign In"
-msgstr ""
+msgstr "விடுபதிகை"
 
 #: src/browser/resources/ui/edit_lists_window.ui:20
 #: src/browser/resources/ui/main_window.ui:285
 msgid "Edit Lists"
-msgstr ""
+msgstr "பட்டியல்களைத் திருத்து"
 
 #: src/browser/resources/ui/error_dialog.ui:48
 msgid "View Error"
-msgstr ""
+msgstr "பிழையைக் காண்க"
 
 #: src/browser/resources/ui/export_lists_window.ui:20
 msgid "Export Lists"
-msgstr ""
+msgstr "ஏற்றுமதி பட்டியல்கள்"
 
 #: src/browser/resources/ui/export_lists_window.ui:78
 #: src/browser/resources/ui/import_lists_window.ui:92
@@ -462,783 +494,794 @@ msgstr ""
 #: src/browser/move_reminders_window.py:111 src/browser/preferences.py:274
 #: src/browser/reminder.py:412
 msgid "Cancel"
-msgstr ""
+msgstr "ரத்துசெய்"
 
 #: src/browser/resources/ui/export_lists_window.ui:93
 #: src/browser/resources/ui/shortcuts_window.ui:37
 msgid "Export"
-msgstr ""
+msgstr "ஏற்றுமதி"
 
 #: src/browser/resources/ui/import_lists_window.ui:20
 msgid "Import Lists"
-msgstr ""
+msgstr "பட்டியல்கள் இறக்குமதி"
 
 #: src/browser/resources/ui/import_lists_window.ui:56
 msgid "Import to specific list"
-msgstr ""
+msgstr "குறிப்பிட்ட பட்டியலில் இறக்குமதி செய்யுங்கள்"
 
 #: src/browser/resources/ui/import_lists_window.ui:57
 msgid "Otherwise new lists will be created"
-msgstr ""
+msgstr "இல்லையெனில் புதிய பட்டியல்கள் உருவாக்கப்படும்"
 
 #: src/browser/resources/ui/import_lists_window.ui:63
 msgid "Select a list"
-msgstr ""
+msgstr "ஒரு பட்டியலைத் தேர்ந்தெடுக்கவும்"
 
 #: src/browser/resources/ui/import_lists_window.ui:107
 #: src/browser/resources/ui/shortcuts_window.ui:43
 msgid "Import"
-msgstr ""
+msgstr "இறக்குமதி"
 
 #: src/browser/resources/ui/main_window.ui:50
 msgid "Show sidebar"
-msgstr ""
+msgstr "பக்கப்பட்டியைக் காட்டு"
 
 #: src/browser/resources/ui/main_window.ui:61
 msgid "Sort direction"
-msgstr ""
+msgstr "திசையை வரிசைப்படுத்துங்கள்"
 
 #: src/browser/resources/ui/main_window.ui:75
 #: src/browser/resources/ui/shortcuts_window.ui:101
 msgid "Search"
-msgstr ""
+msgstr "தேடல்"
 
 #: src/browser/resources/ui/main_window.ui:83
 msgid "App menu"
-msgstr ""
+msgstr "பயன்பாட்டு பட்டியல்"
 
 #: src/browser/resources/ui/main_window.ui:126
 #: src/browser/resources/ui/main_window.ui:340 src/browser/main_window.py:1048
 msgid "All Reminders"
-msgstr ""
+msgstr "அனைத்து நினைவூட்டல்களும்"
 
 #: src/browser/resources/ui/main_window.ui:158 src/browser/main_window.py:1059
 msgid "Upcoming Reminders"
-msgstr ""
+msgstr "வரவிருக்கும் நினைவூட்டல்கள்"
 
 #: src/browser/resources/ui/main_window.ui:190 src/browser/main_window.py:1070
 msgid "Past Reminders"
-msgstr ""
+msgstr "கடந்த நினைவூட்டல்கள்"
 
 #: src/browser/resources/ui/main_window.ui:222 src/browser/main_window.py:1081
 msgid "Completed Reminders"
-msgstr ""
+msgstr "நிறைவடைந்த நினைவூட்டல்கள்"
 
 #: src/browser/resources/ui/main_window.ui:448 src/browser/reminder.py:346
 msgid "Complete"
-msgstr ""
+msgstr "முழுமையானது"
 
 #: src/browser/resources/ui/main_window.ui:474 src/browser/reminder.py:342
 msgid "Incomplete"
-msgstr ""
+msgstr "முழுமையற்ற"
 
 #: src/browser/resources/ui/main_window.ui:500
 #: src/browser/resources/ui/reminder_edit_window.ui:66
 msgid "Important"
-msgstr ""
+msgstr "முக்கியமானது"
 
 #: src/browser/resources/ui/main_window.ui:526
 msgid "Unimportant"
-msgstr ""
+msgstr "முக்கியமற்றது"
 
 #: src/browser/resources/ui/main_window.ui:551
 #: src/browser/resources/ui/move_reminders_window.ui:93
 msgid "Move"
-msgstr ""
+msgstr "நகர்த்தவும்"
 
 #: src/browser/resources/ui/main_window.ui:573
 #: src/browser/resources/ui/reminder.ui:100
 #: src/browser/edit_lists_window.py:202 src/browser/reminder.py:413
 msgid "Remove"
-msgstr ""
+msgstr "அகற்று"
 
 #: src/browser/resources/ui/main_window.ui:595
 #: src/browser/resources/ui/main_window.ui:603
 msgid "Add a reminder"
-msgstr ""
+msgstr "ஒரு நினைவூட்டலைச் சேர்க்கவும்"
 
 #: src/browser/resources/ui/main_window.ui:625
 msgid "_Refresh"
-msgstr ""
+msgstr "புதிப்பி"
 
 #: src/browser/resources/ui/main_window.ui:629
 msgid "_Export Lists"
-msgstr ""
+msgstr "ஏற்றுமதி பட்டியல்"
 
 #: src/browser/resources/ui/main_window.ui:633
 msgid "_Import Lists"
-msgstr ""
+msgstr "இறக்குமதி பட்டியல்"
 
 #: src/browser/resources/ui/main_window.ui:639
 msgid "_Preferences"
-msgstr ""
+msgstr "_ முனைகள்"
 
 #: src/browser/resources/ui/main_window.ui:643
 msgid "_Keyboard Shortcuts"
-msgstr ""
+msgstr "விசைப்பலகை குறுக்குவழிகள்"
 
 #: src/browser/resources/ui/main_window.ui:647
 msgid "_About Reminders"
-msgstr ""
+msgstr "நினைவூட்டல்கள் பற்றி"
 
 #: src/browser/resources/ui/main_window.ui:654
 msgid "Sort By"
-msgstr ""
+msgstr "வரிசைப்படுத்தவும்"
 
 #: src/browser/resources/ui/main_window.ui:656
 msgid "_Time"
-msgstr ""
+msgstr "_ நேரம்"
 
 #: src/browser/resources/ui/main_window.ui:661
 msgid "_Alphabetical"
-msgstr ""
+msgstr "_ALPHABETICAL"
 
 #: src/browser/resources/ui/main_window.ui:666
 msgid "_Created"
-msgstr ""
+msgstr "_ திரையிட்டது"
 
 #: src/browser/resources/ui/main_window.ui:671
 msgid "_Last Updated"
-msgstr ""
+msgstr "கடைசியாக புதுப்பிக்கப்பட்டது"
 
 #: src/browser/resources/ui/microsoft_sign_in.ui:23
 msgid "Microsoft To Do Sync"
-msgstr ""
+msgstr "ஒத்திசைவு செய்ய மைக்ரோசாப்ட்"
 
 #: src/browser/resources/ui/move_reminders_window.ui:20
 msgid "Move Selected Reminder(s)"
-msgstr ""
+msgstr "தேர்ந்தெடுக்கப்பட்ட நினைவூட்டல் (களை) நகர்த்தவும்"
 
 #: src/browser/resources/ui/preferences.ui:20
 #: src/browser/resources/ui/shortcuts_window.ui:49
 msgid "Preferences"
-msgstr ""
+msgstr "விருப்பத்தேர்வுகள்"
 
 #: src/browser/resources/ui/preferences.ui:29
 msgid "Syncing"
-msgstr ""
+msgstr "ஒத்திசைவு"
 
 #: src/browser/resources/ui/preferences.ui:38
 msgid "Microsoft To Do"
-msgstr ""
+msgstr "செய்ய மைக்ரோசாப்ட்"
 
 #: src/browser/resources/ui/preferences.ui:50
 #: src/browser/resources/ui/preferences.ui:78
 msgid "Add Account"
-msgstr ""
+msgstr "கணக்கைச் சேர்க்கவும்"
 
 #: src/browser/resources/ui/preferences.ui:66
 msgid "CalDAV"
-msgstr ""
+msgstr "கால்டாவ்"
 
 #: src/browser/resources/ui/preferences.ui:98
 msgid "Refresh"
-msgstr ""
+msgstr "புதுப்பிப்பு"
 
 #: src/browser/resources/ui/preferences.ui:110
 #: src/browser/resources/ui/reminder_edit_window.ui:52
 msgid "General"
-msgstr ""
+msgstr "பொது"
 
 #: src/browser/resources/ui/preferences.ui:119
 msgid "Week starts on Sunday"
-msgstr ""
+msgstr "வாரம் ஞாயிற்றுக்கிழமை தொடங்குகிறது"
 
 #: src/browser/resources/ui/preferences.ui:130
 msgid "Play sound with notification"
-msgstr ""
+msgstr "அறிவிப்புடன் ஒலியை விளையாடுங்கள்"
 
 #: src/browser/resources/ui/preferences.ui:134
 msgid "Use the included notification sound"
-msgstr ""
+msgstr "சேர்க்கப்பட்ட அறிவிப்பு ஒலியைப் பயன்படுத்தவும்"
 
 #: src/browser/resources/ui/preferences.ui:135
 msgid "Otherwise the bell sound from the enabled sound theme will be used"
 msgstr ""
+"இல்லையெனில் இயக்கப்பட்ட ஒலி கருப்பொருளிலிருந்து மணி ஒலி பயன்படுத்தப்படும்"
 
 #: src/browser/resources/ui/preferences.ui:153
 msgid "Use locale default"
-msgstr ""
+msgstr "லோகேல் இயல்புநிலையைப் பயன்படுத்தவும்"
 
 #: src/browser/resources/ui/preferences.ui:154
 msgid "12 hour time"
-msgstr ""
+msgstr "12 மணிநேர நேரம்"
 
 #: src/browser/resources/ui/preferences.ui:155
 msgid "24 hour time"
-msgstr ""
+msgstr "24 மணி நேரம்"
 
 #: src/browser/resources/ui/preferences.ui:160
 msgid "5 mins"
-msgstr ""
+msgstr "5 நிமிடங்கள்"
 
 #: src/browser/resources/ui/preferences.ui:161
 msgid "15 mins"
-msgstr ""
+msgstr "15 நிமிடங்கள்"
 
 #: src/browser/resources/ui/preferences.ui:162
 msgid "30 mins"
-msgstr ""
+msgstr "30 நிமிடங்கள்"
 
 #: src/browser/resources/ui/preferences.ui:163
 msgid "60 mins"
-msgstr ""
+msgstr "60 நிமிடங்கள்"
 
 #: src/browser/resources/ui/preferences_user_row.ui:52
 msgid "All"
-msgstr ""
+msgstr "அனைத்தும்"
 
 #: src/browser/resources/ui/preferences_user_row.ui:75
 #: src/browser/preferences.py:275
 msgid "Sign Out"
-msgstr ""
+msgstr "விடுபதிகை"
 
 #: src/browser/resources/ui/reminder.ui:131
 msgid "Edit"
-msgstr ""
+msgstr "தொகு"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:55
 msgid "What should the reminder be called?"
-msgstr ""
+msgstr "நினைவூட்டலை என்ன அழைக்க வேண்டும்?"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:61
 msgid "Short description of the reminder (Optional)"
-msgstr ""
+msgstr "நினைவூட்டலின் குறுகிய விளக்கம் (விரும்பினால்)"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:67
 msgid "This will make the reminder display first in the list"
-msgstr ""
+msgstr "இது பட்டியலில் முதலில் நினைவூட்டல் காட்சியை உருவாக்கும்"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:79
 msgid "Location"
-msgstr ""
+msgstr "இடம்"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:90
 msgid "Set a date/time"
-msgstr ""
+msgstr "தேதி/நேரத்தை அமைக்கவும்"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:112
 #: src/browser/resources/ui/reminder_edit_window.ui:447
 msgid "Select date"
-msgstr ""
+msgstr "தேதியைத் தேர்ந்தெடுக்கவும்"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:147
 msgid "Hour"
-msgstr ""
+msgstr "மணி"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:178
 msgid "Minute"
-msgstr ""
+msgstr "நிமிடங்கள்"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:224
 msgid "Send a notification"
-msgstr ""
+msgstr "அறிவிப்பை அனுப்பவும்"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:243
 msgid "Repeat the reminder"
-msgstr ""
+msgstr "நினைவூட்டலை மீண்டும் செய்யவும்"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:244
 msgid "The reminder will be updated when you complete it"
-msgstr ""
+msgstr "நீங்கள் அதை முடிக்கும்போது நினைவூட்டல் புதுப்பிக்கப்படும்"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:259
 msgid "Repeat every"
-msgstr ""
+msgstr "ஒவ்வொன்றையும் மீண்டும் செய்யவும்"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:310
 msgid "Mon"
-msgstr ""
+msgstr "தி"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:311
 msgid "Monday"
-msgstr ""
+msgstr "திங்கள்"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:322
 msgid "Tue"
-msgstr ""
+msgstr "செவ்வாய்"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:323
 msgid "Tuesday"
-msgstr ""
+msgstr "செவ்வாய்க்கிழமை"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:334
 msgid "Wed"
-msgstr ""
+msgstr "அறிவன்"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:335
 msgid "Wednesday"
-msgstr ""
+msgstr "புதன்கிழமை"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:346
 msgid "Thu"
-msgstr ""
+msgstr "Thu"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:347
 msgid "Thursday"
-msgstr ""
+msgstr "வியாழக்கிழமை"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:358
 msgid "Fri"
-msgstr ""
+msgstr "வெள்ளி"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:359
 msgid "Friday"
-msgstr ""
+msgstr "வெள்ளிக்கிழமை"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:370
 msgid "Sat"
-msgstr ""
+msgstr "காரி"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:371
 msgid "Saturday"
-msgstr ""
+msgstr "காரிக்கிழமை"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:382
 msgid "Sun"
-msgstr ""
+msgstr "சூரியன்"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:383
 msgid "Sunday"
-msgstr ""
+msgstr "ஞாயிற்றுக்கிழமை"
 
 #. Translators: This is a noun, preceded by a number to represent the number of occurrences of something
 #: src/browser/resources/ui/reminder_edit_window.ui:432
 msgid "time(s)"
-msgstr ""
+msgstr "நேரம் (கள்)"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:505
 msgid "Save"
-msgstr ""
+msgstr "சேமி"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:520
 msgid "minute(s)"
-msgstr ""
+msgstr "மணித்துளி (கள்)"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:521
 msgid "hour(s)"
-msgstr ""
+msgstr "மணி (கள்)"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:522
 #: src/browser/resources/ui/reminder_edit_window.ui:530
 msgid "day(s)"
-msgstr ""
+msgstr "நாள் (கள்)"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:523
 #: src/browser/resources/ui/reminder_edit_window.ui:531
 msgid "week(s)"
-msgstr ""
+msgstr "வாரம் (கள்)"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:524
 #: src/browser/resources/ui/reminder_edit_window.ui:532
 msgid "months(s)"
-msgstr ""
+msgstr "மாதங்கள் (கள்)"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:525
 #: src/browser/resources/ui/reminder_edit_window.ui:533
 msgid "years(s)"
-msgstr ""
+msgstr "ஆண்டுகள் (கள்)"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:538
 msgid "Repeat forever"
-msgstr ""
+msgstr "என்றென்றும் மீண்டும் செய்யவும்"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:539
 msgid "Display a total of"
-msgstr ""
+msgstr "மொத்தத்தைக் காண்பி"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:540
 msgid "Repeat until"
-msgstr ""
+msgstr "வரை மீண்டும் செய்யவும்"
 
 #: src/browser/resources/ui/shortcuts_window.ui:27
 msgid "Application"
-msgstr ""
+msgstr "பயன்பாடு"
 
 #: src/browser/resources/ui/shortcuts_window.ui:31
 msgid "Show menu"
-msgstr ""
+msgstr "மெனுவைக் காட்டு"
 
 #: src/browser/resources/ui/shortcuts_window.ui:55
 msgid "Keyboard shortcuts"
-msgstr ""
+msgstr "விசைப்பலகை குறுக்குவழிகள்"
 
 #: src/browser/resources/ui/shortcuts_window.ui:61
 msgid "Quit"
-msgstr ""
+msgstr "வெளியேறு"
 
 #: src/browser/resources/ui/shortcuts_window.ui:68
 msgid "Navigation"
-msgstr ""
+msgstr "வானோடல்"
 
 #: src/browser/resources/ui/shortcuts_window.ui:72
 msgid "Move left"
-msgstr ""
+msgstr "இடதுபுறம் நகர்த்தவும்"
 
 #: src/browser/resources/ui/shortcuts_window.ui:78
 msgid "Move up"
-msgstr ""
+msgstr "மேலே செல்லுங்கள்"
 
 #: src/browser/resources/ui/shortcuts_window.ui:84
 msgid "Move right"
-msgstr ""
+msgstr "வலதுபுறம் நகர்த்தவும்"
 
 #: src/browser/resources/ui/shortcuts_window.ui:90
 msgid "Move down"
-msgstr ""
+msgstr "கீழே செல்லுங்கள்"
 
 #: src/browser/resources/ui/shortcuts_window.ui:97
 msgid "Main Window"
-msgstr ""
+msgstr "முதன்மை சாளரம்"
 
 #: src/browser/resources/ui/shortcuts_window.ui:107
 msgid "New reminder"
-msgstr ""
+msgstr "புதிய நினைவூட்டல்"
 
 #: src/browser/resources/ui/shortcuts_window.ui:113
 msgid "Refresh reminders"
-msgstr ""
+msgstr "நினைவூட்டல்களை புதுப்பிக்கவும்"
 
 #: src/browser/resources/ui/shortcuts_window.ui:119
 msgid "Select all reminders"
-msgstr ""
+msgstr "அனைத்து நினைவூட்டல்களையும் தேர்ந்தெடுக்கவும்"
 
 #: src/browser/resources/ui/shortcuts_window.ui:125
 msgid "Hold to start selecting reminders"
-msgstr ""
+msgstr "நினைவூட்டல்களைத் தேர்ந்தெடுக்கத் தொடங்க"
 
 #: src/browser/resources/ui/shortcuts_window.ui:131
 msgid "Unselect all reminders"
-msgstr ""
+msgstr "அனைத்து நினைவூட்டல்களையும் தேர்வுநீக்கு"
 
 #: src/browser/resources/ui/shortcuts_window.ui:137
 msgid "Remove selected reminders"
-msgstr ""
+msgstr "தேர்ந்தெடுக்கப்பட்ட நினைவூட்டல்களை அகற்று"
 
 #: src/browser/resources/ui/shortcuts_window.ui:144
 msgid "Child Windows"
-msgstr ""
+msgstr "குழந்தை சன்னல்கள்"
 
 #: src/browser/resources/ui/shortcuts_window.ui:148
 msgid "Close window"
-msgstr ""
+msgstr "சாளரத்தை மூடு"
 
 #: src/browser/resources/ui/shortcuts_window.ui:154
 msgid "Save changes"
-msgstr ""
+msgstr "மாற்றங்களைச் சேமிக்கவும்"
 
 #: src/browser/about.py:51
 msgid "Copyright 2023 Sasha Hale"
-msgstr ""
+msgstr "பதிப்புரிமை 2023 சாசா ஏல்"
 
 #. Translators: Do not translate this, instead put your name and email here.
 #. name <email>
 #: src/browser/about.py:59
 msgid "translator-credits"
-msgstr ""
+msgstr "மொழிபெயர்ப்பாளர்-வரவு"
 
 #: src/browser/application.py:56
 msgid "Print the version of the app"
-msgstr ""
+msgstr "பயன்பாட்டின் பதிப்பை அச்சிடுக"
 
 #: src/browser/application.py:63
 msgid "Restart service before starting app"
-msgstr ""
+msgstr "பயன்பாட்டைத் தொடங்குவதற்கு முன் சேவையை மறுதொடக்கம் செய்யுங்கள்"
 
 #: src/browser/application.py:70
 msgid "Start on a different page"
-msgstr ""
+msgstr "வேறு பக்கத்தில் தொடங்கவும்"
 
 #: src/browser/application.py:195 src/browser/application.py:375
 msgid "Something went wrong"
-msgstr ""
+msgstr "ஏதோ தவறு நடந்தது"
 
 #: src/browser/application.py:195 src/browser/application.py:375
 msgid "Changes were not saved. This bug should be reported."
-msgstr ""
+msgstr "மாற்றங்கள் சேமிக்கப்படவில்லை. இந்த பிழையைப் புகாரளிக்க வேண்டும்."
 
 #: src/browser/application.py:367
 msgid "Reminders failed to start"
-msgstr ""
+msgstr "நினைவூட்டல்கள் தொடங்கத் தவறிவிட்டன"
 
 #: src/browser/application.py:367
 msgid ""
 "If this is your first time running Reminders, you will probably have to log "
 "out and log back in before using it. This is due to a bug in Flatpak."
 msgstr ""
+"இது உங்கள் முதல் முறையாக இயங்கும் நினைவூட்டல்கள் என்றால், அதைப் பயன்படுத்துவதற்கு முன்பு "
+"நீங்கள் வெளியேறி மீண்டும் உள்நுழைய வேண்டியிருக்கும். இது பிளாட்பேக்கில் ஒரு பிழை "
+"காரணமாகும்."
 
 #: src/browser/edit_lists_window.py:22 src/browser/edit_lists_window.py:118
 msgid "New List"
-msgstr ""
+msgstr "புதிய பட்டியல்"
 
 #: src/browser/edit_lists_window.py:93 src/browser/main_window.py:388
 msgid "You have unsaved changes"
-msgstr ""
+msgstr "நீங்கள் சேமிக்கப்படாத மாற்றங்கள் உள்ளன"
 
 #: src/browser/edit_lists_window.py:94 src/browser/main_window.py:389
 msgid "Are you sure you want to close the window?"
-msgstr ""
+msgstr "நீங்கள் சாளரத்தை மூட விரும்புகிறீர்களா?"
 
 #: src/browser/edit_lists_window.py:97 src/browser/main_window.py:392
 #: src/browser/main_window.py:1286 src/browser/main_window.py:1301
 #: src/browser/main_window.py:1320 src/browser/main_window.py:1335
 #: src/browser/main_window.py:1350 src/browser/move_reminders_window.py:112
 msgid "Yes"
-msgstr ""
+msgstr "ஆம்"
 
 #: src/browser/edit_lists_window.py:153
 msgid "What should the list be called?"
-msgstr ""
+msgstr "பட்டியல் என்ன அழைக்கப்பட வேண்டும்?"
 
 #: src/browser/edit_lists_window.py:197
 msgid "Remove list?"
-msgstr ""
+msgstr "பட்டியலை அகற்று?"
 
 #: src/browser/edit_lists_window.py:198
 #, python-brace-format
 msgid "This will remove {list_name} and cannot be undone."
-msgstr ""
+msgstr "இது {list_name} மற்றும் செயல்தவிர்க்க முடியாது."
 
 #: src/browser/main_window.py:99
 msgid "Nothing to see here!"
-msgstr ""
+msgstr "இங்கே பார்க்க எதுவும் இல்லை!"
 
 #: src/browser/main_window.py:100
 msgid "Press the plus button below to add a reminder"
-msgstr ""
+msgstr "நினைவூட்டலைச் சேர்க்க கீழே உள்ள பிளச் பொத்தானை அழுத்தவும்"
 
 #: src/browser/main_window.py:104
 msgid "No reminders match your search"
-msgstr ""
+msgstr "உங்கள் தேடலுடன் எந்த நினைவூட்டல்களும் பொருந்தவில்லை"
 
 #: src/browser/main_window.py:407
 msgid "Does not repeat"
-msgstr ""
+msgstr "மீண்டும் செய்யாது"
 
 #: src/browser/main_window.py:410
 msgid "minute"
-msgstr ""
+msgstr "நிமிடங்கள்"
 
 #: src/browser/main_window.py:412
 msgid "minutes"
-msgstr ""
+msgstr "நிமைங்கள்"
 
 #: src/browser/main_window.py:415
 msgid "hour"
-msgstr ""
+msgstr "மணி"
 
 #: src/browser/main_window.py:417
 msgid "hours"
-msgstr ""
+msgstr "மணிகள்"
 
 #: src/browser/main_window.py:420
 msgid "day"
-msgstr ""
+msgstr "நாள்"
 
 #: src/browser/main_window.py:422
 msgid "days"
-msgstr ""
+msgstr "நாட்கள்"
 
 #. Translators: This is an abbreviation for Monday
 #: src/browser/main_window.py:427
 msgid "M"
-msgstr ""
+msgstr "மீ"
 
 #. Translators: This is an abbreviation for Tuesday
 #: src/browser/main_window.py:429
 msgid "Tu"
-msgstr ""
+msgstr "செ"
 
 #. Translators: This is an abbreviation for Wednesday
 #: src/browser/main_window.py:431
 msgid "W"
-msgstr ""
+msgstr "W"
 
 #. Translators: This is an abbreviation for Thursday
 #: src/browser/main_window.py:433
 msgid "Th"
-msgstr ""
+msgstr "வது"
 
 #. Translators: This is an abbreviation for Friday
 #: src/browser/main_window.py:435
 msgid "F"
-msgstr ""
+msgstr "F"
 
 #. Translators: This is an abbreviation for Saturday
 #: src/browser/main_window.py:437
 msgid "Sa"
-msgstr ""
+msgstr "ச"
 
 #. Translators: This is an abbreviation for Sunday
 #: src/browser/main_window.py:439
 msgid "Su"
-msgstr ""
+msgstr "அவை"
 
 #: src/browser/main_window.py:445
 msgid "week"
-msgstr ""
+msgstr "வாரம்"
 
 #: src/browser/main_window.py:447
 msgid "weeks"
-msgstr ""
+msgstr "வாரங்கள்"
 
 #: src/browser/main_window.py:453
 msgid "month"
-msgstr ""
+msgstr "மாதம்"
 
 #: src/browser/main_window.py:455
 msgid "months"
-msgstr ""
+msgstr "மாதங்கள்"
 
 #: src/browser/main_window.py:458
 msgid "year"
-msgstr ""
+msgstr "ஆண்டு"
 
 #: src/browser/main_window.py:460
 msgid "years"
-msgstr ""
+msgstr "ஆண்டுகள்"
 
 #: src/browser/main_window.py:463
 msgid "until"
-msgstr ""
+msgstr "வரை"
 
 #. Translators: This is a noun, preceded by a number to represent the number of occurrences of something
 #: src/browser/main_window.py:466
 msgid "time"
-msgstr ""
+msgstr "நேரம்"
 
 #. Translators: This is a noun, preceded by a number to represent the number of occurrences of something
 #: src/browser/main_window.py:469
 msgid "times"
-msgstr ""
+msgstr "பெருக்கல்"
 
 #. Translators: This is a adjective, followed by a number to represent how often something occurs
 #: src/browser/main_window.py:474
 msgid "Every"
-msgstr ""
+msgstr "ஒவ்வொன்றும்"
 
 #: src/browser/main_window.py:510
 msgid "Today"
-msgstr ""
+msgstr "இன்று"
 
 #: src/browser/main_window.py:512
 msgid "Tomorrow"
-msgstr ""
+msgstr "நாளை"
 
 #: src/browser/main_window.py:514
 msgid "Yesterday"
-msgstr ""
+msgstr "நேற்று"
 
 #: src/browser/main_window.py:736
 msgid "All Lists"
-msgstr ""
+msgstr "அனைத்து பட்டியல்களும்"
 
 #: src/browser/main_window.py:1257
 #, python-brace-format
 msgid "Searching '{text}'"
-msgstr ""
+msgstr "'{text}' தேடுகிறது"
 
 #: src/browser/main_window.py:1264
 msgid "Start typing to search"
-msgstr ""
+msgstr "தேட தட்டச்சு செய்யத் தொடங்குங்கள்"
 
 #: src/browser/main_window.py:1282
 msgid "Mark reminders as complete?"
-msgstr ""
+msgstr "நினைவூட்டல்களை முழுமையானது?"
 
 #: src/browser/main_window.py:1283
 msgid ""
 "Are you sure you want to mark the currently selected reminder(s) as complete?"
 msgstr ""
+"தற்போது தேர்ந்தெடுக்கப்பட்ட நினைவூட்டலை (களை) முழுமையானதாகக் குறிக்க விரும்புகிறீர்களா?"
 
 #: src/browser/main_window.py:1297
 msgid "Mark reminders as incomplete?"
-msgstr ""
+msgstr "நினைவூட்டல்களை முழுமையடையாதது என்று குறிக்கவும்?"
 
 #: src/browser/main_window.py:1298
 msgid ""
 "Are you sure you want to mark the currently selected reminder(s) as "
 "incomplete?"
 msgstr ""
+"தற்போது தேர்ந்தெடுக்கப்பட்ட நினைவூட்டலை (களை) முழுமையற்றதாகக் குறிக்க விரும்புகிறீர்களா?"
 
 #: src/browser/main_window.py:1316
 msgid "Mark reminders as important?"
-msgstr ""
+msgstr "நினைவூட்டல்களை முக்கியமானதா?"
 
 #: src/browser/main_window.py:1317
 msgid ""
 "Are you sure you want to mark the currently selected reminder(s) as "
 "important?"
 msgstr ""
+"தற்போது தேர்ந்தெடுக்கப்பட்ட நினைவூட்டலை (களை) முக்கியமானதாகக் குறிக்க விரும்புகிறீர்களா?"
 
 #: src/browser/main_window.py:1331
 msgid "Mark reminders as unimportant?"
-msgstr ""
+msgstr "நினைவூட்டல்கள் முக்கியமற்றவை என்று குறிக்கவும்?"
 
 #: src/browser/main_window.py:1332
 msgid ""
 "Are you sure you want to mark the currently selected reminder(s) as "
 "unimportant?"
 msgstr ""
+"தற்போது தேர்ந்தெடுக்கப்பட்ட நினைவூட்டலை (களை) முக்கியமற்றதாகக் குறிக்க விரும்புகிறீர்களா?"
 
 #: src/browser/main_window.py:1346
 msgid "Remove reminders?"
-msgstr ""
+msgstr "நினைவூட்டல்களை அகற்றவா?"
 
 #: src/browser/main_window.py:1347
 msgid ""
 "Are you sure you want to remove the currently selected reminder(s)? This "
 "cannot be undone."
 msgstr ""
+"தற்போது தேர்ந்தெடுக்கப்பட்ட நினைவூட்டலை (களை) அகற்ற விரும்புகிறீர்களா? இதை செயல்தவிர்க்க "
+"முடியாது."
 
 #: src/browser/move_reminders_window.py:109
 msgid "Are you sure you want to move the currently selected reminder(s)?"
 msgstr ""
+"தற்போது தேர்ந்தெடுக்கப்பட்ட நினைவூட்டலை (களை) நகர்த்த விரும்புகிறீர்களா?"
 
 #: src/browser/preferences.py:270
 msgid "Are you sure you want to sign out?"
-msgstr ""
+msgstr "நீங்கள் உறுதியாக உள்நுழைய விரும்புகிறீர்களா?"
 
 #: src/browser/preferences.py:271
 #, python-brace-format
 msgid "This will sign out <b>{self.username}</b>"
-msgstr ""
+msgstr "இது <b> {self.username} </b> ஐ பதிவு செய்யும்"
 
 #: src/browser/reminder.py:408
 msgid "Remove reminder?"
-msgstr ""
+msgstr "நினைவூட்டலை அகற்றவா?"
 
 #: src/browser/reminder.py:409
 #, python-brace-format
 msgid "This will remove {reminder} and cannot be undone."
-msgstr ""
+msgstr "இது {reminder} ஐ அகற்றும், மேலும் செயல்தவிர்க்க முடியாது."
 
 #: src/browser/reminder_edit_window.py:123
 msgid "Edit Reminder"
-msgstr ""
+msgstr "நினைவூட்டலைத் திருத்து"
 
 #: src/browser/reminder_edit_window.py:125
 msgid "New Reminder"
-msgstr ""
+msgstr "புதிய நினைவூட்டல்"
 
 #: src/browser/reminder_edit_window.py:278
 #: src/browser/reminder_edit_window.py:298
 msgid "PM"
-msgstr ""
+msgstr "பி.எம்"
 
 #: src/browser/reminder_edit_window.py:282
 #: src/browser/reminder_edit_window.py:302
 msgid "AM"
-msgstr ""
+msgstr "காலை"
 
 #: src/service/backend.py:634
 msgid "Mark as completed"
-msgstr ""
+msgstr "முடிக்கப்பட்டபடி குறி"
 
 #: src/service/backend.py:1015
 msgid "Local Reminders"
-msgstr ""
+msgstr "உள்ளக நினைவூட்டல்கள்"
 
 #: src/service/backend.py:1676
 msgid "Local"
-msgstr ""
+msgstr "உள்ளக"
