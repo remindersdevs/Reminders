@@ -8,29 +8,34 @@ msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 16:55-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-03-20 10:01+0000\n"
+"Last-Translator: Priit Jõerüüt <hwlate@joeruut.com>\n"
+"Language-Team: Estonian <https://hosted.weblate.org/projects/reminders/"
+"reminders/et/>\n"
 "Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.11-dev\n"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:4
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:9
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:66 src/info.py:8
 msgid "Reminders"
-msgstr ""
+msgstr "Meeldetuletused"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:5
 msgid "Set reminders for yourself"
-msgstr ""
+msgstr "Halda oma meeldetuletusi"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:13
 msgid ""
 "Todo;Productivity;Task;Planning;Planner;Time;Management;Reminder;Remembrance;"
 "Reminders;"
 msgstr ""
+"Todo;Productivity;Task;Planning;Planner;Time;Management;Reminder;Remembrance;Reminders;meeldetuletus;märguanne;teavitus;ülesanne;"
+"tehatv töö;tegemiseks;tegemisel;"
 
 #: data/service/io.github.dgsasha.Remembrance.Service3.desktop.in.in:4
 msgid "Remembrance Service"
@@ -132,88 +137,88 @@ msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:10
 msgid "Set reminders and manage tasks"
-msgstr ""
+msgstr "Märgi üles meeldetuletusi ja halda ülesandeid ning tegemisi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:13
 msgid "What you can do with Reminders:"
-msgstr ""
+msgstr "Mida Meeldetuletused aitab sul teha:"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:15
 msgid "Set recurring reminders"
-msgstr ""
+msgstr "Seadista korduvaid meeldetuletusi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:16
 msgid "Schedule notifications"
-msgstr ""
+msgstr "Ajasta teavitusi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:17
 msgid "Sort, filter, and search for reminders"
-msgstr ""
+msgstr "Järjesta, filtreeri ja otsi meeldetuletusi"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:18
 msgid "Mark reminders as important or complete"
-msgstr ""
+msgstr "Lisa meeldetuletustele olekuid nagu „tehtud“ või „oluline“"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:19
 msgid "Organize reminders using lists"
-msgstr ""
+msgstr "Halda meeldetuletusi loendite kaupa"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:20
 msgid "Optionally play a sound when notifications are sent"
-msgstr ""
+msgstr "Lisa teavitustele helimärguanne"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:21
 msgid "Optionally sync with Microsoft To Do"
-msgstr ""
+msgstr "Kui soovid, siis kasuta Microsoft To Do liidestust"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:22
 msgid "Optionally sync with CalDAV servers"
-msgstr ""
+msgstr "Kui soovid, siis kasuta liidestust CalDAVi serveritega"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:23
 msgid "Import and export ical/ics files"
-msgstr ""
+msgstr "Impordi ja ekspordi andmeid ical/ics failidega"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:57
 msgid "Todo"
-msgstr ""
+msgstr "Tegemised"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:58
 msgid "Productivity"
-msgstr ""
+msgstr "Tootlikkus"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:59
 msgid "Task"
-msgstr ""
+msgstr "Ülesanne"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:60
 msgid "Planning"
-msgstr ""
+msgstr "Kavandamine"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:61
 msgid "Planner"
-msgstr ""
+msgstr "Plaanimisrakendus"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:62
 #: src/browser/resources/ui/reminder_edit_window.ui:87
 msgid "Time"
-msgstr ""
+msgstr "Aeg"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:63
 msgid "Management"
-msgstr ""
+msgstr "Haldus"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:64
 msgid "Reminder"
-msgstr ""
+msgstr "Meeldetuletus"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:65
 msgid "Remembrance"
-msgstr ""
+msgstr "Mälestamine"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:87
 msgid "UI improvements"
-msgstr ""
+msgstr "Kasutajaliidese parandused"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:88
 msgid "Added support for making the week start on sunday"
@@ -414,41 +419,41 @@ msgstr ""
 
 #: src/browser/resources/ui/caldav_sign_in.ui:23
 msgid "CalDAV Sync"
-msgstr ""
+msgstr "CalDAVi sünkroniseerimine"
 
 #: src/browser/resources/ui/caldav_sign_in.ui:47
 #: src/browser/resources/ui/preferences_user_row.ui:23
 msgid "Display Name"
-msgstr ""
+msgstr "Kuvatav nimi"
 
 #: src/browser/resources/ui/caldav_sign_in.ui:53
 msgid "Server URL"
-msgstr ""
+msgstr "Serveri võrguaadress"
 
 #: src/browser/resources/ui/caldav_sign_in.ui:59
 msgid "Username"
-msgstr ""
+msgstr "Kasutajanimi"
 
 #: src/browser/resources/ui/caldav_sign_in.ui:65
 msgid "Password"
-msgstr ""
+msgstr "Salasõna"
 
 #: src/browser/resources/ui/caldav_sign_in.ui:72
 msgid "Sign In"
-msgstr ""
+msgstr "Logi sisse"
 
 #: src/browser/resources/ui/edit_lists_window.ui:20
 #: src/browser/resources/ui/main_window.ui:285
 msgid "Edit Lists"
-msgstr ""
+msgstr "Muuda loendeid"
 
 #: src/browser/resources/ui/error_dialog.ui:48
 msgid "View Error"
-msgstr ""
+msgstr "Vaatamisviga"
 
 #: src/browser/resources/ui/export_lists_window.ui:20
 msgid "Export Lists"
-msgstr ""
+msgstr "Ekspordi loendid"
 
 #: src/browser/resources/ui/export_lists_window.ui:78
 #: src/browser/resources/ui/import_lists_window.ui:92
@@ -462,148 +467,148 @@ msgstr ""
 #: src/browser/move_reminders_window.py:111 src/browser/preferences.py:274
 #: src/browser/reminder.py:412
 msgid "Cancel"
-msgstr ""
+msgstr "Katkesta"
 
 #: src/browser/resources/ui/export_lists_window.ui:93
 #: src/browser/resources/ui/shortcuts_window.ui:37
 msgid "Export"
-msgstr ""
+msgstr "Ekspordi"
 
 #: src/browser/resources/ui/import_lists_window.ui:20
 msgid "Import Lists"
-msgstr ""
+msgstr "Impordi loendid"
 
 #: src/browser/resources/ui/import_lists_window.ui:56
 msgid "Import to specific list"
-msgstr ""
+msgstr "Impordi kindlasse loendisse"
 
 #: src/browser/resources/ui/import_lists_window.ui:57
 msgid "Otherwise new lists will be created"
-msgstr ""
+msgstr "Vastasel juhul loon uue loendi"
 
 #: src/browser/resources/ui/import_lists_window.ui:63
 msgid "Select a list"
-msgstr ""
+msgstr "Palun vali loend"
 
 #: src/browser/resources/ui/import_lists_window.ui:107
 #: src/browser/resources/ui/shortcuts_window.ui:43
 msgid "Import"
-msgstr ""
+msgstr "Impordi"
 
 #: src/browser/resources/ui/main_window.ui:50
 msgid "Show sidebar"
-msgstr ""
+msgstr "Näita külgriba"
 
 #: src/browser/resources/ui/main_window.ui:61
 msgid "Sort direction"
-msgstr ""
+msgstr "Järjestamise suund"
 
 #: src/browser/resources/ui/main_window.ui:75
 #: src/browser/resources/ui/shortcuts_window.ui:101
 msgid "Search"
-msgstr ""
+msgstr "Otsi"
 
 #: src/browser/resources/ui/main_window.ui:83
 msgid "App menu"
-msgstr ""
+msgstr "Rakenduse menüü"
 
 #: src/browser/resources/ui/main_window.ui:126
 #: src/browser/resources/ui/main_window.ui:340 src/browser/main_window.py:1048
 msgid "All Reminders"
-msgstr ""
+msgstr "Kõik meeldetuletused"
 
 #: src/browser/resources/ui/main_window.ui:158 src/browser/main_window.py:1059
 msgid "Upcoming Reminders"
-msgstr ""
+msgstr "Meeldetuletused lähitulevikuks"
 
 #: src/browser/resources/ui/main_window.ui:190 src/browser/main_window.py:1070
 msgid "Past Reminders"
-msgstr ""
+msgstr "Meeldetuletused minevikust"
 
 #: src/browser/resources/ui/main_window.ui:222 src/browser/main_window.py:1081
 msgid "Completed Reminders"
-msgstr ""
+msgstr "Tehtuks märgitud meeldetuletused"
 
 #: src/browser/resources/ui/main_window.ui:448 src/browser/reminder.py:346
 msgid "Complete"
-msgstr ""
+msgstr "Tehtud"
 
 #: src/browser/resources/ui/main_window.ui:474 src/browser/reminder.py:342
 msgid "Incomplete"
-msgstr ""
+msgstr "Tegemata"
 
 #: src/browser/resources/ui/main_window.ui:500
 #: src/browser/resources/ui/reminder_edit_window.ui:66
 msgid "Important"
-msgstr ""
+msgstr "Oluline"
 
 #: src/browser/resources/ui/main_window.ui:526
 msgid "Unimportant"
-msgstr ""
+msgstr "Väheoluline"
 
 #: src/browser/resources/ui/main_window.ui:551
 #: src/browser/resources/ui/move_reminders_window.ui:93
 msgid "Move"
-msgstr ""
+msgstr "Teisalda"
 
 #: src/browser/resources/ui/main_window.ui:573
 #: src/browser/resources/ui/reminder.ui:100
 #: src/browser/edit_lists_window.py:202 src/browser/reminder.py:413
 msgid "Remove"
-msgstr ""
+msgstr "Eemalda"
 
 #: src/browser/resources/ui/main_window.ui:595
 #: src/browser/resources/ui/main_window.ui:603
 msgid "Add a reminder"
-msgstr ""
+msgstr "Lisa meeldetuletus"
 
 #: src/browser/resources/ui/main_window.ui:625
 msgid "_Refresh"
-msgstr ""
+msgstr "_Laadi uuesti"
 
 #: src/browser/resources/ui/main_window.ui:629
 msgid "_Export Lists"
-msgstr ""
+msgstr "_Ekspordi loendid"
 
 #: src/browser/resources/ui/main_window.ui:633
 msgid "_Import Lists"
-msgstr ""
+msgstr "_Impordi loendid"
 
 #: src/browser/resources/ui/main_window.ui:639
 msgid "_Preferences"
-msgstr ""
+msgstr "_Eelistused"
 
 #: src/browser/resources/ui/main_window.ui:643
 msgid "_Keyboard Shortcuts"
-msgstr ""
+msgstr "_Klaviatuuri kiirklahvid"
 
 #: src/browser/resources/ui/main_window.ui:647
 msgid "_About Reminders"
-msgstr ""
+msgstr "R_akenduse teave: Meeldetuletused"
 
 #: src/browser/resources/ui/main_window.ui:654
 msgid "Sort By"
-msgstr ""
+msgstr "Järjestuse viis"
 
 #: src/browser/resources/ui/main_window.ui:656
 msgid "_Time"
-msgstr ""
+msgstr "_Ajapõhine"
 
 #: src/browser/resources/ui/main_window.ui:661
 msgid "_Alphabetical"
-msgstr ""
+msgstr "_Tähestikuline"
 
 #: src/browser/resources/ui/main_window.ui:666
 msgid "_Created"
-msgstr ""
+msgstr "_Loomise aja alusel"
 
 #: src/browser/resources/ui/main_window.ui:671
 msgid "_Last Updated"
-msgstr ""
+msgstr "_Viimase muutmise aja alusel"
 
 #: src/browser/resources/ui/microsoft_sign_in.ui:23
 msgid "Microsoft To Do Sync"
-msgstr ""
+msgstr "Sünkroniseerimine Microsoft To Do teenusega"
 
 #: src/browser/resources/ui/move_reminders_window.ui:20
 msgid "Move Selected Reminder(s)"
@@ -686,20 +691,20 @@ msgstr ""
 
 #: src/browser/resources/ui/preferences_user_row.ui:52
 msgid "All"
-msgstr ""
+msgstr "Kõik"
 
 #: src/browser/resources/ui/preferences_user_row.ui:75
 #: src/browser/preferences.py:275
 msgid "Sign Out"
-msgstr ""
+msgstr "Logi välja"
 
 #: src/browser/resources/ui/reminder.ui:131
 msgid "Edit"
-msgstr ""
+msgstr "Muuda"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:55
 msgid "What should the reminder be called?"
-msgstr ""
+msgstr "Mis peaks olema meeldetuletuse nimi?"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:61
 msgid "Short description of the reminder (Optional)"
