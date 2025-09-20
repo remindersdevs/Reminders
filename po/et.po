@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 16:55-0400\n"
-"PO-Revision-Date: 2025-03-20 10:01+0000\n"
-"Last-Translator: Priit Jõerüüt <hwlate@joeruut.com>\n"
+"PO-Revision-Date: 2025-09-21 23:01+0000\n"
+"Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/reminders/"
 "reminders/et/>\n"
 "Language: et\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:4
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:9
@@ -39,66 +39,66 @@ msgstr ""
 
 #: data/service/io.github.dgsasha.Remembrance.Service3.desktop.in.in:4
 msgid "Remembrance Service"
-msgstr ""
+msgstr "Meeldetuletuste teenus"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:23
 #: src/browser/resources/ui/preferences.ui:113
 msgid "Time format"
-msgstr ""
+msgstr "Ajavorming"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:24
 msgid "What format to display the time in"
-msgstr ""
+msgstr "Mis vormingus peaks aega kuvama"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:28
 #: src/browser/resources/ui/main_window.ui:62
 msgid "Sort by"
-msgstr ""
+msgstr "Järjestus"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:29
 msgid "How to sort the reminders"
-msgstr ""
+msgstr "Kuidas peaks meeldetuletusi järjestama"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:33
 #: src/browser/resources/ui/preferences.ui:94
 msgid "Auto refresh frequency"
-msgstr ""
+msgstr "Automaatse uuendamise sagedus"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:34
 msgid "How often the reminders are refreshed (minutes)"
-msgstr ""
+msgstr "Kui sageli meeldetuletusi uuendatakse (minutites)"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:38
 msgid "Notification Sound"
-msgstr ""
+msgstr "Teavituse heli"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:39
 msgid "Whether or not to play a notification sound"
-msgstr ""
+msgstr "Kas teavitusele peaks lisama helilise märguande"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:43
 msgid "Use included notification sound"
-msgstr ""
+msgstr "Kasuta olemasolevat helimärguannet"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:44
 msgid "Whether to use the included notification sound"
-msgstr ""
+msgstr "Kas peaks kasutama rakenduses kaasasolevat helimärguannet"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:48
 msgid "Descending sort"
-msgstr ""
+msgstr "Kahanev järjestus"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:49
 msgid "If reminders sort should be descending"
-msgstr ""
+msgstr "Kas meeldetuletusi peaks järjestama kahanevalt"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:53
 msgid "Week starts on sunday"
-msgstr ""
+msgstr "Nädal algab pühapäeval"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:54
 msgid "If week should start on sunday"
-msgstr ""
+msgstr "Kas arvestame, et nädal algab pühapäevaga"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:67
 msgid "Remote lists that should be synced"
@@ -407,15 +407,15 @@ msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:204
 msgid "Added keyboard shortcuts page"
-msgstr ""
+msgstr "Lisasime klaviatuuri kiirklahvide lehe"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:205
 msgid "Added more keyboard shortcuts"
-msgstr ""
+msgstr "Lisasime täiendavad klaviatuuri kiirvalikud"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:206
 msgid "Lots of bugfixes"
-msgstr ""
+msgstr "Rohkelt veaparandusi"
 
 #: src/browser/resources/ui/caldav_sign_in.ui:23
 msgid "CalDAV Sync"
@@ -612,42 +612,42 @@ msgstr "Sünkroniseerimine Microsoft To Do teenusega"
 
 #: src/browser/resources/ui/move_reminders_window.ui:20
 msgid "Move Selected Reminder(s)"
-msgstr ""
+msgstr "Teisalda valitud meeldetuletus(ed)"
 
 #: src/browser/resources/ui/preferences.ui:20
 #: src/browser/resources/ui/shortcuts_window.ui:49
 msgid "Preferences"
-msgstr ""
+msgstr "Eelistused"
 
 #: src/browser/resources/ui/preferences.ui:29
 msgid "Syncing"
-msgstr ""
+msgstr "Sünkroniseerin"
 
 #: src/browser/resources/ui/preferences.ui:38
 msgid "Microsoft To Do"
-msgstr ""
+msgstr "Microsoft To Do teenus"
 
 #: src/browser/resources/ui/preferences.ui:50
 #: src/browser/resources/ui/preferences.ui:78
 msgid "Add Account"
-msgstr ""
+msgstr "Lisa kasutajakonto"
 
 #: src/browser/resources/ui/preferences.ui:66
 msgid "CalDAV"
-msgstr ""
+msgstr "CalDAV"
 
 #: src/browser/resources/ui/preferences.ui:98
 msgid "Refresh"
-msgstr ""
+msgstr "Värskenda andmeid"
 
 #: src/browser/resources/ui/preferences.ui:110
 #: src/browser/resources/ui/reminder_edit_window.ui:52
 msgid "General"
-msgstr ""
+msgstr "Üldist"
 
 #: src/browser/resources/ui/preferences.ui:119
 msgid "Week starts on Sunday"
-msgstr ""
+msgstr "Nädal algab pühapäeval"
 
 #: src/browser/resources/ui/preferences.ui:130
 msgid "Play sound with notification"
@@ -725,7 +725,7 @@ msgstr ""
 #: src/browser/resources/ui/reminder_edit_window.ui:112
 #: src/browser/resources/ui/reminder_edit_window.ui:447
 msgid "Select date"
-msgstr ""
+msgstr "Vali kuupäev"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:147
 msgid "Hour"
@@ -741,15 +741,15 @@ msgstr ""
 
 #: src/browser/resources/ui/reminder_edit_window.ui:243
 msgid "Repeat the reminder"
-msgstr ""
+msgstr "Korda meeldetuletust"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:244
 msgid "The reminder will be updated when you complete it"
-msgstr ""
+msgstr "Meeldetuletus saab uuendatud, kui oled täiendamise lõpetanud"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:259
 msgid "Repeat every"
-msgstr ""
+msgstr "Korda iga"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:310
 msgid "Mon"
@@ -846,7 +846,7 @@ msgstr ""
 
 #: src/browser/resources/ui/reminder_edit_window.ui:538
 msgid "Repeat forever"
-msgstr ""
+msgstr "Korda lõputult"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:539
 msgid "Display a total of"
@@ -858,89 +858,89 @@ msgstr ""
 
 #: src/browser/resources/ui/shortcuts_window.ui:27
 msgid "Application"
-msgstr ""
+msgstr "Rakendus"
 
 #: src/browser/resources/ui/shortcuts_window.ui:31
 msgid "Show menu"
-msgstr ""
+msgstr "Näita menüüd"
 
 #: src/browser/resources/ui/shortcuts_window.ui:55
 msgid "Keyboard shortcuts"
-msgstr ""
+msgstr "Klaviatuuri kiirklahvid"
 
 #: src/browser/resources/ui/shortcuts_window.ui:61
 msgid "Quit"
-msgstr ""
+msgstr "Välju"
 
 #: src/browser/resources/ui/shortcuts_window.ui:68
 msgid "Navigation"
-msgstr ""
+msgstr "Liikumine rakenduses"
 
 #: src/browser/resources/ui/shortcuts_window.ui:72
 msgid "Move left"
-msgstr ""
+msgstr "Tõsta vasakule"
 
 #: src/browser/resources/ui/shortcuts_window.ui:78
 msgid "Move up"
-msgstr ""
+msgstr "Liiguta ülespoole"
 
 #: src/browser/resources/ui/shortcuts_window.ui:84
 msgid "Move right"
-msgstr ""
+msgstr "Tõsta paremale"
 
 #: src/browser/resources/ui/shortcuts_window.ui:90
 msgid "Move down"
-msgstr ""
+msgstr "Liiguta allapoole"
 
 #: src/browser/resources/ui/shortcuts_window.ui:97
 msgid "Main Window"
-msgstr ""
+msgstr "Põhiaken"
 
 #: src/browser/resources/ui/shortcuts_window.ui:107
 msgid "New reminder"
-msgstr ""
+msgstr "Uus meeldetuletus"
 
 #: src/browser/resources/ui/shortcuts_window.ui:113
 msgid "Refresh reminders"
-msgstr ""
+msgstr "Uuenda meeldetuletusi"
 
 #: src/browser/resources/ui/shortcuts_window.ui:119
 msgid "Select all reminders"
-msgstr ""
+msgstr "Vali kõik meeldetuletused"
 
 #: src/browser/resources/ui/shortcuts_window.ui:125
 msgid "Hold to start selecting reminders"
-msgstr ""
+msgstr "Meeldetuletuste valimiseks hoia all"
 
 #: src/browser/resources/ui/shortcuts_window.ui:131
 msgid "Unselect all reminders"
-msgstr ""
+msgstr "Eemalda kõikide meeldetuletuste valik"
 
 #: src/browser/resources/ui/shortcuts_window.ui:137
 msgid "Remove selected reminders"
-msgstr ""
+msgstr "Kustuta valitud meeldetuletused"
 
 #: src/browser/resources/ui/shortcuts_window.ui:144
 msgid "Child Windows"
-msgstr ""
+msgstr "Järglasaknad"
 
 #: src/browser/resources/ui/shortcuts_window.ui:148
 msgid "Close window"
-msgstr ""
+msgstr "Sulge aken"
 
 #: src/browser/resources/ui/shortcuts_window.ui:154
 msgid "Save changes"
-msgstr ""
+msgstr "Salvesta muudatused"
 
 #: src/browser/about.py:51
 msgid "Copyright 2023 Sasha Hale"
-msgstr ""
+msgstr "Autoriõigused 2023-2025 Sasha Hale"
 
 #. Translators: Do not translate this, instead put your name and email here.
 #. name <email>
 #: src/browser/about.py:59
 msgid "translator-credits"
-msgstr ""
+msgstr "Priit Jõerüüt 2025"
 
 #: src/browser/application.py:56
 msgid "Print the version of the app"
