@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-16 19:17-0400\n"
-"PO-Revision-Date: 2025-02-02 23:11+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2025-12-07 12:00+0000\n"
+"Last-Translator: ZakaHaceCosas <zakahacecosas@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/reminders/"
 "reminders/es/>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:4
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:9
@@ -124,7 +124,7 @@ msgstr "Listas de tareas que deben sincronizarse"
 msgid ""
 "{user_id: [task_list_ids]}, task_list_ids can be 'all' or an array of ids"
 msgstr ""
-"{user_id: [task_list_ids]}, task_list_ids puede ser 'todos' o una matriz de "
+"{user_id: [task_list_ids]}, task_list_ids puede ser 'todos' o un arreglo de "
 "ids"
 
 #: data/io.github.dgsasha.Remembrance.gschema.xml.in:82
