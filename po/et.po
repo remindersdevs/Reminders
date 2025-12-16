@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: remembrance\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 16:55-0400\n"
-"PO-Revision-Date: 2025-09-21 23:01+0000\n"
+"PO-Revision-Date: 2025-12-16 14:32+0000\n"
 "Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/reminders/"
 "reminders/et/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.15.1-dev\n"
 
 #: data/browser/io.github.dgsasha.Remembrance.desktop.in.in:4
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:9
@@ -305,23 +305,23 @@ msgstr ""
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:125
 msgid "Change delete icon"
-msgstr ""
+msgstr "Uus kustutamise ikoon"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:126
 msgid "Fix some ui bugs"
-msgstr ""
+msgstr "Mõned kasutajaliidese parandused"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:127
 msgid "Some tiny performance improvements"
-msgstr ""
+msgstr "Mõned väikesed jõudluse parandused"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:128
 msgid "Improve logging"
-msgstr ""
+msgstr "Senisest parem logimine"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:135
 msgid "UI Improvements to sidebar"
-msgstr ""
+msgstr "Külgpaani kasutajaliidese parandused"
 
 #: data/io.github.dgsasha.Remembrance.metainfo.xml.in.in:136
 msgid "Fix issues when moving reminders between lists"
@@ -651,27 +651,29 @@ msgstr "Nädal algab pühapäeval"
 
 #: src/browser/resources/ui/preferences.ui:130
 msgid "Play sound with notification"
-msgstr ""
+msgstr "Lisa teavitusele helimärguanne"
 
 #: src/browser/resources/ui/preferences.ui:134
 msgid "Use the included notification sound"
-msgstr ""
+msgstr "Kasuta rakenduse teavitusheli"
 
 #: src/browser/resources/ui/preferences.ui:135
 msgid "Otherwise the bell sound from the enabled sound theme will be used"
 msgstr ""
+"Muul juhul pruugitakse hetkel töölauakeskkonnas kasutusel olevat standardset "
+"kellahalinat"
 
 #: src/browser/resources/ui/preferences.ui:153
 msgid "Use locale default"
-msgstr ""
+msgstr "Kasuta lokaadi vaikimisi väärtust"
 
 #: src/browser/resources/ui/preferences.ui:154
 msgid "12 hour time"
-msgstr ""
+msgstr "12-tunni ajavaade"
 
 #: src/browser/resources/ui/preferences.ui:155
 msgid "24 hour time"
-msgstr ""
+msgstr "24-tunni ajavaade"
 
 #: src/browser/resources/ui/preferences.ui:160
 msgid "5 mins"
@@ -716,11 +718,11 @@ msgstr ""
 
 #: src/browser/resources/ui/reminder_edit_window.ui:79
 msgid "Location"
-msgstr ""
+msgstr "Asukoht"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:90
 msgid "Set a date/time"
-msgstr ""
+msgstr "Määra kuupäev/kellaaeg"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:112
 #: src/browser/resources/ui/reminder_edit_window.ui:447
@@ -729,15 +731,15 @@ msgstr "Vali kuupäev"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:147
 msgid "Hour"
-msgstr ""
+msgstr "Tunnid"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:178
 msgid "Minute"
-msgstr ""
+msgstr "Minutid"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:224
 msgid "Send a notification"
-msgstr ""
+msgstr "Saada teavitus"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:243
 msgid "Repeat the reminder"
@@ -753,96 +755,96 @@ msgstr "Korda iga"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:310
 msgid "Mon"
-msgstr ""
+msgstr "Esmasp"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:311
 msgid "Monday"
-msgstr ""
+msgstr "Esmaspäev"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:322
 msgid "Tue"
-msgstr ""
+msgstr "Teisip"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:323
 msgid "Tuesday"
-msgstr ""
+msgstr "Teisipäev"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:334
 msgid "Wed"
-msgstr ""
+msgstr "Kolmap"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:335
 msgid "Wednesday"
-msgstr ""
+msgstr "Kolmapäev"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:346
 msgid "Thu"
-msgstr ""
+msgstr "Neljap"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:347
 msgid "Thursday"
-msgstr ""
+msgstr "Neljapäev"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:358
 msgid "Fri"
-msgstr ""
+msgstr "Reede"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:359
 msgid "Friday"
-msgstr ""
+msgstr "Reede"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:370
 msgid "Sat"
-msgstr ""
+msgstr "Laup"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:371
 msgid "Saturday"
-msgstr ""
+msgstr "Laupäev"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:382
 msgid "Sun"
-msgstr ""
+msgstr "Pühap"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:383
 msgid "Sunday"
-msgstr ""
+msgstr "Pühapäev"
 
 #. Translators: This is a noun, preceded by a number to represent the number of occurrences of something
 #: src/browser/resources/ui/reminder_edit_window.ui:432
 msgid "time(s)"
-msgstr ""
+msgstr "kord(a)"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:505
 msgid "Save"
-msgstr ""
+msgstr "Salvesta"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:520
 msgid "minute(s)"
-msgstr ""
+msgstr "minut(it)"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:521
 msgid "hour(s)"
-msgstr ""
+msgstr "tund(i)"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:522
 #: src/browser/resources/ui/reminder_edit_window.ui:530
 msgid "day(s)"
-msgstr ""
+msgstr "päev(a)"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:523
 #: src/browser/resources/ui/reminder_edit_window.ui:531
 msgid "week(s)"
-msgstr ""
+msgstr "nädal(at)"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:524
 #: src/browser/resources/ui/reminder_edit_window.ui:532
 msgid "months(s)"
-msgstr ""
+msgstr "kuu(d)"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:525
 #: src/browser/resources/ui/reminder_edit_window.ui:533
 msgid "years(s)"
-msgstr ""
+msgstr "aasta(t)"
 
 #: src/browser/resources/ui/reminder_edit_window.ui:538
 msgid "Repeat forever"
@@ -854,7 +856,7 @@ msgstr ""
 
 #: src/browser/resources/ui/reminder_edit_window.ui:540
 msgid "Repeat until"
-msgstr ""
+msgstr "Korda kuni"
 
 #: src/browser/resources/ui/shortcuts_window.ui:27
 msgid "Application"
